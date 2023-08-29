@@ -23,7 +23,7 @@ class Partner
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $collect = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $sells = null;
 
     #[ORM\Column]

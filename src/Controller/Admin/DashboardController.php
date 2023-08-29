@@ -2,7 +2,12 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Address;
+use App\Entity\City;
+use App\Entity\Country;
+use App\Entity\Department;
 use App\Entity\Partner;
+use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -42,6 +47,11 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToCrud('Villes', 'fas fa-list', City::class);
+        yield MenuItem::linkToCrud('Departements', 'fas fa-list', Department::class);
+        yield MenuItem::linkToCrud('Pays', 'fas fa-list', Country::class);
+        yield MenuItem::linkToCrud('Clients', 'fas fa-list', User::class);
+        yield MenuItem::linkToCrud('Adresses', 'fas fa-list', Address::class);
         yield MenuItem::linkToCrud('Partenaires', 'fas fa-list', Partner::class);
 
     }

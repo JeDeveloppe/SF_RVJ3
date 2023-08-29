@@ -61,7 +61,7 @@ class InitForProd extends Command
         //$this->importPartenairesService->importPartenaires($io);
 
         //on importe les adresses (facturation et livraison)
-        $this->importAdressesService->importAdresses($io);
+        // $this->importAdressesService->importAdresses($io);
 
         return Command::SUCCESS;
     }
