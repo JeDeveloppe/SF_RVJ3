@@ -16,7 +16,9 @@ class PartnerCrudController extends AbstractCrudController
     // public function configureFields(string $pageName): iterable
     // {
     //     return [
-    //         ImageField::new('imageBlob')->setFormType(FileType::class),
+    //         TextField::new('imageFile')->setFormType(VichImageType::class)->onlyWhenCreating(),
+    //         ImageField::new('imageBlob')->setBasePath('')
+    //         VichImageField::new('imageFile')->onlyOnForms();
     //     ];
     // }
 

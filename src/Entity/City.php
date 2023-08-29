@@ -41,9 +41,13 @@ class City
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: Partner::class)]
     private Collection $partners;
 
+    #[ORM\OneToMany(mappedBy: 'city', targetEntity: Address::class)]
+    private Collection $addresses;
+
     public function __construct()
     {
         $this->partners = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -159,6 +163,36 @@ class City
             // set the owning side to null (unless already changed)
             if ($partner->getCity() === $this) {
                 $partner->setCity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Address>
+     */
+    public function getAddresses(): Collection
+    {
+        return $this->addresses;
+    }
+
+    public function addAddress(Address $address): static
+    {
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
+            $address->setCity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAddress(Address $address): static
+    {
+        if ($this->addresses->removeElement($address)) {
+            // set the owning side to null (unless already changed)
+            if ($address->getCity() === $this) {
+                $address->setCity(null);
             }
         }
 

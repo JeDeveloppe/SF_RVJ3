@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Service\ImportRvj2\CreationCountrieService;
+use App\Service\ImportRvj2\ImportAdressesService;
 use App\Service\ImportRvj2\ImportClientsService;
 use App\Service\ImportRvj2\ImportDepartementsService;
 use App\Service\ImportRvj2\ImportPartenairesService;
@@ -27,7 +28,8 @@ class InitForProd extends Command
             private ImportClientsService $importClientsService,
             private ImportDepartementsService $importDepartementsService,
             private ImportVillesService $importVillesService,
-            private ImportPartenairesService $importPartenairesService
+            private ImportPartenairesService $importPartenairesService,
+            private ImportAdressesService $importAdressesService
         )
     {
         parent::__construct();
@@ -57,6 +59,9 @@ class InitForProd extends Command
 
         //on importe les partenaires
         //$this->importPartenairesService->importPartenaires($io);
+
+        //on importe les adresses (facturation et livraison)
+        $this->importAdressesService->importAdresses($io);
 
         return Command::SUCCESS;
     }

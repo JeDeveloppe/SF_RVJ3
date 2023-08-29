@@ -2,23 +2,23 @@
 
 namespace App\Service\ImportRvj2;
 
-use App\Entity\Adresse;
-use App\Repository\AdresseRepository;
+use App\Entity\Address;
+use App\Repository\AddressRepository;
+use App\Repository\CityRepository;
+use App\Repository\CountryRepository;
 use League\Csv\Reader;
 use App\Repository\UserRepository;
-use App\Repository\PaysRepository;
-use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ImportAdressesService
 {
     public function __construct(
-        private AdresseRepository $adresseRepository,
+        private AddressRepository $addressRepository,
         private UserRepository $userRepository,
         private EntityManagerInterface $em,
-        private PaysRepository $paysRepository,
-        private VilleRepository $villeRepository
+        private CountryRepository $countryRepository,
+        private CityRepository $cityRepository
         ){
     }
 
@@ -65,13 +65,14 @@ class ImportAdressesService
     {
 
         //on regarde si la ville existe
-        $ville = $this->villeRepository->findOneBy(['villeCodePostal' => $arrayClient['cpFacturation'], 'villeNom' => $arrayClient['villeFacturation']]);
+        $ville = $this->cityRepository->findOneBy(['postalcode' => $arrayClient['cpFacturation'], 'name' => $arrayClient['villeFacturation']]);
 
         if(!is_null($ville)){
-            $adresse = $this->adresseRepository->findOneBy(['token' => $arrayClient['idUser']]);
+
+            $adresse = $this->addressRepository->findOneBy(['rvj2id' => $arrayClient['idClient'], 'isFacturation' => true]);
 
             if(!$adresse){
-                $adresse = new Adresse();
+                $adresse = new Address();
             }
 
             if($arrayClient['organismeFacturation'] == "NULL"){
@@ -81,13 +82,13 @@ class ImportAdressesService
             }
 
             $adresse->setIsFacturation(true)
-                    ->setFirstName($arrayClient['nomFacturation'])
-                    ->setLastName($arrayClient['prenomFacturation'])
-                    ->setAdresse($arrayClient['adresseFacturation'])
-                    ->setOrganisation($organismeFacturation)
-                    ->setUser($this->userRepository->findOneBy(['token' => $arrayClient['idUser']]))
-                    ->setToken($arrayClient['idUser'])
-                    ->setVille($ville);
+                    ->setLastName($arrayClient['nomFacturation'])
+                    ->setFirstName($arrayClient['prenomFacturation'])
+                    ->setStreet($arrayClient['adresseFacturation'])
+                    ->setOrganization($organismeFacturation)
+                    ->setUser($this->userRepository->findOneBy(['rvj2id' => $arrayClient['idClient']]))
+                    ->setCity($ville)
+                    ->setRvj2id($arrayClient['idClient']);
             $this->em->persist($adresse);
         }
     }
@@ -95,13 +96,13 @@ class ImportAdressesService
     private function createOrUpdateAdressesLivraison(array $arrayClient)
     {
 
-        $ville = $this->villeRepository->findOneBy(['villeCodePostal' => $arrayClient['cpLivraison'], 'villeNom' => $arrayClient['villeLivraison']]);
+        $ville = $this->cityRepository->findOneBy(['postalcode' => $arrayClient['cpLivraison'], 'name' => $arrayClient['villeLivraison']]);
 
         if(!is_null($ville)){
-            $adresse = $this->adresseRepository->findOneBy(['token' => $arrayClient['idUser'], 'isFacturation' => false]);
+            $adresse = $this->addressRepository->findOneBy(['rvj2id' => $arrayClient['idClient'], 'isFacturation' => false]);
 
             if(!$adresse){
-                $adresse = new Adresse();
+                $adresse = new Address();
             }
 
             if($arrayClient['organismeLivraison'] == "NULL"){
@@ -110,14 +111,14 @@ class ImportAdressesService
                 $organismeLivraison = $arrayClient['organismeLivraison'];
             }
 
-            $adresse->setIsFacturation(null)
-                    ->setFirstName($arrayClient['nomLivraison'])
-                    ->setLastName($arrayClient['prenomLivraison'])
-                    ->setAdresse($arrayClient['adresseLivraison'])
-                    ->setOrganisation($organismeLivraison)
-                    ->setUser($this->userRepository->findOneBy(['token' => $arrayClient['idUser']]))
-                    ->setToken($arrayClient['idUser'])
-                    ->setVille($ville);
+            $adresse->setIsFacturation(false)
+                    ->setLastName($arrayClient['nomLivraison'])
+                    ->setFirstName($arrayClient['prenomLivraison'])
+                    ->setStreet($arrayClient['adresseLivraison'])
+                    ->setOrganization($organismeLivraison)
+                    ->setUser($this->userRepository->findOneBy(['rvj2id' => $arrayClient['idClient']]))
+                    ->setCity($ville)
+                    ->setRvj2id($arrayClient['idClient']);
             $this->em->persist($adresse);
         }
     }
