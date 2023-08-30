@@ -63,9 +63,22 @@ class ImportClientsService
             $pseudo = $arrayClient['pseudo'];
         }
 
+        switch($arrayClient['userLevel']){
+            case 4:
+                $role = ['ROLE_ADMIN'];
+                break;
+            case 5:
+                $role = ['ROLE_SUPER_ADMIN'];
+                break;
+            default:
+                $role = ['ROLE_USER'];
+        };
+        
+
         $client->setEmail($arrayClient['email'])
                 ->setRvj2Id($arrayClient['idClient'])
                 ->setPassword($arrayClient['password'])
+                ->setRoles($role)
                 ->setNickname($pseudo)
                 ->setPhone($arrayClient['telephone'])
                 ->setMembership($this->utilities->getDateTimeImmutableFromTimestamp($arrayClient['isAssociation']))

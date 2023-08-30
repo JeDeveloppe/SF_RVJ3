@@ -47,7 +47,7 @@ class CityCrudController extends AbstractCrudController
     {
         return $actions
             // ->remove(Crud::PAGE_INDEX, Action::DELETE);
-            ->setPermission(Action::DELETE, 'ROLE_ADMIN');
+            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
         
     }
 }

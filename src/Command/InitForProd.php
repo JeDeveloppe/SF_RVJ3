@@ -49,7 +49,7 @@ class InitForProd extends Command
         // $this->userService->initForProd_adminUser($io);
 
         // on importe les clients
-        // $this->importClientsService->importClients($io);
+        $this->importClientsService->importClients($io);
 
         //on importe les departementss
         // $this->importDepartementsService->importDepartements($io);
