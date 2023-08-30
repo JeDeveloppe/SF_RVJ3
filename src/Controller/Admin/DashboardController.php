@@ -3,9 +3,11 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Address;
+use App\Entity\Boite;
 use App\Entity\City;
 use App\Entity\Country;
 use App\Entity\Department;
+use App\Entity\Editor;
 use App\Entity\Partner;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -52,6 +54,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Pays', 'fas fa-list', Country::class);
         yield MenuItem::linkToCrud('Clients', 'fas fa-list', User::class);
         yield MenuItem::linkToCrud('Adresses', 'fas fa-list', Address::class);
+        yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class);
+        yield MenuItem::linkToCrud('Éditeurs', 'fas fa-list', Editor::class);
         yield MenuItem::linkToCrud('Partenaires', 'fas fa-list', Partner::class);
 
     }

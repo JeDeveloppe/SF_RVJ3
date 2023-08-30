@@ -10,7 +10,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class ImportPiecesService
 {
     public function __construct(
-        private BoiteRepository $boiteRepository,
         private EntityManagerInterface $em
         ){
     }

@@ -57,9 +57,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class)]
     private Collection $addresses;
 
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Boite::class)]
+    private Collection $boites;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
+        $this->boites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -250,4 +254,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->email;
     }
+
+    /**
+     * @return Collection<int, Boite>
+     */
+    public function getBoites(): Collection
+    {
+        return $this->boites;
+    }
+
+    public function addBoite(Boite $boite): static
+    {
+        if (!$this->boites->contains($boite)) {
+            $this->boites->add($boite);
+            $boite->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBoite(Boite $boite): static
+    {
+        if ($this->boites->removeElement($boite)) {
+            // set the owning side to null (unless already changed)
+            if ($boite->getCreatedBy() === $this) {
+                $boite->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

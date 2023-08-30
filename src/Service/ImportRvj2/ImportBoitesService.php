@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use App\Repository\BoiteRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -14,7 +15,8 @@ class ImportBoitesService
 {
     public function __construct(
         private BoiteRepository $boiteRepository,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private UserRepository $userRepository
         ){
     }
 
@@ -129,23 +131,28 @@ class ImportBoitesService
         }else{
             $isV3 = true;
         }
+        if($arrayBoite['annee'] == "Année inconnue"){
+            $year = NULL;
+        }else{
+            $year = (int) $arrayBoite['annee'];
+        }
 
-        $boite->setNom($arrayBoite['nom'])
-            ->setEditeur($arrayBoite['editeur'])
-            ->setAnnee($arrayBoite['annee'])
+        $boite->setName($arrayBoite['nom'])
+            ->setIniteditor($arrayBoite['editeur'])
+            ->setYear($year)
             ->setImageblob($arrayBoite['imageBlob'])
             ->setSlug($arrayBoite['urlNom'])
-            ->setIsLivrable($arrayBoite['isLivrable'])
-            ->setIsComplet($this->stringToNull($arrayBoite['isComplet']))
-            ->setPoidBoite($this->stringToNull($arrayBoite['poidBoite']))
-            ->setAge($this->stringToNull($arrayBoite['age']))
-            ->setNbrJoueurs($this->stringToNull($arrayBoite['nbrJoueurs']))
-            ->setPrixHt($this->stringToNull($arrayBoite['prix_HT']))
-            ->setCreator($arrayBoite['createur'])
-            ->setIsDeee($arrayBoite['deee'])
+            ->setIsDeliverable($arrayBoite['isLivrable'])
+            ->setIsOccasion($this->nullToBoolean($arrayBoite['isComplet']))
+            ->setWeigth($this->nullTo0($arrayBoite['poidBoite']))
+            ->setAge((int) $arrayBoite['age'])
+            ->setPlayers((int) $arrayBoite['nbrJoueurs'])
+            ->setHtPrice($this->stringToNull($arrayBoite['prix_HT']))
+            ->setCreatedBy($this->userRepository->findOneBy(['nickname' => $arrayBoite['createur']]))
+            ->setIsDeee($this->nullToBoolean($arrayBoite['deee']))
             ->setCreatedAt(new DateTimeImmutable($arrayBoite['created_at']))
             ->setIsOnLine($actif)
-            ->setVenteDirecte($isV3)
+            ->setIsDirectSale($isV3)
             ->setRvj2Id($arrayBoite['idCatalogue']);
 
         return $boite;
@@ -153,8 +160,28 @@ class ImportBoitesService
 
     private function stringToNull($value){
         
-        if($value == "NULL"){
+        if($value == "NULL" || "Année inconnue"){
             $value = NULL;
+        }
+
+        return $value;
+    }
+
+    private function nullToBoolean($value){
+        
+        if($value == "NULL"){
+            $value = false;
+        }else{
+            $value = true;
+        }
+
+        return $value;
+    }
+
+    private function nullTo0($value){
+        
+        if($value == "NULL"){
+            $value = 0;
         }
 
         return $value;

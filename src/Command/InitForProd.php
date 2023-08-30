@@ -3,10 +3,13 @@
 namespace App\Command;
 
 use App\Service\ImportRvj2\CreationCountrieService;
+use App\Service\ImportRvj2\EditorService;
 use App\Service\ImportRvj2\ImportAdressesService;
+use App\Service\ImportRvj2\ImportBoitesService;
 use App\Service\ImportRvj2\ImportClientsService;
 use App\Service\ImportRvj2\ImportDepartementsService;
 use App\Service\ImportRvj2\ImportPartenairesService;
+use App\Service\ImportRvj2\ImportPiecesService;
 use App\Service\ImportRvj2\ImportVillesService;
 use App\Service\SpaceViewsService;
 use App\Service\UserService;
@@ -29,7 +32,10 @@ class InitForProd extends Command
             private ImportDepartementsService $importDepartementsService,
             private ImportVillesService $importVillesService,
             private ImportPartenairesService $importPartenairesService,
-            private ImportAdressesService $importAdressesService
+            private ImportAdressesService $importAdressesService,
+            private ImportBoitesService $importBoitesService,
+            private ImportPiecesService $importPiecesService,
+            private EditorService $editorService
         )
     {
         parent::__construct();
@@ -49,7 +55,7 @@ class InitForProd extends Command
         // $this->userService->initForProd_adminUser($io);
 
         // on importe les clients
-        $this->importClientsService->importClients($io);
+        //$this->importClientsService->importClients($io);
 
         //on importe les departementss
         // $this->importDepartementsService->importDepartements($io);
@@ -62,6 +68,15 @@ class InitForProd extends Command
 
         //on importe les adresses (facturation et livraison)
         // $this->importAdressesService->importAdresses($io);
+
+        //on importe les boites
+        $this->importBoitesService->importBoites($io);
+
+        //on genere les editeurs de facon distinct
+        $this->editorService->addEditorsInDatabase($io);
+
+        // // // ////on importe le detail des boites
+        // $this->importPiecesService->importPieces($io);
 
         return Command::SUCCESS;
     }
