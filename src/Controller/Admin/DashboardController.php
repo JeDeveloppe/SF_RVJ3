@@ -5,9 +5,11 @@ namespace App\Controller\Admin;
 use App\Entity\Address;
 use App\Entity\Boite;
 use App\Entity\City;
+use App\Entity\ConditionOccasion;
 use App\Entity\Country;
 use App\Entity\Department;
 use App\Entity\Editor;
+use App\Entity\MeansOfPayement;
 use App\Entity\Partner;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -57,6 +59,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class);
         yield MenuItem::linkToCrud('Éditeurs', 'fas fa-list', Editor::class);
         yield MenuItem::linkToCrud('Partenaires', 'fas fa-list', Partner::class);
+        yield MenuItem::linkToCrud('Condition des occasions', 'fas fa-list', ConditionOccasion::class);
+        yield MenuItem::linkToCrud('Moyens de paiement', 'fas fa-list', MeansOfPayement::class);
 
     }
 }

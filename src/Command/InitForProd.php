@@ -2,7 +2,11 @@
 
 namespace App\Command;
 
+use App\Repository\MeansOfPayementRepository;
+use App\Service\ImportRvj2\CreationConditionOccasionService;
 use App\Service\ImportRvj2\CreationCountrieService;
+use App\Service\ImportRvj2\CreationMoyenDePaiement;
+use App\Service\ImportRvj2\CreationMoyenDePaiementService;
 use App\Service\ImportRvj2\EditorService;
 use App\Service\ImportRvj2\ImportAdressesService;
 use App\Service\ImportRvj2\ImportBoitesService;
@@ -35,7 +39,9 @@ class InitForProd extends Command
             private ImportAdressesService $importAdressesService,
             private ImportBoitesService $importBoitesService,
             private ImportPiecesService $importPiecesService,
-            private EditorService $editorService
+            private EditorService $editorService,
+            private CreationConditionOccasionService $creationConditionOccasionService,
+            private CreationMoyenDePaiementService $creationMoyenDePaiementService
         )
     {
         parent::__construct();
@@ -77,6 +83,13 @@ class InitForProd extends Command
 
         //on importe le detail des boites
         //$this->importPiecesService->importPieces($io);
+
+        //on cree les conditions des occasions
+        $this->creationConditionOccasionService->addConditions($io);
+
+        //on cree les MOYENS DE PAIEMENT
+        $this->creationMoyenDePaiementService->addMoyens($io);
+
 
         return Command::SUCCESS;
     }
