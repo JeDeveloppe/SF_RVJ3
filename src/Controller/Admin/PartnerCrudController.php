@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -22,6 +23,8 @@ class PartnerCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            TextField::new('image'),
+            ImageField::new('image')->onlyOnForms()->setBasePath('./assets/images/partners/')->setUploadDir('./assets/images/partners/'),
             TextField::new('name')->setLabel('Nom'),
             TextField::new('fullUrl')->setLabel('Adresse web'),
             TextareaField::new('description')->setLabel('Description')->onlyOnForms(),

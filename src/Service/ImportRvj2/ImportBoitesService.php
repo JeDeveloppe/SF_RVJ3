@@ -137,10 +137,11 @@ class ImportBoitesService
             $year = (int) $arrayBoite['annee'];
         }
 
+        $this->saveImageOnServeur($arrayBoite['idCatalogue'], $arrayBoite['imageBlob']);
+
         $boite->setName($arrayBoite['nom'])
             ->setIniteditor($arrayBoite['editeur'])
             ->setYear($year)
-            ->setImageblob($arrayBoite['imageBlob'])
             ->setSlug($arrayBoite['urlNom'])
             ->setIsDeliverable($arrayBoite['isLivrable'])
             ->setIsOccasion($this->nullToBoolean($arrayBoite['isComplet']))
@@ -152,6 +153,7 @@ class ImportBoitesService
             ->setIsDeee($this->nullToBoolean($arrayBoite['deee']))
             ->setCreatedAt(new DateTimeImmutable($arrayBoite['created_at']))
             ->setIsOnLine($actif)
+            ->setImage($this->constructImagePath($arrayBoite['idCatalogue']))
             ->setIsDirectSale($isV3)
             ->setRvj2Id($arrayBoite['idCatalogue']);
 
@@ -185,5 +187,33 @@ class ImportBoitesService
         }
 
         return $value;
+    }
+
+    public function saveImageOnServeur($uniqueName,$imageBlob){
+
+        if (!file_exists($this->pathForImagesBoites())) {
+            mkdir($this->pathForImagesBoites(), 0777, true);
+        }
+
+        if(!empty($imageBlob)){
+
+            $save_path = $this->pathForImagesBoites().$this->constructImagePath($uniqueName);
+
+            $im = imagecreatefromstring(base64_decode($imageBlob));
+            imagepng($im,$save_path);
+            imagedestroy($im);
+            
+        }
+
+    }
+
+    public function constructImagePath($unique_id){
+
+        return 'boite_'.$unique_id.'.png';
+    }
+
+    public function pathForImagesBoites(){
+
+        return './assets/images/boites/';
     }
 }

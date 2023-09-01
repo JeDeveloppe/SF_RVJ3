@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Boite;
+use App\Repository\BoiteRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -12,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -33,6 +35,10 @@ class BoiteCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            TextField::new('image')->onlyOnIndex(),
+            ImageField::new('image')->onlyOnForms()
+                ->setBasePath('./assets/images/boites/')
+                ->setUploadDir('./assets/images/boites/'),
             TextField::new('name')->setLabel('Nom'),
             SlugField::new('slug')->setTargetFieldName('name')->setLabel('Slug')->onlyOnForms(),
             IntegerField::new('year')->setLabel('Année'),
@@ -42,8 +48,15 @@ class BoiteCrudController extends AbstractCrudController
             IntegerField::new('players')->setLabel('Nombre de joueurs')->onlyOnForms(),
             BooleanField::new('isOccasion')->setLabel('Occasion'),
             IntegerField::new('htPrice')->setLabel('Prix HT (en cents)'),
-            DateTimeField::new('createdAt')->setLabel('Créé le')->setFormat('dd-MM-yyyy')->setDisabled()->onlyOnForms(),
-            AssociationField::new('createdBy')->setLabel('Créé par')->setFormTypeOption('choice_label', 'nickname')->setDisabled(true)->setFormTypeOptions(['placeholder' => 'Créateur de la boite...']),
+            DateTimeField::new('createdAt')->setLabel('Créé le')
+                ->setFormat('dd-MM-yyyy')
+                ->setDisabled()
+                ->onlyOnForms(),
+            AssociationField::new('createdBy')->setLabel('Créé par')
+                ->setFormTypeOption('choice_label', 'nickname')
+                ->setDisabled(true)
+                ->setFormTypeOptions(['placeholder' => 'Créateur de la boite...'])
+                ->onlyOnForms(),
             BooleanField::new('isDeliverable')->setLabel('Livrable')->onlyOnForms(),
             BooleanField::new('isDeee')->setLabel('Deee'),
             BooleanField::new('isDirectSale')->setLabel('Vente directe'),

@@ -42,6 +42,7 @@ class ImportPartenairesService
 
         $io->progressFinish();
         $io->success('Importation terminée');
+
     }
 
     //lecture des fichiers exportes dans le dossier import
@@ -55,7 +56,7 @@ class ImportPartenairesService
 
     private function createOrUpdatePartner(array $arrayPartenaire): Partner
     {
-        $partenaire = $this->partnerRepository->findOneBy(['id' => $arrayPartenaire['idPartenaire']]);
+        $partenaire = $this->partnerRepository->findOneBy(['rvj2id' => $arrayPartenaire['idPartenaire']]);
 
         if(!$partenaire){
             $partenaire = new Partner();
@@ -77,22 +78,53 @@ class ImportPartenairesService
             $online = false;
         }
 
+        $this->saveImageOnServeur($arrayPartenaire['idPartenaire'], $arrayPartenaire['image']);
 
+    
         $partenaire->setName($arrayPartenaire['nom'])
                 ->setDescription($arrayPartenaire['description'])
                 ->setCollect($arrayPartenaire['collecte'])
                 ->setSells($arrayPartenaire['vend'])
                 ->setIsAcceptDonations($arrayPartenaire['don'])
                 ->setFullUrl($arrayPartenaire['url'])
-                ->setImageBlob($arrayPartenaire['image'])
+                ->setImage($this->constructImagePath($arrayPartenaire['idPartenaire']))
                 ->setIsSellsSpareParts($detachee)
                 ->setIsSellFullGames($complet)
                 ->setIsWebShop($arrayPartenaire['ecommerce'])
                 ->setIsOnLine($online)
                 ->setIsDisplayOnCatalogueWhenSearchIsNull(true)
+                ->setRvj2id($arrayPartenaire['idPartenaire'])
                 ->setCity($this->cityRepository->findOneBy(['rvj2id' => $arrayPartenaire['id_villes_free']]) ?? $this->cityRepository->findOneBy(['rvj2id' => 1]));
 
         return $partenaire;
 
+    }
+
+    public function saveImageOnServeur($uniqueName,$imageBlob){
+
+        if (!file_exists($this->pathForImagesPartners())) {
+            mkdir($this->pathForImagesPartners(), 0777, true);
+        }
+
+        if(!empty($imageBlob)){
+
+            $save_path = $this->pathForImagesPartners().$this->constructImagePath($uniqueName);
+
+            $im = imagecreatefromstring(base64_decode($imageBlob));
+            imagepng($im,$save_path);
+            imagedestroy($im);
+            
+        }
+
+    }
+
+    public function constructImagePath($unique_id){
+
+        return 'partner_'.$unique_id.'.png';
+    }
+
+    public function pathForImagesPartners(){
+
+        return './assets/images/partners/';
     }
 }

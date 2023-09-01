@@ -48,11 +48,14 @@ class Partner
     #[ORM\JoinColumn(nullable: false)]
     private ?City $city = null;
 
-    #[ORM\Column(type: Types::BLOB)]
-    private $imageBlob = null;
-
     #[ORM\Column]
     private ?bool $isSellFullGames = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
+    #[ORM\Column]
+    private ?int $rvj2id = null;
 
     public function getId(): ?int
     {
@@ -191,18 +194,6 @@ class Partner
         return $this;
     }
 
-    public function getImageBlob()
-    {
-        return $this->imageBlob;
-    }
-
-    public function setImageBlob($imageBlob): static
-    {
-        $this->imageBlob = $imageBlob;
-
-        return $this;
-    }
-
     public function isIsSellFullGames(): ?bool
     {
         return $this->isSellFullGames;
@@ -211,6 +202,30 @@ class Partner
     public function setIsSellFullGames(bool $isSellFullGames): static
     {
         $this->isSellFullGames = $isSellFullGames;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getRvj2id(): ?int
+    {
+        return $this->rvj2id;
+    }
+
+    public function setRvj2id(int $rvj2id): static
+    {
+        $this->rvj2id = $rvj2id;
 
         return $this;
     }

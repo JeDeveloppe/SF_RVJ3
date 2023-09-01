@@ -70,10 +70,10 @@ class InitForProd extends Command
         // $this->importAdressesService->importAdresses($io);
 
         //on importe les boites
-        $this->importBoitesService->importBoites($io);
+        //$this->importBoitesService->importBoites($io);
 
         //on genere les editeurs de facon distinct
-        $this->editorService->addEditorsInDatabase($io);
+        // $this->editorService->addEditorsInDatabase($io);
 
         // // // ////on importe le detail des boites
         // $this->importPiecesService->importPieces($io);

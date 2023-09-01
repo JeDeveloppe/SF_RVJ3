@@ -26,9 +26,6 @@ class Boite
     #[ORM\Column(nullable: true)]
     private ?int $year = null;
 
-    #[ORM\Column(type: Types::BLOB)]
-    private $imageBlob = null;
-
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
@@ -68,6 +65,9 @@ class Boite
 
     #[ORM\Column]
     private ?bool $isDirectSale = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
 
     public function getId(): ?int
     {
@@ -118,18 +118,6 @@ class Boite
     public function setYear(?int $year): static
     {
         $this->year = $year;
-
-        return $this;
-    }
-
-    public function getImageBlob()
-    {
-        return $this->imageBlob;
-    }
-
-    public function setImageBlob($imageBlob): static
-    {
-        $this->imageBlob = $imageBlob;
 
         return $this;
     }
@@ -286,6 +274,18 @@ class Boite
     public function setIsDirectSale(bool $isDirectSale): static
     {
         $this->isDirectSale = $isDirectSale;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }
