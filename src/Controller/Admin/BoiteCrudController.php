@@ -16,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -43,6 +44,8 @@ class BoiteCrudController extends AbstractCrudController
             SlugField::new('slug')->setTargetFieldName('name')->setLabel('Slug')->onlyOnForms(),
             IntegerField::new('year')->setLabel('Année'),
             AssociationField::new('editor')->setLabel('Éditeur')->setFormTypeOptions(['placeholder' => 'Sélectionner un éditeur...']),
+            TextareaField::new('content')->setLabel('Contenu d\'une boite entière')->onlyOnForms(),
+            TextField::new('contentMessage')->setLabel('Message d\'alerte sur le contenu de la boite')->onlyOnForms(),
             IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms(),
             IntegerField::new('age')->setLabel('A partir de (âge)')->onlyOnForms(),
             IntegerField::new('players')->setLabel('Nombre de joueurs')->onlyOnForms(),

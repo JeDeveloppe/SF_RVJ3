@@ -75,8 +75,8 @@ class InitForProd extends Command
         //on genere les editeurs de facon distinct
         // $this->editorService->addEditorsInDatabase($io);
 
-        // // // ////on importe le detail des boites
-        // $this->importPiecesService->importPieces($io);
+        //on importe le detail des boites
+        //$this->importPiecesService->importPieces($io);
 
         return Command::SUCCESS;
     }

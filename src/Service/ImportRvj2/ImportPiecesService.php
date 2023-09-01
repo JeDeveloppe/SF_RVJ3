@@ -10,7 +10,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class ImportPiecesService
 {
     public function __construct(
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private BoiteRepository $boiteRepository
         ){
     }
 
@@ -45,11 +46,11 @@ class ImportPiecesService
     private function createOrUpdateBoite(array $arrayPiece): void
     {
 
-        $boite = $this->boiteRepository->findOneBy(['id' => $arrayPiece['idJeu']]);
+        $boite = $this->boiteRepository->findOneBy(['rvj2id' => $arrayPiece['idJeu']]);
 
         if($boite){
-            $boite->setContenu($arrayPiece['contenu_total'])
-            ->setMessage($this->stringToNull($arrayPiece['message']));
+            $boite->setContent($arrayPiece['contenu_total'])
+            ->setContentMessage($this->stringToNull($arrayPiece['message']));
             $this->em->persist($boite);
         }
 

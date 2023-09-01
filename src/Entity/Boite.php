@@ -69,6 +69,12 @@ class Boite
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $content = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $contentMessage = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -286,6 +292,30 @@ class Boite
     public function setImage(string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(?string $content): static
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getContentMessage(): ?string
+    {
+        return $this->contentMessage;
+    }
+
+    public function setContentMessage(?string $contentMessage): static
+    {
+        $this->contentMessage = $contentMessage;
 
         return $this;
     }
