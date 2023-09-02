@@ -18,15 +18,11 @@ class MeansOfPayement
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'meansOfPaiement', targetEntity: Occasion::class)]
-    private Collection $occasions;
-
     #[ORM\OneToMany(mappedBy: 'meansOfPaiement', targetEntity: OffSiteOccasionSale::class)]
     private Collection $offSiteOccasionSales;
 
     public function __construct()
     {
-        $this->occasions = new ArrayCollection();
         $this->offSiteOccasionSales = new ArrayCollection();
     }
 
@@ -43,36 +39,6 @@ class MeansOfPayement
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Occasion>
-     */
-    public function getOccasions(): Collection
-    {
-        return $this->occasions;
-    }
-
-    public function addOccasion(Occasion $occasion): static
-    {
-        if (!$this->occasions->contains($occasion)) {
-            $this->occasions->add($occasion);
-            $occasion->setMeansOfPaiement($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOccasion(Occasion $occasion): static
-    {
-        if ($this->occasions->removeElement($occasion)) {
-            // set the owning side to null (unless already changed)
-            if ($occasion->getMeansOfPaiement() === $this) {
-                $occasion->setMeansOfPaiement(null);
-            }
-        }
 
         return $this;
     }

@@ -43,28 +43,14 @@ class Occasion
     #[ORM\Column]
     private ?bool $isOnline = null;
 
-    #[ORM\ManyToOne(inversedBy: 'occasions')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?MovementOccasion $movement = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $movementTime = null;
-
-    #[ORM\ManyToOne(inversedBy: 'occasions')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?MeansOfPayement $meansOfPaiement = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $movementPrice = null;
-
-    #[ORM\Column]
-    private ?int $sellingPriceHT = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $rvj2id = null;
 
     #[ORM\OneToMany(mappedBy: 'occasion', targetEntity: OffSiteOccasionSale::class)]
     private Collection $offSiteOccasionSales;
+
+    #[ORM\ManyToOne(inversedBy: 'occasions')]
+    private ?OffSiteOccasionSale $offSiteSale = null;
 
     public function __construct()
     {
@@ -172,66 +158,6 @@ class Occasion
         return $this;
     }
 
-    public function getMovement(): ?MovementOccasion
-    {
-        return $this->movement;
-    }
-
-    public function setMovement(?MovementOccasion $movement): static
-    {
-        $this->movement = $movement;
-
-        return $this;
-    }
-
-    public function getMovementTime(): ?\DateTimeImmutable
-    {
-        return $this->movementTime;
-    }
-
-    public function setMovementTime(?\DateTimeImmutable $movementTime): static
-    {
-        $this->movementTime = $movementTime;
-
-        return $this;
-    }
-
-    public function getMeansOfPaiement(): ?MeansOfPayement
-    {
-        return $this->meansOfPaiement;
-    }
-
-    public function setMeansOfPaiement(?MeansOfPayement $meansOfPaiement): static
-    {
-        $this->meansOfPaiement = $meansOfPaiement;
-
-        return $this;
-    }
-
-    public function getMovementPrice(): ?int
-    {
-        return $this->movementPrice;
-    }
-
-    public function setMovementPrice(?int $movementPrice): static
-    {
-        $this->movementPrice = $movementPrice;
-
-        return $this;
-    }
-
-    public function getSellingPriceHT(): ?int
-    {
-        return $this->sellingPriceHT;
-    }
-
-    public function setSellingPriceHT(int $sellingPriceHT): static
-    {
-        $this->sellingPriceHT = $sellingPriceHT;
-
-        return $this;
-    }
-
     public function getRvj2id(): ?int
     {
         return $this->rvj2id;
@@ -277,5 +203,17 @@ class Occasion
     public function __toString()
     {
         return $this->reference;
+    }
+
+    public function getOffSiteSale(): ?OffSiteOccasionSale
+    {
+        return $this->offSiteSale;
+    }
+
+    public function setOffSiteSale(?OffSiteOccasionSale $offSiteSale): static
+    {
+        $this->offSiteSale = $offSiteSale;
+
+        return $this;
     }
 }

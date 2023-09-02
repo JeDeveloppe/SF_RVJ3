@@ -18,15 +18,11 @@ class MovementOccasion
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'movement', targetEntity: Occasion::class)]
-    private Collection $occasions;
-
     #[ORM\OneToMany(mappedBy: 'movement', targetEntity: OffSiteOccasionSale::class)]
     private Collection $offSiteOccasionSales;
 
     public function __construct()
     {
-        $this->occasions = new ArrayCollection();
         $this->offSiteOccasionSales = new ArrayCollection();
     }
 
@@ -43,36 +39,6 @@ class MovementOccasion
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Occasion>
-     */
-    public function getOccasions(): Collection
-    {
-        return $this->occasions;
-    }
-
-    public function addOccasion(Occasion $occasion): static
-    {
-        if (!$this->occasions->contains($occasion)) {
-            $this->occasions->add($occasion);
-            $occasion->setMovement($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOccasion(Occasion $occasion): static
-    {
-        if ($this->occasions->removeElement($occasion)) {
-            // set the owning side to null (unless already changed)
-            if ($occasion->getMovement() === $this) {
-                $occasion->setMovement(null);
-            }
-        }
 
         return $this;
     }

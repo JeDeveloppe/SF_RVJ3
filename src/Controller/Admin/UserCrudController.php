@@ -23,7 +23,7 @@ class UserCrudController extends AbstractCrudController
     {
         return [
             TextField::new('email')->setLabel('Adresse email'),
-            TextField::new('nickname')->setLabel('Pseudo'),
+            TextField::new('nickname')->setLabel('Pseudo')->onlyOnForms(),
             TelephoneField::new('phone')->setLabel('Téléphone'),
             DateTimeField::new('createdAt')->setLabel('Date d\'inscription')->setFormat('dd.MM.yyyy')->setDisabled(true),
             DateTimeField::new('lastvisite')->setLabel('Dernière visite')->setFormat('dd.MM.yyyy')->setDisabled(true),

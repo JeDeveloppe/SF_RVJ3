@@ -5,16 +5,12 @@ namespace App\Controller\Admin;
 use App\Entity\Occasion;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
-use Symfony\Component\HttpFoundation\RequestStack;
+
 
 class OccasionCrudController extends AbstractCrudController
 {   
@@ -30,33 +26,8 @@ class OccasionCrudController extends AbstractCrudController
             TextField::new('reference')->setLabel('Référence'),
             TextField::new('information')->setLabel('Information sur l\'occasion'),
             BooleanField::new('isOnline')->setLabel('En ligne'),
-            AssociationField::new('movement')->setLabel('Mouvement (don / vente)')->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
+            AssociationField::new('offSiteSale')->setLabel('Mouvement'),
             BooleanField::new('isNew')->setLabel('Neuf')
-                ->onlyOnForms(),
-            AssociationField::new('boxCondition')
-                ->setLabel('État de la boite')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-                ->onlyOnForms(),
-            AssociationField::new('equipmentCondition')
-                ->setLabel('État des pièces')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-                ->onlyOnForms(),
-            AssociationField::new('gameRule')
-                ->setLabel('Règle du jeu')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-                ->onlyOnForms(),
-            DateTimeField::new('movementTime')
-                ->setLabel('Date de mouvement')
-                ->setFormat('dd-MM-yyy à HH:mm' )
-                ->onlyOnForms(),
-            MoneyField::new('movementPrice')
-                ->setLabel('Prix du mouvement')
-                ->setCurrency('EUR')->setStoredAsCents()
-                ->onlyOnForms(),
-            AssociationField::new('meansOfPaiement')
-                ->setLabel('Moyen de paiement')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-                ->onlyOnForms(),
         ];
     }
 

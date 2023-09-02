@@ -48,22 +48,6 @@ class ImportOccasionsService
         $io->progressFinish();
         $io->success('Importation terminée');
 
-
-        $io->title('Importation des mouvements');
-
-        $occasions = $this->readCsvFileJeuxComplets();
-        
-        $io->progressStart(count($occasions));
-
-        foreach($occasions as $arrayOccasion){
-            $io->progressAdvance();
-            $this->createOrUpdateMouvements($arrayOccasion);
-        }
-
-        $this->em->flush();
-
-        $io->progressFinish();
-        $io->success('Importation terminée');
     }
 
     //lecture des fichiers exportes dans le dossier import
@@ -83,61 +67,19 @@ class ImportOccasionsService
             $occasion = new Occasion();
         }
 
-            //! on detecte si on a fait un don
-            if(count(explode("|",$arrayOccasion['don'])) > 1){
+        $occasion->setBoite($this->boiteRepository->findOneBy(['rvj2id' => $arrayOccasion['idCatalogue']]))
+                ->setReference($arrayOccasion['reference'])
+                ->setInformation($this->stringToNull($arrayOccasion['information']))
+                ->setIsNew($this->stringToBoolean($arrayOccasion['isNeuf']))
+                ->setBoxCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatBoite']]))
+                ->setEquipmentCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatMateriel']]))
+                ->setGameRule($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['regleJeu']]))
+                ->setIsOnLine($arrayOccasion['actif'])
+                ->setOffSiteSale(null)
+                ->setRvj2id($arrayOccasion['idJeuxComplet'])
+                ;
 
-                $movement = $this->movementOccasionRepository->findOneBy(['name' => 'DON']);
-                $timeMovement = $this->utilities->getDateTimeImmutableFromTimestamp($arrayOccasion['timeDon']);
-
-                $donnees = explode("|",$arrayOccasion['don']);
-                if(count($donnees) > 1){
-                    $meansOfPaiement = $this->meansOfPayementRepository->findOneBy(['name' => $donnees[1]]);
-                    $movementPrice = $donnees[0];
-
-                }else{
-                    $meansOfPaiement = null;
-                    $movementPrice = null;
-                }
-
-            }elseif(count(explode("|",$arrayOccasion['vente'])) > 1){
-
-                $movement = $this->movementOccasionRepository->findOneBy(['name' => 'VENTE']);
-                $timeMovement = $this->utilities->getDateTimeImmutableFromTimestamp($arrayOccasion['timeVente']);
-
-                $donnees = explode("|",$arrayOccasion['vente']);
-                if(count($donnees) > 1){
-                    $meansOfPaiement = $this->meansOfPayementRepository->findOneBy(['name' => $donnees[1]]);
-                    $movementPrice = (int) $donnees[0];
-
-                }else{
-                    $meansOfPaiement = null;
-                    $movementPrice = null;
-                }
-
-            }else{
-                $movement = null;
-                $timeMovement = null;
-                $movementPrice = null;
-                $meansOfPaiement = null;
-            }
-
-            $occasion->setBoite($this->boiteRepository->findOneBy(['rvj2id' => $arrayOccasion['idCatalogue']]))
-                    ->setReference($arrayOccasion['reference'])
-                    ->setInformation($this->stringToNull($arrayOccasion['information']))
-                    ->setIsNew($this->stringToBoolean($arrayOccasion['isNeuf']))
-                    ->setSellingPriceHT($arrayOccasion['prixHT'])
-                    ->setBoxCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatBoite']]))
-                    ->setEquipmentCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatMateriel']]))
-                    ->setGameRule($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['regleJeu']]))
-                    ->setIsOnLine($arrayOccasion['actif'])
-                    ->setMovement($movement)
-                    ->setMeansOfPaiement($meansOfPaiement)
-                    ->setMovementPrice($movementPrice * 100)
-                    ->setMovementTime($timeMovement)
-                    ->setRvj2id($arrayOccasion['idJeuxComplet'])
-                    ;
-
-                    $this->em->persist($occasion);
+                $this->em->persist($occasion);
 
     }
 
@@ -163,64 +105,4 @@ class ImportOccasionsService
 
         return $value;
     }
-
-    private function createOrUpdateMouvements(array $arrayOccasion): void
-    {
-        if(!empty($arrayOccasion['timeDon']) || !empty($arrayOccasion['timeVente'])){
-
-                $occasion = $this->occasionRepository->findOneBy(['rvj2id' => $arrayOccasion['idJeuxComplet']]);
-                $movementOfOccasion = $this->offSiteOccasionSaleRepository->findOneBy(['occasion' => $occasion]);
-        
-                if(!$movementOfOccasion){
-                    $movementOfOccasion = new OffSiteOccasionSale();
-                }
-        
-                    //! on detecte si on a fait un don
-                    if(count(explode("|",$arrayOccasion['don'])) > 1){
-        
-                        $movement = $this->movementOccasionRepository->findOneBy(['name' => 'DON']);
-                        $timeMovement = $this->utilities->getDateTimeImmutableFromTimestamp($arrayOccasion['timeDon']);
-        
-                        $donnees = explode("|",$arrayOccasion['don']);
-                        if(count($donnees) > 1){
-                            $meansOfPaiement = $this->meansOfPayementRepository->findOneBy(['name' => $donnees[1]]);
-                            $movementPrice = $donnees[0];
-        
-                        }else{
-                            $meansOfPaiement = null;
-                            $movementPrice = null;
-                        }
-        
-                    }elseif(count(explode("|",$arrayOccasion['vente'])) > 1){
-        
-                        $movement = $this->movementOccasionRepository->findOneBy(['name' => 'VENTE']);
-                        $timeMovement = $this->utilities->getDateTimeImmutableFromTimestamp($arrayOccasion['timeVente']);
-        
-                        $donnees = explode("|",$arrayOccasion['vente']);
-                        if(count($donnees) > 1){
-                            $meansOfPaiement = $this->meansOfPayementRepository->findOneBy(['name' => $donnees[1]]);
-                            $movementPrice = (int) $donnees[0];
-        
-                        }else{
-                            $meansOfPaiement = null;
-                            $movementPrice = null;
-                        }
-        
-                    }else{
-                        $movement = $this->movementOccasionRepository->findOneBy(['name' => 'INCONNU']);
-                        $timeMovement = null;
-                        $movementPrice = null;
-                        $meansOfPaiement = $this->meansOfPayementRepository->findOneBy(['name' => 'INCONNU']);
-                    }
-        
-                    $movementOfOccasion->setMovement($movement)
-                        ->setMeansOfPaiement($meansOfPaiement)
-                        ->setMovementPrice($movementPrice * 100)
-                        ->setMovementTime($timeMovement)
-                        ->setOccasion($occasion);
-        
-                            $this->em->persist($movementOfOccasion);
-        
-            }
-        }
 }

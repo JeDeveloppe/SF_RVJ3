@@ -60,10 +60,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Boite::class)]
     private Collection $boites;
 
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: OffSiteOccasionSale::class)]
+    private Collection $offSiteOccasionSales;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
         $this->boites = new ArrayCollection();
+        $this->offSiteOccasionSales = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -250,8 +254,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-
     /**
      * @return Collection<int, Boite>
      */
@@ -282,4 +284,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, OffSiteOccasionSale>
+     */
+    public function getOffSiteOccasionSales(): Collection
+    {
+        return $this->offSiteOccasionSales;
+    }
+
+    public function addOffSiteOccasionSale(OffSiteOccasionSale $offSiteOccasionSale): static
+    {
+        if (!$this->offSiteOccasionSales->contains($offSiteOccasionSale)) {
+            $this->offSiteOccasionSales->add($offSiteOccasionSale);
+            $offSiteOccasionSale->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffSiteOccasionSale(OffSiteOccasionSale $offSiteOccasionSale): static
+    {
+        if ($this->offSiteOccasionSales->removeElement($offSiteOccasionSale)) {
+            // set the owning side to null (unless already changed)
+            if ($offSiteOccasionSale->getCreatedBy() === $this) {
+                $offSiteOccasionSale->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->nickname ?? '#'.$this->id;
+    }
 }

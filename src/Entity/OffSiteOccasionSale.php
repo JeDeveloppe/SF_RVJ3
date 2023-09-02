@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OffSiteOccasionSaleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OffSiteOccasionSaleRepository::class)]
@@ -30,6 +32,20 @@ class OffSiteOccasionSale
     #[ORM\ManyToOne(inversedBy: 'offSiteOccasionSales')]
     #[ORM\JoinColumn(nullable: false)]
     private ?MeansOfPayement $meansOfPaiement = null;
+
+    #[ORM\OneToMany(mappedBy: 'offSiteSale', targetEntity: Occasion::class)]
+    private Collection $occasions;
+
+    #[ORM\ManyToOne(inversedBy: 'offSiteOccasionSales')]
+    private ?User $createdBy = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    public function __construct()
+    {
+        $this->occasions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -92,6 +108,65 @@ class OffSiteOccasionSale
     public function setMeansOfPaiement(?MeansOfPayement $meansOfPaiement): static
     {
         $this->meansOfPaiement = $meansOfPaiement;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Occasion>
+     */
+    public function getOccasions(): Collection
+    {
+        return $this->occasions;
+    }
+
+    public function addOccasion(Occasion $occasion): static
+    {
+        if (!$this->occasions->contains($occasion)) {
+            $this->occasions->add($occasion);
+            $occasion->setOffSiteSale($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOccasion(Occasion $occasion): static
+    {
+        if ($this->occasions->removeElement($occasion)) {
+            // set the owning side to null (unless already changed)
+            if ($occasion->getOffSiteSale() === $this) {
+                $occasion->setOffSiteSale(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->meansOfPaiement;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

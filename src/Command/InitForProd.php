@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Repository\MeansOfPayementRepository;
 use App\Service\ImportRvj2\CreationConditionOccasionService;
 use App\Service\ImportRvj2\CreationCountrieService;
+use App\Service\ImportRvj2\CreationMouvementsOccasionService;
 use App\Service\ImportRvj2\CreationMoyenDePaiement;
 use App\Service\ImportRvj2\CreationMoyenDePaiementService;
 use App\Service\ImportRvj2\EditorService;
@@ -16,6 +17,7 @@ use App\Service\ImportRvj2\ImportOccasionsService;
 use App\Service\ImportRvj2\ImportPartenairesService;
 use App\Service\ImportRvj2\ImportPiecesService;
 use App\Service\ImportRvj2\ImportVillesService;
+use App\Service\ImportRvj2\UpdateOccasionMouvement;
 use App\Service\SpaceViewsService;
 use App\Service\UserService;
 use Symfony\Component\Console\Command\Command;
@@ -43,7 +45,9 @@ class InitForProd extends Command
             private EditorService $editorService,
             private CreationConditionOccasionService $creationConditionOccasionService,
             private CreationMoyenDePaiementService $creationMoyenDePaiementService,
-            private ImportOccasionsService $importOccasionsService
+            private ImportOccasionsService $importOccasionsService,
+            private CreationMouvementsOccasionService $creationMouvementsOccasionService,
+            private UpdateOccasionMouvement $updateOccasionMouvement
         )
     {
         parent::__construct();
@@ -92,8 +96,14 @@ class InitForProd extends Command
         //on cree les MOYENS DE PAIEMENT
         $this->creationMoyenDePaiementService->addMoyens($io);
 
-        //on importe les jeux complet et leur mouvements (occasions)
+        //on importe les jeux complet
         $this->importOccasionsService->importOccasions($io);
+
+        //on cree les mouvements des occasions
+        $this->creationMouvementsOccasionService->importMouvementsOccasions($io);
+
+        $this->updateOccasionMouvement->updateOccasionMouvement($io);
+
 
 
         return Command::SUCCESS;
