@@ -21,9 +21,13 @@ class MeansOfPayement
     #[ORM\OneToMany(mappedBy: 'meansOfPaiement', targetEntity: Occasion::class)]
     private Collection $occasions;
 
+    #[ORM\OneToMany(mappedBy: 'meansOfPaiement', targetEntity: OffSiteOccasionSale::class)]
+    private Collection $offSiteOccasionSales;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
+        $this->offSiteOccasionSales = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,5 +80,35 @@ class MeansOfPayement
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, OffSiteOccasionSale>
+     */
+    public function getOffSiteOccasionSales(): Collection
+    {
+        return $this->offSiteOccasionSales;
+    }
+
+    public function addOffSiteOccasionSale(OffSiteOccasionSale $offSiteOccasionSale): static
+    {
+        if (!$this->offSiteOccasionSales->contains($offSiteOccasionSale)) {
+            $this->offSiteOccasionSales->add($offSiteOccasionSale);
+            $offSiteOccasionSale->setMeansOfPaiement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffSiteOccasionSale(OffSiteOccasionSale $offSiteOccasionSale): static
+    {
+        if ($this->offSiteOccasionSales->removeElement($offSiteOccasionSale)) {
+            // set the owning side to null (unless already changed)
+            if ($offSiteOccasionSale->getMeansOfPaiement() === $this) {
+                $offSiteOccasionSale->setMeansOfPaiement(null);
+            }
+        }
+
+        return $this;
     }
 }

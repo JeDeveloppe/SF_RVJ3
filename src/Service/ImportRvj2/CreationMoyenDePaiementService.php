@@ -17,7 +17,7 @@ class CreationMoyenDePaiementService
 
     public function addMoyens(SymfonyStyle $io){
 
-        $moyens = ['CB','ESPÈCES','CHEQUE','VIREMENT','DON'];
+        $moyens = ['CB','ESPÈCES','CHEQUE','VIREMENT','DON','INCONNU'];
 
         foreach($moyens as $moyenArray){
 

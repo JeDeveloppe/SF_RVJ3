@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OccasionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OccasionRepository::class)]
@@ -60,6 +62,14 @@ class Occasion
 
     #[ORM\Column(nullable: true)]
     private ?int $rvj2id = null;
+
+    #[ORM\OneToMany(mappedBy: 'occasion', targetEntity: OffSiteOccasionSale::class)]
+    private Collection $offSiteOccasionSales;
+
+    public function __construct()
+    {
+        $this->offSiteOccasionSales = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -232,5 +242,40 @@ class Occasion
         $this->rvj2id = $rvj2id;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, OffSiteOccasionSale>
+     */
+    public function getOffSiteOccasionSales(): Collection
+    {
+        return $this->offSiteOccasionSales;
+    }
+
+    public function addOffSiteOccasionSale(OffSiteOccasionSale $offSiteOccasionSale): static
+    {
+        if (!$this->offSiteOccasionSales->contains($offSiteOccasionSale)) {
+            $this->offSiteOccasionSales->add($offSiteOccasionSale);
+            $offSiteOccasionSale->setOccasion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffSiteOccasionSale(OffSiteOccasionSale $offSiteOccasionSale): static
+    {
+        if ($this->offSiteOccasionSales->removeElement($offSiteOccasionSale)) {
+            // set the owning side to null (unless already changed)
+            if ($offSiteOccasionSale->getOccasion() === $this) {
+                $offSiteOccasionSale->setOccasion(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->reference;
     }
 }

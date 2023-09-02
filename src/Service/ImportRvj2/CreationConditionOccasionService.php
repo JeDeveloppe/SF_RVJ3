@@ -22,7 +22,7 @@ class CreationConditionOccasionService
 
         $conditions = ['BON ÉTAT','ÉTAT MOYEN','ORIGINALE','SUR LA BOITE','IMPRIMÉE','COMME NEUF','SANS','NEUF','NEUVE'];
 
-        $ventesDons = ['DON','VENTE'];
+        $ventesDons = ['DON','VENTE','INCONNU'];
 
         $io->title('Création: condition des occasion et des moyens de paiement');
 

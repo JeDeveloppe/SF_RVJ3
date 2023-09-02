@@ -12,6 +12,7 @@ use App\Entity\Editor;
 use App\Entity\MeansOfPayement;
 use App\Entity\MovementOccasion;
 use App\Entity\Occasion;
+use App\Entity\OffSiteOccasionSale;
 use App\Entity\Partner;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -68,9 +69,12 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Departements', 'fas fa-list', Department::class);
         yield MenuItem::linkToCrud('Pays', 'fas fa-list', Country::class);
 
-        yield MenuItem::section('Paramètres (autres)');
+        yield MenuItem::section('Gestion des occasions:');
+        yield MenuItem::linkToCrud('Ventes / dons', 'fas fa-list', OffSiteOccasionSale::class);
+        yield MenuItem::linkToCrud('Liste des états (pièces, boite, règle)', 'fas fa-list', ConditionOccasion::class);
+        
+        yield MenuItem::section('Paramètres:');
         yield MenuItem::linkToCrud('Mouvements', 'fas fa-list', MovementOccasion::class);
-        yield MenuItem::linkToCrud('Condition des occasions', 'fas fa-list', ConditionOccasion::class);
         yield MenuItem::linkToCrud('Moyens de paiement', 'fas fa-list', MeansOfPayement::class);
 
     }

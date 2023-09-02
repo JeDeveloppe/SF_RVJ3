@@ -55,6 +55,7 @@ class OccasionCrudController extends AbstractCrudController
                 ->onlyOnForms(),
             AssociationField::new('meansOfPaiement')
                 ->setLabel('Moyen de paiement')
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                 ->onlyOnForms(),
         ];
     }
