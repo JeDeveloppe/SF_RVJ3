@@ -91,18 +91,18 @@ class InitForProd extends Command
         //$this->importPiecesService->importPieces($io);
 
         //on cree les conditions des occasions
-        $this->creationConditionOccasionService->addConditions($io);
+        //$this->creationConditionOccasionService->addConditions($io);
 
         //on cree les MOYENS DE PAIEMENT
-        $this->creationMoyenDePaiementService->addMoyens($io);
+        //$this->creationMoyenDePaiementService->addMoyens($io);
 
         //on importe les jeux complet
-        $this->importOccasionsService->importOccasions($io);
+        //$this->importOccasionsService->importOccasions($io);
 
         //on cree les mouvements des occasions
-        $this->creationMouvementsOccasionService->importMouvementsOccasions($io);
+        //$this->creationMouvementsOccasionService->importMouvementsOccasions($io);
 
-        $this->updateOccasionMouvement->updateOccasionMouvement($io);
+        //$this->updateOccasionMouvement->updateOccasionMouvement($io);
 
 
 

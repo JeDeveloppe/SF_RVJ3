@@ -31,7 +31,9 @@ class UserService
             $user = new User();
         }
 
-        $user->setCreatedAt(new DateTimeImmutable('now'))->setLastvisite(new DateTimeImmutable('now'))->setRvj2id(0)
+        $user->setCreatedAt(new DateTimeImmutable('now'))
+            ->setLastvisite(new DateTimeImmutable('now'))
+            ->setRvj2id(0)
             ->setEmail($_ENV['ADMIN_EMAIL'])
             ->setRoles(['ROLE_SUPER_ADMIN'])
             ->setNickname('JeDéveloppe')

@@ -85,11 +85,11 @@ class ImportClientsService
                 ->setCountry($this->countryRepository->findOneBy(['isocode' => $arrayClient['paysFacturation']]) ?? $this->countryRepository->findOneBy(['isocode' => 'INC']) );
 
                 if($arrayClient['timeInscription'] != 0){
-                    $time = (int) $arrayClient['timeInscription'];
+                    $time = $arrayClient['timeInscription'];
                     $client->setCreatedAt($this->utilities->getDateTimeImmutableFromTimestamp($time));
                 }
 
-                $time = (int) $arrayClient['lastVisite'];
+                $time = $arrayClient['lastVisite'];
                 $client->setLastvisite($this->utilities->getDateTimeImmutableFromTimestamp($time));
 
 
