@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BoiteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -57,7 +59,7 @@ class Boite
     #[ORM\Column]
     private ?bool $isOnline = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable:true)]
     private ?int $rvj2id = null;
 
     #[ORM\Column]
@@ -74,6 +76,14 @@ class Boite
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $contentMessage = null;
+
+    #[ORM\OneToMany(mappedBy: 'boite', targetEntity: Occasion::class)]
+    private Collection $occasions;
+
+    public function __construct()
+    {
+        $this->occasions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -318,5 +328,40 @@ class Boite
         $this->contentMessage = $contentMessage;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Occasion>
+     */
+    public function getOccasions(): Collection
+    {
+        return $this->occasions;
+    }
+
+    public function addOccasion(Occasion $occasion): static
+    {
+        if (!$this->occasions->contains($occasion)) {
+            $this->occasions->add($occasion);
+            $occasion->setBoite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOccasion(Occasion $occasion): static
+    {
+        if ($this->occasions->removeElement($occasion)) {
+            // set the owning side to null (unless already changed)
+            if ($occasion->getBoite() === $this) {
+                $occasion->setBoite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

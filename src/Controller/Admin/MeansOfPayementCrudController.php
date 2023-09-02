@@ -27,9 +27,9 @@ class MeansOfPayementCrudController extends AbstractCrudController
     {
         return $crud
             ->showEntityActionsInlined()
-            ->setPageTitle('index', 'Liste des moyens')
-            ->setPageTitle('new', 'Nouveau moyen')
-            ->setPageTitle('edit', 'Édition d\un moyen')
+            ->setPageTitle('index', 'Liste des moyens de paiement')
+            ->setPageTitle('new', 'Nouveau moyen de paiement')
+            ->setPageTitle('edit', 'Édition d\un moyen de paiement')
 
         ;
     }

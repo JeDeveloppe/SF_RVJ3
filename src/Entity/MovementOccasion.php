@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\MeansOfPayementRepository;
+use App\Repository\MovementOccasionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: MeansOfPayementRepository::class)]
-class MeansOfPayement
+#[ORM\Entity(repositoryClass: MovementOccasionRepository::class)]
+class MovementOccasion
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,7 +18,7 @@ class MeansOfPayement
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'meansOfPaiement', targetEntity: Occasion::class)]
+    #[ORM\OneToMany(mappedBy: 'movement', targetEntity: Occasion::class)]
     private Collection $occasions;
 
     public function __construct()
@@ -55,7 +55,7 @@ class MeansOfPayement
     {
         if (!$this->occasions->contains($occasion)) {
             $this->occasions->add($occasion);
-            $occasion->setMeansOfPaiement($this);
+            $occasion->setMovement($this);
         }
 
         return $this;
@@ -65,8 +65,8 @@ class MeansOfPayement
     {
         if ($this->occasions->removeElement($occasion)) {
             // set the owning side to null (unless already changed)
-            if ($occasion->getMeansOfPaiement() === $this) {
-                $occasion->setMeansOfPaiement(null);
+            if ($occasion->getMovement() === $this) {
+                $occasion->setMovement(null);
             }
         }
 

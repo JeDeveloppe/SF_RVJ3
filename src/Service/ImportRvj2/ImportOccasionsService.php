@@ -6,6 +6,9 @@ use App\Entity\Occasion;
 use DateTimeImmutable;
 use League\Csv\Reader;
 use App\Repository\BoiteRepository;
+use App\Repository\ConditionOccasionRepository;
+use App\Repository\MeansOfPayementRepository;
+use App\Repository\MovementOccasionRepository;
 use App\Repository\OccasionRepository;
 use App\Service\Utilities;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +20,9 @@ class ImportOccasionsService
         private BoiteRepository $boiteRepository,
         private EntityManagerInterface $em,
         private OccasionRepository $occasionRepository,
+        private MovementOccasionRepository $movementOccasionRepository,
+        private MeansOfPayementRepository $meansOfPayementRepository,
+        private ConditionOccasionRepository $conditionOccasionRepository,
         private Utilities $utilities
         ){
     }
@@ -51,49 +57,64 @@ class ImportOccasionsService
 
     private function createOrUpdateOccasion(array $arrayOccasion): void
     {
-        $occasion = $this->occasionRepository->findOneBy(['reference' => $arrayOccasion['reference']]);
+        $occasion = $this->occasionRepository->findOneBy(['rvj2id' => $arrayOccasion['idJeuxComplet']]);
 
-
-        
         if(!$occasion){
             $occasion = new Occasion();
         }
+            //! on detecte si on a fait un don
+            if(count(explode("|",$arrayOccasion['don'])) > 1){
 
-            $donnees = explode("|",$arrayOccasion['vente']);
+                $movement = $this->movementOccasionRepository->findOneBy(['name' => 'DON']);
+                $timeMovement = $this->utilities->getDateTimeImmutableFromTimestamp($arrayOccasion['timeDon']);
 
-            if(count($donnees) > 1){
-                $vente = true;
-                $moyenAchat = $donnees[1];
-                $prixVente = $donnees[0];
-                $timeVente = $this->utilities->getDateTimeImmutableFromTimestamp($arrayOccasion['timeVente']);
+                $donnees = explode("|",$arrayOccasion['don']);
+                if(count($donnees) > 1){
+                    $meansOfPaiement = $this->meansOfPayementRepository->findOneBy(['name' => $donnees[1]]);
+                    $movementPrice = $donnees[0];
+
+                }else{
+                    $meansOfPaiement = null;
+                    $movementPrice = null;
+                }
+
+            }elseif(count(explode("|",$arrayOccasion['vente'])) > 1){
+
+                $movement = $this->movementOccasionRepository->findOneBy(['name' => 'VENTE']);
+                $timeMovement = $this->utilities->getDateTimeImmutableFromTimestamp($arrayOccasion['timeVente']);
+
+                $donnees = explode("|",$arrayOccasion['vente']);
+                if(count($donnees) > 1){
+                    $meansOfPaiement = $this->meansOfPayementRepository->findOneBy(['name' => $donnees[1]]);
+                    $movementPrice = (int) $donnees[0];
+
+                }else{
+                    $meansOfPaiement = null;
+                    $movementPrice = null;
+                }
+
             }else{
-                $vente = false;
-                $moyenAchat = null;
-                $prixVente = null;
-                $timeVente = null;
+                $movement = null;
+                $timeMovement = null;
+                $movementPrice = null;
+                $meansOfPaiement = null;
             }
 
-            $occasion->setBoite($this->boiteRepository->findOneBy(['rvj2Id' => $arrayOccasion['idCatalogue']]))
+            $occasion->setBoite($this->boiteRepository->findOneBy(['rvj2id' => $arrayOccasion['idCatalogue']]))
                     ->setReference($arrayOccasion['reference'])
-                    ->setPriceHt($arrayOccasion['prixHT'])
-                    ->setOldPriceHt($arrayOccasion['ancienPrixHT'])
                     ->setInformation($this->stringToNull($arrayOccasion['information']))
-                    ->setIsNeuf($arrayOccasion['isNeuf'])
-                    ->setEtatBoite($arrayOccasion['etatBoite'])
-                    ->setEtatMateriel($arrayOccasion['etatMateriel'])
-                    ->setRegleJeu($arrayOccasion['regleJeu'])
+                    ->setIsNew($this->stringToBoolean($arrayOccasion['isNeuf']))
+                    ->setSellingPriceHT($arrayOccasion['prixHT'])
+                    ->setBoxCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatBoite']]))
+                    ->setEquipmentCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatMateriel']]))
+                    ->setGameRule($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['regleJeu']]))
                     ->setIsOnLine($arrayOccasion['actif'])
-                    ->setIsDonation($arrayOccasion['don'])
-                    ->setIsSale($vente)
-                    ->setStock($arrayOccasion['stock'])
-                    ->setMeansOfSale($moyenAchat)
-                    ->setPrixDeVente($prixVente)
-                    ->setSale($timeVente)
-                    ->setRvj2Id($arrayOccasion['idJeuxComplet']);
-
-            if($arrayOccasion['timeDon'] != 0){
-                $occasion->setDonation($this->utilities->getDateTimeImmutableFromTimestamp($arrayOccasion['timeDon']));
-            }
+                    ->setMovement($movement)
+                    ->setMeansOfPaiement($meansOfPaiement)
+                    ->setMovementPrice($movementPrice * 100)
+                    ->setMovementTime($timeMovement)
+                    ->setRvj2id($arrayOccasion['idJeuxComplet'])
+                    ;
 
         $this->em->persist($occasion);
     }
@@ -102,6 +123,20 @@ class ImportOccasionsService
         
         if($value == "NULL"){
             $value = NULL;
+        }
+
+        return $value;
+    }
+
+    private function stringToBoolean($value){
+        
+        if($value = "NULL"){
+            
+            $value = 0;
+
+        }else{
+
+            $value = 1;
         }
 
         return $value;

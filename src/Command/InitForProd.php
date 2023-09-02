@@ -12,6 +12,7 @@ use App\Service\ImportRvj2\ImportAdressesService;
 use App\Service\ImportRvj2\ImportBoitesService;
 use App\Service\ImportRvj2\ImportClientsService;
 use App\Service\ImportRvj2\ImportDepartementsService;
+use App\Service\ImportRvj2\ImportOccasionsService;
 use App\Service\ImportRvj2\ImportPartenairesService;
 use App\Service\ImportRvj2\ImportPiecesService;
 use App\Service\ImportRvj2\ImportVillesService;
@@ -41,7 +42,8 @@ class InitForProd extends Command
             private ImportPiecesService $importPiecesService,
             private EditorService $editorService,
             private CreationConditionOccasionService $creationConditionOccasionService,
-            private CreationMoyenDePaiementService $creationMoyenDePaiementService
+            private CreationMoyenDePaiementService $creationMoyenDePaiementService,
+            private ImportOccasionsService $importOccasionsService
         )
     {
         parent::__construct();
@@ -89,6 +91,9 @@ class InitForProd extends Command
 
         //on cree les MOYENS DE PAIEMENT
         $this->creationMoyenDePaiementService->addMoyens($io);
+
+        //on importe les jeux complet (occasions)
+        $this->importOccasionsService->importOccasions($io);
 
 
         return Command::SUCCESS;
