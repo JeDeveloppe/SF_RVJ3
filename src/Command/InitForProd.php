@@ -78,7 +78,7 @@ class InitForProd extends Command
         // $this->importAdressesService->importAdresses($io);
 
         //on importe les boites
-        //$this->importBoitesService->importBoites($io);
+        $this->importBoitesService->importBoites($io);
 
         //on genere les editeurs de facon distinct
         // $this->editorService->addEditorsInDatabase($io);
@@ -87,13 +87,13 @@ class InitForProd extends Command
         //$this->importPiecesService->importPieces($io);
 
         //on cree les conditions des occasions
-        $this->creationConditionOccasionService->addConditions($io);
+        //$this->creationConditionOccasionService->addConditions($io);
 
         //on cree les MOYENS DE PAIEMENT
-        $this->creationMoyenDePaiementService->addMoyens($io);
+        //$this->creationMoyenDePaiementService->addMoyens($io);
 
         //on importe les jeux complet (occasions)
-        $this->importOccasionsService->importOccasions($io);
+        //$this->importOccasionsService->importOccasions($io);
 
 
         return Command::SUCCESS;

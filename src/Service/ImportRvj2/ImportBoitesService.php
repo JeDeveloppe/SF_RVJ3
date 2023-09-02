@@ -144,7 +144,7 @@ class ImportBoitesService
             ->setYear($year)
             ->setSlug($arrayBoite['urlNom'])
             ->setIsDeliverable($arrayBoite['isLivrable'])
-            ->setIsOccasion($this->nullToBoolean($arrayBoite['isComplet']))
+            ->setIsOccasion($arrayBoite['isComplet'])
             ->setWeigth($this->nullTo0($arrayBoite['poidBoite']))
             ->setAge((int) $arrayBoite['age'])
             ->setPlayers((int) $arrayBoite['nbrJoueurs'])
@@ -172,9 +172,9 @@ class ImportBoitesService
     private function nullToBoolean($value){
         
         if($value == "NULL"){
-            $value = false;
+            $value = 0;
         }else{
-            $value = true;
+            $value = 1;
         }
 
         return $value;
