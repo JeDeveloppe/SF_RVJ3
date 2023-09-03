@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $membership = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $rvj2id = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
@@ -209,7 +209,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->rvj2id;
     }
 
-    public function setRvj2id(int $rvj2id): static
+    public function setRvj2id(?int $rvj2id): static
     {
         $this->rvj2id = $rvj2id;
 

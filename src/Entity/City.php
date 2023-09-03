@@ -35,7 +35,7 @@ class City
     #[ORM\JoinColumn(nullable: false)]
     private ?Country $country = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable:true)]
     private ?int $rvj2id = null;
 
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: Partner::class)]
@@ -132,7 +132,7 @@ class City
         return $this->rvj2id;
     }
 
-    public function setRvj2id(int $rvj2id): static
+    public function setRvj2id(?int $rvj2id): static
     {
         $this->rvj2id = $rvj2id;
 

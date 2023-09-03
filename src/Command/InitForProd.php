@@ -7,6 +7,7 @@ use App\Service\ImportRvj2\CreationCountrieService;
 use App\Service\ImportRvj2\CreationLegalInformationService;
 use App\Service\ImportRvj2\CreationMouvementsOccasionService;
 use App\Service\ImportRvj2\CreationMoyenDePaiementService;
+use App\Service\ImportRvj2\CreationUndefinedAdminAndAdresseService;
 use App\Service\ImportRvj2\EditorService;
 use App\Service\ImportRvj2\ImportAdressesService;
 use App\Service\ImportRvj2\ImportBoitesService;
@@ -47,7 +48,8 @@ class InitForProd extends Command
             private CreationMouvementsOccasionService $creationMouvementsOccasionService,
             private UpdateOccasionMouvement $updateOccasionMouvement,
             private ImportDocumentsService $importDocumentsService,
-            private CreationLegalInformationService $creationLegalInformationService
+            private CreationLegalInformationService $creationLegalInformationService,
+            private CreationUndefinedAdminAndAdresseService $creationUndefinedAdminAndAdresseService
         )
     {
         parent::__construct();
@@ -106,9 +108,13 @@ class InitForProd extends Command
         //$this->updateOccasionMouvement->updateOccasionMouvement($io);
 
         //on crer les information legale et la tax
-        $this->creationLegalInformationService->creationLegalInformation($io);
+        //$this->creationLegalInformationService->creationLegalInformation($io);
+
+        //on cree undefined admin and is adresse for undefined user in document
+        $this->creationUndefinedAdminAndAdresseService->creationAdminAdresse($io);
+
         //on importe les documents
-        // $this->importDocumentsService->importDocuments($io);
+        //$this->importDocumentsService->importDocuments($io);
         // $this->importPaiementService->importPaiements($io);
 
         return Command::SUCCESS;

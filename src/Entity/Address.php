@@ -36,7 +36,7 @@ class Address
     #[ORM\JoinColumn(nullable: false)]
     private ?City $city = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable:true)]
     private ?int $rvj2id = null;
 
     public function getId(): ?int
@@ -133,7 +133,7 @@ class Address
         return $this->rvj2id;
     }
 
-    public function setRvj2id(int $rvj2id): static
+    public function setRvj2id(?int $rvj2id): static
     {
         $this->rvj2id = $rvj2id;
 
