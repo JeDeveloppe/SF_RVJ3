@@ -8,6 +8,7 @@ use App\Entity\City;
 use App\Entity\ConditionOccasion;
 use App\Entity\Country;
 use App\Entity\Department;
+use App\Entity\DocumentStatus;
 use App\Entity\Editor;
 use App\Entity\LegalInformation;
 use App\Entity\MeansOfPayement;
@@ -85,6 +86,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Paramètres:');
         yield MenuItem::linkToCrud('Mouvements de paiement', 'fas fa-list', MovementOccasion::class);
         yield MenuItem::linkToCrud('Moyens de retrait', 'fas fa-list', ShippingMethod::class);
+        yield MenuItem::linkToCrud('Status des documents', 'fas fa-list', DocumentStatus::class);
         yield MenuItem::linkToCrud('Moyens de paiement', 'fas fa-list', MeansOfPayement::class);
 
     }

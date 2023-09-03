@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Service\ImportRvj2\CreationConditionOccasionService;
 use App\Service\ImportRvj2\CreationCountrieService;
+use App\Service\ImportRvj2\CreationDocumentStatusService;
 use App\Service\ImportRvj2\CreationLegalInformationService;
 use App\Service\ImportRvj2\CreationMouvementsOccasionService;
 use App\Service\ImportRvj2\CreationMoyenDePaiementService;
@@ -49,7 +50,8 @@ class InitForProd extends Command
             private UpdateOccasionMouvement $updateOccasionMouvement,
             private ImportDocumentsService $importDocumentsService,
             private CreationLegalInformationService $creationLegalInformationService,
-            private CreationUndefinedAdminAndAdresseService $creationUndefinedAdminAndAdresseService
+            private CreationUndefinedAdminAndAdresseService $creationUndefinedAdminAndAdresseService,
+            private CreationDocumentStatusService $creationDocumentStatusService
         )
     {
         parent::__construct();
@@ -111,7 +113,10 @@ class InitForProd extends Command
         //$this->creationLegalInformationService->creationLegalInformation($io);
 
         //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
-        $this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
+        //$this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
+
+        //on cree les status des documents
+        $this->creationDocumentStatusService->creationStatus($io);
 
         //on importe les documents
         //$this->importDocumentsService->importDocuments($io);

@@ -2,28 +2,21 @@
 
 namespace App\Service\ImportRvj2;
 
-use DateTimeImmutable;
 use League\Csv\Reader;
 use App\Entity\Document;
-use App\Entity\Paiement;
-use App\Repository\PaysRepository;
-use App\Repository\UserRepository;
-use App\Repository\BoiteRepository;
-use App\Repository\DocumentRepository;
-use App\Repository\EtatDocumentRepository;
-use App\Repository\OccasionRepository;
+use App\Repository\DocumentStatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\shippingMethodRepository;
-use App\Repository\InformationsLegalesRepository;
-use App\Repository\PaiementRepository;
-use App\Service\Utilities;
+use App\Repository\ShippingMethodRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ImportDocumentsService
 {
     public function __construct(
         private EntityManagerInterface $em,
-        private shippingMethodRepository $shippingMethodRepository,
+        private ShippingMethodRepository $shippingMethodRepository,
+        private DocumentStatusRepository $documentStatusRepository,
+        private UserRepository $userRepository,
         // private DocumentRepository $documentRepository,
         // private PaysRepository $paysRepository,
         // private shippingMethodRepository $shippingMethodRepository,
@@ -33,7 +26,7 @@ class ImportDocumentsService
         // private OccasionRepository $occasionRepository,
         // private BoiteRepository $boiteRepository,
         // private PaiementRepository $paiementRepository,
-        // private EtatDocumentRepository $etatDocumentRepository
+        // private documentStatusRepository $documentStatusRepository
         ){
     }
 
@@ -75,6 +68,7 @@ class ImportDocumentsService
             $document = new Document();
         }
 
+        //TODO faire Entity Document
         $document
         ->setToken($arrayDoc['validKey'])
         ->setRvj2Id($arrayDoc['idDocument'])
@@ -96,6 +90,7 @@ class ImportDocumentsService
         ->setCost($arrayDoc['prix_preparation'])
         ->setTokenPaiementRvj2($arrayDoc['num_transaction']);
 
+        //?ok version 3
         if($arrayDoc['expedition'] == "poste"){
             $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'POSTE']);
         }else if($arrayDoc['expedition'] == "mondialRelay"){
@@ -107,27 +102,26 @@ class ImportDocumentsService
         }else{
             $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'INDEFINI']);
         }
-
         $document->setEnvoi($expedition);
 
+        //?ok version 3
         if($arrayDoc['etat'] == 2 && $arrayDoc['envoyer'] !== 0){
-            $etat = $this->etatDocumentRepository->findOneBy(['name' => 'Expédiée / Terminée']);
+            $etat = $this->documentStatusRepository->findOneBy(['name' => 'EXPÉDIÉE / TERMINÉE']);
         }else if($arrayDoc['etat'] == 3){ // 3 = mis de cote dans la version 2
-            $etat = $this->etatDocumentRepository->findOneBy(['name' => 'Mise de côté']); 
+            $etat = $this->documentStatusRepository->findOneBy(['name' => 'MISE DE CÔTÉ']); 
         }else if($arrayDoc['etat'] == 2 && $arrayDoc['envoyer'] == 0){
-            $etat = $this->etatDocumentRepository->findOneBy(['name' => 'A préparer']); 
+            $etat = $this->documentStatusRepository->findOneBy(['name' => 'A PRÉPARER']); 
         }else if($arrayDoc['etat'] == 1){ // non facturer dans version 2
-            $etat = $this->etatDocumentRepository->findOneBy(['name' => 'Non facturé']);
+            $etat = $this->documentStatusRepository->findOneBy(['name' => 'NON FACTURÉ']);
         }else{
-            dd("ETAT NON DEFINI DANS IMPORTATION DOCUMENT SERVICE ".$arrayDoc['etat']);
+            $etat = $this->documentStatusRepository->findOneBy(['name' => 'INDÉFINIE']);
         }
-
         $document->setEtatDocument($etat);
 
+        //?ok version 3
         $user = $this->userRepository->findOneBy(['rvj2Id' => (int) $arrayDoc['idUser']]);
-
         if(!$user){
-            $document->setUser($this->userRepository->findOneBy(['email' => 'ADMINISTRATION@ADMINISTRATION.FR']));
+            $document->setUser($this->userRepository->findOneBy(['email' => $_ENV['UNDEFINED_USER_EMAIL']]));
         }else{
             $document->setUser($user);
         }

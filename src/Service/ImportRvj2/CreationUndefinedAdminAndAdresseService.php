@@ -38,7 +38,7 @@ class CreationUndefinedAdminAndAdresseService
 
     public function creationAdminAdresseAndShippingMethod(SymfonyStyle $io): void
     {
-        $io->title('Création / mise à jour de des modes de livraison');
+        $io->title('Création / mise à jour des modes de livraison');
 
         $shippingMethods = ['MONDIAL RELAY', 'POSTE', 'COLISSIMO', 'INDEFINI', 'RETRAIT A LA COOP 100%'];
 
