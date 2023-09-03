@@ -110,8 +110,8 @@ class InitForProd extends Command
         //on crer les information legale et la tax
         //$this->creationLegalInformationService->creationLegalInformation($io);
 
-        //on cree undefined admin and is adresse for undefined user in document
-        $this->creationUndefinedAdminAndAdresseService->creationAdminAdresse($io);
+        //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
+        $this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
 
         //on importe les documents
         //$this->importDocumentsService->importDocuments($io);

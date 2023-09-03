@@ -15,6 +15,7 @@ use App\Entity\MovementOccasion;
 use App\Entity\Occasion;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Partner;
+use App\Entity\ShippingMethod;
 use App\Entity\Tax;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -82,7 +83,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Taxes', 'fas fa-list', Tax::class);
 
         yield MenuItem::section('Paramètres:');
-        yield MenuItem::linkToCrud('Mouvements', 'fas fa-list', MovementOccasion::class);
+        yield MenuItem::linkToCrud('Mouvements de paiement', 'fas fa-list', MovementOccasion::class);
+        yield MenuItem::linkToCrud('Moyens de retrait', 'fas fa-list', ShippingMethod::class);
         yield MenuItem::linkToCrud('Moyens de paiement', 'fas fa-list', MeansOfPayement::class);
 
     }

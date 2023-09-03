@@ -13,7 +13,7 @@ use App\Repository\DocumentRepository;
 use App\Repository\EtatDocumentRepository;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\MethodeEnvoiRepository;
+use App\Repository\shippingMethodRepository;
 use App\Repository\InformationsLegalesRepository;
 use App\Repository\PaiementRepository;
 use App\Service\Utilities;
@@ -23,9 +23,10 @@ class ImportDocumentsService
 {
     public function __construct(
         private EntityManagerInterface $em,
+        private shippingMethodRepository $shippingMethodRepository,
         // private DocumentRepository $documentRepository,
         // private PaysRepository $paysRepository,
-        // private MethodeEnvoiRepository $methodeEnvoiRepository,
+        // private shippingMethodRepository $shippingMethodRepository,
         // private Utilities $utilities,
         // private InformationsLegalesRepository $informationsLegalesRepository,
         // private UserRepository $userRepository,
@@ -96,15 +97,15 @@ class ImportDocumentsService
         ->setTokenPaiementRvj2($arrayDoc['num_transaction']);
 
         if($arrayDoc['expedition'] == "poste"){
-            $expedition = $this->methodeEnvoiRepository->find(1);
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'POSTE']);
         }else if($arrayDoc['expedition'] == "mondialRelay"){
-            $expedition = $this->methodeEnvoiRepository->find(4);
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'MONDIAL RELAY']);
         }else if($arrayDoc['expedition'] == "retrait_caen1"){
-            $expedition = $this->methodeEnvoiRepository->find(3);
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT A LA COOP 100%']);
         }else if($arrayDoc['expedition'] == "colissimo"){
-            $expedition = $this->methodeEnvoiRepository->find(2);
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'COLISSIMO']);
         }else{
-            dd('Methode envoi non connue '.$arrayDoc['expedition']);
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'INDEFINI']);
         }
 
         $document->setEnvoi($expedition);

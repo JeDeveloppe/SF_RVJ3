@@ -6,6 +6,7 @@ use App\Entity\Address;
 use App\Entity\User;
 use DateTimeImmutable;
 use App\Entity\Adresse;
+use App\Entity\ShippingMethod;
 use App\Repository\AddressRepository;
 use App\Repository\PaysRepository;
 use App\Repository\UserRepository;
@@ -14,6 +15,7 @@ use App\Repository\AdresseRepository;
 use App\Repository\CityRepository;
 use App\Repository\CountryRepository;
 use App\Repository\DocumentRepository;
+use App\Repository\ShippingMethodRepository;
 use App\Service\DocumentService;
 use App\Service\Utilities;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,12 +31,30 @@ class CreationUndefinedAdminAndAdresseService
         private UserPasswordHasherInterface $userPasswordHasher,
         private Utilities $utilities,
         private AddressRepository $addressRepository,
-        private CityRepository $cityRepository
+        private CityRepository $cityRepository,
+        private ShippingMethodRepository $shippingMethodRepository
         ){
     }
 
-    public function creationAdminAdresse(SymfonyStyle $io): void
+    public function creationAdminAdresseAndShippingMethod(SymfonyStyle $io): void
     {
+        $io->title('Création / mise à jour de des modes de livraison');
+
+        $shippingMethods = ['MONDIAL RELAY', 'POSTE', 'COLISSIMO', 'INDEFINI', 'RETRAIT A LA COOP 100%'];
+
+        foreach($shippingMethods as $shippingMethod){
+            $shipping = $this->shippingMethodRepository->findOneBy(['name' => $shippingMethod]);
+
+            if(!$shipping){
+                $shipping = new ShippingMethod();
+            }
+
+            $shipping->setName($shippingMethod);
+            $this->manager->persist($shipping);
+        }
+        $this->manager->flush();
+        
+        
         //on vérifié si pn a déjà créer l'administrateur spécial
         $user = $this->userRepository->findOneBy(['email' => $_ENV['UNDEFINED_USER_EMAIL']]);
 
