@@ -30,11 +30,15 @@ class Country
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: City::class)]
     private Collection $cities;
 
+    #[ORM\OneToMany(mappedBy: 'country', targetEntity: LegalInformation::class)]
+    private Collection $legalInformation;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->departments = new ArrayCollection();
         $this->cities = new ArrayCollection();
+        $this->legalInformation = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -159,5 +163,35 @@ class Country
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, LegalInformation>
+     */
+    public function getLegalInformation(): Collection
+    {
+        return $this->legalInformation;
+    }
+
+    public function addLegalInformation(LegalInformation $legalInformation): static
+    {
+        if (!$this->legalInformation->contains($legalInformation)) {
+            $this->legalInformation->add($legalInformation);
+            $legalInformation->setCountry($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLegalInformation(LegalInformation $legalInformation): static
+    {
+        if ($this->legalInformation->removeElement($legalInformation)) {
+            // set the owning side to null (unless already changed)
+            if ($legalInformation->getCountry() === $this) {
+                $legalInformation->setCountry(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -63,11 +63,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: OffSiteOccasionSale::class)]
     private Collection $offSiteOccasionSales;
 
+    #[ORM\OneToMany(mappedBy: 'updatedBy', targetEntity: LegalInformation::class)]
+    private Collection $legalInformation;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
         $this->boites = new ArrayCollection();
         $this->offSiteOccasionSales = new ArrayCollection();
+        $this->legalInformation = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -317,5 +321,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->nickname ?? '#'.$this->id;
+    }
+
+    /**
+     * @return Collection<int, LegalInformation>
+     */
+    public function getLegalInformation(): Collection
+    {
+        return $this->legalInformation;
+    }
+
+    public function addLegalInformation(LegalInformation $legalInformation): static
+    {
+        if (!$this->legalInformation->contains($legalInformation)) {
+            $this->legalInformation->add($legalInformation);
+            $legalInformation->setUpdatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLegalInformation(LegalInformation $legalInformation): static
+    {
+        if ($this->legalInformation->removeElement($legalInformation)) {
+            // set the owning side to null (unless already changed)
+            if ($legalInformation->getUpdatedBy() === $this) {
+                $legalInformation->setUpdatedBy(null);
+            }
+        }
+
+        return $this;
     }
 }

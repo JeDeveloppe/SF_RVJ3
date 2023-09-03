@@ -9,11 +9,13 @@ use App\Entity\ConditionOccasion;
 use App\Entity\Country;
 use App\Entity\Department;
 use App\Entity\Editor;
+use App\Entity\LegalInformation;
 use App\Entity\MeansOfPayement;
 use App\Entity\MovementOccasion;
 use App\Entity\Occasion;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Partner;
+use App\Entity\Tax;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -54,6 +56,8 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToRoute('SITE','fa-solid fa-shop','app_home');
+
         yield MenuItem::section('Catalogues');
         yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class);
         yield MenuItem::linkToCrud('Occasions', 'fas fa-list', Occasion::class);
@@ -73,6 +77,10 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Ventes / dons', 'fas fa-list', OffSiteOccasionSale::class);
         yield MenuItem::linkToCrud('Liste des états (pièces, boite, règle)', 'fas fa-list', ConditionOccasion::class);
         
+        yield MenuItem::section('Légale:');
+        yield MenuItem::linkToCrud('Informations', 'fas fa-list', LegalInformation::class);
+        yield MenuItem::linkToCrud('Taxes', 'fas fa-list', Tax::class);
+
         yield MenuItem::section('Paramètres:');
         yield MenuItem::linkToCrud('Mouvements', 'fas fa-list', MovementOccasion::class);
         yield MenuItem::linkToCrud('Moyens de paiement', 'fas fa-list', MeansOfPayement::class);

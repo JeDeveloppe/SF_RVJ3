@@ -23,16 +23,16 @@ class ImportDocumentsService
 {
     public function __construct(
         private EntityManagerInterface $em,
-        private DocumentRepository $documentRepository,
-        private PaysRepository $paysRepository,
-        private MethodeEnvoiRepository $methodeEnvoiRepository,
-        private Utilities $utilities,
-        private InformationsLegalesRepository $informationsLegalesRepository,
-        private UserRepository $userRepository,
-        private OccasionRepository $occasionRepository,
-        private BoiteRepository $boiteRepository,
-        private PaiementRepository $paiementRepository,
-        private EtatDocumentRepository $etatDocumentRepository
+        // private DocumentRepository $documentRepository,
+        // private PaysRepository $paysRepository,
+        // private MethodeEnvoiRepository $methodeEnvoiRepository,
+        // private Utilities $utilities,
+        // private InformationsLegalesRepository $informationsLegalesRepository,
+        // private UserRepository $userRepository,
+        // private OccasionRepository $occasionRepository,
+        // private BoiteRepository $boiteRepository,
+        // private PaiementRepository $paiementRepository,
+        // private EtatDocumentRepository $etatDocumentRepository
         ){
     }
 

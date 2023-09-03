@@ -2,28 +2,26 @@
 
 namespace App\Command;
 
-use App\Repository\MeansOfPayementRepository;
 use App\Service\ImportRvj2\CreationConditionOccasionService;
 use App\Service\ImportRvj2\CreationCountrieService;
+use App\Service\ImportRvj2\CreationLegalInformationService;
 use App\Service\ImportRvj2\CreationMouvementsOccasionService;
-use App\Service\ImportRvj2\CreationMoyenDePaiement;
 use App\Service\ImportRvj2\CreationMoyenDePaiementService;
 use App\Service\ImportRvj2\EditorService;
 use App\Service\ImportRvj2\ImportAdressesService;
 use App\Service\ImportRvj2\ImportBoitesService;
 use App\Service\ImportRvj2\ImportClientsService;
 use App\Service\ImportRvj2\ImportDepartementsService;
+use App\Service\ImportRvj2\ImportDocumentsService;
 use App\Service\ImportRvj2\ImportOccasionsService;
 use App\Service\ImportRvj2\ImportPartenairesService;
 use App\Service\ImportRvj2\ImportPiecesService;
 use App\Service\ImportRvj2\ImportVillesService;
 use App\Service\ImportRvj2\UpdateOccasionMouvement;
-use App\Service\SpaceViewsService;
 use App\Service\UserService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -47,7 +45,9 @@ class InitForProd extends Command
             private CreationMoyenDePaiementService $creationMoyenDePaiementService,
             private ImportOccasionsService $importOccasionsService,
             private CreationMouvementsOccasionService $creationMouvementsOccasionService,
-            private UpdateOccasionMouvement $updateOccasionMouvement
+            private UpdateOccasionMouvement $updateOccasionMouvement,
+            private ImportDocumentsService $importDocumentsService,
+            private CreationLegalInformationService $creationLegalInformationService
         )
     {
         parent::__construct();
@@ -102,9 +102,14 @@ class InitForProd extends Command
         //on cree les mouvements des occasions
         //$this->creationMouvementsOccasionService->importMouvementsOccasions($io);
 
+        //on met a jour les occasions avec les mouvements
         //$this->updateOccasionMouvement->updateOccasionMouvement($io);
 
-
+        //on crer les information legale et la tax
+        $this->creationLegalInformationService->creationLegalInformation($io);
+        //on importe les documents
+        // $this->importDocumentsService->importDocuments($io);
+        // $this->importPaiementService->importPaiements($io);
 
         return Command::SUCCESS;
     }
