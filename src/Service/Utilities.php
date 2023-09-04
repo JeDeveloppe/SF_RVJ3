@@ -43,4 +43,13 @@ class Utilities
 
         return $ht;
     }
+
+    public function stringToNull($value){
+
+        if($value == 'NULL' ){
+            $value = NULL;
+        }
+
+        return $value;
+    }
 }

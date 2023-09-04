@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
 class ShippingMethodCrudController extends AbstractCrudController
 {
@@ -22,6 +23,7 @@ class ShippingMethodCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name'),
+            AssociationField::new('documents')->setLabel('Documents')
         ];
     }
 
@@ -38,7 +40,7 @@ class ShippingMethodCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            // ->remove(Crud::PAGE_INDEX, Action::DELETE);
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN');
         

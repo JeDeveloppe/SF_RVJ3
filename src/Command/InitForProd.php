@@ -16,6 +16,7 @@ use App\Service\ImportRvj2\ImportClientsService;
 use App\Service\ImportRvj2\ImportDepartementsService;
 use App\Service\ImportRvj2\ImportDocumentsService;
 use App\Service\ImportRvj2\ImportOccasionsService;
+use App\Service\ImportRvj2\ImportPaiementService;
 use App\Service\ImportRvj2\ImportPartenairesService;
 use App\Service\ImportRvj2\ImportPiecesService;
 use App\Service\ImportRvj2\ImportVillesService;
@@ -51,7 +52,8 @@ class InitForProd extends Command
             private ImportDocumentsService $importDocumentsService,
             private CreationLegalInformationService $creationLegalInformationService,
             private CreationUndefinedAdminAndAdresseService $creationUndefinedAdminAndAdresseService,
-            private CreationDocumentStatusService $creationDocumentStatusService
+            private CreationDocumentStatusService $creationDocumentStatusService,
+            private ImportPaiementService $importPaiementService
         )
     {
         parent::__construct();
@@ -116,11 +118,11 @@ class InitForProd extends Command
         //$this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
 
         //on cree les status des documents
-        $this->creationDocumentStatusService->creationStatus($io);
+        //$this->creationDocumentStatusService->creationStatus($io);
 
         //on importe les documents
-        //$this->importDocumentsService->importDocuments($io);
-        // $this->importPaiementService->importPaiements($io);
+        $this->importDocumentsService->importDocuments($io);
+        $this->importPaiementService->importPaiements($io);
 
         return Command::SUCCESS;
     }

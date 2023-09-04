@@ -4,10 +4,13 @@ namespace App\Service\ImportRvj2;
 
 use League\Csv\Reader;
 use App\Entity\Document;
+use App\Repository\DocumentRepository;
 use App\Repository\DocumentStatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ShippingMethodRepository;
+use App\Repository\TaxRepository;
 use App\Repository\UserRepository;
+use App\Service\Utilities;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ImportDocumentsService
@@ -17,16 +20,9 @@ class ImportDocumentsService
         private ShippingMethodRepository $shippingMethodRepository,
         private DocumentStatusRepository $documentStatusRepository,
         private UserRepository $userRepository,
-        // private DocumentRepository $documentRepository,
-        // private PaysRepository $paysRepository,
-        // private shippingMethodRepository $shippingMethodRepository,
-        // private Utilities $utilities,
-        // private InformationsLegalesRepository $informationsLegalesRepository,
-        // private UserRepository $userRepository,
-        // private OccasionRepository $occasionRepository,
-        // private BoiteRepository $boiteRepository,
-        // private PaiementRepository $paiementRepository,
-        // private documentStatusRepository $documentStatusRepository
+        private DocumentRepository $documentRepository,
+        private TaxRepository $taxRepository,
+        private Utilities $utilities,
         ){
     }
 
@@ -68,27 +64,35 @@ class ImportDocumentsService
             $document = new Document();
         }
 
-        //TODO faire Entity Document
         $document
         ->setToken($arrayDoc['validKey'])
-        ->setRvj2Id($arrayDoc['idDocument'])
-        ->setNumeroDevis((int) substr($arrayDoc['numero_devis'],3))
-        ->setNumeroFacture((int) substr($arrayDoc['numero_facture'],3))
-        ->setTotalHT($arrayDoc['totalHT'])
-        ->setTotalTTC($arrayDoc['totalTTC'])
-        ->setDeliveryPriceHt($arrayDoc['prix_expedition'])
-        ->setAdresseFacturation($arrayDoc['adresse_facturation'])
-        ->setAdresseLivraison($arrayDoc['adresse_livraison'])
-        ->setIsRelanceDevis($arrayDoc['relance_devis'])
-        ->setEndValidationDevis($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['end_validation']))
+        ->setRvj2id($arrayDoc['idDocument'])
+        ->setQuoteNumber((int) substr($arrayDoc['numero_devis'],3));
+
+        $numFacture = $arrayDoc['numero_facture'];
+        if(is_null($this->utilities->stringToNull($arrayDoc['numero_facture']))){
+            $numFacture = null;
+        }else{
+            $numFacture = (int) substr($arrayDoc['numero_facture'],3);
+        }
+
+        $document
+        ->setBillNumber($numFacture)
+        ->setTotalExcludingTax($arrayDoc['totalHT'])
+        ->setTotalWithTax($arrayDoc['totalTTC'])
+        ->setDeliveryPriceExcludingTax($arrayDoc['prix_expedition'])
+        ->setBillingAddress($arrayDoc['adresse_facturation'])
+        ->setDeliveryAddress($arrayDoc['adresse_livraison'])
+        ->setIsQuoteReminder($arrayDoc['relance_devis'])
+        ->setEndOfQuoteValidation($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['end_validation']))
         ->setCreatedAt($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time']))
-        ->setEnvoiEmailDevis($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_mail_devis']))
+        ->setTimeOfSendingQuote($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_mail_devis']))
         ->setIsDeleteByUser(false)
-        ->setPaiement(null)
+        ->setPayment(null)
         ->setMessage($arrayDoc['commentaire'])
-        ->setTauxTva(0)
+        ->setTaxRate($this->taxRepository->findOneBy(['value' => 0]))
         ->setCost($arrayDoc['prix_preparation'])
-        ->setTokenPaiementRvj2($arrayDoc['num_transaction']);
+        ->setTokenPayment($this->utilities->stringToNull($arrayDoc['num_transaction']));
 
         //?ok version 3
         if($arrayDoc['expedition'] == "poste"){
@@ -102,7 +106,7 @@ class ImportDocumentsService
         }else{
             $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'INDEFINI']);
         }
-        $document->setEnvoi($expedition);
+        $document->setSendingMethod($expedition);
 
         //?ok version 3
         if($arrayDoc['etat'] == 2 && $arrayDoc['envoyer'] !== 0){
@@ -116,10 +120,10 @@ class ImportDocumentsService
         }else{
             $etat = $this->documentStatusRepository->findOneBy(['name' => 'INDÉFINIE']);
         }
-        $document->setEtatDocument($etat);
+        $document->setDocumentStatus($etat);
 
         //?ok version 3
-        $user = $this->userRepository->findOneBy(['rvj2Id' => (int) $arrayDoc['idUser']]);
+        $user = $this->userRepository->findOneBy(['rvj2id' => (int) $arrayDoc['idUser']]);
         if(!$user){
             $document->setUser($this->userRepository->findOneBy(['email' => $_ENV['UNDEFINED_USER_EMAIL']]));
         }else{

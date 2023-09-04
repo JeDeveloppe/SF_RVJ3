@@ -69,7 +69,7 @@ class ImportOccasionsService
 
         $occasion->setBoite($this->boiteRepository->findOneBy(['rvj2id' => $arrayOccasion['idCatalogue']]))
                 ->setReference($arrayOccasion['reference'])
-                ->setInformation($this->stringToNull($arrayOccasion['information']))
+                ->setInformation($this->utilities->stringToNull($arrayOccasion['information']))
                 ->setIsNew($this->stringToBoolean($arrayOccasion['isNeuf']))
                 ->setBoxCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatBoite']]))
                 ->setEquipmentCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatMateriel']]))
@@ -81,15 +81,6 @@ class ImportOccasionsService
 
                 $this->em->persist($occasion);
 
-    }
-
-    private function stringToNull($value){
-        
-        if($value == "NULL"){
-            $value = NULL;
-        }
-
-        return $value;
     }
 
     private function stringToBoolean($value){

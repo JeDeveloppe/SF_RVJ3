@@ -8,6 +8,7 @@ use App\Entity\City;
 use App\Entity\ConditionOccasion;
 use App\Entity\Country;
 use App\Entity\Department;
+use App\Entity\Document;
 use App\Entity\DocumentStatus;
 use App\Entity\Editor;
 use App\Entity\LegalInformation;
@@ -16,6 +17,7 @@ use App\Entity\MovementOccasion;
 use App\Entity\Occasion;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Partner;
+use App\Entity\Payment;
 use App\Entity\ShippingMethod;
 use App\Entity\Tax;
 use App\Entity\User;
@@ -61,10 +63,12 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('SITE','fa-solid fa-shop','app_home');
 
         yield MenuItem::section('Catalogues');
+        yield MenuItem::linkToCrud('Documents', 'fas fa-list', Document::class);
         yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class);
         yield MenuItem::linkToCrud('Occasions', 'fas fa-list', Occasion::class);
         yield MenuItem::linkToCrud('Partenaires', 'fas fa-list', Partner::class);
         yield MenuItem::linkToCrud('Éditeurs', 'fas fa-list', Editor::class);
+        yield MenuItem::linkToCrud('Paiements', 'fas fa-list', Payment::class);
 
         yield MenuItem::section('Gestion des utilisateurs:');
         yield MenuItem::linkToCrud('Clients', 'fas fa-list', User::class);

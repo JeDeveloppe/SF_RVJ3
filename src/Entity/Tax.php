@@ -21,9 +21,13 @@ class Tax
     #[ORM\OneToMany(mappedBy: 'tax', targetEntity: LegalInformation::class)]
     private Collection $legalInformation;
 
+    #[ORM\OneToMany(mappedBy: 'taxRate', targetEntity: Document::class)]
+    private Collection $documents;
+
     public function __construct()
     {
         $this->legalInformation = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,5 +80,35 @@ class Tax
     public function __toString()
     {
         return $this->value.'%';
+    }
+
+    /**
+     * @return Collection<int, Document>
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    public function addDocument(Document $document): static
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+            $document->setTaxRate($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(Document $document): static
+    {
+        if ($this->documents->removeElement($document)) {
+            // set the owning side to null (unless already changed)
+            if ($document->getTaxRate() === $this) {
+                $document->setTaxRate(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -23,12 +23,12 @@ class CityCrudController extends AbstractCrudController
     {
         return [
             AssociationField::new('department')->setLabel('Département')->setFormTypeOptions(['placeholder' => 'Sélectionner un département...']),
-            TextField::new('name')->setLabel('Numéro / nom'),
+            TextField::new('name')->setLabel('Nom'),
             IntegerField::new('postalcode')->setLabel('Code postal'),
             TextField::new('latitude')->setLabel('Latitude'),
             TextField::new('longitude')->setLabel('Longitude'),
-            AssociationField::new('addresses')->setLabel('Nombre d\'adresses')->onlyOnIndex(),
-            AssociationField::new('partners')->setLabel('Nombre de partenaires')->onlyOnIndex(),
+            AssociationField::new('addresses')->setLabel('Nbre d\'adresses')->onlyOnIndex(),
+            AssociationField::new('partners')->setLabel('Nbre de partenaires')->onlyOnIndex(),
         ];
     }
 
@@ -46,7 +46,7 @@ class CityCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            // ->remove(Crud::PAGE_INDEX, Action::DELETE);
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
         
     }

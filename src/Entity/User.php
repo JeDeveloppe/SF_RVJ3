@@ -66,12 +66,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'updatedBy', targetEntity: LegalInformation::class)]
     private Collection $legalInformation;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Document::class)]
+    private Collection $documents;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
         $this->boites = new ArrayCollection();
         $this->offSiteOccasionSales = new ArrayCollection();
         $this->legalInformation = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -320,7 +324,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString()
     {
-        return $this->nickname ?? '#'.$this->id;
+        return $this->nickname ?? 'User #'.$this->id;
     }
 
     /**
@@ -347,6 +351,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($legalInformation->getUpdatedBy() === $this) {
                 $legalInformation->setUpdatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Document>
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    public function addDocument(Document $document): static
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+            $document->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(Document $document): static
+    {
+        if ($this->documents->removeElement($document)) {
+            // set the owning side to null (unless already changed)
+            if ($document->getUser() === $this) {
+                $document->setUser(null);
             }
         }
 

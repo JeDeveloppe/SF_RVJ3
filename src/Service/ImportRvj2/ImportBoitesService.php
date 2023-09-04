@@ -8,6 +8,7 @@ use League\Csv\Reader;
 use League\Csv\Statement;
 use App\Repository\BoiteRepository;
 use App\Repository\UserRepository;
+use App\Service\Utilities;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -16,7 +17,8 @@ class ImportBoitesService
     public function __construct(
         private BoiteRepository $boiteRepository,
         private EntityManagerInterface $em,
-        private UserRepository $userRepository
+        private UserRepository $userRepository,
+        private Utilities $utilities
         ){
     }
 
@@ -148,7 +150,7 @@ class ImportBoitesService
             ->setWeigth($this->nullTo0($arrayBoite['poidBoite']))
             ->setAge((int) $arrayBoite['age'])
             ->setPlayers((int) $arrayBoite['nbrJoueurs'])
-            ->setHtPrice($this->stringToNull($arrayBoite['prix_HT']))
+            ->setHtPrice($this->utilities->stringToNull($arrayBoite['prix_HT']))
             ->setCreatedBy($this->userRepository->findOneBy(['nickname' => $arrayBoite['createur']]))
             ->setIsDeee($this->nullToBoolean($arrayBoite['deee']))
             ->setCreatedAt(new DateTimeImmutable($arrayBoite['created_at']))
@@ -158,15 +160,6 @@ class ImportBoitesService
             ->setRvj2Id($arrayBoite['idCatalogue']);
 
         return $boite;
-    }
-
-    private function stringToNull($value){
-        
-        if($value == "NULL" || "Année inconnue"){
-            $value = NULL;
-        }
-
-        return $value;
     }
 
     private function nullToBoolean($value){

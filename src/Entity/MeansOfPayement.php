@@ -21,9 +21,13 @@ class MeansOfPayement
     #[ORM\OneToMany(mappedBy: 'meansOfPaiement', targetEntity: OffSiteOccasionSale::class)]
     private Collection $offSiteOccasionSales;
 
+    #[ORM\OneToMany(mappedBy: 'meansOfPayment', targetEntity: Payment::class)]
+    private Collection $payments;
+
     public function __construct()
     {
         $this->offSiteOccasionSales = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -72,6 +76,36 @@ class MeansOfPayement
             // set the owning side to null (unless already changed)
             if ($offSiteOccasionSale->getMeansOfPaiement() === $this) {
                 $offSiteOccasionSale->setMeansOfPaiement(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setMeansOfPayment($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getMeansOfPayment() === $this) {
+                $payment->setMeansOfPayment(null);
             }
         }
 

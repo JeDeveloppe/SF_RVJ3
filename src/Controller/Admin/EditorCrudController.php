@@ -39,7 +39,7 @@ class EditorCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            // ->remove(Crud::PAGE_INDEX, Action::DELETE);
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
         
     }

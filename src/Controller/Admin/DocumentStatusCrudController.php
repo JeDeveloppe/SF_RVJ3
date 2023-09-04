@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
 class DocumentStatusCrudController extends AbstractCrudController
 {
@@ -22,6 +23,7 @@ class DocumentStatusCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name'),
+            AssociationField::new('documents')->setLabel('Documents')
         ];
     }
     
