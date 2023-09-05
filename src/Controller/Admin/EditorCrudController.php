@@ -32,7 +32,7 @@ class EditorCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des éditeurs')
             ->setPageTitle('new', 'Nouvel éditeur')
             ->setPageTitle('edit', 'Édition d\'un éditeur')
-
+            ->setDefaultSort(['name' => 'ASC'])
         ;
     }
 

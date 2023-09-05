@@ -54,6 +54,8 @@ class DocumentCrudController extends AbstractCrudController
         return $crud
             ->showEntityActionsInlined()
             ->setPageTitle('index', 'Liste des documents')
+            ->setDefaultSort(['id' => 'DESC'])
+            ->setSearchFields(['quoteNumber', 'billNumber', 'user.email'])
         ;
     }
 

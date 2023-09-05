@@ -34,7 +34,7 @@ class DepartmentCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des départements')
             ->setPageTitle('new', 'Nouveau département')
             ->setPageTitle('edit', 'Édition du département')
-
+            ->setDefaultSort(['name' => 'ASC'])
         ;
     }
 

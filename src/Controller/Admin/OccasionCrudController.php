@@ -38,6 +38,7 @@ class OccasionCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des occasions')
             ->setPageTitle('new', 'Nouvel occasion')
             ->setPageTitle('edit', 'Édition d\'un occasion')
+            ->setDefaultSort(['boite.name' => 'ASC'])
         ;
     }
 

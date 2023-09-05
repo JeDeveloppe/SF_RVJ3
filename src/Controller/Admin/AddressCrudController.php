@@ -24,8 +24,8 @@ class AddressCrudController extends AbstractCrudController
         return [
             BooleanField::new('isFacturation')->setLabel('Facturation')->setDisabled(true),
             TextField::new('organization')->setLabel('Organisation'),
-            TextField::new('lastname')->setLabel('Prénom'),
-            TextField::new('firstname')->setLabel('Nom'),
+            TextField::new('lastname')->setLabel('Nom'),
+            TextField::new('firstname')->setLabel('Prénom'),
             TextField::new('street')->setLabel('Adresse'),
             AssociationField::new('city')->setLabel('Ville'),
             AssociationField::new('user')->setLabel('Client')->setDisabled(true)
@@ -39,6 +39,7 @@ class AddressCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des adresses')
             ->setPageTitle('new', 'Nouvelle adresse')
             ->setPageTitle('edit', 'Édition de l\'adresse')
+            ->setDefaultSort(['id' => 'DESC'])
 
         ;
     }

@@ -36,7 +36,7 @@ class CountryCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des pays')
             ->setPageTitle('new', 'Nouveau pays')
             ->setPageTitle('edit', 'Édition du pays')
-
+            ->setDefaultSort(['name' => 'ASC'])
         ;
     }
 

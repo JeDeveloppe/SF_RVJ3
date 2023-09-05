@@ -39,7 +39,7 @@ class CityCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des villes')
             ->setPageTitle('new', 'Nouvelle ville')
             ->setPageTitle('edit', 'Édition de la ville')
-
+            ->setDefaultSort(['name' => 'ASC'])
         ;
     }
 

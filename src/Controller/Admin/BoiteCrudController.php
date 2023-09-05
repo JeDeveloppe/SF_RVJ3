@@ -74,7 +74,7 @@ class BoiteCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des boites')
             ->setPageTitle('new', 'Nouvelle boite')
             ->setPageTitle('edit', 'Édition d\'une boite')
-
+            ->setDefaultSort(['id' => 'DESC'])
         ;
     }
 
