@@ -22,12 +22,15 @@ class OccasionCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            AssociationField::new('boite')->setLabel('Boite'),
-            TextField::new('reference')->setLabel('Référence'),
+            AssociationField::new('boite')->setLabel('Boite')->setDisabled(true),
+            TextField::new('reference')->setLabel('Référence')->setDisabled(true),
             TextField::new('information')->setLabel('Information sur l\'occasion'),
+            AssociationField::new('boxCondition')->setLabel('État de la boite'),
+            AssociationField::new('equipmentCondition')->setLabel('État des pièces'),
+            AssociationField::new('gameRule')->setLabel('Régle du jeu'),
             BooleanField::new('isOnline')->setLabel('En ligne'),
-            AssociationField::new('offSiteSale')->setLabel('Mouvement'),
-            BooleanField::new('isNew')->setLabel('Neuf')
+            AssociationField::new('offSiteSale')->setLabel('Vente / don')->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
+            BooleanField::new('isNew')->setLabel('Neuf')->onlyOnForms()->onlyOnForms()
         ];
     }
 

@@ -25,8 +25,8 @@ class PaymentCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            DateTimeField::new('createdAt')->setLabel('Enregistré le'),
-            AssociationField::new('document')->setLabel('Facture')
+            DateTimeField::new('createdAt')->setLabel('Enregistré le')->setFormat('dd.MM.yyyy à HH:mm:ss'),
+            AssociationField::new('document')->setLabel('Document<br/>(n° facture)')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                 ->setQueryBuilder(
                         fn(QueryBuilder $queryBuilder) => 
@@ -35,7 +35,7 @@ class PaymentCrudController extends AbstractCrudController
                             ->orderBy('entity.quoteNumber', 'ASC')
                     ),
             TextField::new('tokenPayment')->setLabel('Token de paiement'),
-            DateTimeField::new('timeOfTransaction')->setLabel('Date de paiement'),
+            DateTimeField::new('timeOfTransaction')->setLabel('Date de paiement')->setFormat('dd.MM.yyyy à HH:mm:ss'),
             AssociationField::new('meansOfPayment')->setLabel('Par')
         ];
     }

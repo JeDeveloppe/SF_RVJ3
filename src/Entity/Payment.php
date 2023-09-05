@@ -106,6 +106,6 @@ class Payment
 
     public function __toString()
     {
-        return $this->document ?? 'PAS DE DOCUMENT DEFINI';
+        return '#'.$this->id ?? 'PAS DE DOCUMENT DEFINI';
     }
 }
