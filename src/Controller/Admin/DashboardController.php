@@ -62,35 +62,38 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToRoute('SITE','fa-solid fa-shop','app_home');
 
-        yield MenuItem::section('Catalogues');
-        yield MenuItem::linkToCrud('Documents', 'fas fa-list', Document::class);
         yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class);
+        
+        yield MenuItem::section('Listes');
         yield MenuItem::linkToCrud('Partenaires', 'fas fa-list', Partner::class);
         yield MenuItem::linkToCrud('Éditeurs', 'fas fa-list', Editor::class);
-        yield MenuItem::linkToCrud('Paiements', 'fas fa-list', Payment::class);
         
         yield MenuItem::section('Gestion des utilisateurs:');
         yield MenuItem::linkToCrud('Clients', 'fas fa-list', User::class);
         yield MenuItem::linkToCrud('Adresses', 'fas fa-list', Address::class);
         
-        yield MenuItem::section('Paramètres géographiques:');
-        yield MenuItem::linkToCrud('Villes', 'fas fa-list', City::class);
-        yield MenuItem::linkToCrud('Departements', 'fas fa-list', Department::class);
-        yield MenuItem::linkToCrud('Pays', 'fas fa-list', Country::class);
-        
+        yield MenuItem::section('Gestion des documents:');
+        yield MenuItem::linkToCrud('Documents', 'fas fa-list', Document::class);
+        yield MenuItem::linkToCrud('Paiements', 'fas fa-list', Payment::class);
+        yield MenuItem::linkToCrud('Status des documents', 'fas fa-list', DocumentStatus::class);
+        yield MenuItem::linkToCrud('Moyens de retrait', 'fas fa-list', ShippingMethod::class);
+
         yield MenuItem::section('Gestion des occasions:');
         yield MenuItem::linkToCrud('Occasions', 'fas fa-list', Occasion::class);
         yield MenuItem::linkToCrud('Ventes / dons', 'fas fa-list', OffSiteOccasionSale::class);
+        yield MenuItem::linkToCrud('Mouvements des occasions', 'fas fa-list', MovementOccasion::class);
         yield MenuItem::linkToCrud('Liste des états (pièces, boite, règle)', 'fas fa-list', ConditionOccasion::class);
         
         yield MenuItem::section('Légale:');
         yield MenuItem::linkToCrud('Informations', 'fas fa-list', LegalInformation::class);
         yield MenuItem::linkToCrud('Taxes', 'fas fa-list', Tax::class);
 
+        yield MenuItem::section('Paramètres géographiques:');
+        yield MenuItem::linkToCrud('Villes', 'fas fa-list', City::class);
+        yield MenuItem::linkToCrud('Departements', 'fas fa-list', Department::class);
+        yield MenuItem::linkToCrud('Pays', 'fas fa-list', Country::class);
+
         yield MenuItem::section('Paramètres:');
-        yield MenuItem::linkToCrud('Mouvements de paiement', 'fas fa-list', MovementOccasion::class);
-        yield MenuItem::linkToCrud('Moyens de retrait', 'fas fa-list', ShippingMethod::class);
-        yield MenuItem::linkToCrud('Status des documents', 'fas fa-list', DocumentStatus::class);
         yield MenuItem::linkToCrud('Moyens de paiement', 'fas fa-list', MeansOfPayement::class);
 
     }

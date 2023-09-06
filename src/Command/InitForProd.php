@@ -67,16 +67,16 @@ class InitForProd extends Command
         $io = new SymfonyStyle($input,$output);
         
         // creation PAYS name/isocode
-        // $this->creationCountrieService->addCountries();
+        //$this->creationCountrieService->addCountries();
         
         //ON CREE OU ON MET A JOUR L'ADMIN
-        // $this->userService->initForProd_adminUser($io);
+        //$this->userService->initForProd_adminUser($io);
 
         // on importe les clients
         //$this->importClientsService->importClients($io);
 
         //on importe les departementss
-        // $this->importDepartementsService->importDepartements($io);
+        //$this->importDepartementsService->importDepartements($io);
 
         //on importe les villes
         //$this->importVillesService->importVilles1_5($io);
@@ -85,13 +85,13 @@ class InitForProd extends Command
         //$this->importPartenairesService->importPartenaires($io);
 
         //on importe les adresses (facturation et livraison)
-        // $this->importAdressesService->importAdresses($io);
+        //$this->importAdressesService->importAdresses($io);
 
         //on importe les boites
         //$this->importBoitesService->importBoites($io);
 
         //on genere les editeurs de facon distinct
-        // $this->editorService->addEditorsInDatabase($io);
+        //$this->editorService->addEditorsInDatabase($io);
 
         //on importe le detail des boites
         //$this->importPiecesService->importPieces($io);
@@ -103,13 +103,13 @@ class InitForProd extends Command
         //$this->creationMoyenDePaiementService->addMoyens($io);
 
         //on importe les jeux complet
-        $this->importOccasionsService->importOccasions($io);
+        //$this->importOccasionsService->importOccasions($io);
 
         //on cree les mouvements des occasions
-        $this->creationMouvementsOccasionService->importMouvementsOccasions($io);
+        //$this->creationMouvementsOccasionService->importMouvementsOccasions($io);
 
         //on met a jour les occasions avec les mouvements
-        $this->updateOccasionMouvement->updateOccasionMouvement($io);
+        //$this->updateOccasionMouvement->updateOccasionMouvement($io);
 
         //on crer les information legale et la tax
         //$this->creationLegalInformationService->creationLegalInformation($io);
@@ -121,8 +121,8 @@ class InitForProd extends Command
         //$this->creationDocumentStatusService->creationStatus($io);
 
         //on importe les documents
-        // $this->importDocumentsService->importDocuments($io);
-        // $this->importPaiementService->importPaiements($io);
+        $this->importDocumentsService->importDocuments($io);
+        $this->importPaiementService->importPaiements($io);
 
         return Command::SUCCESS;
     }

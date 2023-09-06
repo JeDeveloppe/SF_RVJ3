@@ -355,6 +355,6 @@ class Document
 
     public function __toString()
     {
-        return $this->billNumber ?? 'PAS FACTURÉ';
+        return $this->quoteNumber;
     }
 }

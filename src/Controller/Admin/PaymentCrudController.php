@@ -26,17 +26,17 @@ class PaymentCrudController extends AbstractCrudController
     {
         return [
             DateTimeField::new('createdAt')->setLabel('Enregistré le')->setFormat('dd.MM.yyyy à HH:mm:ss'),
-            AssociationField::new('document')->setLabel('Document<br/>(n° facture)')
+            AssociationField::new('document')->setLabel('Document (n° devis)')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                 ->setQueryBuilder(
                         fn(QueryBuilder $queryBuilder) => 
                         $queryBuilder
                         ->where('entity.payment IS NULL')
-                            ->orderBy('entity.quoteNumber', 'ASC')
+                        ->orderBy('entity.quoteNumber', 'ASC')
                     ),
             TextField::new('tokenPayment')->setLabel('Token de paiement'),
             DateTimeField::new('timeOfTransaction')->setLabel('Date de paiement')->setFormat('dd.MM.yyyy à HH:mm:ss'),
-            AssociationField::new('meansOfPayment')->setLabel('Par')
+            AssociationField::new('meansOfPayment')->setLabel('Par')->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
         ];
     }
 
