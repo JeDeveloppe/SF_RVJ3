@@ -39,7 +39,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
             $disabled = true;
             $occasionField = AssociationField::new('occasion')->setLabel('Occasion')
             ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-            ->setDisabled(true);
+            ->setDisabled($disabled);
         }else{
             $disabled = false;
             $occasionField = AssociationField::new('occasion')->setLabel('Occasion')
@@ -49,13 +49,13 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
                                     $queryBuilder->where('entity.isOnline = :true')
                                         ->setParameter('true', true)
                                         ->orderBy('entity.reference', 'ASC')
-                                );
+                                )->setDisabled($disabled);
         }
        
         return [
             DateTimeField::new('movementTime')
                 ->setLabel('Date de mouvement')
-                ->setFormat('dd-MM-yyy à HH:mm' ),
+                ->setFormat('dd-MM-yyy à HH:mm' )->setDisabled($disabled),
             $occasionField,
             MoneyField::new('movementPrice')
                 ->setLabel('Prix du mouvement (HT)')
@@ -63,13 +63,12 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
                 ->setCurrency('EUR')->setStoredAsCents(),
             AssociationField::new('movement')
                 ->setLabel('Mouvement:')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-                ->setDisabled($disabled),
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
             AssociationField::new('meansOfPaiement')
                 ->setLabel('Moyen de paiement')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
-            DateTimeField::new('createdAt')->setLabel('Saisie le')->setFormat('dd-MM-yyyy')->onlyOnForms()->setDisabled($disabled),
-            AssociationField::new('createdBy')->setLabel('Saisie par')->onlyOnForms()->setDisabled($disabled),
+            DateTimeField::new('createdAt')->setLabel('Saisie le')->setFormat('dd-MM-yyyy')->onlyOnForms()->setDisabled(true),
+            AssociationField::new('createdBy')->setLabel('Saisie par')->onlyOnForms()->setDisabled(true),
         ];
     }
 

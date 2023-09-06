@@ -29,7 +29,7 @@ class OccasionCrudController extends AbstractCrudController
             AssociationField::new('equipmentCondition')->setLabel('État des pièces'),
             AssociationField::new('gameRule')->setLabel('Régle du jeu'),
             BooleanField::new('isOnline')->setLabel('En ligne'),
-            AssociationField::new('offSiteSale')->setLabel('Vente / don')->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
+            AssociationField::new('offSiteOccasionSales')->setLabel('Vente / don')->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
             BooleanField::new('isNew')->setLabel('Neuf')->onlyOnForms()->onlyOnForms()
         ];
     }
