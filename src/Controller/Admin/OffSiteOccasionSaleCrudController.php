@@ -29,8 +29,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
     )
-    {
-        
+    { 
     }
 
     public function configureFields(string $pageName): iterable
@@ -98,14 +97,14 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
         if($entityInstance instanceof OffSiteOccasionSale) {
             $user = $this->security->getUser();
             $entityInstance->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user);
-dd($entityInstance);
             $entityManager->persist($entityInstance);
+
+            $occasion = $entityInstance->getOccasion();
+            $occasion->setIsOnline(false)->setOffSiteOccasionSale($entityInstance);
+            $entityManager->persist($occasion);
+
             $entityManager->flush();
         }
 
-        $occasion = $entityInstance->getOccasion();
-        $occasion->setIsOnline(false)->setOffSiteSale($entityInstance);
-        $entityManager->persist($occasion);
-        $entityManager->flush();
     }
 }

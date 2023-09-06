@@ -2,13 +2,8 @@
 
 namespace App\Service\ImportRvj2;
 
-use App\Repository\BoiteRepository;
-use App\Repository\ConditionOccasionRepository;
-use App\Repository\MeansOfPayementRepository;
-use App\Repository\MovementOccasionRepository;
 use App\Repository\OccasionRepository;
 use App\Repository\OffSiteOccasionSaleRepository;
-use App\Service\Utilities;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -26,15 +21,15 @@ class UpdateOccasionMouvement
     
         $io->title('Mise à jour mouvements / occasions');
 
-        $movements = $this->offSiteOccasionSaleRepository->findAll();
+        $offSiteOccasionSales = $this->offSiteOccasionSaleRepository->findAll();
         
-        $io->progressStart(count($movements));
+        $io->progressStart(count($offSiteOccasionSales));
 
-        foreach($movements as $move){
+        foreach($offSiteOccasionSales as $offSiteOccasionSale){
             $io->progressAdvance();
 
-            $occasion = $this->occasionRepository->find($move->getOccasion());
-            $occasion->setOffSiteSale($move);
+            $occasion = $this->occasionRepository->find($offSiteOccasionSale->getOccasion());
+            $occasion->setOffSiteOccasionSale($offSiteOccasionSale);
             $this->em->persist($occasion);
         }
 

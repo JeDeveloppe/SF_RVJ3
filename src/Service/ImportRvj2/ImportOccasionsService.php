@@ -75,7 +75,7 @@ class ImportOccasionsService
                 ->setEquipmentCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatMateriel']]))
                 ->setGameRule($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['regleJeu']]))
                 ->setIsOnLine($arrayOccasion['actif'])
-                ->setOffSiteSale(null)
+                ->setOffSiteOccasionSale(null)
                 ->setRvj2id($arrayOccasion['idJeuxComplet'])
                 ;
 

@@ -33,14 +33,14 @@ class OffSiteOccasionSale
     #[ORM\JoinColumn(nullable: false)]
     private ?MeansOfPayement $meansOfPaiement = null;
 
-    #[ORM\OneToMany(mappedBy: 'offSiteSale', targetEntity: Occasion::class)]
-    private Collection $occasions;
-
     #[ORM\ManyToOne(inversedBy: 'offSiteOccasionSales')]
     private ?User $createdBy = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'offSiteOccasionSale', targetEntity: Occasion::class)]
+    private Collection $occasions;
 
     public function __construct()
     {
@@ -112,39 +112,9 @@ class OffSiteOccasionSale
         return $this;
     }
 
-    /**
-     * @return Collection<int, Occasion>
-     */
-    public function getOccasions(): Collection
-    {
-        return $this->occasions;
-    }
-
-    public function addOccasion(Occasion $occasion): static
-    {
-        if (!$this->occasions->contains($occasion)) {
-            $this->occasions->add($occasion);
-            $occasion->setOffSiteSale($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOccasion(Occasion $occasion): static
-    {
-        if ($this->occasions->removeElement($occasion)) {
-            // set the owning side to null (unless already changed)
-            if ($occasion->getOffSiteSale() === $this) {
-                $occasion->setOffSiteSale(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function __toString()
     {
-        return $this->meansOfPaiement;
+        return '#'.$this->id.' '.$this->movement;
     }
 
     public function getCreatedBy(): ?User
@@ -167,6 +137,36 @@ class OffSiteOccasionSale
     public function setCreatedAt(?\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Occasion>
+     */
+    public function getOccasions(): Collection
+    {
+        return $this->occasions;
+    }
+
+    public function addOccasion(Occasion $occasion): static
+    {
+        if (!$this->occasions->contains($occasion)) {
+            $this->occasions->add($occasion);
+            $occasion->setOffSiteOccasionSale($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOccasion(Occasion $occasion): static
+    {
+        if ($this->occasions->removeElement($occasion)) {
+            // set the owning side to null (unless already changed)
+            if ($occasion->getOffSiteOccasionSale() === $this) {
+                $occasion->setOffSiteOccasionSale(null);
+            }
+        }
 
         return $this;
     }

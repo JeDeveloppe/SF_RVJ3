@@ -46,16 +46,18 @@ class Occasion
     #[ORM\Column(nullable: true)]
     private ?int $rvj2id = null;
 
-    #[ORM\OneToMany(mappedBy: 'occasion', targetEntity: OffSiteOccasionSale::class)]
-    private Collection $offSiteOccasionSales;
-
     #[ORM\ManyToOne(inversedBy: 'occasions')]
     private ?OffSiteOccasionSale $offSiteSale = null;
 
-    public function __construct()
-    {
-        $this->offSiteOccasionSales = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'occasions')]
+    private ?OffSiteOccasionSale $offSiteOccasionSale = null;
+
+    #[ORM\ManyToOne(inversedBy: 'occasions')]
+    private ?User $createdBy = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
+
 
     public function getId(): ?int
     {
@@ -170,36 +172,6 @@ class Occasion
         return $this;
     }
 
-    /**
-     * @return Collection<int, OffSiteOccasionSale>
-     */
-    public function getOffSiteOccasionSales(): Collection
-    {
-        return $this->offSiteOccasionSales;
-    }
-
-    public function addOffSiteOccasionSale(OffSiteOccasionSale $offSiteOccasionSale): static
-    {
-        if (!$this->offSiteOccasionSales->contains($offSiteOccasionSale)) {
-            $this->offSiteOccasionSales->add($offSiteOccasionSale);
-            $offSiteOccasionSale->setOccasion($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOffSiteOccasionSale(OffSiteOccasionSale $offSiteOccasionSale): static
-    {
-        if ($this->offSiteOccasionSales->removeElement($offSiteOccasionSale)) {
-            // set the owning side to null (unless already changed)
-            if ($offSiteOccasionSale->getOccasion() === $this) {
-                $offSiteOccasionSale->setOccasion(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function __toString()
     {
         return $this->reference;
@@ -213,6 +185,42 @@ class Occasion
     public function setOffSiteSale(?OffSiteOccasionSale $offSiteSale): static
     {
         $this->offSiteSale = $offSiteSale;
+
+        return $this;
+    }
+
+    public function getOffSiteOccasionSale(): ?OffSiteOccasionSale
+    {
+        return $this->offSiteOccasionSale;
+    }
+
+    public function setOffSiteOccasionSale(?OffSiteOccasionSale $offSiteOccasionSale): static
+    {
+        $this->offSiteOccasionSale = $offSiteOccasionSale;
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

@@ -103,13 +103,13 @@ class InitForProd extends Command
         //$this->creationMoyenDePaiementService->addMoyens($io);
 
         //on importe les jeux complet
-        //$this->importOccasionsService->importOccasions($io);
+        $this->importOccasionsService->importOccasions($io);
 
         //on cree les mouvements des occasions
-        //$this->creationMouvementsOccasionService->importMouvementsOccasions($io);
+        $this->creationMouvementsOccasionService->importMouvementsOccasions($io);
 
         //on met a jour les occasions avec les mouvements
-        //$this->updateOccasionMouvement->updateOccasionMouvement($io);
+        $this->updateOccasionMouvement->updateOccasionMouvement($io);
 
         //on crer les information legale et la tax
         //$this->creationLegalInformationService->creationLegalInformation($io);
@@ -121,8 +121,8 @@ class InitForProd extends Command
         //$this->creationDocumentStatusService->creationStatus($io);
 
         //on importe les documents
-        $this->importDocumentsService->importDocuments($io);
-        $this->importPaiementService->importPaiements($io);
+        // $this->importDocumentsService->importDocuments($io);
+        // $this->importPaiementService->importPaiements($io);
 
         return Command::SUCCESS;
     }

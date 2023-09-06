@@ -69,6 +69,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Document::class)]
     private Collection $documents;
 
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Occasion::class)]
+    private Collection $occasions;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
@@ -76,6 +79,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->offSiteOccasionSales = new ArrayCollection();
         $this->legalInformation = new ArrayCollection();
         $this->documents = new ArrayCollection();
+        $this->occasions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -381,6 +385,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($document->getUser() === $this) {
                 $document->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Occasion>
+     */
+    public function getOccasions(): Collection
+    {
+        return $this->occasions;
+    }
+
+    public function addOccasion(Occasion $occasion): static
+    {
+        if (!$this->occasions->contains($occasion)) {
+            $this->occasions->add($occasion);
+            $occasion->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOccasion(Occasion $occasion): static
+    {
+        if ($this->occasions->removeElement($occasion)) {
+            // set the owning side to null (unless already changed)
+            if ($occasion->getCreatedBy() === $this) {
+                $occasion->setCreatedBy(null);
             }
         }
 
