@@ -123,7 +123,7 @@ class InitForProd extends Command
         //$this->creationDocumentStatusService->creationStatus($io);
 
         //on importe les documents
-        $this->importDocumentsService->importDocuments($io);
+        //$this->importDocumentsService->importDocuments($io);
         $this->importPaiementService->importPaiements($io);
 
         return Command::SUCCESS;

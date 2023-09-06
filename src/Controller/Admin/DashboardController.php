@@ -21,6 +21,8 @@ use App\Entity\Payment;
 use App\Entity\ShippingMethod;
 use App\Entity\Tax;
 use App\Entity\User;
+use App\Repository\OffSiteOccasionSaleRepository;
+use App\Repository\PaymentRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -29,6 +31,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
+    public function __construct(
+        private OffSiteOccasionSaleRepository $offSiteOccasionSaleRepository,
+        private PaymentRepository $paymentRepository
+    )
+    {
+        
+    }
+    
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
@@ -48,7 +58,36 @@ class DashboardController extends AbstractDashboardController
         // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
         //
-        return $this->render('admin/dashboard.html.twig');
+        $payments = $this->paymentRepository->findAll();
+        $occasionsSales = $this->offSiteOccasionSaleRepository->findAll();
+
+        $totalPayment = 0;
+        foreach($payments as $payment){
+            $document = $payment->getDocument();
+
+            if($document){
+
+                $totalPayment += $document->getTotalExcludingTax() ?? 0;
+            }
+        }
+
+        $totalOccasionSale = 0;
+        foreach($occasionsSales as $occasionsSale){
+            $totalOccasionSale += $occasionsSale->getMovementPrice();
+        }
+
+        $totals[] = [
+            'name' => 'CA - Ventes',
+            'total' => $totalPayment
+        ];
+        $totals[] = [
+            'name' => 'CA - Mouvements occasion',
+            'total' => $totalOccasionSale
+        ];
+
+        return $this->render('admin/dashboard.html.twig', [
+            'totals' => $totals
+        ]);
     }
 
     public function configureDashboard(): Dashboard

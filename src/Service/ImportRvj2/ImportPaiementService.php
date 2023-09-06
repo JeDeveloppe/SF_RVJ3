@@ -82,10 +82,18 @@ class ImportPaiementService
         }
 
         //?cohérence mouvement ESPECES partout
-        if($arrayDoc['moyen_paiement'] = 'ESP'){
+        if($arrayDoc['moyen_paiement'] == 'ESP'){
+
             $moyenPaiement = 'ESPÈCES';
+
+        }elseif($arrayDoc['moyen_paiement'] == 'NULL'){ //?il peut y avoir ce cas
+
+            $moyenPaiement = 'INCONNU';
+
         }else{
+
             $moyenPaiement = $arrayDoc['moyen_paiement'];
+
         }
 
         $paiement

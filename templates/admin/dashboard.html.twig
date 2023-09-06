@@ -8,5 +8,14 @@
 {% endblock %}
 
 {% block main %}
-
+    <div class="row">
+        {% for total in totals %}
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">{{ total.name }}</div>
+                    <div class="card-body">{{ (total.total) / 100 |number_format(2, '.', ',') }}</div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
