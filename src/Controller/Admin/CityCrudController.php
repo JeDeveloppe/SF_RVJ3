@@ -22,6 +22,7 @@ class CityCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            AssociationField::new('country'),
             AssociationField::new('department')->setLabel('Département')->setFormTypeOptions(['placeholder' => 'Sélectionner un département...']),
             TextField::new('name')->setLabel('Nom'),
             IntegerField::new('postalcode')->setLabel('Code postal'),

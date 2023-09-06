@@ -36,7 +36,6 @@ class ImportPaiementService
             if(!is_null($num_transaction)){
 
                 $paiement = $this->createOrUpdatePaiement($arrayDoc);
-                
 
                 $this->em->persist($paiement);
             }
@@ -82,9 +81,16 @@ class ImportPaiementService
             $paiement = new Payment();
         }
 
+        //?cohérence mouvement ESPECES partout
+        if($arrayDoc['moyen_paiement'] = 'ESP'){
+            $moyenPaiement = 'ESPÈCES';
+        }else{
+            $moyenPaiement = $arrayDoc['moyen_paiement'];
+        }
+
         $paiement
         ->setTokenPayment($arrayDoc['num_transaction'])
-        ->setMeansOfPayment($this->meansOfPayementRepository->findOneBy(['name' => $arrayDoc['moyen_paiement']]))
+        ->setMeansOfPayment($this->meansOfPayementRepository->findOneBy(['name' => $moyenPaiement]))
         ->setCreatedAt($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_transaction']))
         ->setTimeOfTransaction($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_transaction']))
         ;

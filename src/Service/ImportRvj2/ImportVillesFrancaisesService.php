@@ -16,7 +16,7 @@ use App\Repository\DepartmentRepository;
 use League\Csv\ResultSet;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ImportVillesService
+class ImportVillesFrancaisesService
 {
     public function __construct(
         private EntityManagerInterface $em,
@@ -28,7 +28,7 @@ class ImportVillesService
 
     public function importVilles1_5(SymfonyStyle $io): void
     {
-        $io->title('Importation des villes');
+        $io->title('Importation des villes Françaises');
 
             $cities = $this->readCsvFileTotalVille();
         
@@ -52,7 +52,7 @@ class ImportVillesService
     //lecture des fichiers exportes dans le dossier import
     private function readCsvFileVille($offset, $limit): ResultSet
     {
-        $csv = Reader::createFromPath('%kernel.root.dir%/../import/ville.csv','r');
+        $csv = Reader::createFromPath('%kernel.root.dir%/../import/villes_france.csv','r');
         $csv->setHeaderOffset(0);
         //get 25 records starting from the 11th row
         $stmt = Statement::create()
@@ -66,7 +66,7 @@ class ImportVillesService
 
     private function readCsvFileTotalVille(): Reader
     {
-        $csv = Reader::createFromPath('%kernel.root.dir%/../import/ville.csv','r');
+        $csv = Reader::createFromPath('%kernel.root.dir%/../import/villes_france.csv','r');
         $csv->setHeaderOffset(0);
 
         return $csv;
@@ -74,7 +74,7 @@ class ImportVillesService
 
     private function createOrUpdateCity(array $arrayVille): City
     {
-        $city = $this->cityRepository->findOneBy(['id' => $arrayVille['id']]);
+        $city = $this->cityRepository->findOneBy(['id' => $arrayVille['ville_id'], 'country' => $this->countryRepository->findOneBy(['isocode' => 'FR'])]);
 
         if(!$city){
             $city = new City();
@@ -84,9 +84,9 @@ class ImportVillesService
         ->setLatitude($arrayVille['lat'])
         ->setLongitude($arrayVille['lng'])
         ->setPostalcode($arrayVille['ville_code_postal'])
-        ->setDepartment($this->departmentRepository->findOneBy(['id' => $arrayVille['departement_id']]) ?? $this->departmentRepository->findOneBy(['id' => 14]))
-        ->setCountry($this->countryRepository->findOneBy(['isocode' => $arrayVille['pays']]))
-        ->setRvj2Id($arrayVille['id']);
+        ->setDepartment($this->departmentRepository->findOneBy(['name' => $arrayVille['ville_departement']]) ?? $this->departmentRepository->findOneBy(['id' => 14]))
+        ->setCountry($this->countryRepository->findOneBy(['isocode' => 'FR']))
+        ->setRvj2Id($arrayVille['ville_id']);
 
         return $city;
     }

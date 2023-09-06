@@ -40,7 +40,6 @@ class OccasionCrudController extends AbstractCrudController
         }
 
         return [
-            IdField::new('id')->setDisabled(true),
             AssociationField::new('boite')->setLabel('Boite')->setFormTypeOptions(['placeholder' => 'Sélectionner...'])->setDisabled($disabled),
             TextField::new('reference')->setLabel('Référence')->setDisabled(true),
             TextField::new('information')->setLabel('Information sur l\'occasion'),

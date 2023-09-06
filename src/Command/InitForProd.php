@@ -2,32 +2,32 @@
 
 namespace App\Command;
 
-use App\Service\ImportRvj2\CreationConditionOccasionService;
-use App\Service\ImportRvj2\CreationCountrieService;
-use App\Service\ImportRvj2\CreationDocumentStatusService;
-use App\Service\ImportRvj2\CreationLegalInformationService;
-use App\Service\ImportRvj2\CreationMouvementsOccasionService;
-use App\Service\ImportRvj2\CreationMoyenDePaiementService;
-use App\Service\ImportRvj2\CreationUndefinedAdminAndAdresseService;
+use App\Service\UserService;
 use App\Service\ImportRvj2\EditorService;
-use App\Service\ImportRvj2\ImportAdressesService;
+use Symfony\Component\Console\Command\Command;
 use App\Service\ImportRvj2\ImportBoitesService;
+use App\Service\ImportRvj2\ImportPiecesService;
 use App\Service\ImportRvj2\ImportClientsService;
-use App\Service\ImportRvj2\ImportDepartementsService;
+use App\Service\ImportRvj2\ImportAdressesService;
+use App\Service\ImportRvj2\ImportPaiementService;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Service\ImportRvj2\ImportDocumentsService;
 use App\Service\ImportRvj2\ImportOccasionsService;
-use App\Service\ImportRvj2\ImportPaiementService;
-use App\Service\ImportRvj2\ImportPartenairesService;
-use App\Service\ImportRvj2\ImportPiecesService;
-use App\Service\ImportRvj2\ImportVillesService;
-use App\Service\ImportRvj2\UpdateOccasionMouvement;
-use App\Service\UserService;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
+use App\Service\ImportRvj2\CreationCountrieService;
+use App\Service\ImportRvj2\UpdateOccasionMouvement;
 use Symfony\Component\Console\Input\InputInterface;
+use App\Service\ImportRvj2\ImportPartenairesService;
+use App\Service\ImportRvj2\ImportDepartementsService;
 use Symfony\Component\Console\Output\OutputInterface;
-
+use App\Service\ImportRvj2\CreationDocumentStatusService;
+use App\Service\ImportRvj2\ImportVillesFrancaisesService;
+use App\Service\ImportRvj2\CreationMoyenDePaiementService;
+use App\Service\ImportRvj2\CreationLegalInformationService;
+use App\Service\ImportRvj2\CreationConditionOccasionService;
+use App\Service\ImportRvj2\CreationMouvementsOccasionService;
+use App\Service\ImportRvj2\CreationUndefinedAdminAndAdresseService;
+use App\Service\ImportRvj2\ImportVillesBelgesService;
 
 #[AsCommand(name: 'app:initforprod')]
 
@@ -38,7 +38,8 @@ class InitForProd extends Command
             private CreationCountrieService $creationCountrieService,
             private ImportClientsService $importClientsService,
             private ImportDepartementsService $importDepartementsService,
-            private ImportVillesService $importVillesService,
+            private ImportVillesFrancaisesService $importVillesFrancaiseService,
+            private ImportVillesBelgesService $importVillesBelgesService,
             private ImportPartenairesService $importPartenairesService,
             private ImportAdressesService $importAdressesService,
             private ImportBoitesService $importBoitesService,
@@ -78,8 +79,9 @@ class InitForProd extends Command
         //on importe les departementss
         //$this->importDepartementsService->importDepartements($io);
 
-        //on importe les villes
-        //$this->importVillesService->importVilles1_5($io);
+        //on importe les villes francaises
+        //$this->importVillesFrancaiseService->importVilles1_5($io);
+        //$this->importVillesBelgesService->importVilles1_5($io);
 
         //on importe les partenaires
         //$this->importPartenairesService->importPartenaires($io);

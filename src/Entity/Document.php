@@ -50,7 +50,7 @@ class Document
     #[ORM\Column]
     private ?bool $isDeleteByUser = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $message = null;
 
     #[ORM\ManyToOne(inversedBy: 'documents')]
@@ -355,6 +355,6 @@ class Document
 
     public function __toString()
     {
-        return $this->quoteNumber;
+        return $this->quoteNumber.' - Total HT (en cents): '.$this->getTotalExcludingTax();
     }
 }
