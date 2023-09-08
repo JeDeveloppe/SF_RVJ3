@@ -25,8 +25,9 @@ class PaymentCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            DateTimeField::new('createdAt')->setLabel('Enregistré le')->setFormat('dd.MM.yyyy à HH:mm:ss'),
+            DateTimeField::new('timeOfTransaction')->setLabel('Date de paiement')->setFormat('dd.MM.yyyy à HH:mm:ss'),
             AssociationField::new('document')->setLabel('Document (n° devis)')
+                ->onlyOnForms()
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                 ->setQueryBuilder(
                         fn(QueryBuilder $queryBuilder) => 
@@ -34,9 +35,17 @@ class PaymentCrudController extends AbstractCrudController
                         ->where('entity.payment IS NULL')
                         ->orderBy('entity.quoteNumber', 'ASC')
                     ),
-            TextField::new('tokenPayment')->setLabel('Token de paiement'),
-            DateTimeField::new('timeOfTransaction')->setLabel('Date de paiement')->setFormat('dd.MM.yyyy à HH:mm:ss'),
-            AssociationField::new('meansOfPayment')->setLabel('Par')->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+            AssociationField::new('document')->setLabel('Document (n° facture)')->hideOnForm(),
+            AssociationField::new('meansOfPayment')
+                ->setLabel('Par')
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->renderAsEmbeddedForm(),
+            TextField::new('tokenPayment')
+                ->setLabel('Token de paiement')
+                ->hideOnIndex()
+                ->setFormTypeOptions(['attr' => ['value' => 'RefaitesVosJeuxManuel']])
+                ->setDisabled(true),
+            DateTimeField::new('createdAt')->setLabel('Enregistré le')->setFormat('dd.MM.yyyy à HH:mm:ss')->onlyOnDetail(),
         ];
     }
 
@@ -47,6 +56,7 @@ class PaymentCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des paiements')
             ->setPageTitle('new', 'Nouveau paiement')
             ->setPageTitle('edit', 'Édition d\'un paiement')
+            ->setDefaultSort(['id' => 'DESC'])
         ;
     }
 

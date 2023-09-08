@@ -30,7 +30,7 @@ class PartnerCrudController extends AbstractCrudController
             TextareaField::new('description')->setLabel('Description')->onlyOnForms(),
             TextareaField::new('collect')->setLabel('Collecte')->onlyOnForms(),
             TextareaField::new('sells')->setLabel('Vend')->onlyOnForms(),
-            AssociationField::new('city')->setLabel('Ville'),
+            AssociationField::new('city')->setLabel('Ville')->renderAsEmbeddedForm(),
             BooleanField::new('isAcceptDonations')->setLabel('Accepte les dons')->onlyOnForms(),
             BooleanField::new('isSellsSpareParts')->setLabel('Vend des pièces détachées')->onlyOnForms(),
             BooleanField::new('isSellFullGames')->setLabel('Vend des jeux complets')->onlyOnForms(),
@@ -54,8 +54,7 @@ class PartnerCrudController extends AbstractCrudController
     {
         return $actions
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
-            ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN');
+            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
         
     }
 

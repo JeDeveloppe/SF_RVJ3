@@ -28,24 +28,87 @@ class DocumentCrudController extends AbstractCrudController
             TextField::new('token')->setLabel('Token')->setDisabled(true)->onlyOnDetail(),
             IntegerField::new('quoteNumber')->setLabel('Num. devis')->setDisabled(true),
             IntegerField::new('BillNumber')->setLabel('Num. facture')->setDisabled(true),
-            MoneyField::new('totalExcludingTax')->setLabel('Total HT')->setDisabled(true)->setCurrency('EUR')->setStoredAsCents()->onlyOnDetail(),
-            MoneyField::new('totalWithTax')->setLabel('Total TTC')->setDisabled(true)->setCurrency('EUR')->setStoredAsCents(),
-            MoneyField::new('deliveryPriceExcludingTax')->setLabel('Frais de port HT')->setCurrency('EUR')->setStoredAsCents()->setDisabled(true),
-            BooleanField::new('isQuoteReminder')->setLabel('Devis relancer')->setDisabled(true)->onlyOnDetail(),
-            DateTimeField::new('createdAt')->setLabel('Devis créé le')->setDisabled(true)->onlyOnDetail()->setFormat('dd.MM.yyyy à HH:mm:ss'),
-            DateTimeField::new('timeOfSendingQuote')->setLabel('Email le')->setDisabled(true)->onlyOnDetail()->setFormat('dd.MM.yyyy à HH:mm:ss'),
-            DateTimeField::new('endOfQuoteValidation')->setLabel('Fin de validation du devis')->setDisabled(true)->onlyOnDetail()->setFormat('dd.MM.yyyy à HH:mm:ss'),
-            BooleanField::new('isDeleteByUser')->setLabel('Supprimer par l\'utilisateur')->setDisabled(true)->onlyOnDetail(),
-            TextField::new('message')->setLabel('Message')->setDisabled(true)->onlyOnDetail(),
-            AssociationField::new('taxRate')->setLabel('Taux de tva')->setDisabled(true)->onlyOnDetail(),
-            MoneyField::new('cost')->setLabel('Autre coût HT <br/>(préparation/abonnement)')->setDisabled(true)->setCurrency('EUR')->setStoredAsCents()->onlyOnDetail(),
-            TextField::new('deliveryAddress')->setLabel('Adresse de livraison')->setDisabled(true)->onlyOnDetail(),
-            TextField::new('billingAddress')->setLabel('Adresse de facturation')->setDisabled(true)->onlyOnDetail(),
-            AssociationField::new('sendingMethod')->setLabel('Méthode d\'envoi')->setDisabled(true)->onlyOnDetail(),
-            AssociationField::new('documentStatus')->setLabel('Status du document')->setDisabled(true),
-            AssociationField::new('payment')->setLabel('Paiement')->setDisabled(true),
-            TextField::new('tokenPayment')->setLabel('Token du paiement')->setDisabled(true)->onlyOnForms(),
-            AssociationField::new('user')->setLabel('Client')->setDisabled(true),
+            MoneyField::new('totalExcludingTax')
+                ->setLabel('Total HT')
+                ->setDisabled(true)
+                ->setCurrency('EUR')
+                ->setStoredAsCents()
+                ->onlyOnDetail(),
+            MoneyField::new('totalWithTax')
+                ->setLabel('Total TTC')
+                ->setDisabled(true)
+                ->setCurrency('EUR')
+                ->setStoredAsCents(),
+            MoneyField::new('deliveryPriceExcludingTax')
+                ->setLabel('Frais de port HT')
+                ->setCurrency('EUR')
+                ->setStoredAsCents()
+                ->setDisabled(true),
+            BooleanField::new('isQuoteReminder')
+                ->setLabel('Devis relancer')
+                ->setDisabled(true)
+                ->onlyOnDetail(),
+            DateTimeField::new('createdAt')
+                ->setLabel('Devis créé le')
+                ->setDisabled(true)
+                ->onlyOnDetail()
+                ->setFormat('dd.MM.yyyy à HH:mm:ss'),
+            DateTimeField::new('timeOfSendingQuote')
+                ->setLabel('Email le')
+                ->setDisabled(true)
+                ->onlyOnDetail()
+                ->setFormat('dd.MM.yyyy à HH:mm:ss'),
+            DateTimeField::new('endOfQuoteValidation')
+                ->setLabel('Fin de validation du devis')
+                ->setDisabled(true)
+                ->onlyOnDetail()
+                ->setFormat('dd.MM.yyyy à HH:mm:ss'),
+            BooleanField::new('isDeleteByUser')
+                ->setLabel('Supprimer par l\'utilisateur')
+                ->setDisabled(true)
+                ->onlyOnDetail(),
+            TextField::new('message')
+                ->setLabel('Message')
+                ->setDisabled(true)
+                ->onlyOnDetail(),
+            AssociationField::new('taxRate')
+                ->setLabel('Taux de tva')
+                ->setDisabled(true)
+                ->onlyOnDetail()
+                ->renderAsEmbeddedForm(),
+            MoneyField::new('cost')
+                ->setLabel('Autre coût HT <br/>(préparation/abonnement)')
+                ->setDisabled(true)
+                ->setCurrency('EUR')
+                ->setStoredAsCents()
+                ->onlyOnDetail(),
+            TextField::new('deliveryAddress')
+                ->setLabel('Adresse de livraison')
+                ->setDisabled(true)
+                ->onlyOnDetail(),
+            TextField::new('billingAddress')
+                ->setLabel('Adresse de facturation')
+                ->setDisabled(true)
+                ->onlyOnDetail(),
+            AssociationField::new('sendingMethod')
+                ->setLabel('Méthode d\'envoi')
+                ->setDisabled(true)
+                ->onlyOnDetail()
+                ->renderAsEmbeddedForm(),
+            AssociationField::new('documentStatus')
+                ->setLabel('Status du document')
+                ->setDisabled(true)
+                ->renderAsEmbeddedForm(),
+            AssociationField::new('payment')
+                ->setLabel('Paiement')
+                ->setDisabled(true),
+            TextField::new('tokenPayment')
+                ->setLabel('Token du paiement')
+                ->setDisabled(true)
+                ->onlyOnForms(),
+            AssociationField::new('user')
+                ->setLabel('Client')
+                ->setDisabled(true),
         ];
     }
 
@@ -54,7 +117,7 @@ class DocumentCrudController extends AbstractCrudController
         return $crud
             ->showEntityActionsInlined()
             ->setPageTitle('index', 'Liste des documents')
-            ->setDefaultSort(['id' => 'DESC'])
+            ->setDefaultSort(['billNumber' => 'DESC'])
             ->setSearchFields(['quoteNumber', 'billNumber', 'user.email'])
         ;
     }

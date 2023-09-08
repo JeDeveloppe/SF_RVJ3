@@ -23,7 +23,7 @@ class DocumentStatusCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name'),
-            AssociationField::new('documents')->setLabel('Documents')
+            AssociationField::new('documents')->setLabel('Documents')->setDisabled(true)
         ];
     }
     

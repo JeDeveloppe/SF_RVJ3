@@ -355,6 +355,6 @@ class Document
 
     public function __toString()
     {
-        return $this->quoteNumber.' - Total HT (en cents): '.$this->getTotalExcludingTax();
+        return $this->billNumber ?? 'INCONNU';
     }
 }

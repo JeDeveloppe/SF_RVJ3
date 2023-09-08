@@ -106,6 +106,6 @@ class Payment
 
     public function __toString()
     {
-        return '#'.$this->id ?? 'PAS DE DOCUMENT DEFINI';
+        return '#'.$this->id.' par '.$this->meansOfPayment ?? 'PAS DE DOCUMENT DEFINI';
     }
 }

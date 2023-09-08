@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class ConditionOccasionCrudController extends AbstractCrudController
@@ -20,6 +21,9 @@ class ConditionOccasionCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name'),
+            AssociationField::new('boxConditions')->setLabel('Les boites en...')->setDisabled(true),
+            AssociationField::new('equipmentConditions')->setLabel('Les pièces en...')->setDisabled(true),
+            AssociationField::new('gameRules')->setLabel('La règle du jeu en...')->setDisabled(true),
         ];
     }
     
@@ -29,7 +33,7 @@ class ConditionOccasionCrudController extends AbstractCrudController
             ->showEntityActionsInlined()
             ->setPageTitle('index', 'Liste des états')
             ->setPageTitle('new', 'Nouvel état')
-            ->setPageTitle('edit', 'Édition d\un état')
+            ->setPageTitle('edit', 'Édition d\'un état')
 
         ;
     }

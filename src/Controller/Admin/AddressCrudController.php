@@ -27,7 +27,7 @@ class AddressCrudController extends AbstractCrudController
             TextField::new('lastname')->setLabel('Nom'),
             TextField::new('firstname')->setLabel('Prénom'),
             TextField::new('street')->setLabel('Adresse'),
-            AssociationField::new('city')->setLabel('Ville'),
+            AssociationField::new('city')->setLabel('Ville') ->renderAsEmbeddedForm(),
             AssociationField::new('user')->setLabel('Client')->setDisabled(true)
         ];
     }
