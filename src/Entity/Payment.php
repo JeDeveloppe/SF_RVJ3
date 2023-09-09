@@ -29,6 +29,9 @@ class Payment
     #[ORM\OneToOne(mappedBy: 'payment', cascade: ['persist', 'remove'])]
     private ?Document $document = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $rvj2id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,5 +110,17 @@ class Payment
     public function __toString()
     {
         return '#'.$this->id.' par '.$this->meansOfPayment ?? 'PAS DE DOCUMENT DEFINI';
+    }
+
+    public function getRvj2id(): ?int
+    {
+        return $this->rvj2id;
+    }
+
+    public function setRvj2id(?int $rvj2id): static
+    {
+        $this->rvj2id = $rvj2id;
+
+        return $this;
     }
 }

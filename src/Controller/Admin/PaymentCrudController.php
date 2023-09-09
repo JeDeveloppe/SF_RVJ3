@@ -42,7 +42,6 @@ class PaymentCrudController extends AbstractCrudController
                 ->renderAsEmbeddedForm(),
             TextField::new('tokenPayment')
                 ->setLabel('Token de paiement')
-                ->hideOnIndex()
                 ->setFormTypeOptions(['attr' => ['value' => 'RefaitesVosJeuxManuel']])
                 ->setDisabled(true),
             DateTimeField::new('createdAt')->setLabel('Enregistré le')->setFormat('dd.MM.yyyy à HH:mm:ss')->onlyOnDetail(),

@@ -75,20 +75,21 @@ class ImportPaiementService
 
     private function createOrUpdatePaiement(array $arrayDoc): Payment
     {
-        $paiement = $this->paymentRepository->findOneBy(['tokenPayment' => $arrayDoc['num_transaction']]);
+        $paiement = $this->paymentRepository->findOneBy(['rvj2id' => $arrayDoc['idDocument']]);
 
         if(!$paiement){
             $paiement = new Payment();
         }
 
         //?cohérence mouvement ESPECES partout
-        if($arrayDoc['moyen_paiement'] == 'ESP'){
-
+        if($arrayDoc['moyen_paiement'] == 'ESP')
+        {
             $moyenPaiement = 'ESPÈCES';
 
-        }elseif($arrayDoc['moyen_paiement'] == 'NULL'){ //?il peut y avoir ce cas
+        }elseif($arrayDoc['moyen_paiement'] == 'NULL')
+        {//?il peut y avoir ce cas
 
-            $moyenPaiement = 'INCONNU';
+            $moyenPaiement = 'EN COURS';
 
         }else{
 
@@ -96,12 +97,19 @@ class ImportPaiementService
 
         }
 
+
+        $document = $this->documentRepository->findOneBy(['billNumber' => (int) substr($arrayDoc['numero_facture'],3)]);
+        
+
+
+
         $paiement
         ->setTokenPayment($arrayDoc['num_transaction'])
+        ->setDocument($document)
+        ->setRvj2id($arrayDoc['idDocument'])
         ->setMeansOfPayment($this->meansOfPayementRepository->findOneBy(['name' => $moyenPaiement]))
         ->setCreatedAt($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_transaction']))
-        ->setTimeOfTransaction($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_transaction']))
-        ;
+        ->setTimeOfTransaction($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_transaction']));
 
         return $paiement;
     }
