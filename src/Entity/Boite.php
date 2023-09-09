@@ -80,9 +80,13 @@ class Boite
     #[ORM\OneToMany(mappedBy: 'boite', targetEntity: Occasion::class)]
     private Collection $occasions;
 
+    #[ORM\OneToMany(mappedBy: 'boite', targetEntity: DocumentLine::class)]
+    private Collection $documentLines;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
+        $this->documentLines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -363,5 +367,35 @@ class Boite
     public function __toString()
     {
         return $this->name.' - '.$this->editor.' - '.$this->year;
+    }
+
+    /**
+     * @return Collection<int, DocumentLine>
+     */
+    public function getDocumentLines(): Collection
+    {
+        return $this->documentLines;
+    }
+
+    public function addDocumentLine(DocumentLine $documentLine): static
+    {
+        if (!$this->documentLines->contains($documentLine)) {
+            $this->documentLines->add($documentLine);
+            $documentLine->setBoite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentLine(DocumentLine $documentLine): static
+    {
+        if ($this->documentLines->removeElement($documentLine)) {
+            // set the owning side to null (unless already changed)
+            if ($documentLine->getBoite() === $this) {
+                $documentLine->setBoite(null);
+            }
+        }
+
+        return $this;
     }
 }

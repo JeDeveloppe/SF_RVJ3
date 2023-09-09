@@ -58,6 +58,14 @@ class Occasion
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'occasion', targetEntity: DocumentLine::class)]
+    private Collection $documentLines;
+
+    public function __construct()
+    {
+        $this->documentLines = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -221,6 +229,36 @@ class Occasion
     public function setCreatedAt(?\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DocumentLine>
+     */
+    public function getDocumentLines(): Collection
+    {
+        return $this->documentLines;
+    }
+
+    public function addDocumentLine(DocumentLine $documentLine): static
+    {
+        if (!$this->documentLines->contains($documentLine)) {
+            $this->documentLines->add($documentLine);
+            $documentLine->setOccasion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentLine(DocumentLine $documentLine): static
+    {
+        if ($this->documentLines->removeElement($documentLine)) {
+            // set the owning side to null (unless already changed)
+            if ($documentLine->getOccasion() === $this) {
+                $documentLine->setOccasion(null);
+            }
+        }
 
         return $this;
     }

@@ -9,6 +9,7 @@ use App\Entity\ConditionOccasion;
 use App\Entity\Country;
 use App\Entity\Department;
 use App\Entity\Document;
+use App\Entity\DocumentLine;
 use App\Entity\DocumentStatus;
 use App\Entity\Editor;
 use App\Entity\LegalInformation;
@@ -113,6 +114,7 @@ class DashboardController extends AbstractDashboardController
         
         yield MenuItem::section('Gestion des documents:');
         yield MenuItem::linkToCrud('Documents', 'fas fa-list', Document::class);
+        yield MenuItem::linkToCrud('Lignes documents', 'fas fa-list', DocumentLine::class);
         yield MenuItem::linkToCrud('Paiements', 'fas fa-list', Payment::class);
         yield MenuItem::linkToCrud('Status des documents', 'fas fa-list', DocumentStatus::class);
         yield MenuItem::linkToCrud('Moyens de retrait', 'fas fa-list', ShippingMethod::class);

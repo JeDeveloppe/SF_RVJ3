@@ -27,6 +27,7 @@ use App\Service\ImportRvj2\CreationLegalInformationService;
 use App\Service\ImportRvj2\CreationConditionOccasionService;
 use App\Service\ImportRvj2\CreationMouvementsOccasionService;
 use App\Service\ImportRvj2\CreationUndefinedAdminAndAdresseService;
+use App\Service\ImportRvj2\ImportDocumentsLignesService;
 use App\Service\ImportRvj2\ImportVillesBelgesService;
 
 #[AsCommand(name: 'app:initforprod')]
@@ -54,7 +55,8 @@ class InitForProd extends Command
             private CreationLegalInformationService $creationLegalInformationService,
             private CreationUndefinedAdminAndAdresseService $creationUndefinedAdminAndAdresseService,
             private CreationDocumentStatusService $creationDocumentStatusService,
-            private ImportPaiementService $importPaiementService
+            private ImportPaiementService $importPaiementService,
+            private ImportDocumentsLignesService $importDocumentsLignesService
         )
     {
         parent::__construct();
@@ -123,8 +125,13 @@ class InitForProd extends Command
         //$this->creationDocumentStatusService->creationStatus($io);
 
         //on importe les documents
-        //$this->importDocumentsService->importDocuments($io);
-        $this->importPaiementService->importPaiements($io);
+        //TODO refaire et vérifier paiement
+        $this->importDocumentsService->importDocuments($io);
+        //$this->importPaiementService->importPaiements($io);
+
+        //on importe les lignes de chaque document
+        $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
+        $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
 
         return Command::SUCCESS;
     }

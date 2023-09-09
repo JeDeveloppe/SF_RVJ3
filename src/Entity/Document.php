@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DocumentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -83,6 +85,14 @@ class Document
     #[ORM\ManyToOne(inversedBy: 'documents')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    #[ORM\OneToMany(mappedBy: 'document', targetEntity: DocumentLine::class)]
+    private Collection $documentLines;
+
+    public function __construct()
+    {
+        $this->documentLines = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -356,5 +366,35 @@ class Document
     public function __toString()
     {
         return $this->billNumber ?? 'INCONNU';
+    }
+
+    /**
+     * @return Collection<int, DocumentLine>
+     */
+    public function getDocumentLines(): Collection
+    {
+        return $this->documentLines;
+    }
+
+    public function addDocumentLine(DocumentLine $documentLine): static
+    {
+        if (!$this->documentLines->contains($documentLine)) {
+            $this->documentLines->add($documentLine);
+            $documentLine->setDocument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentLine(DocumentLine $documentLine): static
+    {
+        if ($this->documentLines->removeElement($documentLine)) {
+            // set the owning side to null (unless already changed)
+            if ($documentLine->getDocument() === $this) {
+                $documentLine->setDocument(null);
+            }
+        }
+
+        return $this;
     }
 }
