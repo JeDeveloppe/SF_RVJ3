@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use DateTimeImmutable;
 use App\Entity\Occasion;
+use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -25,7 +26,8 @@ class OccasionCrudController extends AbstractCrudController
 
     public function __construct(
         private RequestStack $requestStack,
-        private Security $security
+        private Security $security,
+        private OccasionRepository $occasionRepository
     )
     { 
     }
@@ -33,19 +35,49 @@ class OccasionCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         //?edition logic
-        if($this->requestStack->getCurrentRequest()->get('entityId')){
+        $id = $this->requestStack->getCurrentRequest()->get('entityId');
+        if($id){
+            $occasion = $this->occasionRepository->find($id);
+            if($occasion->getIsOnline() == false){
+                $disabledAfterBilling = true;
+            }else{
+                $disabledAfterBilling = false;
+            }
             $disabled = true;
         }else{
             $disabled = false;
+            $disabledAfterBilling = false;
         }
+
 
         return [
             AssociationField::new('boite')->setLabel('Boite')->setFormTypeOptions(['placeholder' => 'Sélectionner...'])->setDisabled($disabled),
             TextField::new('reference')->setLabel('Référence')->setDisabled(true),
             TextField::new('information')->setLabel('Information sur l\'occasion'),
-            AssociationField::new('boxCondition')->setLabel('État de la boite')->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
-            AssociationField::new('equipmentCondition')->setLabel('État des pièces')->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
-            AssociationField::new('gameRule')->setLabel('Régle du jeu')->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
+            AssociationField::new('boxCondition')
+                ->setLabel('État de la boite')
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->renderAsEmbeddedForm()->onlyOnIndex(),
+            AssociationField::new('boxCondition')
+                ->setLabel('État de la boite')
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->onlyOnForms()->setDisabled($disabledAfterBilling),
+            AssociationField::new('equipmentCondition')
+                ->setLabel('État des pièces')
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->renderAsEmbeddedForm()->onlyOnIndex(),
+            AssociationField::new('equipmentCondition')
+                ->setLabel('État des pièces')
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->onlyOnForms()->setDisabled($disabledAfterBilling),
+            AssociationField::new('gameRule')
+                ->setLabel('Régle du jeu')
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->renderAsEmbeddedForm()->onlyOnIndex(),
+            AssociationField::new('gameRule')
+                ->setLabel('Régle du jeu')
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->onlyOnForms()->setDisabled($disabledAfterBilling),
             BooleanField::new('isOnline')->setLabel('En ligne'),
             AssociationField::new('offSiteOccasionSale')->setLabel('Vente / don')->setDisabled(true)->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
             BooleanField::new('isNew')->setLabel('Neuf')->onlyOnForms()->onlyOnForms()
