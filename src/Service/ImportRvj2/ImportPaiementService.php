@@ -40,6 +40,7 @@ class ImportPaiementService
                 $this->em->persist($paiement);
             }
         }
+
         $this->em->flush();
         $io->success('Importation terminée');
 
@@ -53,7 +54,7 @@ class ImportPaiementService
         foreach($paiements as $paiement){
             
             $io->progressAdvance();
-            $document = $this->documentRepository->findOneBy(['tokenPayment' => $paiement->getTokenPayment()]);
+            $document = $paiement->getDocument();
             $document->setPayment($paiement);
             $this->em->persist($document); 
         }
@@ -75,7 +76,9 @@ class ImportPaiementService
 
     private function createOrUpdatePaiement(array $arrayDoc): Payment
     {
-        $paiement = $this->paymentRepository->findOneBy(['rvj2id' => $arrayDoc['idDocument']]);
+        $document = $this->documentRepository->findOneBy(['rvj2id' => $arrayDoc['idDocument']]);
+
+        $paiement = $this->paymentRepository->findOneBy(['document' => $document]);
 
         if(!$paiement){
             $paiement = new Payment();
@@ -97,16 +100,9 @@ class ImportPaiementService
 
         }
 
-
-        $document = $this->documentRepository->findOneBy(['billNumber' => (int) substr($arrayDoc['numero_facture'],3)]);
-        
-
-
-
         $paiement
         ->setTokenPayment($arrayDoc['num_transaction'])
         ->setDocument($document)
-        ->setRvj2id($arrayDoc['idDocument'])
         ->setMeansOfPayment($this->meansOfPayementRepository->findOneBy(['name' => $moyenPaiement]))
         ->setCreatedAt($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_transaction']))
         ->setTimeOfTransaction($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_transaction']));

@@ -125,13 +125,12 @@ class InitForProd extends Command
         //$this->creationDocumentStatusService->creationStatus($io);
 
         //on importe les documents
-        //TODO refaire et vérifier paiement
-        $this->importDocumentsService->importDocuments($io);
+        //$this->importDocumentsService->importDocuments($io);
         //$this->importPaiementService->importPaiements($io);
 
         //on importe les lignes de chaque document
-        $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
-        $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
+        //$this->importDocumentsLignesService->importDocumentsLigneBoites($io);
+        //$this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
 
         return Command::SUCCESS;
     }

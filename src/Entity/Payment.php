@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PaymentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PaymentRepository::class)]
@@ -26,11 +28,17 @@ class Payment
     #[ORM\Column(length: 255)]
     private ?string $tokenPayment = null;
 
-    #[ORM\OneToOne(mappedBy: 'payment', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'payments')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Document $document = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $rvj2id = null;
+    #[ORM\OneToMany(mappedBy: 'payment', targetEntity: Document::class)]
+    private Collection $documents;
+
+    public function __construct()
+    {
+        $this->documents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -85,6 +93,11 @@ class Payment
         return $this;
     }
 
+    public function __toString()
+    {
+        return '#'.$this->id.' par '.$this->meansOfPayment ?? 'PAS DE DOCUMENT DEFINI';
+    }
+
     public function getDocument(): ?Document
     {
         return $this->document;
@@ -92,35 +105,39 @@ class Payment
 
     public function setDocument(?Document $document): static
     {
-        // unset the owning side of the relation if necessary
-        if ($document === null && $this->document !== null) {
-            $this->document->setPayment(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($document !== null && $document->getPayment() !== $this) {
-            $document->setPayment($this);
-        }
-
         $this->document = $document;
 
         return $this;
     }
 
-    public function __toString()
+    /**
+     * @return Collection<int, Document>
+     */
+    public function getDocuments(): Collection
     {
-        return '#'.$this->id.' par '.$this->meansOfPayment ?? 'PAS DE DOCUMENT DEFINI';
+        return $this->documents;
     }
 
-    public function getRvj2id(): ?int
+    public function addDocument(Document $document): static
     {
-        return $this->rvj2id;
-    }
-
-    public function setRvj2id(?int $rvj2id): static
-    {
-        $this->rvj2id = $rvj2id;
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+            $document->setPayment($this);
+        }
 
         return $this;
     }
+
+    public function removeDocument(Document $document): static
+    {
+        if ($this->documents->removeElement($document)) {
+            // set the owning side to null (unless already changed)
+            if ($document->getPayment() === $this) {
+                $document->setPayment(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

@@ -91,7 +91,7 @@ class ImportDocumentsService
         ->setTimeOfSendingQuote($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_mail_devis']))
         ->setIsDeleteByUser(false)
         ->setPayment(null)
-        ->setMessage($arrayDoc['commentaire'])
+        ->setMessage($this->utilities->stringToNull($arrayDoc['commentaire']))
         ->setTaxRate($this->taxRepository->findOneBy(['value' => 0]))
         ->setCost($arrayDoc['prix_preparation'])
         ->setTokenPayment($this->utilities->stringToNull($arrayDoc['num_transaction']));

@@ -79,9 +79,6 @@ class Document
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $tokenPayment = null;
 
-    #[ORM\OneToOne(inversedBy: 'document', cascade: ['persist', 'remove'])]
-    private ?Payment $payment = null;
-
     #[ORM\ManyToOne(inversedBy: 'documents')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
@@ -89,9 +86,16 @@ class Document
     #[ORM\OneToMany(mappedBy: 'document', targetEntity: DocumentLine::class)]
     private Collection $documentLines;
 
+    #[ORM\OneToMany(mappedBy: 'document', targetEntity: Payment::class)]
+    private Collection $payments;
+
+    #[ORM\ManyToOne(inversedBy: 'documents')]
+    private ?Payment $payment = null;
+
     public function __construct()
     {
         $this->documentLines = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -339,18 +343,6 @@ class Document
         return $this;
     }
 
-    public function getPayment(): ?Payment
-    {
-        return $this->payment;
-    }
-
-    public function setPayment(?Payment $payment): static
-    {
-        $this->payment = $payment;
-
-        return $this;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;
@@ -394,6 +386,48 @@ class Document
                 $documentLine->setDocument(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setDocument($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getDocument() === $this) {
+                $payment->setDocument(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPayment(): ?Payment
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(?Payment $payment): static
+    {
+        $this->payment = $payment;
 
         return $this;
     }
