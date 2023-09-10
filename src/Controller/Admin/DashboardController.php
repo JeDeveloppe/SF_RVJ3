@@ -67,7 +67,6 @@ class DashboardController extends AbstractDashboardController
             $document = $payment->getDocument();
 
             if($document){
-
                 $totalPayment += $document->getTotalExcludingTax() ?? 0;
             }
         }
@@ -78,11 +77,11 @@ class DashboardController extends AbstractDashboardController
         }
 
         $totals[] = [
-            'name' => 'CA - Ventes',
+            'name' => 'CA - Ventes sur le site',
             'total' => $totalPayment
         ];
         $totals[] = [
-            'name' => 'CA - Mouvements occasion',
+            'name' => 'CA - Ventes hors site (occasions)',
             'total' => $totalOccasionSale
         ];
 

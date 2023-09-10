@@ -114,11 +114,11 @@ class ImportDocumentsService
         if($arrayDoc['etat'] == 2 && $arrayDoc['envoyer'] !== 0){
             $etat = $this->documentStatusRepository->findOneBy(['name' => 'EXPÉDIÉE / TERMINÉE']);
         }else if($arrayDoc['etat'] == 3){ // 3 = mis de cote dans la version 2
-            $etat = $this->documentStatusRepository->findOneBy(['name' => 'MISE DE CÔTÉ']); 
+            $etat = $this->documentStatusRepository->findOneBy(['name' => 'PAYÉE / MISE DE CÔTÉ']); 
         }else if($arrayDoc['etat'] == 2 && $arrayDoc['envoyer'] == 0){
-            $etat = $this->documentStatusRepository->findOneBy(['name' => 'A PRÉPARER']); 
+            $etat = $this->documentStatusRepository->findOneBy(['name' => 'PAYÉE / A PRÉPARER']); 
         }else if($arrayDoc['etat'] == 1){ // non facturer dans version 2
-            $etat = $this->documentStatusRepository->findOneBy(['name' => 'NON FACTURÉ']);
+            $etat = $this->documentStatusRepository->findOneBy(['name' => 'NON PAYÉE']);
         }else{
             $etat = $this->documentStatusRepository->findOneBy(['name' => 'INDÉFINIE']);
         }

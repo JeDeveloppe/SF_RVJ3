@@ -19,7 +19,7 @@ class CreationDocumentStatusService
     {
         $io->title('Création / mise à jour des status des documents');
 
-        $statusDocuments = ['EXPÉDIÉE / TERMINÉE', 'MISE DE CÔTÉ', 'A PRÉPARER', 'NON FACTURÉ', 'INDÉFINIE'];
+        $statusDocuments = ['EXPÉDIÉE / TERMINÉE', 'PAYÉE / MISE DE CÔTÉ', 'PAYÉE / A PRÉPARER', 'NON PAYÉE', 'INDÉFINIE'];
 
         foreach($statusDocuments as $statusDocument){
             $status = $this->documentStatusRepository->findOneBy(['name' => $statusDocument]);

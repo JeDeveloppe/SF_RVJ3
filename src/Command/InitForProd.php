@@ -122,11 +122,11 @@ class InitForProd extends Command
         //$this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
 
         //on cree les status des documents
-        //$this->creationDocumentStatusService->creationStatus($io);
+        $this->creationDocumentStatusService->creationStatus($io);
 
         //on importe les documents
-        //$this->importDocumentsService->importDocuments($io);
-        //$this->importPaiementService->importPaiements($io);
+        $this->importDocumentsService->importDocuments($io);
+        $this->importPaiementService->importPaiements($io);
 
         //on importe les lignes de chaque document
         //$this->importDocumentsLignesService->importDocumentsLigneBoites($io);
