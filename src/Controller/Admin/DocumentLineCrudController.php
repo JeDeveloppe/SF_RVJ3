@@ -29,7 +29,7 @@ class DocumentLineCrudController extends AbstractCrudController
             AssociationField::new('occasion'),
             TextEditorField::new('question')->setLabel('Question'),
             TextEditorField::new('answer')->setLabel('Réponse'),
-            MoneyField::new('priceExcludingTax')->setDisabled(true)->setCurrency('EUR'),
+            MoneyField::new('priceExcludingTax')->setLabel('Prix HT')->setDisabled(true)->setCurrency('EUR'),
             IntegerField::new('quantity')->setDisabled(true)->onlyOnDetail(),
             AssociationField::new('document')
         ];

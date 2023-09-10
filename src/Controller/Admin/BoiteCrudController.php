@@ -59,7 +59,7 @@ class BoiteCrudController extends AbstractCrudController
             IntegerField::new('players')->setLabel('Nombre de joueurs')->onlyOnForms(),
             AssociationField::new('documentLines')
             ->setLabel('Nbre de demandes'),
-            BooleanField::new('isOccasion')->setLabel('Occasion'),
+            BooleanField::new('isOccasion')->setLabel('En occasion'),
             IntegerField::new('htPrice')->setLabel('Prix HT (en cents) d\'une boite complête en bon état')->onlyOnForms(),
             DateTimeField::new('createdAt')->setLabel('Créé le')
                 ->setFormat('dd-MM-yyyy')

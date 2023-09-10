@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 
 class DocumentCrudController extends AbstractCrudController
 {
@@ -109,7 +110,7 @@ class DocumentCrudController extends AbstractCrudController
             AssociationField::new('user')
                 ->setLabel('Client')
                 ->setDisabled(true),
-            AssociationField::new('documentLines')->onlyOnDetail(),
+            CollectionField::new('documentLines')->onlyOnDetail(),
         ];
     }
 
