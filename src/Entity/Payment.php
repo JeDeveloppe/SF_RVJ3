@@ -28,17 +28,9 @@ class Payment
     #[ORM\Column(length: 255)]
     private ?string $tokenPayment = null;
 
-    #[ORM\ManyToOne(inversedBy: 'payments')]
+    #[ORM\OneToOne(inversedBy: 'payment', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Document $document = null;
-
-    #[ORM\OneToMany(mappedBy: 'payment', targetEntity: Document::class)]
-    private Collection $documents;
-
-    public function __construct()
-    {
-        $this->documents = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -95,7 +87,7 @@ class Payment
 
     public function __toString()
     {
-        return '#'.$this->id.' par '.$this->meansOfPayment ?? 'PAS DE DOCUMENT DEFINI';
+        return $this->timeOfTransaction->format('d-m-Y à H:i:s').' par '.$this->meansOfPayment ?? 'PAS DE DOCUMENT DEFINI';
     }
 
     public function getDocument(): ?Document
@@ -103,39 +95,9 @@ class Payment
         return $this->document;
     }
 
-    public function setDocument(?Document $document): static
+    public function setDocument(Document $document): static
     {
         $this->document = $document;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Document>
-     */
-    public function getDocuments(): Collection
-    {
-        return $this->documents;
-    }
-
-    public function addDocument(Document $document): static
-    {
-        if (!$this->documents->contains($document)) {
-            $this->documents->add($document);
-            $document->setPayment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDocument(Document $document): static
-    {
-        if ($this->documents->removeElement($document)) {
-            // set the owning side to null (unless already changed)
-            if ($document->getPayment() === $this) {
-                $document->setPayment(null);
-            }
-        }
 
         return $this;
     }

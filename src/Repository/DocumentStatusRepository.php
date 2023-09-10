@@ -21,6 +21,17 @@ class DocumentStatusRepository extends ServiceEntityRepository
         parent::__construct($registry, DocumentStatus::class);
     }
 
+    public function findStatusIsTraitedDaily(): array
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.isToBeTraitedDaily = :val')
+            ->setParameter('val', true)
+            ->orderBy('d.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return DocumentStatus[] Returns an array of DocumentStatus objects
 //     */

@@ -1,0 +1,17 @@
+
+{% if command == 'PAYÉE / A PRÉPARER' %}  
+        <div class="btn-group" role="group">
+            <a href="{{ path('app_admin_change_status_document', {'document': document,'status': status.1.id }) }}" class="btn btn-info">Mettre de côté</a>
+            <a href="{{ path('app_admin_change_status_document', {'document': document,'status': status.2.id }) }}" class="btn btn-success">Ok expédier</a>
+        </div>
+{% elseif command == 'PAYÉE / MISE DE CÔTÉ' %}
+        <div class="btn-group" role="group">
+            <a href="{{ path('app_admin_change_status_document', {'document': document,'status': status.0.id }) }}" class="btn btn-warning">A préparer</a>
+            <a href="{{ path('app_admin_change_status_document', {'document': document,'status': status.2.id }) }}" class="btn btn-success">Ok expédier</a>
+        </div>
+{% elseif command == 'INDÉFINIE' %}
+        <div class="btn-group" role="group">
+            <a href="{{ path('app_admin_change_status_document', {'document': document,'status': status.1.id }) }}" class="btn btn-info">Mettre de côté</a>
+            <a href="{{ path('app_admin_change_status_document', {'document': document,'status': status.2.id }) }}" class="btn btn-success">Ok expédier</a>
+        </div>
+{% endif %}

@@ -44,25 +44,6 @@ class ImportPaiementService
         $this->em->flush();
         $io->success('Importation terminée');
 
-
-        $io->title('Mise à jour relation paiements / document');
-
-        $paiements = $this->paymentRepository->findAll();
-
-        $io->progressStart(count($paiements));
-
-        foreach($paiements as $paiement){
-            
-            $io->progressAdvance();
-            $document = $paiement->getDocument();
-            $document->setPayment($paiement);
-            $this->em->persist($document); 
-        }
-        
-        $this->em->flush();
-        $io->progressFinish();
-        $io->success('Mise à jour terminée');
-
     }
 
     //lecture des fichiers exportes dans le dossier import

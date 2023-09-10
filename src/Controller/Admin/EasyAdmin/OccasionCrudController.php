@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\EasyAdmin;
 
 use DateTimeImmutable;
 use App\Entity\Occasion;

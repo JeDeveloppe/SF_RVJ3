@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\Country;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;

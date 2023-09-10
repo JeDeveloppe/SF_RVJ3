@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\EasyAdmin;
 
-use App\Entity\Tax;
+use App\Entity\ShippingMethod;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -10,30 +10,30 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
-class TaxCrudController extends AbstractCrudController
+class ShippingMethodCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Tax::class;
+        return ShippingMethod::class;
     }
 
-    
     public function configureFields(string $pageName): iterable
     {
         return [
-            IntegerField::new('value')->setLabel('Poucentage %'),
+            TextField::new('name'),
+            AssociationField::new('documents')->setLabel('Documents')->setDisabled(true)
         ];
     }
-    
+
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
             ->showEntityActionsInlined()
-            ->setPageTitle('index', 'Liste des taxes')
-            ->setPageTitle('new', 'Nouvelle taxe')
-            ->setPageTitle('edit', 'Édition taxe')
+            ->setPageTitle('index', 'Liste des moyens de retrait')
+            ->setPageTitle('new', 'Nouveau retrait')
+            ->setPageTitle('edit', 'Édition du retrait')
         ;
     }
 
@@ -41,6 +41,7 @@ class TaxCrudController extends AbstractCrudController
     {
         return $actions
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN');
         
     }

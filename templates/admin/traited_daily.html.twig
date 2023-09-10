@@ -1,0 +1,46 @@
+{# templates/admin/my-custom-page.html.twig #}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}TRAITEMENT DES COMMANDES{% endblock %}
+
+{% block page_actions %}
+
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        {% for key,document in documents %}
+            <div class="card col-12 p-0 my-5">
+                <div class="card-header">{{ key }}</div>
+                <div class="card-body">
+                    {% if document | length > 0 %}
+                        {% for item in document %}
+                            <div class="card mb-4">
+                                <div class="card-header">{{ item.quoteNumber }}</div>
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-3">
+                                        Payée le:
+                                            <p>{{ item.payment }}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        Envoi / retrait:
+                                        <p>{{ item.sendingMethod }}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        Adresse:
+                                        <p>{{ item.deliveryAddress | raw }}</p>
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        {% include "components/admin_group_buttons_traited_daily.html.twig"  with {'command': key, 'document':item.id } %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        "NOTHING FOR THE MOMENT..."
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

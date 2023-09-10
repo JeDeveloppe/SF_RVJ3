@@ -22,6 +22,8 @@ use App\Entity\Payment;
 use App\Entity\ShippingMethod;
 use App\Entity\Tax;
 use App\Entity\User;
+use App\Repository\DocumentRepository;
+use App\Repository\DocumentStatusRepository;
 use App\Repository\OffSiteOccasionSaleRepository;
 use App\Repository\PaymentRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -34,7 +36,9 @@ class DashboardController extends AbstractDashboardController
 {
     public function __construct(
         private OffSiteOccasionSaleRepository $offSiteOccasionSaleRepository,
-        private PaymentRepository $paymentRepository
+        private PaymentRepository $paymentRepository,
+        private DocumentRepository $documentRepository,
+        private DocumentStatusRepository $documentStatusRepository
     )
     {
         
@@ -90,6 +94,24 @@ class DashboardController extends AbstractDashboardController
         ]);
     }
 
+    #[Route('/admin/traitement-quotidien', name: 'admin_traited_daily')]
+    public function traitedDaily(): Response
+    {
+        $documents = [];
+        $statusToBeTraitedDaily = $this->documentStatusRepository->findStatusIsTraitedDaily();
+        $documentStatus = $this->documentStatusRepository->findAll();
+
+        foreach($statusToBeTraitedDaily as $status){
+
+            $documents[$status->getName()] = $this->documentRepository->findDocumentsToBeTraitedDailyWithStatus($status);
+        }
+
+        return $this->render('admin/traited_daily.html.twig', [
+            'documents' => $documents,
+            'status' => $documentStatus
+        ]);
+    }
+
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
@@ -100,6 +122,7 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToRoute('SITE','fa-solid fa-shop','app_home');
+        yield MenuItem::linkToRoute('COMMANDES','fa-solid fa-money-bill','admin_traited_daily');
 
         yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class);
         

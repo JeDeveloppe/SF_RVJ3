@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\EasyAdmin;
 
-use App\Entity\ShippingMethod;
+use App\Entity\DocumentStatus;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -11,36 +11,39 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use phpDocumentor\Reflection\Types\Boolean;
 
-class ShippingMethodCrudController extends AbstractCrudController
+class DocumentStatusCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return ShippingMethod::class;
+        return DocumentStatus::class;
     }
 
     public function configureFields(string $pageName): iterable
     {
         return [
             TextField::new('name'),
+            BooleanField::new('isToBeTraitedDaily')->setLabel('Traitement quotidien'),
             AssociationField::new('documents')->setLabel('Documents')->setDisabled(true)
         ];
     }
-
+    
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
             ->showEntityActionsInlined()
-            ->setPageTitle('index', 'Liste des moyens de retrait')
-            ->setPageTitle('new', 'Nouveau retrait')
-            ->setPageTitle('edit', 'Édition du retrait')
+            ->setPageTitle('index', 'Liste des status des documents')
+            ->setPageTitle('new', 'Nouveau status de document')
+            ->setPageTitle('edit', 'Édition d\'un status de document')
         ;
     }
 
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            // ->remove(Crud::PAGE_INDEX, Action::DELETE);
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN');
         

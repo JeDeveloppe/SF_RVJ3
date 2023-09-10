@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\EasyAdmin;
 
-use App\Entity\DocumentStatus;
+use App\Entity\Tax;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -10,20 +10,20 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
-class DocumentStatusCrudController extends AbstractCrudController
+class TaxCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return DocumentStatus::class;
+        return Tax::class;
     }
 
+    
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('name'),
-            AssociationField::new('documents')->setLabel('Documents')->setDisabled(true)
+            IntegerField::new('value')->setLabel('Poucentage %'),
         ];
     }
     
@@ -31,17 +31,16 @@ class DocumentStatusCrudController extends AbstractCrudController
     {
         return $crud
             ->showEntityActionsInlined()
-            ->setPageTitle('index', 'Liste des status des documents')
-            ->setPageTitle('new', 'Nouveau status de document')
-            ->setPageTitle('edit', 'Édition d\'un status de document')
+            ->setPageTitle('index', 'Liste des taxes')
+            ->setPageTitle('new', 'Nouvelle taxe')
+            ->setPageTitle('edit', 'Édition taxe')
         ;
     }
 
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            // ->remove(Crud::PAGE_INDEX, Action::DELETE);
-            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN');
         
     }

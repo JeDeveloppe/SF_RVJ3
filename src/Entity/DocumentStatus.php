@@ -21,6 +21,9 @@ class DocumentStatus
     #[ORM\OneToMany(mappedBy: 'documentStatus', targetEntity: Document::class)]
     private Collection $documents;
 
+    #[ORM\Column]
+    private ?bool $isToBeTraitedDaily = null;
+
     public function __construct()
     {
         $this->documents = new ArrayCollection();
@@ -76,5 +79,17 @@ class DocumentStatus
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function isIsToBeTraitedDaily(): ?bool
+    {
+        return $this->isToBeTraitedDaily;
+    }
+
+    public function setIsToBeTraitedDaily(bool $isToBeTraitedDaily): static
+    {
+        $this->isToBeTraitedDaily = $isToBeTraitedDaily;
+
+        return $this;
     }
 }

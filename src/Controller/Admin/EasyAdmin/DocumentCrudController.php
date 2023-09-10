@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\Document;
+use App\Repository\DocumentRepository;
+use App\Repository\DocumentStatusRepository;
 use phpDocumentor\Reflection\Types\Integer;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -10,14 +12,22 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class DocumentCrudController extends AbstractCrudController
 {
+    public function __construct(
+        private RequestStack $requestStack,
+        private DocumentRepository $documentRepository,
+        private DocumentStatusRepository $documentStatusRepository
+    )
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return Document::class;
@@ -25,10 +35,24 @@ class DocumentCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+
+          //?edition logic
+          $id = $this->requestStack->getCurrentRequest()->get('entityId');
+          if($id){
+              $document = $this->documentRepository->find($id);
+              if($document->getDocumentStatus() == $this->documentStatusRepository->findOneBy(['name' => 'EXPÉDIÉE / TERMINÉE'])){
+                  $disabled = true;
+              }else{
+                  $disabled = false;
+              }
+          }else{
+              $disabled = false;
+          }
+
         return [
             TextField::new('token')->setLabel('Token')->setDisabled(true)->onlyOnDetail(),
-            IntegerField::new('quoteNumber')->setLabel('Num. devis')->setDisabled(true),
-            IntegerField::new('BillNumber')->setLabel('Num. facture')->setDisabled(true),
+            TextField::new('quoteNumber')->setLabel('Num. devis')->setDisabled(true),
+            TextField::new('BillNumber')->setLabel('Num. facture')->setDisabled(true),
             MoneyField::new('totalExcludingTax')
                 ->setLabel('Total HT')
                 ->setDisabled(true)
@@ -98,8 +122,10 @@ class DocumentCrudController extends AbstractCrudController
                 ->renderAsEmbeddedForm(),
             AssociationField::new('documentStatus')
                 ->setLabel('Status du document')
-                ->setDisabled(true)
-                ->renderAsEmbeddedForm(),
+                ->renderAsEmbeddedForm()->onlyOnIndex(),
+            AssociationField::new('documentStatus')
+                ->setLabel('Status du document')
+                ->onlyOnForms()->setDisabled($disabled),
             AssociationField::new('payment')
                 ->setLabel('Paiement')
                 ->setDisabled(true),

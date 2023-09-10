@@ -90,7 +90,6 @@ class ImportDocumentsService
         ->setCreatedAt($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time']))
         ->setTimeOfSendingQuote($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_mail_devis']))
         ->setIsDeleteByUser(false)
-        ->setPayment(null)
         ->setMessage($this->utilities->stringToNull($arrayDoc['commentaire']))
         ->setTaxRate($this->taxRepository->findOneBy(['value' => 0]))
         ->setCost($arrayDoc['prix_preparation'])
