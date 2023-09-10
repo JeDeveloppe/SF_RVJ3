@@ -97,16 +97,21 @@ class ImportDocumentsLignesService
         //"idDocLigne","idDocument","idJeu","question","reponse","prix"
         $document = $this->documentRepository->findOneBy(['rvj2id' => $arrayLines['idDocument']]);
         if(!$document){
-            dd('Doc: '.$arrayLines['idDocument']);
+            dd('Document: '.$arrayLines['idDocument']);
+        }
+        $boite = $this->boiteRepository->findOneBy(['rvj2id' => $arrayLines['idJeu']]);
+        if(!$boite){
+            dd('Boite: '.$arrayLines['idJeu']);
         }
 
         $docLine
             ->setDocument($document)
-            ->setBoite($this->boiteRepository->findOneBy(['rvj2id' => $arrayLines['idJeu']]))
+            ->setBoite($boite)
+            ->setOccasion(null)
             ->setQuestion($arrayLines['question'])
             ->setQuantity(1)
             ->setAnswer($arrayLines['reponse'])
-            ->setRvj2idoccasion($arrayLines['idDocLigne'])
+            ->setRvj2idboite($arrayLines['idDocLigne'])
             ->setPriceExcludingTax($arrayLines['prix']);
 
         return $docLine;
@@ -128,10 +133,15 @@ class ImportDocumentsLignesService
         if(!$document){
             dd('Doc: '.$arrayLines['idDocument']);
         }
+        $occasion = $this->occasionRepository->findOneBy(['rvj2id' => $arrayLines['idJeuComplet']]);
+        if(!$occasion){
+            dd('Occasion: '.$arrayLines['idJeuComplet']);
+        }
 
         $docLine
             ->setDocument($document)
-            ->setOccasion($this->occasionRepository->findOneBy(['rvj2id' => $arrayLines['idJeuComplet']]))
+            ->setOccasion($occasion)
+            ->setBoite(null)
             ->setQuantity(1)
             ->setRvj2idoccasion($arrayLines['idDocLigneAchat'])
             ->setPriceExcludingTax($arrayLines['prix']);

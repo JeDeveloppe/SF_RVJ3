@@ -23,10 +23,10 @@ class Document
     private ?int $rvj2id = null;
 
     #[ORM\Column]
-    private ?int $quoteNumber = null;
+    private ?string $quoteNumber = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $billNumber = null;
+    private ?string $billNumber = null;
 
     #[ORM\Column]
     private ?int $totalExcludingTax = null;
@@ -123,24 +123,24 @@ class Document
         return $this;
     }
 
-    public function getQuoteNumber(): ?int
+    public function getQuoteNumber(): ?string
     {
         return $this->quoteNumber;
     }
 
-    public function setQuoteNumber(int $quoteNumber): static
+    public function setQuoteNumber(string $quoteNumber): static
     {
         $this->quoteNumber = $quoteNumber;
 
         return $this;
     }
 
-    public function getBillNumber(): ?int
+    public function getBillNumber(): ?string
     {
         return $this->billNumber;
     }
 
-    public function setBillNumber(?int $billNumber): static
+    public function setBillNumber(?string $billNumber): static
     {
         $this->billNumber = $billNumber;
 
@@ -365,7 +365,7 @@ class Document
 
     public function __toString()
     {
-        return $this->billNumber ?? 'INCONNU';
+        return $this->billNumber ?? $this->quoteNumber;
     }
 
     /**

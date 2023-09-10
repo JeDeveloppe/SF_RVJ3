@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ShippingMethodRepository;
 use App\Repository\TaxRepository;
 use App\Repository\UserRepository;
+use App\Service\DocumentService;
 use App\Service\Utilities;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -23,6 +24,7 @@ class ImportDocumentsService
         private DocumentRepository $documentRepository,
         private TaxRepository $taxRepository,
         private Utilities $utilities,
+        private DocumentService $documentService
         ){
     }
 
@@ -67,13 +69,13 @@ class ImportDocumentsService
         $document
         ->setToken($arrayDoc['validKey'])
         ->setRvj2id($arrayDoc['idDocument'])
-        ->setQuoteNumber((int) substr($arrayDoc['numero_devis'],3));
+        ->setQuoteNumber($this->documentService->quoteNumberGenerator(substr($arrayDoc['numero_devis'],3)));
 
         $numFacture = $arrayDoc['numero_facture'];
         if(is_null($this->utilities->stringToNull($arrayDoc['numero_facture']))){
             $numFacture = null;
         }else{
-            $numFacture = (int) substr($arrayDoc['numero_facture'],3);
+            $numFacture = $this->documentService->billingNumberGenerator(substr($arrayDoc['numero_facture'],3));
         }
 
         $document

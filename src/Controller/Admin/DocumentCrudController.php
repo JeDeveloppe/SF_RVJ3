@@ -109,6 +109,7 @@ class DocumentCrudController extends AbstractCrudController
             AssociationField::new('user')
                 ->setLabel('Client')
                 ->setDisabled(true),
+            AssociationField::new('documentLines')->onlyOnDetail(),
         ];
     }
 

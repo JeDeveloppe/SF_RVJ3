@@ -37,6 +37,7 @@ class BoiteCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            IntegerField::new('rvj2id'),
             TextField::new('image')->onlyOnIndex(),
             ImageField::new('image')->onlyOnForms()
                 ->setBasePath('./assets/images/boites/')
@@ -57,13 +58,7 @@ class BoiteCrudController extends AbstractCrudController
             IntegerField::new('age')->setLabel('A partir de (âge)')->onlyOnForms(),
             IntegerField::new('players')->setLabel('Nombre de joueurs')->onlyOnForms(),
             AssociationField::new('documentLines')
-            ->setLabel('Nbre de demandes')
-            ->setQueryBuilder(
-                fn(QueryBuilder $queryBuilder) => $queryBuilder
-                        ->where('entity.document = :entity')
-                        ->setParameter('entity', 'entity.id')
-                        ->andWhere('entity.priceExcludingTax > 0'))
-                        ->setDisabled(true),
+            ->setLabel('Nbre de demandes'),
             BooleanField::new('isOccasion')->setLabel('Occasion'),
             IntegerField::new('htPrice')->setLabel('Prix HT (en cents) d\'une boite complête en bon état')->onlyOnForms(),
             DateTimeField::new('createdAt')->setLabel('Créé le')
