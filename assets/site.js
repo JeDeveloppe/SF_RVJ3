@@ -8,3 +8,4 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/template_bootstrap.css';
 import './styles/site.css';
+import './toast';

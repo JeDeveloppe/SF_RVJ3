@@ -8,6 +8,9 @@
 {% endblock %}
 
 {% block main %}
+
+    {% include "_toast.html.twig" %}
+
     <div class="row">
         {% for data in datas %}
             <div class="card col-12 p-0 my-5">

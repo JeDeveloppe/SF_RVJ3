@@ -29,16 +29,19 @@ class AdminController extends AbstractController
 
         if(!$document || !$status){
 
+            $this->addFlash('warning', 'Document inconnu !');
             return $this->redirectToRoute('admin_traited_daily');
 
         }else{
 
-            //TODO
+            //TODO envoi email
             //$this->emailService->sendEmailWhenDocumentIsChangingStatus($document,$status);
 
             $document->setDocumentStatus($status);
             $this->em->persist($document);
             $this->em->flush();
+
+            $this->addFlash('success', 'Status mis à jour !');
             return $this->redirectToRoute('admin_traited_daily');
 
         }
