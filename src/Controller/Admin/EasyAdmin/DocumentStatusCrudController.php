@@ -26,7 +26,8 @@ class DocumentStatusCrudController extends AbstractCrudController
         return [
             TextField::new('name'),
             BooleanField::new('isToBeTraitedDaily')->setLabel('Traitement quotidien'),
-            AssociationField::new('documents')->setLabel('Documents')->setDisabled(true)
+            TextField::new('action')->setDisabled('Lier à l\'action')->setDisabled(true),
+            AssociationField::new('documents')->setLabel('Documents')->setDisabled(true)->onlyOnIndex()
         ];
     }
     

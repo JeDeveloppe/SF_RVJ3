@@ -9,29 +9,29 @@
 
 {% block main %}
     <div class="row">
-        {% for key,document in documents %}
+        {% for data in datas %}
             <div class="card col-12 p-0 my-5">
-                <div class="card-header">{{ key }}</div>
+                <div class="card-header">{{ data.value }}</div>
                 <div class="card-body">
-                    {% if document | length > 0 %}
-                        {% for item in document %}
+                    {% if data .documents | length > 0 %}
+                        {% for document in data.documents %}
                             <div class="card mb-4">
-                                <div class="card-header">{{ item.quoteNumber }}</div>
+                                <div class="card-header">{{ document.quoteNumber }}</div>
                                 <div class="card-body d-flex align-items-center">
                                     <div class="col-3">
                                         Payée le:
-                                            <p>{{ item.payment }}</p>
+                                            <p>{{ document.payment }}</p>
                                     </div>
                                     <div class="col-3">
                                         Envoi / retrait:
-                                        <p>{{ item.sendingMethod }}</p>
+                                        <p>{{ document.sendingMethod }}</p>
                                     </div>
                                     <div class="col-3">
                                         Adresse:
-                                        <p>{{ item.deliveryAddress | raw }}</p>
+                                        <p>{{ document.deliveryAddress | raw }}</p>
                                     </div>
                                     <div class="col-3 text-center">
-                                        {% include "components/admin_group_buttons_traited_daily.html.twig"  with {'command': key, 'document':item.id } %}
+                                        {% include "components/admin_group_buttons_traited_daily.html.twig" with {'command': data.action, 'token':document.token } %}
                                     </div>
                                 </div>
                             </div>

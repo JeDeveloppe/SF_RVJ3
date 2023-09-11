@@ -97,18 +97,30 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin/traitement-quotidien', name: 'admin_traited_daily')]
     public function traitedDaily(): Response
     {
-        $documents = [];
-        $statusToBeTraitedDaily = $this->documentStatusRepository->findStatusIsTraitedDaily();
-        $documentStatus = $this->documentStatusRepository->findAll();
+        $datas = [];
+        $status = [];
+        $statusToBeTraitedDailys = $this->documentStatusRepository->findStatusIsTraitedDaily();
+        $actions = $this->documentStatusRepository->findAll();
 
-        foreach($statusToBeTraitedDaily as $status){
-
-            $documents[$status->getName()] = $this->documentRepository->findDocumentsToBeTraitedDailyWithStatus($status);
+        foreach($actions as $action){
+            $status[$action->getAction()] = $action->getAction();
         }
 
+
+        foreach($statusToBeTraitedDailys as $statusToBeTraitedDaily){
+
+            $datas[$statusToBeTraitedDaily->getAction()] = 
+                [
+                    'value' => $statusToBeTraitedDaily->getName(),
+                    'action' => $statusToBeTraitedDaily->getAction(),
+                    'documents' => $this->documentRepository->findDocumentsToBeTraitedDailyWithStatus($statusToBeTraitedDaily)
+                ];
+        }
+        
+
         return $this->render('admin/traited_daily.html.twig', [
-            'documents' => $documents,
-            'status' => $documentStatus
+            'datas' => $datas,
+            'status' => $status
         ]);
     }
 

@@ -23,23 +23,28 @@ class CreationDocumentStatusService
 
         //! BIEN GARDER CETTE ORDER CAUSE BESOIN/ LOGIQUE DANS COMPONENTS/ADMIN_GROUP_BUTTON 
         $statusDocuments[] = [
-            'name' => 'PAYÉE / A PRÉPARER', //! METTRE A JOUR DANS LES CRUDS ET TEMPLATES
+            'name' => 'PAYÉE / A PRÉPARER', 
+            'action' => 'TO_PREPARE',
             'isTreatedDaily' => true
         ];
         $statusDocuments[] = [
-            'name' => 'PAYÉE / MISE DE CÔTÉ', //! METTRE A JOUR DANS LES CRUDS ET TEMPLATES
+            'name' => 'PAYÉE / MISE DE CÔTÉ', 
+            'action' => 'SET_ASIDE',
             'isTreatedDaily' => true
         ];
         $statusDocuments[] = [
-            'name' => 'EXPÉDIÉE / TERMINÉE', //! METTRE A JOUR DANS LES CRUDS ET TEMPLATES
+            'name' => 'EXPÉDIÉE / TERMINÉE', 
+            'action' => 'END',
             'isTreatedDaily' => false
         ];
         $statusDocuments[] = [
-            'name' => 'INDÉFINIE', //! METTRE A JOUR DANS LES CRUDS ET TEMPLATES
+            'name' => 'INDÉFINIE', 
+            'action' => 'UNKNOWN',
             'isTreatedDaily' => true
         ];
         $statusDocuments[] = [
             'name' => 'NON PAYÉE', 
+            'action' => 'NO_PAID',
             'isTreatedDaily' => false
         ];
 
@@ -51,7 +56,7 @@ class CreationDocumentStatusService
                 $status = new DocumentStatus();
             }
 
-            $status->setName($statusDocument['name'])->setIsToBeTraitedDaily($statusDocument['isTreatedDaily']);
+            $status->setName($statusDocument['name'])->setAction($statusDocument['action'])->setIsToBeTraitedDaily($statusDocument['isTreatedDaily']);
             $this->manager->persist($status);
         }
         $this->manager->flush();

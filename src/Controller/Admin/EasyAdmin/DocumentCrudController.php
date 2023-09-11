@@ -36,18 +36,18 @@ class DocumentCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
 
-          //?edition logic
-          $id = $this->requestStack->getCurrentRequest()->get('entityId');
-          if($id){
-              $document = $this->documentRepository->find($id);
-              if($document->getDocumentStatus() == $this->documentStatusRepository->findOneBy(['name' => 'EXPÉDIÉE / TERMINÉE'])){
-                  $disabled = true;
-              }else{
-                  $disabled = false;
-              }
-          }else{
-              $disabled = false;
-          }
+        //?edition logic
+        $id = $this->requestStack->getCurrentRequest()->get('entityId');
+        if($id){
+            $document = $this->documentRepository->find($id);
+            if($document->getDocumentStatus() == $this->documentStatusRepository->findOneBy(['action' => 'END'])){
+                $disabled = true;
+            }else{
+                $disabled = false;
+            }
+        }else{
+            $disabled = false;
+        }
 
         return [
             TextField::new('token')->setLabel('Token')->setDisabled(true)->onlyOnDetail(),
@@ -146,7 +146,7 @@ class DocumentCrudController extends AbstractCrudController
             ->showEntityActionsInlined()
             ->setPageTitle('index', 'Liste des documents')
             ->setDefaultSort(['billNumber' => 'DESC'])
-            ->setSearchFields(['quoteNumber', 'billNumber', 'user.email'])
+            ->setSearchFields(['quoteNumber', 'billNumber', 'user.email', 'token'])
         ;
     }
 

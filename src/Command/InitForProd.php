@@ -124,7 +124,7 @@ class InitForProd extends Command
         //on cree les status des documents
         $this->creationDocumentStatusService->creationStatus($io);
 
-        //on importe les documents
+        //on importe les documents et les paiements
         $this->importDocumentsService->importDocuments($io);
         $this->importPaiementService->importPaiements($io);
 

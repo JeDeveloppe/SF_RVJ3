@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Repository\DocumentRepository;
 use App\Repository\DocumentStatusRepository;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,8 @@ class AdminController extends AbstractController
     public function __construct(
         private DocumentRepository $documentRepository,
         private DocumentStatusRepository $documentStatusRepository,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private EmailService $emailService
     )
     {
     }
@@ -22,14 +24,17 @@ class AdminController extends AbstractController
     #[Route('/admin/change-status-of-document/{document}/{status}', name: 'app_admin_change_status_document')]
     public function changeStatusDocument($document,$status): Response
     {
-        $document = $this->documentRepository->find($document);
-        $status = $this->documentStatusRepository->find($status);
+        $document = $this->documentRepository->findOneBy(['token' => $document]);
+        $status = $this->documentStatusRepository->findOneby(['action' => $status]);
 
         if(!$document || !$status){
 
             return $this->redirectToRoute('admin_traited_daily');
 
         }else{
+
+            //TODO
+            //$this->emailService->sendEmailWhenDocumentIsChangingStatus($document,$status);
 
             $document->setDocumentStatus($status);
             $this->em->persist($document);

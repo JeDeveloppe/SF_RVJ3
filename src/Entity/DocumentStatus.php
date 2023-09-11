@@ -24,6 +24,9 @@ class DocumentStatus
     #[ORM\Column]
     private ?bool $isToBeTraitedDaily = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $action = null;
+
     public function __construct()
     {
         $this->documents = new ArrayCollection();
@@ -89,6 +92,18 @@ class DocumentStatus
     public function setIsToBeTraitedDaily(bool $isToBeTraitedDaily): static
     {
         $this->isToBeTraitedDaily = $isToBeTraitedDaily;
+
+        return $this;
+    }
+
+    public function getAction(): ?string
+    {
+        return $this->action;
+    }
+
+    public function setAction(string $action): static
+    {
+        $this->action = $action;
 
         return $this;
     }
