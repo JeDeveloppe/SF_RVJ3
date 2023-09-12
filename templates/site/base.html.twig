@@ -2,17 +2,38 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+        {% block meta %}
+        {% endblock %}
+        <link rel="icon" href="/build/images/favicon/favicon.ico">
+        <link rel="apple-touch-icon" sizes="180x180" href="/build/images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/build/images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/build/images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="/build/images/favicon/site.webmanifest">
+        <title>REFAITES VOS JEUX | {% block title %}{% endblock %}</title>
+
+        {{ encore_entry_link_tags('site') }}
+        
         {% block stylesheets %}
-            {{ encore_entry_link_tags('site') }}
         {% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('site') }}
-        {% endblock %}
+        <script src="https://kit.fontawesome.com/39dfe16fa3.js" crossorigin="anonymous"></script>
+        
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% include "site/navbar.html.twig" %}
+
+
+        <div class="container">
+            {% include "components/flash_message.html.twig" %}
+            
+            {% block body %}{% endblock %}
+        </div>
+
+        {{ encore_entry_script_tags('site') }}
+
+        {% block javascript %}{% endblock %}
     </body>
 </html>

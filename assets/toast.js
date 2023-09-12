@@ -6,6 +6,7 @@ if (toastLiveExample) {
 
     //TODO suppression mesage flash
     setTimeout(function() {
-        flashMessage.remove();
-    }, 3000);
+        console.log('start')
+        toastLiveExample.hide();
+    }, 300);
 }

@@ -61,9 +61,13 @@ class Occasion
     #[ORM\OneToMany(mappedBy: 'occasion', targetEntity: DocumentLine::class)]
     private Collection $documentLines;
 
+    #[ORM\OneToMany(mappedBy: 'occasion', targetEntity: Panier::class)]
+    private Collection $paniers;
+
     public function __construct()
     {
         $this->documentLines = new ArrayCollection();
+        $this->paniers = new ArrayCollection();
     }
 
 
@@ -257,6 +261,36 @@ class Occasion
             // set the owning side to null (unless already changed)
             if ($documentLine->getOccasion() === $this) {
                 $documentLine->setOccasion(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Panier>
+     */
+    public function getPaniers(): Collection
+    {
+        return $this->paniers;
+    }
+
+    public function addPanier(Panier $panier): static
+    {
+        if (!$this->paniers->contains($panier)) {
+            $this->paniers->add($panier);
+            $panier->setOccasion($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanier(Panier $panier): static
+    {
+        if ($this->paniers->removeElement($panier)) {
+            // set the owning side to null (unless already changed)
+            if ($panier->getOccasion() === $this) {
+                $panier->setOccasion(null);
             }
         }
 

@@ -1,0 +1,13 @@
+{# read and display all flash messages #}
+
+{% if app.flashes | length > 0 %}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="row alertRow">
+                <div class="col-11 mx-auto col-md-6 mt-3 mt-md-5 py-3 text-center bg-{{ label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endif %}

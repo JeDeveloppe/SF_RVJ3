@@ -83,10 +83,14 @@ class Boite
     #[ORM\OneToMany(mappedBy: 'boite', targetEntity: DocumentLine::class)]
     private Collection $documentLines;
 
+    #[ORM\OneToMany(mappedBy: 'boite', targetEntity: Panier::class)]
+    private Collection $paniers;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
         $this->documentLines = new ArrayCollection();
+        $this->paniers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -393,6 +397,36 @@ class Boite
             // set the owning side to null (unless already changed)
             if ($documentLine->getBoite() === $this) {
                 $documentLine->setBoite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Panier>
+     */
+    public function getPaniers(): Collection
+    {
+        return $this->paniers;
+    }
+
+    public function addPanier(Panier $panier): static
+    {
+        if (!$this->paniers->contains($panier)) {
+            $this->paniers->add($panier);
+            $panier->setBoite($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanier(Panier $panier): static
+    {
+        if ($this->paniers->removeElement($panier)) {
+            // set the owning side to null (unless already changed)
+            if ($panier->getBoite() === $this) {
+                $panier->setBoite(null);
             }
         }
 

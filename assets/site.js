@@ -9,3 +9,5 @@
 import './styles/template_bootstrap.css';
 import './styles/site.css';
 import './toast';
+
+require('bootstrap');
