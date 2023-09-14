@@ -29,6 +29,7 @@ use App\Service\ImportRvj2\CreationMouvementsOccasionService;
 use App\Service\ImportRvj2\CreationUndefinedAdminAndAdresseService;
 use App\Service\ImportRvj2\ImportDocumentsLignesService;
 use App\Service\ImportRvj2\ImportVillesBelgesService;
+use App\Service\ImportRvj2\CreationEnvelopesAndColorsAndDiscountsService;
 
 #[AsCommand(name: 'app:initforprod')]
 
@@ -56,7 +57,8 @@ class InitForProd extends Command
             private CreationUndefinedAdminAndAdresseService $creationUndefinedAdminAndAdresseService,
             private CreationDocumentStatusService $creationDocumentStatusService,
             private ImportPaiementService $importPaiementService,
-            private ImportDocumentsLignesService $importDocumentsLignesService
+            private ImportDocumentsLignesService $importDocumentsLignesService,
+            private CreationEnvelopesAndColorsAndDiscountsService $creationEnvelopesAndColorsAndDiscountsService
         )
     {
         parent::__construct();
@@ -92,10 +94,10 @@ class InitForProd extends Command
         //$this->importAdressesService->importAdresses($io);
 
         //on importe les boites
-        //$this->importBoitesService->importBoites($io);
+        $this->importBoitesService->importBoites($io);
 
         //on genere les editeurs de facon distinct
-        $this->editorService->addEditorsInDatabase($io);
+        //$this->editorService->addEditorsInDatabase($io);
 
         //on importe le detail des boites
         //$this->importPiecesService->importPieces($io);
@@ -131,6 +133,11 @@ class InitForProd extends Command
         //on importe les lignes de chaque document
         //$this->importDocumentsLignesService->importDocumentsLigneBoites($io);
         //$this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
+
+        //on cree les enveloppes et les couleurs pour les articles
+        $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
+        $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
+        $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
 
         return Command::SUCCESS;
     }

@@ -5,13 +5,16 @@ namespace App\Controller\Admin;
 use App\Entity\Address;
 use App\Entity\Boite;
 use App\Entity\City;
+use App\Entity\Color;
 use App\Entity\ConditionOccasion;
 use App\Entity\Country;
 use App\Entity\Department;
+use App\Entity\Discount;
 use App\Entity\Document;
 use App\Entity\DocumentLine;
 use App\Entity\DocumentStatus;
 use App\Entity\Editor;
+use App\Entity\Envelope;
 use App\Entity\LegalInformation;
 use App\Entity\MeansOfPayement;
 use App\Entity\MovementOccasion;
@@ -142,6 +145,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Partenaires', 'fas fa-list', Partner::class);
         yield MenuItem::linkToCrud('Éditeurs', 'fas fa-list', Editor::class);
         
+        yield MenuItem::section('Gestion des articles:');
+        yield MenuItem::linkToCrud('Couleurs', 'fas fa-list', Color::class);
+
         yield MenuItem::section('Gestion des utilisateurs:');
         yield MenuItem::linkToCrud('Clients', 'fas fa-list', User::class);
         yield MenuItem::linkToCrud('Adresses', 'fas fa-list', Address::class);
@@ -168,8 +174,10 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Departements', 'fas fa-list', Department::class);
         yield MenuItem::linkToCrud('Pays', 'fas fa-list', Country::class);
 
-        yield MenuItem::section('Paramètres:');
+        yield MenuItem::section('Paramètres de ventes:');
         yield MenuItem::linkToCrud('Moyens de paiement', 'fas fa-list', MeansOfPayement::class);
+        yield MenuItem::linkToCrud('Enveloppes', 'fas fa-list', Envelope::class);
+        yield MenuItem::linkToCrud('Remises', 'fas fa-list', Discount::class);
 
     }
 }
