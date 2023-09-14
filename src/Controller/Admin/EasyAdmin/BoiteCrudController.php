@@ -37,11 +37,10 @@ class BoiteCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IntegerField::new('rvj2id'),
             TextField::new('image')->onlyOnIndex(),
             ImageField::new('image')->onlyOnForms()
-                ->setBasePath('./assets/images/boites/')
-                ->setUploadDir('./assets/images/boites/'),
+                ->setBasePath('./public/build/images/boites/')
+                ->setUploadDir('./public/build/images/boites/'),
             TextField::new('name')->setLabel('Nom'),
             SlugField::new('slug')->setTargetFieldName('name')->setLabel('Slug')->onlyOnForms(),
             IntegerField::new('year')->setLabel('Année'),

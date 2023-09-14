@@ -14,9 +14,9 @@ Encore
     // only needed for CDN's or subdirectory deploy
     //.setManifestKeyPrefix('build/')
     .copyFiles({
-        from: './assets/images/favicon',
+        from: './assets/images',
         // optional target path, relative to the output dir
-        to: 'images/favicon/[path][name].[ext]'
+        to: 'images/[path][name].[ext]'
     })
     /*
      * ENTRY CONFIG

@@ -95,7 +95,7 @@ class InitForProd extends Command
         //$this->importBoitesService->importBoites($io);
 
         //on genere les editeurs de facon distinct
-        //$this->editorService->addEditorsInDatabase($io);
+        $this->editorService->addEditorsInDatabase($io);
 
         //on importe le detail des boites
         //$this->importPiecesService->importPieces($io);
@@ -122,11 +122,11 @@ class InitForProd extends Command
         //$this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
 
         //on cree les status des documents
-        $this->creationDocumentStatusService->creationStatus($io);
+        //$this->creationDocumentStatusService->creationStatus($io);
 
         //on importe les documents et les paiements
-        $this->importDocumentsService->importDocuments($io);
-        $this->importPaiementService->importPaiements($io);
+        //$this->importDocumentsService->importDocuments($io);
+        //$this->importPaiementService->importPaiements($io);
 
         //on importe les lignes de chaque document
         //$this->importDocumentsLignesService->importDocumentsLigneBoites($io);

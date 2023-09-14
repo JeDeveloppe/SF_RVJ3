@@ -1,0 +1,12 @@
+<p class="card-text">
+    {% if is_granted('ROLE_USER') %}
+        {% if donnee.boite is defined %}
+        {# si on affiche des occasions #}
+            <a class="btn btn-primary" href="{{ path('app_occasion', {'reference_occasion': donnee.reference, 'boite_slug': donnee.boite.slug , 'editor_slug': donnee.boite.editor.slug }) }}">Voir les détails</a>
+        {% else %}
+            <a class="btn btn-primary" href="{{ path('app_catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.slug , 'editor': boite.editor  }) }}">Faire une demande de pièces</a>
+        {% endif %}
+    {% else %}
+        <a href="{{ path('app_login') }}" class="btn btn-sm btn-warning mt-3 mb-2">Merci de vous identifier</a>
+    {% endif %}
+</p>

@@ -1,0 +1,16 @@
+{# renseigner url dans la page parent ex:
+{% set url = path('catalogue_pieces_detachees_demande', { id: boite.id, slug: boite.slug, editeur: boite.editeur }) %} #}
+
+
+    <a class="facebook-share-button" href="https://www.facebook.com/sharer/sharer.php?u={{ absolute_url(url) }}" target="_blank" data-toggle="tooltip" data-placement="top" title="Partager sur Facebook">
+        <svg style="color: blue" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bg-white border-1 border-blue rounded-circle bi bi-facebook" viewBox="0 0 16 16">
+            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" fill="blue"></path>
+        </svg>
+    </a>
+
+
+    <a class="twitter-share-button ms-2" href="https://twitter.com/intent/tweet?text={{ absolute_url(url) }}" target="_blank" data-toggle="tooltip" data-placement="top" title="Partager sur Tweeter">
+        <svg width="32" height="32" viewBox="328 355 335 276" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 630, 425 A 195, 195 0 0 1 331, 600 A 142, 142 0 0 0 428, 570  A  70,  70 0 0 1 370, 523 A  70,  70 0 0 0 401, 521 A  70,  70 0 0 1 344, 455 A  70,  70 0 0 0 372, 460 A  70,  70 0 0 1 354, 370 A 195, 195 0 0 0 495, 442 A  67,  67 0 0 1 611, 380 A 117, 117 0 0 0 654, 363 A  65,  65 0 0 1 623, 401 A 117, 117 0 0 0 662, 390 A  65,  65 0 0 1 630, 425 Z" style="fill:#3BA9EE;"/>
+        </svg>
+    </a>

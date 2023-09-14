@@ -1,0 +1,185 @@
+{% extends 'site/base.html.twig' %}
+
+{% block title %}
+	{{ boite.name | raw }} | {{ boite.editor | raw }}
+	{% if boite.year is not null %}
+		{{ boite.year }}
+	{% else %}
+		Année inconnue
+	{% endif %}
+{% endblock %}
+
+{% block body %}
+
+	<h1 class="col-12 text-center mt-5 pt-3 mb-3">{{ boite.name }} - {{ boite.editor }} - <span class="small">{{ boite.year }}</span></h1>
+
+		<div class="row mb-3">
+			{% include "components/catalog/_retour-button.html.twig" %}
+		</div>
+
+		<!-- BLOC PRESENTATION DU JEU  -->
+		<div class="row mb-5" id="">
+			<div class="card col-11 mx-auto col-md-10 col-lg-8 p-0 border shadow">
+
+    			<div class="col-12 d-flex justify-content-center my-4">
+					{% set url = path('app_catalogue_pieces_detachees_demande', { id: boite.id, slug: boite.slug, editor: boite.editor }) %}
+					{% include "components/catalog/share_buttons.html.twig" %}
+				</div>
+
+				<div class="card-body d-flex flex-wrap">
+					<!-- image de la boite -->
+					<div class="col-12 col-md-6 text-center p-0">
+						<div class="divImgPresentation mt-4">
+							<div class="zoom">
+								<div class="zoom__top zoom__left"></div>
+								<div class="zoom__top zoom__centre"></div>
+								<div class="zoom__top zoom__right"></div>
+								<div class="zoom__middle zoom__left"></div>
+								<div class="zoom__middle zoom__centre"></div>
+								<div class="zoom__middle zoom__right"></div>
+								<div class="zoom__bottom zoom__left"></div>
+								<div class="zoom__bottom zoom__centre"></div>
+								<div class="zoom__bottom zoom__right"></div>
+                        		<img class="zoom__image" src="{{ asset('build/images/boites/'~ boite.image)  }}"/>
+							</div>
+						</div>
+					</div>
+
+					<!-- contenu d'une boite -->
+					<div class="card col-12 col-md-6 p-0 text-primary">
+						<div class="card-header bg-vos">Contenu d'un jeu complet :</div>
+						<div class="card-body mt-2">
+							<ul>
+								{% set contenus = boite.content|split('\r\n') %}
+								{% if boite.content | length > 0 %}
+									{% for contenu in contenus %}
+										<li>{{ contenu }}</li>
+									{% endfor %}
+								{% else %}
+									Aucune information pour le moment...
+								{% endif %}
+								
+							</ul>
+						</div>
+					</div>
+
+					<!-- information d'envois -->
+					<div class="col-11 mx-auto mt-5 p-0">
+						{% include "components/catalog/_tableau_des_envois.html.twig" %}
+					</div>
+
+					<!-- message d'information sur un jeu -->
+					{% if boite.message is defined and boite.message is not null %}
+						<div class="col-12 text-danger text-center my-5">
+							<i class="fas fa-bell fa-2x"> Information:</i>
+							<p class="pl-5">{{ boite.message }}</p>
+						</div>
+					{% endif %}
+
+					<!-- question pre-formulaire -->
+					{# <div class="col-11 mx-auto mt-4">
+						Vous souhaitez faire une demande de pièces pour ce jeu ?
+						<a href="{{ path('informations-comment-ca-marche') }}" target="_blank" data-html="true" data-toggle="tooltip" data-placement="top" title="Aide">
+							<i class="fas fa-question-circle text-info p-2"></i>
+						</a><br/>
+						Remplissez ce formulaire et ajoutez cette demande à votre panier !
+					</div> #}
+
+					<!-- formulaire de demande -->
+					<form class="col-12 p-0 d-flex flex-wrap" method="post" class="border-primary pt-3" action="{{ path('panier-ajout-pieces-detachees') }}" name="formulaireDemandePiece" enctype="multipart/form-data">
+						<div class="form-group col-12 col-md-6 p-0">
+							<textarea class="form-control mt-3" rows="3" id="message" name="message" onkeyup="limiteur();" placeholder="Bonjour, avez vous cette pièce ?..." minlength="15" maxlenght="300" required></textarea>
+							<span id="precision" class="jumbotron bg-primary text-light p-2">
+								<i class="fas fa-lightbulb text-info"></i>
+								N’oubliez pas d’être précis dans votre demande :
+								<ul class="m-0">
+									<li>namebre de pièces souhaité</li>
+									<li>couleur</li>
+									<li>forme</li>
+									<li>etc...</li>
+								</ul>
+								<div class="col-12 p-0 text-right">Merci</div>
+							</span>
+							<small class="form-text text-danger text-center">Entre 15 et 300 caractères.</small>
+							<div class="small text-center" id="caracteresRestantFormulaireContenuJeu">300 caractères restant...</div>
+						</div>
+						<div class="form-group p-0 col-12 col-md-6 mt-4 mt-md-0">
+							<label class="col-12 text-center">Vous pouvez illustrer votre demande avec 2 photos maximum :</label>
+							<div class="image-upload text-center">
+								<label for="file-input">
+									<i class="fas fa-camera fa-3x cursor-grab"></i>
+								</label>
+								<input type="file" name="photo[]" id="file-input" onchange="getFileInfo()" multiple/>
+							</div>
+							<div class="col-12 text-center" id="resultatInput"></div>
+							<p class="col-12 text-center mt-2">
+                               {% include "/components/informations_upload_images.html.twig" %}
+                            </p>
+						</div>
+
+						<div class="col-12 text-center">
+							<input type="hidden" name="boite" value="{{ boite.id }}">
+							<input type="hidden" id="recaptchaResponse" name="recaptcha-response">
+							{% if is_granted('ROLE_USER') %}
+								<button type="submit" class="btn btn-success mt-3 mb-2">Ajouter au panier</button>
+							{% else %}
+								<a href="{{ path('app_login') }}" class="btn btn-warning mt-3 mb-2">Merci de vous identifier !</a>
+							{% endif %}
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			{% include "site/components/catalogues/_retour-button.html.twig" %}
+		</div>
+
+
+
+	<script>
+		function limiteur() {
+			maximum = 300;
+			champ = document.getElementById("message");
+			indic = document.getElementById("message").indicateur;
+
+			if (champ.value.length > maximum) {
+				champ.value = champ.value.substring(0, maximum);
+			} else {
+				document.getElementById("caracteresRestantFormulaireContenuJeu").innerHTML = maximum - champ.value.length + " caractères restant...";
+				document.getElementById("precision").style.display = "block";
+			}
+			if (champ.value.length == 0) {
+				document.getElementById("precision").style.display = "none";
+			} else { // Init a timeout variable to be used below
+				let timeout = null;
+				// Listen for keystroke events
+				champ.addEventListener('keyup', function (e) {
+					// Clear the timeout if it has already been set.
+					// This will prevent the previous task from executing
+					// if it has been less than <MILLISECONDS>
+					clearTimeout(timeout);
+					// Make a new timeout set to go off in 1000ms (1 second)
+					timeout = setTimeout(function () {
+						document.getElementById("precision").style.display = "none";
+					}, 4000);
+				});
+			}
+		}
+
+		var resultatInput = document.getElementById('resultatInput');
+		resultatInput.innerHTML = "Aucune image !";
+
+		function getFileInfo() {
+			var countFiles = document.getElementById('file-input').files.length;
+
+			if (countFiles > 1) {
+			resultatInput.innerHTML = "2 images séléctionnées";
+			} else {
+			var name = document.getElementById('file-input').files[0].name;
+			resultatInput.innerHTML = "Image séléctionnée:<br/>" + name;
+			}
+		}
+	</script>
+
+{% endblock %}

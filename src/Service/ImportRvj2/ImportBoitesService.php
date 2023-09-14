@@ -139,7 +139,7 @@ class ImportBoitesService
             $year = (int) $arrayBoite['annee'];
         }
 
-        $this->saveImageOnServeur($arrayBoite['idCatalogue'], $arrayBoite['imageBlob']);
+        $this->saveImageOnServeur($arrayBoite['urlNom'],$arrayBoite['idCatalogue'], $arrayBoite['imageBlob']);
 
         $boite->setName($arrayBoite['nom'])
             ->setIniteditor($arrayBoite['editeur'])
@@ -154,9 +154,8 @@ class ImportBoitesService
             ->setCreatedBy($this->userRepository->findOneBy(['nickname' => $arrayBoite['createur']]))
             ->setIsDeee($this->nullToBoolean($arrayBoite['deee']))
             ->setCreatedAt(new DateTimeImmutable($arrayBoite['created_at']))
-            ->setIsOnLine($actif)
-            ->setImage($this->constructImagePath($arrayBoite['idCatalogue']))
-            ->setIsDirectSale($isV3)
+            ->setIsOnLine($isV3)
+            ->setImage($this->constructImagePath($arrayBoite['urlNom'], $arrayBoite['idCatalogue']))
             ->setRvj2Id($arrayBoite['idCatalogue']);
 
         return $boite;
@@ -182,7 +181,7 @@ class ImportBoitesService
         return $value;
     }
 
-    public function saveImageOnServeur($uniqueName,$imageBlob){
+    public function saveImageOnServeur($slug, $uniqueName,$imageBlob){
 
         if (!file_exists($this->pathForImagesBoites())) {
             mkdir($this->pathForImagesBoites(), 0777, true);
@@ -190,7 +189,7 @@ class ImportBoitesService
 
         if(!empty($imageBlob)){
 
-            $save_path = $this->pathForImagesBoites().$this->constructImagePath($uniqueName);
+            $save_path = $this->pathForImagesBoites().$this->constructImagePath($slug, $uniqueName);
 
             $im = imagecreatefromstring(base64_decode($imageBlob));
             imagepng($im,$save_path);
@@ -200,9 +199,9 @@ class ImportBoitesService
 
     }
 
-    public function constructImagePath($unique_id){
+    public function constructImagePath($slug,$unique_id){
 
-        return 'boite_'.$unique_id.'.png';
+        return $slug.'_'.$unique_id.'.png';
     }
 
     public function pathForImagesBoites(){

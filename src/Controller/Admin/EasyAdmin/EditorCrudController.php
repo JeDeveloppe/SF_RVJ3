@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class EditorCrudController extends AbstractCrudController
@@ -21,6 +22,7 @@ class EditorCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name')->setLabel('Nom'),
+            SlugField::new('slug')->setTargetFieldName('name'),
             AssociationField::new('boites')->setLabel('Nombre de boites')->onlyOnIndex(),
         ];
     }

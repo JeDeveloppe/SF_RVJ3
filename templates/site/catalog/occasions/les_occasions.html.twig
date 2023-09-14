@@ -1,0 +1,45 @@
+{% extends "site/base.html.twig" %}
+
+{% block title %}Catalogue des jeux d'occasion{% endblock %}
+
+{% block body %}
+
+    <div class="col-12 text-center h2 my-5">Les jeux d'occasion</div>
+
+    {% if occasions | length > 0 %}
+
+        <div class="row justify-content-start align-items-stretch">
+
+            {% include "components/catalog/_card.html.twig" with { 'donnees': occasions } %}
+
+        </div>
+        
+        {% if occasions | length > 0 %}
+
+            <div class="row my-5">
+                <div class="col-12 d-flex justify-content-center">
+                    {{ knp_pagination_render(occasions, 'components/pagination.html.twig') }}
+                </div>
+            </div>
+
+        {% endif %}
+
+    {% else %}
+
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="h2">Nous n'avons pas ce jeu en stock pour le moment.</p>
+                <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.refaitesvosjeux.fr" target="_blank">Facebook !</a></p>    
+                <p class="h5 mt-5">Ou tenter votre chance chez l'un de nos partenaires:</p>
+            </div>
+        </div>
+        <div class="row justify-content-start mb-5">
+
+            {% for partenaire in partenaires %}
+
+            {% include "site/components/catalogues/card-partenaire.html.twig" %}
+                
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

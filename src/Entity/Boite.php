@@ -65,9 +65,6 @@ class Boite
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    private ?bool $isDirectSale = null;
-
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
@@ -286,18 +283,6 @@ class Boite
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function isIsDirectSale(): ?bool
-    {
-        return $this->isDirectSale;
-    }
-
-    public function setIsDirectSale(bool $isDirectSale): static
-    {
-        $this->isDirectSale = $isDirectSale;
 
         return $this;
     }

@@ -9,13 +9,15 @@ use App\Repository\CountryRepository;
 use App\Repository\EditorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class EditorService
 {
     public function __construct(
         private BoiteRepository $boiteRepository,
         private EditorRepository $editorRepository,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private SluggerInterface $sluggerInterface
         ){
     }
 
@@ -36,7 +38,7 @@ class EditorService
                 $editor = new Editor();
             }
 
-            $editor->setName($simpleEditor['initeditor']);
+            $editor->setName($simpleEditor['initeditor'])->setSlug($this->sluggerInterface->slug(strtolower($simpleEditor['initeditor'])));
 
             $io->progressAdvance();
             $this->em->persist($editor);

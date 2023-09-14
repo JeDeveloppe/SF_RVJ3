@@ -1,0 +1,30 @@
+{% for key,donnee in donnees %}   
+
+    {% if donnee.boite is defined %}
+        {% set boite = donnee.boite %}
+    {% else %}
+        {% set boite = donnee %}
+    {% endif %}
+
+    <div class="col-9 col-sm-7 mx-auto col-md-6 mx-md-0 col-lg-4 col-xl-3 my-4">
+        <div class="card col-12 p-0 h-100 shadow">
+            <div class="card-header text-center bg-primary text-white">
+                {{ boite.name | raw }} <br/>
+                {{ boite.editor | raw }}<br/>
+                {% if boite.year is not null %}
+                    {{ boite.year }}
+                {% else %}
+                    Année inconnue
+                {% endif %}
+            </div>
+            <div class="card-body d-flex flex-column align-items-center justify-content-between h-50">
+                <div class="d-flex justify-content-center align-items-center h-100">
+                    <img class="img_full-width" src="{{ asset('build/images/boites/'~ boite.image)  }}"/>
+                </div>
+            </div>
+            <div class="card-footer p-2 text-center">
+                {% include "components/catalog/_card_button.html.twig" %}
+            </div>
+        </div>
+    </div>
+{% endfor %}
