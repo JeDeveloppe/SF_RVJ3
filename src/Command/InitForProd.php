@@ -106,7 +106,7 @@ class InitForProd extends Command
         $this->editorService->addEditorsInDatabase($io);
 
         //on importe le detail des boites
-        //$this->importPiecesService->importPieces($io);
+        $this->importPiecesService->importPieces($io);
 
         //on cree les conditions des occasions
         //$this->creationConditionOccasionService->addConditions($io);

@@ -1,9 +1,11 @@
-<div class="col-12 col-md-6">
-    {% if app.request.headers.get('referer') is null %}
-        <a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees_direct') }}">Retour au catalogue général</a>
-    {% elseif app.request.headers.get('referer')| slice(0,-1) == app.request.getSchemeAndHttpHost() %}
-        <a class="btn btn-secondary" href="{{ path('accueil') }}">Retour a l'accueil</a>
-    {% else %}
-        <a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}">Retour au catalogue</a>
-    {% endif %}
+<div class="row my-5">
+    <div class="col-12 col-md-6">
+        {% if app.request.headers.get('referer') is null %}
+            <a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees_direct') }}">Retour au catalogue général</a>
+        {% elseif app.request.headers.get('referer')| slice(0,-1) == app.request.getSchemeAndHttpHost() %}
+            <a class="btn btn-secondary" href="{{ path('accueil') }}">Retour a l'accueil</a>
+        {% else %}
+            <a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}">Retour au catalogue</a>
+        {% endif %}
+    </div>
 </div>

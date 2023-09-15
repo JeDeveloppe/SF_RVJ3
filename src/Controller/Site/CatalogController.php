@@ -35,11 +35,12 @@ class CatalogController extends AbstractController
 
         return $this->render('site/catalog/pieces_detachees/les_pieces_detachees.html.twig', [
             'boites' => $boites,
+            'boites_totales' => $donnees
         ]);
     }
 
 
-    #[Route('/catalogue-pieces-detachees/demande-boite/{id}/{slug}/{editor}', name: 'app_catalogue_pieces_detachees_demande')]
+    #[Route('/catalogue-pieces-detachees/demande-boite/{id}/{editor}/{slug}', name: 'app_catalogue_pieces_detachees_demande')]
     public function cataloguePiecesDetacheesDemande($id, $slug, $editor): Response
     {
 
@@ -50,7 +51,7 @@ class CatalogController extends AbstractController
             return $this->redirectToRoute('app_catalogue_pieces_detachees');
         }
 
-        return $this->render('site/catalog/pieces_detachees_demande.html.twig', [
+        return $this->render('site/catalog/pieces_detachees/pieces_detachees_demande.html.twig', [
             'boite' => $boite,
         ]);
     }

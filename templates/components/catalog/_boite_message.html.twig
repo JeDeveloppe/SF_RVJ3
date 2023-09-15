@@ -1,0 +1,6 @@
+{% if boite.message is defined and boite.message is not null %}
+    <div class="col-12 text-danger text-center my-5">
+        <i class="fas fa-bell fa-2x"> Information:</i>
+        <p class="pl-5">{{ boite.message }}</p>
+    </div>
+{% endif %}
