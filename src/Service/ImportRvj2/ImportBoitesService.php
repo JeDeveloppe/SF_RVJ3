@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use App\Repository\BoiteRepository;
+use App\Repository\NumbersOfPlayersRepository;
 use App\Repository\UserRepository;
 use App\Service\Utilities;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +19,8 @@ class ImportBoitesService
         private BoiteRepository $boiteRepository,
         private EntityManagerInterface $em,
         private UserRepository $userRepository,
-        private Utilities $utilities
+        private Utilities $utilities,
+        private NumbersOfPlayersRepository $numbersOfPlayersRepository
         ){
     }
 
@@ -149,7 +151,7 @@ class ImportBoitesService
             ->setIsOccasion($arrayBoite['isComplet'])
             ->setWeigth($this->nullTo0($arrayBoite['poidBoite']))
             ->setAge((int) $arrayBoite['age'])
-            ->setPlayers((int) $arrayBoite['nbrJoueurs'])
+            ->setPlayers($this->numbersOfPlayersRepository->findOneBy(['keyword' => $arrayBoite['nbrJoueurs']]) ?? $this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
             ->setHtPrice($this->utilities->stringToNull($arrayBoite['prix_HT']))
             ->setCreatedBy($this->userRepository->findOneBy(['nickname' => $arrayBoite['createur']]))
             ->setIsDeee($this->nullToBoolean($arrayBoite['deee']))

@@ -71,7 +71,6 @@ class BoiteCrudController extends AbstractCrudController
                 ->onlyOnForms(),
             BooleanField::new('isDeliverable')->setLabel('Livrable')->onlyOnForms(),
             BooleanField::new('isDeee')->setLabel('Deee'),
-            BooleanField::new('isDirectSale')->setLabel('Vente directe')->onlyOnForms(),
             BooleanField::new('isOnline')->setLabel('En ligne')
         ];
     }

@@ -43,9 +43,6 @@ class Boite
     #[ORM\Column]
     private ?int $age = null;
 
-    #[ORM\Column]
-    private ?int $players = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $htPrice = null;
 
@@ -82,6 +79,10 @@ class Boite
 
     #[ORM\OneToMany(mappedBy: 'boite', targetEntity: Panier::class)]
     private Collection $paniers;
+
+    #[ORM\ManyToOne(inversedBy: 'boites')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?NumbersOfPlayers $players = null;
 
     public function __construct()
     {
@@ -199,18 +200,6 @@ class Boite
     public function setAge(int $age): static
     {
         $this->age = $age;
-
-        return $this;
-    }
-
-    public function getPlayers(): ?int
-    {
-        return $this->players;
-    }
-
-    public function setPlayers(int $players): static
-    {
-        $this->players = $players;
 
         return $this;
     }
@@ -414,6 +403,18 @@ class Boite
                 $panier->setBoite(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPlayers(): ?NumbersOfPlayers
+    {
+        return $this->players;
+    }
+
+    public function setPlayers(?NumbersOfPlayers $players): static
+    {
+        $this->players = $players;
 
         return $this;
     }

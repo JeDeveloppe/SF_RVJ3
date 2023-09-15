@@ -18,6 +18,7 @@ use App\Entity\Envelope;
 use App\Entity\LegalInformation;
 use App\Entity\MeansOfPayement;
 use App\Entity\MovementOccasion;
+use App\Entity\NumbersOfPlayers;
 use App\Entity\Occasion;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Partner;
@@ -139,7 +140,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('SITE','fa-solid fa-shop','app_home');
         yield MenuItem::linkToRoute('COMMANDES','fa-solid fa-money-bill','admin_traited_daily');
 
+        yield MenuItem::section('Gestion des boites:');
         yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class);
+        yield MenuItem::linkToCrud('Joueurs', 'fas fa-list', NumbersOfPlayers::class);
         
         yield MenuItem::section('Listes');
         yield MenuItem::linkToCrud('Partenaires', 'fas fa-list', Partner::class);
