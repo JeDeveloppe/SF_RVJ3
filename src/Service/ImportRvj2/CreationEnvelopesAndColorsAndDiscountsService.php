@@ -3,11 +3,14 @@
 namespace App\Service\ImportRvj2;
 
 use App\Entity\Color;
+use App\Entity\Delivery;
 use App\Entity\Discount;
 use App\Entity\Envelope;
 use App\Repository\ColorRepository;
+use App\Repository\DeliveryRepository;
 use App\Repository\DiscountRepository;
 use App\Repository\EnvelopeRepository;
+use App\Repository\ShippingMethodRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -17,8 +20,36 @@ class CreationEnvelopesAndColorsAndDiscountsService
         private EntityManagerInterface $em,
         private EnvelopeRepository $envelopeRepository,
         private ColorRepository $colorRepository,
-        private DiscountRepository $discountRepository
+        private DiscountRepository $discountRepository,
+        private ShippingMethodRepository $shippingMethodRepository,
+        private DeliveryRepository $deliveryRepository
         ){
+    }
+
+    public function addDelivery(){
+        $deliveries = [];
+        $deliveries[] = [
+            'shippingMethod' => $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT A LA COOP 100%']),
+            'start' => 1,
+            'end' => 9999,
+            'price' => 0
+        ];
+
+        foreach($deliveries as $deliverie){
+            $delivery = $this->deliveryRepository->findOneBy(['shippingMethod' => $deliverie['shippingMethod'], 'start' => $deliverie['start']]);
+
+            if(!$delivery){
+                $delivery = new Delivery();
+            }
+
+            $delivery->setShippingMethod($deliverie['shippingMethod'])
+                ->setStart($deliverie['start'])
+                ->setEnd($deliverie['end'])
+                ->setPriceExcludingTax($deliverie['price']);
+
+            $this->em->persist($delivery);
+        }
+        $this->em->flush($delivery);
     }
 
     public function addEnvelopes(SymfonyStyle $io){

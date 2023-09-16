@@ -21,9 +21,13 @@ class ShippingMethod
     #[ORM\OneToMany(mappedBy: 'sendingMethod', targetEntity: Document::class)]
     private Collection $documents;
 
+    #[ORM\OneToMany(mappedBy: 'shippingMethod', targetEntity: Delivery::class)]
+    private Collection $deliveries;
+
     public function __construct()
     {
         $this->documents = new ArrayCollection();
+        $this->deliveries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,5 +80,35 @@ class ShippingMethod
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, Delivery>
+     */
+    public function getDeliveries(): Collection
+    {
+        return $this->deliveries;
+    }
+
+    public function addDelivery(Delivery $delivery): static
+    {
+        if (!$this->deliveries->contains($delivery)) {
+            $this->deliveries->add($delivery);
+            $delivery->setShippingMethod($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDelivery(Delivery $delivery): static
+    {
+        if ($this->deliveries->removeElement($delivery)) {
+            // set the owning side to null (unless already changed)
+            if ($delivery->getShippingMethod() === $this) {
+                $delivery->setShippingMethod(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -8,6 +8,7 @@ use App\Entity\City;
 use App\Entity\Color;
 use App\Entity\ConditionOccasion;
 use App\Entity\Country;
+use App\Entity\Delivery;
 use App\Entity\Department;
 use App\Entity\Discount;
 use App\Entity\Document;
@@ -181,6 +182,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Moyens de paiement', 'fas fa-list', MeansOfPayement::class);
         yield MenuItem::linkToCrud('Enveloppes', 'fas fa-list', Envelope::class);
         yield MenuItem::linkToCrud('Remises', 'fas fa-list', Discount::class);
+        yield MenuItem::linkToCrud('Prix des livraisons', 'fas fa-list', Delivery::class);
 
     }
 }

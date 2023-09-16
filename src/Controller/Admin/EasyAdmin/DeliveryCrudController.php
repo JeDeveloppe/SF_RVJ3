@@ -2,28 +2,28 @@
 
 namespace App\Controller\Admin\EasyAdmin;
 
-use App\Entity\ShippingMethod;
+use App\Entity\Delivery;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
-class ShippingMethodCrudController extends AbstractCrudController
+class DeliveryCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return ShippingMethod::class;
+        return Delivery::class;
     }
 
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('name'),
-            AssociationField::new('documents')->setLabel('Documents')->setDisabled(true)
+            AssociationField::new('shippingMethod')->setLabel('Mode de livraison')->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
+            IntegerField::new('start')->setLabel('De (poid en gramme)'),
+            IntegerField::new('end')->setLabel('A (poid en gramme)'),
+            IntegerField::new('priceExcludingTax')->setLabel('Prix hors taxe en cents')
         ];
     }
 
@@ -31,9 +31,9 @@ class ShippingMethodCrudController extends AbstractCrudController
     {
         return $crud
             ->showEntityActionsInlined()
-            ->setPageTitle('index', 'Liste des moyens de retrait/envoi')
-            ->setPageTitle('new', 'Nouveau retrait/envoi')
-            ->setPageTitle('edit', 'Édition du retrait/envoi')
+            ->setPageTitle('index', 'Liste des livraisons')
+            ->setPageTitle('new', 'Nouvelle livraison')
+            ->setPageTitle('edit', 'Édition livraison')
         ;
     }
 
@@ -41,8 +41,7 @@ class ShippingMethodCrudController extends AbstractCrudController
     {
         return $actions
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
-            ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN');
+            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
         
     }
 }

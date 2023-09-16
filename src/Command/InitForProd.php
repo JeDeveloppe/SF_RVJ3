@@ -103,10 +103,10 @@ class InitForProd extends Command
         //$this->importBoitesService->importBoites($io);
 
         //on genere les editeurs de facon distinct
-        $this->editorService->addEditorsInDatabase($io);
+        //$this->editorService->addEditorsInDatabase($io);
 
         //on importe le detail des boites
-        $this->importPiecesService->importPieces($io);
+        //$this->importPiecesService->importPieces($io);
 
         //on cree les conditions des occasions
         //$this->creationConditionOccasionService->addConditions($io);
@@ -140,7 +140,8 @@ class InitForProd extends Command
         //$this->importDocumentsLignesService->importDocumentsLigneBoites($io);
         //$this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
 
-        //on cree les enveloppes et les couleurs pour les articles, les enveloppes, les joueurs
+        //on cree les enveloppes et les couleurs pour les articles, les enveloppes, les joueurs, les livraisons
+        $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
         $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
         $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
         $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
