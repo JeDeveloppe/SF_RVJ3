@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
 class NumbersOfPlayersCrudController extends AbstractCrudController
 {
@@ -19,7 +20,8 @@ class NumbersOfPlayersCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('name')
+            TextField::new('name')->setLabel('A partir de ... joueur(s)'),
+            AssociationField::new('boites')->setLabel('Nombre de boites')->setDisabled(true)
         ];
     }
 
