@@ -4,7 +4,16 @@
 
 {% block body %}
 
-    <div class="col-12 text-center h2 my-5">Les pièces détachées</div>
+    <div class="col-12 text-center h2 my-5">Catalogue des pièces détachées</div>
+
+
+    {% include "components/catalog/_search_boite.html.twig" %}
+
+    {% if search is not null %}
+        <div class="row">
+            <div class="col-12 text-start">Votre recherche: {{ search | raw }}</div>
+        </div>
+    {% endif %}
 
     {% if boites | length > 0 %}
 
@@ -24,14 +33,14 @@
 
         {% endif %}
 
-        <div class="row mb-5">
+        <div class="row mb-5 justify-content-start">
             <div class="col-12 text-center">{{ boites_totales | length }} boites en ligne.</div>
         </div>
 
     {% else %}
 
-        <div class="row">
-            <div class="col-12 text-center">
+        <div class="row my-5">
+            <div class="col-11 text-center">
                 <p class="h2">Nous n'avons pas ce jeu en stock pour le moment.</p>
                 <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.refaitesvosjeux.fr" target="_blank">Facebook !</a></p>    
                 <p class="h5 mt-5">Ou tenter votre chance chez l'un de nos partenaires:</p>
@@ -39,9 +48,9 @@
         </div>
         <div class="row justify-content-start mb-5">
 
-            {% for partenaire in partenaires %}
+            {% for partner in partenaires %}
 
-            {% include "site/components/catalogues/card-partenaire.html.twig" %}
+            {% include "components/catalog/_card_partenaire.html.twig" %}
                 
             {% endfor %}
         </div>

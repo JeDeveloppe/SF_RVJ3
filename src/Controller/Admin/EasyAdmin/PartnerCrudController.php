@@ -35,7 +35,7 @@ class PartnerCrudController extends AbstractCrudController
             BooleanField::new('isAcceptDonations')->setLabel('Accepte les dons')->onlyOnForms(),
             BooleanField::new('isSellsSpareParts')->setLabel('Vend des pièces détachées')->onlyOnForms(),
             BooleanField::new('isSellFullGames')->setLabel('Vend des jeux complets')->onlyOnForms(),
-            BooleanField::new('isDisplayOnCatalogueWhenSearchIsNull')->setLabel('Affichage dans les catalogues si la recherche est NULL')->onlyOnForms(),
+            BooleanField::new('isDisplayOnCatalogueWhenSearchIsNull')->setLabel('Affichage dans les catalogues si la recherche est NULL'),
             BooleanField::new('isWebShop')->setLabel('Eboutique')->onlyOnForms(),
             BooleanField::new('isOnline')->setLabel('En ligne'),
         ];

@@ -2,9 +2,12 @@
 
 namespace App\Controller\Site;
 
+use App\Entity\Boite;
+use App\Form\SearchBoiteInCatalogueType;
 use App\Repository\BoiteRepository;
 use App\Repository\EditorRepository;
 use App\Repository\OccasionRepository;
+use App\Repository\PartnerRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +20,8 @@ class CatalogController extends AbstractController
         private BoiteRepository $boiteRepository,
         private OccasionRepository $occasionRepository,
         private PaginatorInterface $paginator,
-        private EditorRepository $editorRepository
+        private EditorRepository $editorRepository,
+        private PartnerRepository $partnerRepository
     )
     {
     }
@@ -25,8 +29,24 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-pieces-detachees', name: 'app_catalogue_pieces_detachees')]
     public function cataloguePiecesDetachees(Request $request): Response
     {
-        $donnees = $this->boiteRepository->findBy(['isOnline' => true],['id' => 'DESC']);
 
+        $form = $this->createForm(SearchBoiteInCatalogueType::class);
+        $form->handleRequest($request);
+
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $search = $form->get('search')->getData();
+            $phrase = str_replace(" ","%",$search);
+
+            $donnees = $this->boiteRepository->findBoitesFromSearch($phrase);
+
+        }else{
+
+            $donnees = $this->boiteRepository->findBy(['isOnline' => true],['id' => 'DESC']);
+        }
+
+        $partenaires = $this->partnerRepository->findBy(['isDisplayOnCatalogueWhenSearchIsNull' => true]);
+        
         $boites = $this->paginator->paginate(
             $donnees, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
@@ -35,7 +55,10 @@ class CatalogController extends AbstractController
 
         return $this->render('site/catalog/pieces_detachees/les_pieces_detachees.html.twig', [
             'boites' => $boites,
-            'boites_totales' => $donnees
+            'boites_totales' => $donnees,
+            'form' => $form,
+            'search' => $search ?? null,
+            'partenaires' => $partenaires ?? null
         ]);
     }
 

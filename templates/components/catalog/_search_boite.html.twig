@@ -1,0 +1,17 @@
+<div class="row my-5 justify-content-center">
+    <div class="col-12 col-sm-9 col-md-6 col-lg-4">
+        {{ form_start(form) }}
+            <div class="input-group">
+                {{ form_widget(form.search) }}
+                <div class="input-group-append">
+                    {# <button class="btn btn-outline-primary" type="submit">Chercher</button> #}
+                    <div class="btn-group" role="group">
+                        <button type="submit" class="btn btn-outline-primary">Chercher</button>
+                        <a href="{{ path('app_catalogue_pieces_detachees') }}" type="button" class="btn btn-outline-warning">Reset</a>
+                    </div>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+

@@ -31,6 +31,19 @@ class BoiteRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findBoitesFromSearch($phrase): array
+    {
+        return $this->createQueryBuilder('b')
+            ->where('b.name LIKE :val')
+            ->andWhere('b.isOnline = :online')
+            ->setParameter('val', '%'.$phrase.'%')
+            ->setParameter('online', true)
+            ->orderBy('b.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Boite[] Returns an array of Boite objects
 //     */

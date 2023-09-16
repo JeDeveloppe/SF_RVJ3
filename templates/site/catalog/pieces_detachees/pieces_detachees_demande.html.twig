@@ -4,14 +4,18 @@
 	{{ boite.name | raw }} | {{ boite.editor | raw }}
 	{% if boite.year is not null %}
 		{{ boite.year }}
-	{% else %}
-		Année inconnue
 	{% endif %}
 {% endblock %}
 
 {% block body %}
 
-	<h1 class="col-12 text-center mt-5 pt-3 mb-3">{{ boite.name }} - {{ boite.editor }}<span class="small"> - {{ boite.year }}</span></h1>
+	<h1 class="col-12 text-center mt-5 pt-3 mb-3">{{ boite.name }} - {{ boite.editor }}
+		{% if boite.year is not null %}
+			<span class="small"> - {{ boite.year }}</span>
+		{% else %}
+			<span class="small"> - Année inconnue</span>
+		{% endif %}
+	</h1>
 
 		<!-- BLOC BUTTON RETOUR  -->
 		{% include "components/catalog/_retour-button.html.twig" %}
