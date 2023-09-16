@@ -23,7 +23,8 @@ class DeliveryCrudController extends AbstractCrudController
             AssociationField::new('shippingMethod')->setLabel('Mode de livraison')->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
             IntegerField::new('start')->setLabel('De (poid en gramme)'),
             IntegerField::new('end')->setLabel('A (poid en gramme)'),
-            IntegerField::new('priceExcludingTax')->setLabel('Prix hors taxe en cents')
+            IntegerField::new('priceExcludingTax')->setLabel('Prix hors taxe en cents')->onlyOnIndex(),
+            IntegerField::new('priceExcludingTax')->setLabel('Prix hors taxe en cents (penser au prix de l\'enveloppe)')->onlyOnForms(),
         ];
     }
 

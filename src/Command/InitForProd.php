@@ -127,7 +127,7 @@ class InitForProd extends Command
         //$this->creationLegalInformationService->creationLegalInformation($io);
 
         //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
-        //$this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
+        $this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
 
         //on cree les status des documents
         //$this->creationDocumentStatusService->creationStatus($io);

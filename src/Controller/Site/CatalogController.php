@@ -40,11 +40,11 @@ class CatalogController extends AbstractController
     }
 
 
-    #[Route('/catalogue-pieces-detachees/demande-boite/{id}/{editor}/{slug}', name: 'app_catalogue_pieces_detachees_demande')]
-    public function cataloguePiecesDetacheesDemande($id, $slug, $editor): Response
+    #[Route('/catalogue-pieces-detachees/{editorSlug}/{id}/{slug}', name: 'app_catalogue_pieces_detachees_demande')]
+    public function cataloguePiecesDetacheesDemande($id, $slug, $editorSlug): Response
     {
 
-        $boite = $this->boiteRepository->findOneBy(['id' => $id, 'slug' => $slug, 'editor' => $this->editorRepository->findOneBy(['name' => $editor]), 'isOnline' => true]);
+        $boite = $this->boiteRepository->findOneBy(['id' => $id, 'slug' => $slug, 'editor' => $this->editorRepository->findOneBy(['slug' => $editorSlug]), 'isOnline' => true]);
 
         if(!$boite){
             $this->addFlash('warning', 'Boite inconnue');

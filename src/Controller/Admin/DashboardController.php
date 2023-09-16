@@ -143,25 +143,28 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Gestion des boites:');
         yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class);
+        yield MenuItem::linkToCrud('Éditeurs', 'fas fa-list', Editor::class);
         yield MenuItem::linkToCrud('Joueurs', 'fas fa-list', NumbersOfPlayers::class);
         
         yield MenuItem::section('Listes');
         yield MenuItem::linkToCrud('Partenaires', 'fas fa-list', Partner::class);
-        yield MenuItem::linkToCrud('Éditeurs', 'fas fa-list', Editor::class);
         
         yield MenuItem::section('Gestion des articles:');
         yield MenuItem::linkToCrud('Couleurs', 'fas fa-list', Color::class);
+        yield MenuItem::linkToCrud('Enveloppes', 'fas fa-list', Envelope::class);
 
         yield MenuItem::section('Gestion des utilisateurs:');
         yield MenuItem::linkToCrud('Clients', 'fas fa-list', User::class);
         yield MenuItem::linkToCrud('Adresses', 'fas fa-list', Address::class);
         
+        yield MenuItem::section('Gestion des paniers:');
+        yield MenuItem::linkToCrud('Moyens de retrait/envoi', 'fas fa-list', ShippingMethod::class);
+
         yield MenuItem::section('Gestion des documents:');
         yield MenuItem::linkToCrud('Documents', 'fas fa-list', Document::class);
         yield MenuItem::linkToCrud('Lignes documents', 'fas fa-list', DocumentLine::class);
         yield MenuItem::linkToCrud('Paiements', 'fas fa-list', Payment::class);
         yield MenuItem::linkToCrud('Status des documents', 'fas fa-list', DocumentStatus::class);
-        yield MenuItem::linkToCrud('Moyens de retrait', 'fas fa-list', ShippingMethod::class);
 
         yield MenuItem::section('Gestion des occasions:');
         yield MenuItem::linkToCrud('Occasions', 'fas fa-list', Occasion::class);
@@ -180,9 +183,11 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Paramètres de ventes:');
         yield MenuItem::linkToCrud('Moyens de paiement', 'fas fa-list', MeansOfPayement::class);
-        yield MenuItem::linkToCrud('Enveloppes', 'fas fa-list', Envelope::class);
+
+        yield MenuItem::section('Paramètres du panier:');
         yield MenuItem::linkToCrud('Remises', 'fas fa-list', Discount::class);
         yield MenuItem::linkToCrud('Prix des livraisons', 'fas fa-list', Delivery::class);
+
 
     }
 }

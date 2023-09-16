@@ -23,8 +23,8 @@ class CountryCrudController extends AbstractCrudController
         return [
             TextField::new('isocode')->setLabel('Code ISO'),
             TextField::new('name')->setLabel('Nom'),
-            AssociationField::new('departments')->setLabel('Nombre de départements')->onlyOnIndex(),
-            AssociationField::new('cities')->setLabel('Nombre de villes')->onlyOnIndex(),
+            // AssociationField::new('departments')->setLabel('Nombre de départements')->onlyOnIndex(),
+            // AssociationField::new('cities')->setLabel('Nombre de villes')->onlyOnIndex(),
             AssociationField::new('users')->setLabel('Nombre de clients')->onlyOnIndex()
         ];
     }

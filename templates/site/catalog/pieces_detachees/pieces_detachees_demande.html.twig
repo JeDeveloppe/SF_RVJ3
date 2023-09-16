@@ -21,7 +21,7 @@
 			<div class="card col-11 mx-auto col-lg-10 p-0 border shadow">
 
 				<!-- BLOC PARTAGE RESEAUX SOCIAUX  -->
-				{% set url = path('app_catalogue_pieces_detachees_demande', { id: boite.id, slug: boite.slug, editor: boite.editor }) %}
+				{% set url = path('app_catalogue_pieces_detachees_demande', { id: boite.id, slug: boite.slug, editorSlug: boite.editor.slug }) %}
 				{% include "components/catalog/share_buttons.html.twig" with {'url': url} %}
 
 				<div class="card-body d-flex flex-wrap">

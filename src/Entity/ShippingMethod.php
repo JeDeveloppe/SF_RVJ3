@@ -24,6 +24,9 @@ class ShippingMethod
     #[ORM\OneToMany(mappedBy: 'shippingMethod', targetEntity: Delivery::class)]
     private Collection $deliveries;
 
+    #[ORM\Column]
+    private ?bool $isActivedInCart = null;
+
     public function __construct()
     {
         $this->documents = new ArrayCollection();
@@ -108,6 +111,18 @@ class ShippingMethod
                 $delivery->setShippingMethod(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isIsActivedInCart(): ?bool
+    {
+        return $this->isActivedInCart;
+    }
+
+    public function setIsActivedInCart(bool $isActivedInCart): static
+    {
+        $this->isActivedInCart = $isActivedInCart;
 
         return $this;
     }

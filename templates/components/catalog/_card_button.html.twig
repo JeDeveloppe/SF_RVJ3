@@ -4,7 +4,7 @@
         {# si on affiche des occasions #}
             <a class="btn btn-primary" href="{{ path('app_occasion', {'reference_occasion': donnee.reference, 'boite_slug': donnee.boite.slug , 'editor_slug': donnee.boite.editor.slug }) }}">Voir les détails</a>
         {% else %}
-            <a class="btn btn-primary" href="{{ path('app_catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.slug , 'editor': boite.editor  }) }}">Voir les pièces disponiblent</a>
+            <a class="btn btn-primary" href="{{ path('app_catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.slug , 'editorSlug': boite.editor.slug  }) }}">Voir les pièces disponiblent</a>
         {% endif %}
     {% else %}
         <a href="{{ path('app_login') }}" class="btn btn-sm btn-warning mt-3 mb-2">Merci de vous identifier</a>

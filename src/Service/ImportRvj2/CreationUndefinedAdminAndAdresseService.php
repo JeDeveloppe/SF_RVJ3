@@ -40,16 +40,36 @@ class CreationUndefinedAdminAndAdresseService
     {
         $io->title('Création / mise à jour des modes de livraison');
 
-        $shippingMethods = ['MONDIAL RELAY', 'POSTE', 'COLISSIMO', 'INDEFINI', 'RETRAIT A LA COOP 100%'];
+        $shippingMethods = [];
+        $shippingMethods[] = [
+            'name' => 'MONDIAL RELAY',
+            'actif' => false
+        ];
+        $shippingMethods[] = [
+            'name' => 'POSTE',
+            'actif' => true
+        ];
+        $shippingMethods[] = [
+            'name' => 'COLISSIMO',
+            'actif' => false
+        ];
+        $shippingMethods[] = [
+            'name' => 'INDEFINI',
+            'actif' => false
+        ];
+        $shippingMethods[] = [
+            'name' => 'RETRAIT A LA COOP 100%',
+            'actif' => true
+        ];
 
-        foreach($shippingMethods as $shippingMethod){
-            $shipping = $this->shippingMethodRepository->findOneBy(['name' => $shippingMethod]);
+        foreach($shippingMethods as $shippingMethodArray){
+            $shipping = $this->shippingMethodRepository->findOneBy(['name' => $shippingMethodArray['name']]);
 
             if(!$shipping){
                 $shipping = new ShippingMethod();
             }
 
-            $shipping->setName($shippingMethod);
+            $shipping->setName($shippingMethodArray['name'])->setIsActivedInCart($shippingMethodArray['actif']);
             $this->manager->persist($shipping);
         }
         $this->manager->flush();
