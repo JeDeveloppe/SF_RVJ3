@@ -6,8 +6,22 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import './styles/template_bootstrap.css';
-import './styles/site.css';
+import './styles/template_bootstrap.scss';
+import './styles/site.scss';
 import './toast';
 
 require('bootstrap');
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop >= 80 || document.documentElement.scrollTop >= 80) {
+    document.getElementById("navbar").style.padding = "5px 2px";
+    document.getElementById("navbar").classList.remove("mt-2");
+    document.getElementById("logo").style.fontSize = "25px";
+  } else {
+    document.getElementById("navbar").style.padding = "30px 10px";
+    document.getElementById("navbar").classList.add("mt-2");
+    document.getElementById("logo").style.fontSize = "35px";
+  }
+}

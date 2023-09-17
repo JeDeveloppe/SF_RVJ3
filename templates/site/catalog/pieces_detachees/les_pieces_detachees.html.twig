@@ -17,21 +17,18 @@
 
     {% if boites | length > 0 %}
 
-        <div class="row justify-content-start align-items-stretch mb-5">
+        <div class="row justify-content-start align-items-stretch">
 
             {% include "components/catalog/_card.html.twig" with { 'donnees': boites } %}
 
         </div>
         
-        {% if boites | length > 0 %}
-
-            <div class="row">
-                <div class="col-12 d-flex justify-content-center">
-                    {{ knp_pagination_render(boites, 'components/pagination.html.twig') }}
-                </div>
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+                {{ knp_pagination_render(boites, 'components/pagination.html.twig') }}
             </div>
+        </div>
 
-        {% endif %}
 
         <div class="row mb-5 justify-content-start">
             <div class="col-12 text-center">{{ boites_totales | length }} boites en ligne.</div>

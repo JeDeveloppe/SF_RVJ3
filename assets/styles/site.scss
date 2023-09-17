@@ -1,0 +1,17 @@
+#navbar {
+    padding: 30px 10px;
+    transition: ease-out 400ms;
+    position: fixed;
+    width: 98%;
+    margin-left: 1%;
+    top: 0;
+    z-index: 99;
+}
+.container{
+    margin-top: 180px;
+}
+.catalog_card:hover{
+    box-shadow: 5px 5px 5px var(--bs-primary);
+    transition: transform ease-in 300ms;
+    transform: scale(0.98);
+}
