@@ -48,6 +48,26 @@ class SitemapController extends AbstractController
             'changefreq' => "monthly", //monthly,daily
             'priority'   => 0.8
             ];
+        $urls[] = [
+            'loc'        => $this->generateUrl('app_contact'),
+            'changefreq' => "monthly", //monthly,daily
+            'priority'   => 0.8
+            ];
+        $urls[] = [
+            'loc'        => $this->generateUrl('app_login'),
+            'changefreq' => "monthly", //monthly,daily
+            'priority'   => 0.8
+            ];
+        $urls[] = [
+            'loc'        => $this->generateUrl('app_register'),
+            'changefreq' => "monthly", //monthly,daily
+            'priority'   => 0.8
+            ];
+        $urls[] = [
+            'loc'        => $this->generateUrl('app_partenaires'),
+            'changefreq' => "monthly", //monthly,daily
+            'priority'   => 0.8
+            ];
 
         //! liste des urls des pieces detachee OK
         $urls[] = [
@@ -71,20 +91,11 @@ class SitemapController extends AbstractController
         //     'priority'   => 0.8
         //     ];
         // $urls[] = [
-        //     'loc'        => $this->generateUrl('carte_partenaires', ['pays' => "FRANCE"]),
-        //     'changefreq' => "monthly", //monthly,daily
-        //     'priority'   => 0.8
-        //     ];
-        // $urls[] = [
         //     'loc'        => $this->generateUrl('nous-soutenir'),
         //     'changefreq' => "monthly", //monthly,daily
         //     'priority'   => 0.8
         //     ];
-        // $urls[] = [
-        //     'loc'        => $this->generateUrl('contact'),
-        //     'changefreq' => "monthly", //monthly,daily
-        //     'priority'   => 0.8
-        //     ];
+
 
         $response = new Response(
             $this->renderView('site/sitemap/sitemap.html.twig', [
