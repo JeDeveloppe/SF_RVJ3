@@ -1,11 +1,42 @@
-   {{ form_errors(registrationForm) }}
+    <h1 class="h3 mb-3 font-weight-normal col-12 text-center my-4">Inscription</h1>
+    
+    {# For convenience sake of this snippet, store the errors in a variable #}
+    {% set formErrors = registrationForm.vars.errors.form.getErrors(true) %}
+                                        
+    {# If there are errors in the form, display them in this unorganized list #}
+    {% if formErrors|length %}
+        <ul>
+            {% for error in formErrors %}
+                <li class="text-danger">{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+    <div class="col-12 col-md-6 mx-auto">
+        {{ form_start(registrationForm) }}
 
-        <button type="submit" class="btn btn-lg">Inscription</button>
-    {{ form_end(registrationForm) }}
+            <div class="form-group">
+                <label for="exampleInputEmail1">{{ form_label(registrationForm.email) }}</label>
+                {{ form_widget(registrationForm.email) }}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">{{ form_label(registrationForm.plainPassword) }}</label>
+                {{ form_widget(registrationForm.plainPassword) }}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">{{ form_label(registrationForm.plainPasswordVerification) }}</label>
+                {{ form_widget(registrationForm.plainPasswordVerification) }}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">{{ form_label(registrationForm.phone) }}</label>
+                {{ form_widget(registrationForm.phone) }}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">{{ form_label(registrationForm.country) }}</label>
+                {{ form_widget(registrationForm.country) }}
+            </div>
+
+
+            <button type="submit" class="btn btn-lg btn-primary">Inscription</button>
+        {{ form_end(registrationForm) }}
+    </div>

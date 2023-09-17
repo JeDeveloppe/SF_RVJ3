@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
@@ -23,7 +24,12 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if($form->get('plainPassword')->getData() != $form->get('plainPasswordVerification')->getData()){
+            $form->addError(new FormError('Les mots de passe ne correspondent pas !'));
+        }
+
+        if($form->isSubmitted() && $form->isValid()){
+
             // encode the plain password
             $user->setCreatedAt(new DateTimeImmutable('now'))
             ->setLastvisite(new DateTimeImmutable('now'))
@@ -34,11 +40,6 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
-
-
-
-
 
             $entityManager->persist($user);
             $entityManager->flush();

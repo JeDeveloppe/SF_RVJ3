@@ -51,15 +51,20 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
-        }
+
+        // if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+        //     return new RedirectResponse($targetPath);
+        // }
 
         //? On enregistre la dernière connexion
         $user = $this->userRepository->findOneBy(['email' => $request->getSession()->get(Security::LAST_USERNAME)]);
-        $user->setLastvisite(new DateTimeImmutable('now'));
-        $this->entityManagerInterface->persist($user);
-        $this->entityManagerInterface->flush();
+
+        if($user){
+
+            $user->setLastvisite(new DateTimeImmutable('now'));
+            $this->entityManagerInterface->persist($user);
+            $this->entityManagerInterface->flush();
+        }
 
         // For example:
         return new RedirectResponse($this->urlGenerator->generate('app_home'));

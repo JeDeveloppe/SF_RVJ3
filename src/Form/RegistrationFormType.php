@@ -13,42 +13,59 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Validator\Constraints\Expression;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
-            ->add('phone', TextType::class)
-            ->add('country', EntityType::class, [
-                'class' => Country::class,
+            ->add('email', EmailType::class, [
+                'label' => 'Adresse email:',
                 'attr' => [
-                    'placeholder' => 'Choisir un pays...'
+                    'class' => 'form-control mb-3'
+                ] 
+            ])
+            ->add('phone', TelType::class, [
+                'label' => 'Téléphone:',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Téléphone obligatoire !',
+                    ]),
+                    new Regex([
+                        'pattern' => '/^[0-9]\d*$/',
+                        'message' => 'Téléphone: que des chiffres...'
+                    ])
                 ],
-                'empty_data' => 'Choisir...'
+                'attr' => [
+                    'class' => 'form-control mb-3'
+                ]
+            ])
+            ->add('country', EntityType::class, [
+                'label' => 'Pays:',
+                'class' => Country::class,
+                'placeholder' => 'Choisir un pays...',
+                'attr' => [
+                    'class' => 'form-control mb-3'
+                ]
             ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
+                'label' => 'Mot de passe:',
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => ['autocomplete' => 'new-password','class' => 'form-control mb-3'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Mot de passe obligatoire !',
                     ]),
                     new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'min' => 8,
+                        'minMessage' => 'Votre mot de passe doit faire minimum {{ limit }} charactères',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
@@ -57,15 +74,16 @@ class RegistrationFormType extends AbstractType
             ->add('plainPasswordVerification', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
+                'label' => 'Vérification du mot de passe:',
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => ['autocomplete' => 'new-password','class' => 'form-control mb-3'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Mot de passe obligatoire !',
                     ]),
                     new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'min' => 8,
+                        'minMessage' => 'Votre mot de passe doit faire minimum {{ limit }} charactères',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
