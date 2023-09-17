@@ -2,11 +2,13 @@
 
 namespace App\Controller\Site;
 
-use App\Repository\LegalInformationRepository;
+use App\Form\ContactType;
 use App\Repository\PartnerRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use App\Repository\LegalInformationRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SiteController extends AbstractController
 {
@@ -53,4 +55,37 @@ class SiteController extends AbstractController
             'partners' => $partenaires,
         ]);
     }
+
+    #[Route('/contact', name: 'app_contact')]
+    public function contact(Request $request): Response
+    {
+        $form = $this->createForm(ContactType::class);
+        $form->handleRequest($request);
+    
+        if($form->isSubmitted() && $form->isValid()) {
+    
+            $mailerService->sendEmailContact(
+                $informationsLegales->getAdresseMailSite(),
+                $form->get('email')->getData(),
+                "Message du site concernant: ".$form->get('sujet')->getData(),
+                [
+                    'expediteur' => $form->get('email')->getData(),
+                    'message' => $form->get('message')->getData()
+                ]
+            );
+    
+            $this->addFlash('success', 'Message bien envoyé!');
+            return $this->redirectToRoute('contact');
+        }
+    
+        return $this->render('site/contact/contact.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+
+
+
+   
 }

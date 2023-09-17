@@ -1,16 +1,16 @@
-<footer class="col-12 border-top border-primary pt-4 bg-dark">
+<footer id="footer-navbar" class="navbar bg-dark pt-4 bg-dark">
     <ul class="mt-2 col-12 mx-auto d-flex flex-column flex-md-row justify-content-around align-items-center list-unstyled">
         <li><a class="text-white text-decoration-none" href="{{ path('app_mentions_legales') }}">Mentions / CGU</a></li>
         <li><a class="text-white text-decoration-none" href="{{ path('app_conditions_generale_de_vente') }}">CGV</a></li>
-        <li><a class="text-white text-decoration-none" href="#">Contact</a></li>
+        <li><a class="text-white text-decoration-none" href="{{ path('app_contact') }}">Contact</a></li>
         <li>
             <a class="col-6" href="https://www.facebook.com/refaitesvosjeux" target="_blank">
                 <img src="{{ asset('build/images/design/logoFacebook.png') }}" class="imgFindUsOnFacebook" alt="Suivez-nous sur Facebook !">
             </a>
         </li>
     </ul>
-    <div class="col-12 text-center">
-        <a class="text-warning text-decoration-none" href="https://www.je-developpe.fr/" target="_blank">Sité créé par: Je-Développe</a><br/>
-        <small>Version {{ app.request.server.get('VERSION_SITE') }}</small>
+    <div class="col-12 text-center small">
+        <a class="text-warning text-decoration-none" href="https://www.je-developpe.fr/" target="_blank">Site créé par: Je-Développe</a><br/>
+        Version {{ app.request.server.get('VERSION_SITE') }}
     </div>
 </footer>

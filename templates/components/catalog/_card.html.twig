@@ -22,8 +22,9 @@
                     <img class="img_full-width" src="{{ asset('build/images/boites/'~ boite.image)  }}"/>
                 </div>
             </div>
-            <div class="card-footer p-2 text-center">
+            <div class="card-footer d-flex justify-content-around align-items-center">
                 {% include "components/catalog/_card_button.html.twig" %}
+                {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': 'Boite'} %}
             </div>
         </div>
     </div>

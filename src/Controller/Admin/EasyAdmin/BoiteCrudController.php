@@ -55,7 +55,7 @@ class BoiteCrudController extends AbstractCrudController
             TextField::new('contentMessage')->setLabel('Message d\'alerte sur le contenu de la boite')->onlyOnForms(),
             IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms(),
             IntegerField::new('age')->setLabel('A partir de (âge)')->onlyOnForms(),
-            AssociationField::new('players')->setLabel('Nombre de joueurs')->onlyOnForms(),
+            AssociationField::new('players')->setLabel('A partir de (joueurs)')->onlyOnForms(),
             AssociationField::new('documentLines')
             ->setLabel('Nbre de demandes')->setDisabled(true),
             BooleanField::new('isOccasion')->setLabel('En occasion'),

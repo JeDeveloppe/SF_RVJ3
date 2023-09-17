@@ -1,4 +1,4 @@
-#navbar {
+#navbar-top{
     padding: 30px 10px;
     transition: ease-out 400ms;
     position: fixed;
@@ -7,6 +7,11 @@
     top: 0;
     z-index: 99;
 }
+#footer-navbar{
+    width: 98%;
+    margin-left: 1%;
+    bottom: 0;
+}
 .container{
     margin-top: 180px;
 }
@@ -14,4 +19,18 @@
     box-shadow: 5px 5px 5px var(--bs-primary);
     transition: transform ease-in 300ms;
     transform: scale(0.98);
+}
+
+.imgFindUsOnFacebook{
+    max-width: 40px;
+    border-radius: 5px;
+}
+.imgFindUsOnFacebook:hover {
+    box-shadow: 0px 0px 2px 2px var(--bs-blue);
+    transition: transform ease-in 300ms;
+    transform: scale(1.1);
+}
+
+.fa-user{
+    transform: scale(1.2); 
 }
