@@ -9,6 +9,7 @@ use App\Repository\BoiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
@@ -37,10 +38,8 @@ class BoiteCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('image')->onlyOnIndex(),
-            ImageField::new('image')->onlyOnForms()
-                ->setBasePath('./public/build/images/boites/')
-                ->setUploadDir('./public/build/images/boites/'),
+            ImageField::new('image')->setBasePath('/uploads/images/boites/')->onlyOnIndex(),
+            TextField::new('imageFile')->setFormType(VichImageType::class)->setLabel('Image')->onlyOnForms(),
             TextField::new('name')->setLabel('Nom'),
             SlugField::new('slug')->setTargetFieldName('name')->setLabel('Slug')->onlyOnForms(),
             IntegerField::new('year')->setLabel('Année'),
@@ -71,7 +70,11 @@ class BoiteCrudController extends AbstractCrudController
                 ->onlyOnForms(),
             BooleanField::new('isDeliverable')->setLabel('Livrable')->onlyOnForms(),
             BooleanField::new('isDeee')->setLabel('Deee'),
-            BooleanField::new('isOnline')->setLabel('En ligne')
+            BooleanField::new('isOnline')->setLabel('En ligne'),
+            DateTimeField::new('updatedAt')->setLabel('Mise à jour le')
+                ->setFormat('dd-MM-yyyy')
+                ->setDisabled()
+                ->onlyOnForms(),
         ];
     }
 

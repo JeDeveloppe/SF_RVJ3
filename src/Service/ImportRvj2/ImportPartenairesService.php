@@ -125,6 +125,7 @@ class ImportPartenairesService
 
     public function pathForImagesPartners(){
 
-        return './assets/images/partners/';
+        return './public/uploads/images/partners/';
+
     }
 }

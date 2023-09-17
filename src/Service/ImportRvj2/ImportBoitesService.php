@@ -119,7 +119,7 @@ class ImportBoitesService
 
     private function createOrUpdateBoite(array $arrayBoite): Boite
     {
-        $boite = $this->boiteRepository->findOneBy(['id' => $arrayBoite['idCatalogue']]);
+        $boite = $this->boiteRepository->findOneBy(['rvj2id' => $arrayBoite['idCatalogue']]);
 
         if(!$boite){
             $boite = new Boite();
@@ -157,8 +157,9 @@ class ImportBoitesService
             ->setIsDeee($this->nullToBoolean($arrayBoite['deee']))
             ->setCreatedAt(new DateTimeImmutable($arrayBoite['created_at']))
             ->setIsOnLine($isV3)
-            ->setImage($this->constructImagePath($arrayBoite['urlNom'], $arrayBoite['idCatalogue']))
-            ->setRvj2Id($arrayBoite['idCatalogue']);
+            ->setImage($this->constructImagePath($arrayBoite['urlNom'], $arrayBoite['idCatalogue']));
+        $boite->setRvj2id($arrayBoite['idCatalogue'])->setUpdatedAt(new DateTimeImmutable('now'));
+
 
         return $boite;
     }
@@ -208,6 +209,6 @@ class ImportBoitesService
 
     public function pathForImagesBoites(){
 
-        return './assets/images/boites/';
+        return './public/uploads/images/boites/';
     }
 }
