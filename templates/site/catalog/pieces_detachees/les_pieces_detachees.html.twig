@@ -11,7 +11,7 @@
 
     {% if search is not null %}
         <div class="row">
-            <div class="col-12 text-start">Votre recherche: {{ search | raw }}</div>
+            <div class="col-12 text-start text-decoration-underline h4">Votre recherche: <span class="text-danger">{{ search | raw }}</span></div>
         </div>
     {% endif %}
 
