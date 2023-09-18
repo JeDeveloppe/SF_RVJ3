@@ -38,7 +38,7 @@ class BoiteCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            ImageField::new('image')->setBasePath('/uploads/images/boites/')->onlyOnIndex(),
+            ImageField::new('image')->setBasePath($this->getParameter('app.path.boites_images'))->onlyOnIndex(),
             TextField::new('imageFile')->setFormType(VichImageType::class)->setLabel('Image')->onlyOnForms(),
             TextField::new('name')->setLabel('Nom'),
             SlugField::new('slug')->setTargetFieldName('name')->setLabel('Slug')->onlyOnForms(),

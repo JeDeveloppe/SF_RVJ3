@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.path.boites_images: /uploads/images/boites
+    app.path.partners_images: /uploads/images/partners
 
 services:
     # default configuration for services in *this* file
