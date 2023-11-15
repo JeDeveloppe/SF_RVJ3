@@ -76,6 +76,8 @@ class ImportOccasionsService
                 ->setGameRule($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['regleJeu']]))
                 ->setIsOnLine($arrayOccasion['actif'])
                 ->setOffSiteOccasionSale(null)
+                ->setPriceWithoutTax($arrayOccasion['prixHT'])
+                ->setDiscountedPriceWithoutTax($arrayOccasion['ancienPrixHT'])
                 ->setRvj2id($arrayOccasion['idJeuxComplet'])
                 ;
 

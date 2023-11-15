@@ -64,6 +64,12 @@ class Occasion
     #[ORM\OneToMany(mappedBy: 'occasion', targetEntity: Panier::class)]
     private Collection $paniers;
 
+    #[ORM\Column]
+    private ?int $priceWithoutTax = null;
+
+    #[ORM\Column]
+    private ?int $discountedPriceWithoutTax = null;
+
     public function __construct()
     {
         $this->documentLines = new ArrayCollection();
@@ -293,6 +299,30 @@ class Occasion
                 $panier->setOccasion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPriceWithoutTax(): ?int
+    {
+        return $this->priceWithoutTax;
+    }
+
+    public function setPriceWithoutTax(int $priceWithoutTax): static
+    {
+        $this->priceWithoutTax = $priceWithoutTax;
+
+        return $this;
+    }
+
+    public function getDiscountedPriceWithoutTax(): ?int
+    {
+        return $this->discountedPriceWithoutTax;
+    }
+
+    public function setDiscountedPriceWithoutTax(int $discountedPriceWithoutTax): static
+    {
+        $this->discountedPriceWithoutTax = $discountedPriceWithoutTax;
 
         return $this;
     }

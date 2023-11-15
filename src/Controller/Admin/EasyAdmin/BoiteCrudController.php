@@ -21,6 +21,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
 class BoiteCrudController extends AbstractCrudController
 {
@@ -39,7 +40,17 @@ class BoiteCrudController extends AbstractCrudController
     {
         return [
             ImageField::new('image')->setBasePath($this->getParameter('app.path.boites_images'))->onlyOnIndex(),
-            TextField::new('imageFile')->setFormType(VichImageType::class)->setLabel('Image')->onlyOnForms(),
+            TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
+                //TODO vérifier les options
+                'required' => false,
+                'allow_delete' => false,
+                'delete_label' => 'Supprimer du serveur ?',
+                'download_label' => '...',
+                'download_uri' => true,
+                'image_uri' => true,
+                // 'imagine_pattern' => '...',
+                'asset_helper' => true,
+            ])->setLabel('Image')->onlyOnForms(),
             TextField::new('name')->setLabel('Nom'),
             SlugField::new('slug')->setTargetFieldName('name')->setLabel('Slug')->onlyOnForms(),
             IntegerField::new('year')->setLabel('Année'),
@@ -86,6 +97,7 @@ class BoiteCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Nouvelle boite')
             ->setPageTitle('edit', 'Édition d\'une boite')
             ->setDefaultSort(['id' => 'DESC'])
+            ->setSearchFields(['name', 'editor.name'])
         ;
     }
 

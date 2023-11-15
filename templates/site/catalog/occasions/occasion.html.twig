@@ -26,12 +26,12 @@
 			<div class="card col-11 mx-auto col-md-9 p-0 border shadow">
 			    <div class="col-12 d-flex justify-content-center my-4">
 					{% set url = path('app_occasion', { 'reference_occasion': occasion.reference, 'editor_slug': occasion.boite.editor.slug, 'boite_slug': occasion.boite.slug }) %}
-					{% include "components/catalog/share_buttons.html.twig" with {'url': url } %}
+					{% include "components/catalog/_share_buttons.html.twig" with {'url': url } %}
 				</div>
 				<div class="card-body d-flex flex-wrap">
 					<!-- image de la boite -->
 					<div class="col-12 col-md-6 text-center p-0">
-						<div class="divImgPresentation mt-4">
+						<div class="divImgPresentation mt-1">
 							<div class="zoom">
 								<div class="zoom__top zoom__left"></div>
 								<div class="zoom__top zoom__centre"></div>
@@ -43,7 +43,7 @@
 								<div class="zoom__bottom zoom__centre"></div>
 								<div class="zoom__bottom zoom__right"></div>
 								{# <img class="zoom__image" src="data:image/png;base64,{{ images[key] }}"/> #}
-                                <img class="zoom__image" src="{{ asset('build/images/boites/'~ occasion.boite.image)  }}"/>
+                                <img class="zoom__image" src="{{ vich_uploader_asset(occasion.boite, 'imageFile') }}"/>
 							</div>
 						</div>
 						<span class="col-12 col-md-6 text-muted small text-center">
@@ -52,71 +52,35 @@
 					</div>
 
 					<div class="col-12 col-md-6 mt-4 mt-md-0">
-						<div class="col-12 mb-3 text-center small">
-					    	{% include "site/components/catalogues/affichage_nbrJoueurs-age.html.twig" %}
-						</div>
-						<p>État de la boite: {{ occasion.etatBoite }}</p>
-						<p>État du matériel: {{ occasion.etatMateriel }}</p>
-						<p>Règle du jeu: {{ occasion.regleJeu }}</p>
+						<p class="col-12 small">
+					    	{% include "components/catalog/players&age.html.twig" with {'item': occasion }%}
+						</p>
+						<p>État de la boite: {{ occasion.boxCondition }}</p>
+						<p>État du matériel: {{ occasion.equipmentCondition }}</p>
+						<p>Règle du jeu: {{ occasion.gameRule }}</p>
+						<p>Prix de vente TTC:
+							{% if occasion.discountedPriceWithoutTax > 0 %}
+								<strike class="text-danger"><b>{{ (occasion.PriceWithoutTax / 100) | number_format(2, '.', ',') }}</b></strike>
+								<b>{{ (occasion.discountedPriceWithoutTax / 100) | number_format(2, '.', ',') }}</b>
+							{% else %}
+								{{ (occasion.PriceWithoutTax / 100) | number_format(2, '.', ',') }}
+							{% endif %}
+						
+						</p>
 						{% if (occasion.information is not null) %}
 							<p><em>Informations:</em></p><p class="ml-5">{{ occasion.information }}</p>
 						{% endif %}
 
-						<p>Prix TTC: {{ (occasion.priceHt * tva / 100) | number_format(2, ',', '.') }} €</p>
+						{# <p>Prix TTC: {{ (occasion.priceHt * tva / 100) | number_format(2, ',', '.') }} €</p> #}
                         
-						{# on inclus le bouton login/register/panier #}
-                        {% include "site/components/catalogues/button-connexion-inscription-panier.html.twig" %}
+						{# on inclus le bouton ajout au panier #}
+						<p class="col-12 text-center">
+                        	{% include "components/catalog/_card_cart_button.html.twig" with {'item': occasion}%}
+						</p>
 
 					</div> 
 				</div>
 			</div>
 		</div>
-
-
-
-
-	<script>
-		function limiteur() {
-maximum = 300;
-champ = document.formulaire.content;
-indic = document.formulaire.indicateur;
-
-if (champ.value.length > maximum) {
-champ.value = champ.value.substring(0, maximum);
-} else {
-document.getElementById("caracteresRestantFormulaireContenuJeu").innerHTML = maximum - champ.value.length + " caractères restant...";
-document.getElementById("precision").style.display = "block";
-}
-if (champ.value.length == 0) {
-document.getElementById("precision").style.display = "none";
-} else { // Init a timeout variable to be used below
-let timeout = null;
-// Listen for keystroke events
-champ.addEventListener('keyup', function (e) {
-// Clear the timeout if it has already been set.
-// This will prevent the previous task from executing
-// if it has been less than <MILLISECONDS>
-clearTimeout(timeout);
-// Make a new timeout set to go off in 1000ms (1 second)
-timeout = setTimeout(function () {
-document.getElementById("precision").style.display = "none";
-}, 4000);
-});
-}
-}
-var resultatInput = document.getElementById('resultatInput');
-resultatInput.innerHTML = "Aucune image !";
-
-function getFileInfo() {
-var countFiles = document.getElementById('file-input').files.length;
-
-if (countFiles > 1) {
-resultatInput.innerHTML = "2 images séléctionnées";
-} else {
-var name = document.getElementById('file-input').files[0].name;
-resultatInput.innerHTML = "Image séléctionnée:<br/>" + name;
-}
-}
-	</script>
 
 {% endblock %}

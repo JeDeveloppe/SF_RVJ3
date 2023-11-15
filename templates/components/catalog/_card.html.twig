@@ -1,9 +1,15 @@
-{% for key,donnee in donnees %}   
+{% for key,donnee in donnees %}  
 
-    {% if donnee.boite is defined %}
+    {% if occasions is defined %}
         {% set boite = donnee.boite %}
+        {% set card_item = donnee %}
+        {% set setEntityId = donnee.id %}
+        {% set entityNameController = 'Occasion' %}
     {% else %}
         {% set boite = donnee %}
+        {% set card_item = donnee %}
+        {% set setEntityId = boite.id %}
+        {% set entityNameController = 'Boite' %}
     {% endif %}
 
     <div class="col-9 col-sm-7 mx-auto col-md-6 mx-md-0 col-lg-4 col-xl-3 my-4">
@@ -26,8 +32,8 @@
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-around align-items-center">
-                {% include "components/catalog/_card_button.html.twig" %}
-                {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': 'Boite'} %}
+                {% include "components/catalog/_card_button.html.twig" with {'item': card_item }%}
+                {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': entityNameController} %}
             </div>
         </div>
     </div>

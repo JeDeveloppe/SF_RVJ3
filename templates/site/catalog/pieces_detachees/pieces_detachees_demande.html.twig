@@ -26,7 +26,7 @@
 
 				<!-- BLOC PARTAGE RESEAUX SOCIAUX  -->
 				{% set url = path('app_catalogue_pieces_detachees_demande', { id: boite.id, slug: boite.slug, editorSlug: boite.editor.slug }) %}
-				{% include "components/catalog/share_buttons.html.twig" with {'url': url} %}
+				{% include "components/catalog/_share_buttons.html.twig" with {'url': url} %}
 
 				<div class="card-body d-flex flex-wrap">
 					<!-- IMAGE DE LA BOITE -->
@@ -42,7 +42,7 @@
 								<div class="zoom__bottom zoom__left"></div>
 								<div class="zoom__bottom zoom__centre"></div>
 								<div class="zoom__bottom zoom__right"></div>
-                        		<img class="zoom__image" src="{{ asset('build/images/boites/'~ boite.image)  }}"/>
+                        		<img class="zoom__image" src="{{ vich_uploader_asset(boite, 'imageFile') }}"/>
 							</div>
 						</div>
 					</div>

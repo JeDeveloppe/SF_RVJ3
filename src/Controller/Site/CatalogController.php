@@ -8,6 +8,7 @@ use App\Repository\BoiteRepository;
 use App\Repository\EditorRepository;
 use App\Repository\OccasionRepository;
 use App\Repository\PartnerRepository;
+use App\Repository\TaxRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,8 @@ class CatalogController extends AbstractController
         private OccasionRepository $occasionRepository,
         private PaginatorInterface $paginator,
         private EditorRepository $editorRepository,
-        private PartnerRepository $partnerRepository
+        private PartnerRepository $partnerRepository,
+        private TaxRepository $taxRepository
     )
     {
     }
@@ -87,11 +89,12 @@ class CatalogController extends AbstractController
         $occasions = $this->paginator->paginate(
             $donnees, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            50 /*limit per page*/
+            24 /*limit per page*/
         );
 
         return $this->render('site/catalog/occasions/les_occasions.html.twig', [
             'occasions' => $occasions,
+            'occasions_totales' => $donnees,
         ]);
     }
 
@@ -99,6 +102,7 @@ class CatalogController extends AbstractController
     public function occasion($reference_occasion, $editor_slug): Response
     {
 
+        $tax = 
         $occasion = $this->occasionRepository->findOneBy(
             [
                 'isOnline' => true,
@@ -114,6 +118,7 @@ class CatalogController extends AbstractController
 
         return $this->render('site/catalog/occasions/occasion.html.twig', [
             'occasion' => $occasion,
+            'taxe' => $this->taxRepository->findOneBy([])
         ]);
     }
 }

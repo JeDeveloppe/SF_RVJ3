@@ -31,7 +31,14 @@
 
 
         <div class="row mb-5 justify-content-start">
-            <div class="col-12 text-center">{{ boites_totales | length }} boites en ligne.</div>
+            <div class="col-12 text-center">
+                {% if boites_totales | length > 1 %}
+                    {% set conjugaison_boite = "boites" %}
+                {% else %}
+                    {% set conjugaison_boite = "boite" %}
+                {% endif %}
+                {{ boites_totales | length }} {{ conjugaison_boite }} en ligne.
+            </div>
         </div>
 
     {% else %}

@@ -17,6 +17,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 
 class OccasionCrudController extends AbstractCrudController
 {   
@@ -89,8 +91,16 @@ class OccasionCrudController extends AbstractCrudController
                 ->setLabel('Régle du jeu')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                 ->onlyOnForms()->setDisabled($disabledAfterBilling),
+            NumberField::new('priceWithoutTax')->setLabel('Prix de vente HT en cents')->onlyOnForms(),
+            NumberField::new('discountedPriceWithoutTax')
+                ->setLabel('Prix de vente HT remiser en cents')
+                ->onlyOnForms()
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Mettre 0 pour aucune remise...']]),
             BooleanField::new('isOnline')->setLabel('En ligne'),
-            AssociationField::new('offSiteOccasionSale')->setLabel('Vente / don')->setDisabled(true)->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
+            AssociationField::new('offSiteOccasionSale')
+                ->setLabel('Vendu / donner')
+                ->setDisabled(true)
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
             BooleanField::new('isNew')->setLabel('Neuf')->onlyOnForms()->onlyOnForms()
         ];
     }
@@ -103,6 +113,7 @@ class OccasionCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Nouvel occasion')
             ->setPageTitle('edit', 'Édition d\'un occasion')
             ->setDefaultSort(['boite.name' => 'ASC'])
+            ->setSearchFields(['reference', 'boite.name'])
         ;
     }
 

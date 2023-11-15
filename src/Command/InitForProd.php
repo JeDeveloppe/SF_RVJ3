@@ -90,7 +90,7 @@ class InitForProd extends Command
         // $this->importVillesBelgesService->importVilles1_5($io);
 
         //on importe les partenaires
-        $this->importPartenairesService->importPartenaires($io);
+        //$this->importPartenairesService->importPartenaires($io);
 
         //on importe les adresses (facturation et livraison)
         // $this->importAdressesService->importAdresses($io);
@@ -98,7 +98,6 @@ class InitForProd extends Command
         //on creer le nombre de joueurs
         // $this->creationNombreDeJoueursService->addplayers($io);
 
-    
         //on importe les boites
         // $this->importBoitesService->importBoites($io);
 
@@ -106,7 +105,7 @@ class InitForProd extends Command
         // $this->editorService->addEditorsInDatabase($io);
 
         //on importe le detail des boites
-        // $this->importPiecesService->importPieces($io);
+        //$this->importPiecesService->importPieces($io);
 
         //on cree les conditions des occasions
         // $this->creationConditionOccasionService->addConditions($io);
@@ -115,7 +114,7 @@ class InitForProd extends Command
         // $this->creationMoyenDePaiementService->addMoyens($io);
 
         //on importe les jeux complet
-        // $this->importOccasionsService->importOccasions($io);
+        $this->importOccasionsService->importOccasions($io);
 
         //on cree les mouvements des occasions
         // $this->creationMouvementsOccasionService->importMouvementsOccasions($io);

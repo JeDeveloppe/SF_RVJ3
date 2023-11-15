@@ -34,7 +34,9 @@ class BoiteRepository extends ServiceEntityRepository
     public function findBoitesFromSearch($phrase): array
     {
         return $this->createQueryBuilder('b')
+            ->join('b.editor','e')
             ->where('b.name LIKE :val')
+            ->orWhere('e.name LIKE :val')
             ->andWhere('b.isOnline = :online')
             ->setParameter('val', '%'.$phrase.'%')
             ->setParameter('online', true)
