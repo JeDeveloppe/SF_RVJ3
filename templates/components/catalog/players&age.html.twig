@@ -1,1 +1,14 @@
-{% dump(item) %}
+{% if item.players.name matches '/^\\d+$/' %}
+    {% if item.players.name > 1 %}
+        {% set dataJoueur = 'joueurs' %}
+    {% else %}
+        {% set dataJoueur = 'joueurs' %}
+    {% endif %}
+    
+    A partir de {{ item.players.name }} {{ dataJoueur }}.
+    
+{% else %}
+    {{ item.players.name }}
+{% endif %}
+
+

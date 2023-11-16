@@ -21,6 +21,30 @@ class PanierRepository extends ServiceEntityRepository
         parent::__construct($registry, Panier::class);
     }
 
+    public function findOccasionsByUser($user): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.occasion IS NOT NULL')
+            ->andWhere('p.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('p.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findBoitesByUser($user): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.boite IS NOT NULL')
+            ->andWhere('p.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('p.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Panier[] Returns an array of Panier objects
 //     */

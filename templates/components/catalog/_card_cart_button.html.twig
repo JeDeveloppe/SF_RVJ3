@@ -3,7 +3,7 @@
     {% if occasions is defined or occasion is defined %}
     {# si on affiche des occasions #}
      {# //TODO mise au panier d'un occasion #}
-        <a class="btn btn-sm btn-info " href="{{ path('app_occasion', {'reference_occasion': item.reference, 'boite_slug': item.boite.slug , 'editor_slug': item.boite.editor.slug }) }}">Ajouter au panier</a>
+        <a class="btn btn-sm btn-info " href="{{ path('app_panier_add_occasion', {'occasion_id': item.id }) }}">Ajouter au panier</a>
     {% else %}
         <a class="btn btn-sm btn-info " href="{{ path('app_catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.slug , 'editorSlug': boite.editor.slug  }) }}">Voir les pièces disponiblent</a>
     {% endif %}

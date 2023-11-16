@@ -41,13 +41,11 @@
         {% endif %}
         <li class="nav-item">
           {% if is_granted('ROLE_USER') %}
-            {% if user.paniers is defined and user.paniers is not null %}
-              <a class="nav-link" href="#">Panier ({{ user.paniers | length }})</a>
+            {% if app.user.paniers is not null %}
+              <a class="nav-link" href="{{ path('app_panier') }}">Panier ({{ app.user.paniers | length }})</a>
             {% else %}
               <a class="nav-link" href="#">Panier (0)</a>
             {% endif %}
-          {% else %}
-            <a class="nav-link" href="#" title="Vide">Panier (...)</a>
           {% endif %}
         </li>
       </ul>

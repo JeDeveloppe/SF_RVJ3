@@ -1,0 +1,11 @@
+{% extends "site/base.html.twig" %}
+
+{% block title %}Panier{% endblock %}
+
+{% block body %}
+
+    <div class="col-12 text-center h2 my-5">Panier</div>
+
+    {% include "components/panier/_table_occasions.html.twig" with {'donnees': occasions }%}
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% if donnees | length > 0 %}
+
+    <div class="col-11 border-bottom mb-4">Occasions:</div>
+    <table class="table table-stripped">
+        <tr>
+            <th>Image</th>
+            <th>Description</th>
+            <th>Prix TTC</th>
+            <th></th>
+        </tr>
+        {% for panier in donnees %}
+            <tr>
+                <td><img class="img_full-width" src="{{ vich_uploader_asset(panier.occasion.boite, 'imageFile') }}"/></td>
+                <td>
+                    <p>{% include "components/catalog/players&age.html.twig" with {'item': panier.occasion.boite }%}</p>
+                    <p>État de la boite: {{ panier.occasion.boxCondition }}</p>
+                    <p>État du matériel: {{ panier.occasion.equipmentCondition }}</p>
+                    <p>Règle du jeu: {{ panier.occasion.gameRule }}</p>
+                </td>
+                <td>{{ (panier.priceWithoutTax  * (1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endif %}

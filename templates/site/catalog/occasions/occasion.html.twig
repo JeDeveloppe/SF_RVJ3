@@ -53,17 +53,17 @@
 
 					<div class="col-12 col-md-6 mt-4 mt-md-0">
 						<p class="col-12 small">
-					    	{% include "components/catalog/players&age.html.twig" with {'item': occasion }%}
+					    	{% include "components/catalog/players&age.html.twig" with {'item': occasion.boite }%}
 						</p>
 						<p>État de la boite: {{ occasion.boxCondition }}</p>
 						<p>État du matériel: {{ occasion.equipmentCondition }}</p>
 						<p>Règle du jeu: {{ occasion.gameRule }}</p>
 						<p>Prix de vente TTC:
 							{% if occasion.discountedPriceWithoutTax > 0 %}
-								<strike class="text-danger"><b>{{ (occasion.PriceWithoutTax / 100) | number_format(2, '.', ',') }}</b></strike>
-								<b>{{ (occasion.discountedPriceWithoutTax / 100) | number_format(2, '.', ',') }}</b>
+								<strike class="text-danger"><b>{{ (occasion.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</b></strike>
+								<b>{{ (occasion.discountedPriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</b>
 							{% else %}
-								{{ (occasion.PriceWithoutTax / 100) | number_format(2, '.', ',') }}
+								{{ (occasion.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}
 							{% endif %}
 						
 						</p>

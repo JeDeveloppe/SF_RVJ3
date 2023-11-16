@@ -6,6 +6,7 @@ use App\Form\ContactType;
 use App\Repository\PartnerRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
+use App\Service\PanierService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,7 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SiteController extends AbstractController
 {
     public function __construct(
-        private LegalInformationRepository $legalInformationRepository
+        private LegalInformationRepository $legalInformationRepository,
+        private PanierService $panierService
     )
     {
     }

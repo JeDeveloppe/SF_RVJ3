@@ -9,11 +9,13 @@ use App\Repository\EditorRepository;
 use App\Repository\OccasionRepository;
 use App\Repository\PartnerRepository;
 use App\Repository\TaxRepository;
+use App\Service\PanierService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class CatalogController extends AbstractController
 {
@@ -23,7 +25,8 @@ class CatalogController extends AbstractController
         private PaginatorInterface $paginator,
         private EditorRepository $editorRepository,
         private PartnerRepository $partnerRepository,
-        private TaxRepository $taxRepository
+        private TaxRepository $taxRepository,
+        private PanierService $panierService,
     )
     {
     }
@@ -60,7 +63,7 @@ class CatalogController extends AbstractController
             'boites_totales' => $donnees,
             'form' => $form,
             'search' => $search ?? null,
-            'partenaires' => $partenaires ?? null
+            'partenaires' => $partenaires ?? null,
         ]);
     }
 
@@ -68,7 +71,6 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-pieces-detachees/{editorSlug}/{id}/{slug}', name: 'app_catalogue_pieces_detachees_demande')]
     public function cataloguePiecesDetacheesDemande($id, $slug, $editorSlug): Response
     {
-
         $boite = $this->boiteRepository->findOneBy(['id' => $id, 'slug' => $slug, 'editor' => $this->editorRepository->findOneBy(['slug' => $editorSlug]), 'isOnline' => true]);
 
         if(!$boite){
@@ -102,7 +104,6 @@ class CatalogController extends AbstractController
     public function occasion($reference_occasion, $editor_slug): Response
     {
 
-        $tax = 
         $occasion = $this->occasionRepository->findOneBy(
             [
                 'isOnline' => true,
@@ -118,7 +119,7 @@ class CatalogController extends AbstractController
 
         return $this->render('site/catalog/occasions/occasion.html.twig', [
             'occasion' => $occasion,
-            'taxe' => $this->taxRepository->findOneBy([])
+            'tax' => $this->taxRepository->findOneBy([])
         ]);
     }
 }

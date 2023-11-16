@@ -19,6 +19,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use Symfony\Component\HttpFoundation\Request;
 
 class OccasionCrudController extends AbstractCrudController
 {   
@@ -91,6 +92,10 @@ class OccasionCrudController extends AbstractCrudController
                 ->setLabel('Régle du jeu')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                 ->onlyOnForms()->setDisabled($disabledAfterBilling),
+            NumberField::new('boite.htPrice')
+                ->setLabel('Prix HT en cents d\'une boite comme neuve:')
+                ->setDisabled(true)
+                ->onlyOnForms(),
             NumberField::new('priceWithoutTax')->setLabel('Prix de vente HT en cents')->onlyOnForms(),
             NumberField::new('discountedPriceWithoutTax')
                 ->setLabel('Prix de vente HT remiser en cents')
@@ -113,7 +118,7 @@ class OccasionCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Nouvel occasion')
             ->setPageTitle('edit', 'Édition d\'un occasion')
             ->setDefaultSort(['boite.name' => 'ASC'])
-            ->setSearchFields(['reference', 'boite.name'])
+            ->setSearchFields(['reference', 'boite.name', 'boite.editor.name'])
         ;
     }
 
@@ -131,6 +136,7 @@ class OccasionCrudController extends AbstractCrudController
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if($entityInstance instanceof Occasion) {
+
             $user = $this->security->getUser();
             $entityInstance->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user)->setReference('to_create');
             $entityManager->persist($entityInstance);

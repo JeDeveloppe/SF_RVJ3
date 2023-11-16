@@ -21,7 +21,8 @@ class NumbersOfPlayersCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name')->setLabel('A partir de ... joueur(s)'),
-            AssociationField::new('boites')->setLabel('Nombre de boites')->setDisabled(true)
+            TextField::new('keyword')->setLabel('keyword dataBase (u1 et u2)')->setPermission('ROLE_SUPER_ADMIN'),
+            AssociationField::new('boites')->setLabel('Nombre de boites')->setDisabled(true)->onlyOnIndex()
         ];
     }
 

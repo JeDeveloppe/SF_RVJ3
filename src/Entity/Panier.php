@@ -30,6 +30,9 @@ class Panier
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $priceWithoutTax = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,6 +94,18 @@ class Panier
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getPriceWithoutTax(): ?int
+    {
+        return $this->priceWithoutTax;
+    }
+
+    public function setPriceWithoutTax(?int $priceWithoutTax): static
+    {
+        $this->priceWithoutTax = $priceWithoutTax;
 
         return $this;
     }
