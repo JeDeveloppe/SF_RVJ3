@@ -6,6 +6,31 @@
 
     <div class="col-12 text-center h2 my-5">Panier</div>
 
-    {% include "components/panier/_table_occasions.html.twig" with {'donnees': occasions }%}
+    <div class="col-12 col-md-10 mx-auto">
+
+        {% include "components/panier/_table_occasions.html.twig" with {'donnees': occasions }%}
+
+    </div>
+
+    <div class="col-12 col-md-6 mx-auto my-5">
+        <table class="table table-striped">
+            <tr>
+                <td>Sous-total occasions:</td>
+                <td>{{ (totalOccasions * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+            </tr>
+            <tr>
+                <td>Sous-total articles:</td>
+                <td>{{ (totalArticles * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+            </tr>
+            <tr>
+                <td>Total HT:</td>
+                <td>{{ (totalPanier / 100) | number_format(2, '.', ',') }}</td>
+            </tr>
+            <tr>
+                <td>Total à payer:</td>
+                <td>{{ (totalPanier * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+            </tr>
+        </table>
+    </div>
 
 {% endblock %}

@@ -32,14 +32,23 @@ class PanierController extends AbstractController
     public function index(): Response
     {
         $user = $this->checkUserIsConnected();
+        $tax = $this->taxRepository->findOneBy([]);
 
         $occasions = $this->panierRepository->findOccasionsByUser($user);
         $boites = $this->panierRepository->findBoitesByUser($user);
 
+        $totalOccasions = $this->panierService->totalPriceItems($occasions);
+        $totalArticles = $this->panierService->totalPriceItems($boites);
+
+        $totalPanier = $totalArticles + $totalOccasions;
+
         return $this->render('site/panier/panier.html.twig', [
             'occasions' => $occasions,
             'boites' => $boites,
-            'tax' => $this->taxRepository->findOneBy([])
+            'totalOccasions' => $totalOccasions,
+            'totalArticles' => $totalArticles,
+            'totalPanier' => $totalPanier,
+            'tax' => $tax
         ]);
     }
 
@@ -75,16 +84,15 @@ class PanierController extends AbstractController
         return $user;
     }
 
-    #[Route('/panier/ajout-occasion/{occasion_id}', name: 'app_panier_delete_item')]
-    public function deleteItemInPanier($item): Response
+    #[Route('/panier/delete-item/{item_id}', name: 'app_panier_delete_item')]
+    public function deleteItemInPanier($item_id): Response
     {
         $user = $this->checkUserIsConnected();
 
-        //TODO DELETE ITEM IN PANIER
-        $reponse = $this->panierService->addOccasionInCart($occasion_id,$user);
+        $reponse = $this->panierService->deleteItemInCart($item_id,$user);
 
         $this->addFlash($reponse[0], $reponse[1]);
 
-        return $this->redirectToRoute('app_catalogue_occasions');
+        return $this->redirectToRoute('app_panier');
     }
 }

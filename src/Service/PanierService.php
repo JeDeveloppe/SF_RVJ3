@@ -19,7 +19,8 @@ class PanierService
         ){
     }
 
-    public function addOccasionInCart($occasion_id,$user){
+    public function addOccasionInCart($occasion_id,$user)
+    {
 
         $occasion = $this->occasionRepository->findOneBy(['id' => $occasion_id, 'isOnline' => true]);
 
@@ -57,4 +58,43 @@ class PanierService
         return $reponse;
     }
 
+    public function deleteItemInCart($item_id,$user)
+    {
+
+        $panier = $this->panierRepository->findOneBy(['id' => $item_id, 'user' => $user]);
+
+        if(!$panier){
+
+            $reponse = ['warning', 'Ligne de panier inconnue !'];
+
+        }else{
+
+            //?on récupère l'occasion
+            $occasion = $panier->getOccasion();
+            //?on remet en ligne l'occasion
+            $occasion->setIsOnline(true);
+            $this->em->persist($occasion);
+
+            //? on supprime la ligne du panier
+            $this->em->remove($panier);
+
+            //?on sauvegarde le tout
+            $this->em->flush();
+
+            $reponse = ['success', 'Ligne supprimée du panier'];
+        }
+
+        return $reponse;
+    }
+
+    public function totalPriceItems($items){
+
+        $total = 0;
+
+        foreach($items as $item){
+            $total += $item->getPriceWithoutTax();
+        }
+
+        return $total;
+    }
 }
