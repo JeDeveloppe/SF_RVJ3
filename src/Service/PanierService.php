@@ -87,14 +87,27 @@ class PanierService
         return $reponse;
     }
 
-    public function totalPriceItems($items){
+    public function totauxItems($items){
 
-        $total = 0;
+        $totaux = [];
+        $price = 0;
+        $weigth = 0;
 
         foreach($items as $item){
-            $total += $item->getPriceWithoutTax();
+
+            //en fonction du calcul voulu des articles ou occasions
+            if($item->getOccasion()->getBoite()){
+                $weigth += $item->getOccasion()->getBoite()->getWeigth();  
+            }else{
+                $weigth += $item->getArticle()->getBoite()->getWeigth();  
+            }
+
+            $price += $item->getPriceWithoutTax();
         }
 
-        return $total;
+        $totaux['price'] = $price;
+        $totaux['weigth'] = $weigth;
+
+        return $totaux;
     }
 }

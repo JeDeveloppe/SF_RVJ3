@@ -12,25 +12,56 @@
 
     </div>
 
-    <div class="col-12 col-md-6 mx-auto my-5">
-        <table class="table table-striped">
-            <tr>
-                <td>Sous-total occasions:</td>
-                <td>{{ (totalOccasions * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-            </tr>
-            <tr>
-                <td>Sous-total articles:</td>
-                <td>{{ (totalArticles * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-            </tr>
-            <tr>
-                <td>Total HT:</td>
-                <td>{{ (totalPanier / 100) | number_format(2, '.', ',') }}</td>
-            </tr>
-            <tr>
-                <td>Total à payer:</td>
-                <td>{{ (totalPanier * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-            </tr>
-        </table>
-    </div>
+    {% include "components/catalog/_shippingMethod.html.twig" %}
+
+    {% if deliveryCostWithoutTax.id is not null %}
+    
+        <div class="col-12 col-md-6 mx-auto my-5">
+            <table class="table table-striped">
+                <tr>
+                    <td>Sous-total occasions:</td>
+                    <td>{{ (totalOccasions * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                </tr>
+                <tr>
+                    <td>Sous-total articles:</td>
+                    <td>{{ (totalBoites * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                </tr>
+                <tr>
+                    <td>Livraison / retrait:<br/>
+                    <small>(poid total: {{ weigthPanier }}g)</small>
+                    </td>
+                    <td class="align-middle">
+                        {% if deliveryCostWithoutTax.priceExcludingTax == 0 %}
+                            Retrait
+                        {% else %}
+                            {{ deliveryCostWithoutTax.priceExcludingTax / 100 | number_format(2, '.', ',') }} € TTC
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Total HT:</td>
+                    <td>{{ (totalPanier / 100) | number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr>
+                    <td>TVA:</td>
+                    <td>
+                    {% if totalPanier * ( 1 + (tax.value / 100)) - totalPanier == 0 %}
+                        0.00 €
+                    {% else %}
+                        {{ (totalPanier * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') - (totalPanier / 100) | number_format(2, '.', ',') }} €</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>Total à payer:</td>
+                    <td>{{ (totalPanier * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                </tr>
+            </table>
+        </div>
+    {% endif %}
+
+    {% include "components/panier/_billingForm.html.twig" %}
+
+    {% include "components/panier/_deliveryForm.html.twig" %}
+
 
 {% endblock %}

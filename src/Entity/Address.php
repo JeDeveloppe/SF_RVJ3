@@ -139,4 +139,9 @@ class Address
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->organization.' '.$this->lastname.' '.$this->firstname.' '.$this->street.' '.$this->city;
+    }
 }

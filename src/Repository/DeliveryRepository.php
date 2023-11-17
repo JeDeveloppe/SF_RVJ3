@@ -21,6 +21,22 @@ class DeliveryRepository extends ServiceEntityRepository
         parent::__construct($registry, Delivery::class);
     }
 
+    
+    public function findCostByDeliveryShippingMethod($shippingMethod, $weigthPanier)
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.shippingMethod = :method')
+            ->andWhere('d.start <= :weigth')
+            ->andWhere('d.end >= :weigth')
+            ->setParameter('method', $shippingMethod)
+            ->setParameter('weigth', $weigthPanier)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleResult()
+        ;
+    }
+
+
 //    /**
 //     * @return Delivery[] Returns an array of Delivery objects
 //     */
