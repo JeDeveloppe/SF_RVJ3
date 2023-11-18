@@ -57,11 +57,15 @@
                 </tr>
             </table>
         </div>
+
+        {% include "components/panier/_billingForm.html.twig" %}
+
+    {% dump(deliveryCostWithoutTax) %}
+        {% if deliveryCostWithoutTax.priceExcludingTax == 0 %}
+            {% include "components/panier/_collectionPointForm.html.twig" %}
+        {% else %}
+            {% include "components/panier/_deliveryForm.html.twig" %}
+        {% endif %}
     {% endif %}
-
-    {% include "components/panier/_billingForm.html.twig" %}
-
-    {% include "components/panier/_deliveryForm.html.twig" %}
-
 
 {% endblock %}

@@ -44,10 +44,14 @@ class City
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: Address::class)]
     private Collection $addresses;
 
+    #[ORM\OneToMany(mappedBy: 'city', targetEntity: CollectionPoint::class)]
+    private Collection $collectionPoints;
+
     public function __construct()
     {
         $this->partners = new ArrayCollection();
         $this->addresses = new ArrayCollection();
+        $this->collectionPoints = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -202,5 +206,35 @@ class City
     public function __toString()
     {
         return $this->postalcode.' '.$this->name;
+    }
+
+    /**
+     * @return Collection<int, CollectionPoint>
+     */
+    public function getCollectionPoints(): Collection
+    {
+        return $this->collectionPoints;
+    }
+
+    public function addCollectionPoint(CollectionPoint $collectionPoint): static
+    {
+        if (!$this->collectionPoints->contains($collectionPoint)) {
+            $this->collectionPoints->add($collectionPoint);
+            $collectionPoint->setCity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCollectionPoint(CollectionPoint $collectionPoint): static
+    {
+        if ($this->collectionPoints->removeElement($collectionPoint)) {
+            // set the owning side to null (unless already changed)
+            if ($collectionPoint->getCity() === $this) {
+                $collectionPoint->setCity(null);
+            }
+        }
+
+        return $this;
     }
 }

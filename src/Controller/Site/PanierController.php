@@ -4,6 +4,7 @@ namespace App\Controller\Site;
 
 use App\Entity\Delivery;
 use App\Form\BillingAdressType;
+use App\Form\CollectionPointType;
 use App\Form\DeliveryAdressType;
 use App\Form\ShippingType;
 use App\Repository\DeliveryRepository;
@@ -43,6 +44,9 @@ class PanierController extends AbstractController
         $deliveryForm = $this->createForm(DeliveryAdressType::class, null, ['user' => $this->security->getUser()]);
         $deliveryForm->handleRequest($request);
 
+        $collectionPointForm = $this->createForm(CollectionPointType::class);
+        $collectionPointForm->handleRequest($request);
+
         $user = $this->checkUserIsConnected();
         $tax = $this->taxRepository->findOneBy([]);
 
@@ -80,6 +84,7 @@ class PanierController extends AbstractController
             'shippingForm' => $shippingForm,
             'billingForm' => $billingForm,
             'deliveryForm' => $deliveryForm,
+            'collectionPointForm' => $collectionPointForm,
         ]);
     }
 

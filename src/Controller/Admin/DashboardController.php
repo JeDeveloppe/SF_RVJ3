@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Address;
 use App\Entity\Boite;
 use App\Entity\City;
+use App\Entity\CollectionPoint;
 use App\Entity\Color;
 use App\Entity\ConditionOccasion;
 use App\Entity\Country;
@@ -159,6 +160,7 @@ class DashboardController extends AbstractDashboardController
         
         yield MenuItem::section('Gestion des paniers:');
         yield MenuItem::linkToCrud('Moyens de retrait/envoi', 'fas fa-list', ShippingMethod::class);
+        yield MenuItem::linkToCrud('Lieux de retrait', 'fas fa-list', CollectionPoint::class);
 
         yield MenuItem::section('Gestion des documents:');
         yield MenuItem::linkToCrud('Documents', 'fas fa-list', Document::class);
