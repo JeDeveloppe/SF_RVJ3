@@ -19,8 +19,12 @@ class BillingAdressType extends AbstractType
         $user = $options['user'];
 
         $builder
-            ->add('address', EntityType::class, [
+            ->add('addressBilling', EntityType::class, [
                 'class' => Address::class,
+                'label' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
                 'placeholder' => '-- Choisir une adresse de facturation --',
                 'query_builder' => function (EntityRepository $er) use ($user) {
                     return $er->createQueryBuilder('a')

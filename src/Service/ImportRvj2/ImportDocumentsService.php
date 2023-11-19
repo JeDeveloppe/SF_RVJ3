@@ -101,7 +101,7 @@ class ImportDocumentsService
         }else if($arrayDoc['expedition'] == "mondialRelay"){
             $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'MONDIAL RELAY']);
         }else if($arrayDoc['expedition'] == "retrait_caen1"){
-            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT A LA COOP 100%']);
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT PRES DE CHEZ MOI']);
         }else if($arrayDoc['expedition'] == "colissimo"){
             $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'COLISSIMO']);
         }else{

@@ -14,8 +14,12 @@ class CollectionPointType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('address', EntityType::class, [
+            ->add('addressDelivery', EntityType::class, [
                 'class' => CollectionPoint::class,
+                'label' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
                 'placeholder' => '-- Choisir un lieu de retrait --',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')

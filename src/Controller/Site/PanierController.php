@@ -3,9 +3,8 @@
 namespace App\Controller\Site;
 
 use App\Entity\Delivery;
-use App\Form\BillingAdressType;
+use App\Form\BillingAndDeliveryAdressType;
 use App\Form\CollectionPointType;
-use App\Form\DeliveryAdressType;
 use App\Form\ShippingType;
 use App\Repository\DeliveryRepository;
 use App\Repository\PanierRepository;
@@ -38,14 +37,11 @@ class PanierController extends AbstractController
         $shippingForm = $this->createForm(ShippingType::class);
         $shippingForm->handleRequest($request);
 
-        $billingForm = $this->createForm(BillingAdressType::class, null, ['user' => $this->security->getUser()]);
-        $billingForm->handleRequest($request);
-
-        $deliveryForm = $this->createForm(DeliveryAdressType::class, null, ['user' => $this->security->getUser()]);
-        $deliveryForm->handleRequest($request);
-
-        $collectionPointForm = $this->createForm(CollectionPointType::class);
-        $collectionPointForm->handleRequest($request);
+        $billingAndDeliveryForm = $this->createForm(BillingAndDeliveryAdressType::class, null, [
+            'user' => $this->security->getUser(),
+            'shipping' => $shippingForm->get('name')->getData()
+        ]);
+        $billingAndDeliveryForm->handleRequest($request);
 
         $user = $this->checkUserIsConnected();
         $tax = $this->taxRepository->findOneBy([]);
@@ -82,9 +78,7 @@ class PanierController extends AbstractController
             'tax' => $tax,
             'deliveryCostWithoutTax' => $deliveryCostWithoutTax,
             'shippingForm' => $shippingForm,
-            'billingForm' => $billingForm,
-            'deliveryForm' => $deliveryForm,
-            'collectionPointForm' => $collectionPointForm,
+            'billingAndDeliveryForm' => $billingAndDeliveryForm,
         ]);
     }
 

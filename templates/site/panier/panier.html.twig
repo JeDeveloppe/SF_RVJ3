@@ -12,7 +12,7 @@
 
     </div>
 
-    {% include "components/catalog/_shippingMethod.html.twig" %}
+    {% include "components/panier/_shippingMethod.html.twig" %}
 
     {% if deliveryCostWithoutTax.id is not null %}
     
@@ -58,14 +58,8 @@
             </table>
         </div>
 
-        {% include "components/panier/_billingForm.html.twig" %}
+        {% include "components/panier/_billingAndDeliveryForm.html.twig" %}
 
-    {% dump(deliveryCostWithoutTax) %}
-        {% if deliveryCostWithoutTax.priceExcludingTax == 0 %}
-            {% include "components/panier/_collectionPointForm.html.twig" %}
-        {% else %}
-            {% include "components/panier/_deliveryForm.html.twig" %}
-        {% endif %}
     {% endif %}
 
 {% endblock %}

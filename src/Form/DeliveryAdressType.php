@@ -16,8 +16,12 @@ class DeliveryAdressType extends AbstractType
         $user = $options['user'];
 
         $builder
-            ->add('address', EntityType::class, [
+            ->add('addressDelivery', EntityType::class, [
                 'class' => Address::class,
+                'label' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
                 'placeholder' => '-- Choisir une adresse de livraison --',
                 'query_builder' => function (EntityRepository $er) use ($user) {
                     return $er->createQueryBuilder('a')

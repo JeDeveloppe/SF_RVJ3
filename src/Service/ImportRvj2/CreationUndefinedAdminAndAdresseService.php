@@ -43,22 +43,27 @@ class CreationUndefinedAdminAndAdresseService
         $shippingMethods = [];
         $shippingMethods[] = [
             'name' => 'MONDIAL RELAY',
+            'price' => 'PAYANT',
             'actif' => false
         ];
         $shippingMethods[] = [
             'name' => 'POSTE',
+            'price' => 'PAYANT',
             'actif' => true
         ];
         $shippingMethods[] = [
             'name' => 'COLISSIMO',
+            'price' => 'PAYANT',
             'actif' => false
         ];
         $shippingMethods[] = [
             'name' => 'INDEFINI',
+            'price' => 'PAYANT',
             'actif' => false
         ];
         $shippingMethods[] = [
-            'name' => 'RETRAIT A LA COOP 100%',
+            'name' => 'RETRAIT PRES DE CHEZ MOI',
+            'price' => 'GRATUIT',
             'actif' => true
         ];
 

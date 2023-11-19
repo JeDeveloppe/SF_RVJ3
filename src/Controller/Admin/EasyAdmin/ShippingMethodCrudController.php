@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 
 class ShippingMethodCrudController extends AbstractCrudController
 {
@@ -24,7 +25,8 @@ class ShippingMethodCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name'),
-            AssociationField::new('documents')->setLabel('Documents')->setDisabled(true),
+            AssociationField::new('documents')->setLabel('Documents')->setDisabled(true)->onlyOnIndex(),
+            ChoiceField::new('price')->setLabel('Payant ou gratuit ?')->setChoices(['GRATUIT' => 'GRATUIT', 'PAYANT' => 'PAYANT']),
             BooleanField::new('isActivedInCart')->setLabel('Actif dans le panier')
         ];
     }

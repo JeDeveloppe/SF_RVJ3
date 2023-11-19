@@ -27,6 +27,9 @@ class ShippingMethod
     #[ORM\Column]
     private ?bool $isActivedInCart = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $price = null;
+
     public function __construct()
     {
         $this->documents = new ArrayCollection();
@@ -123,6 +126,18 @@ class ShippingMethod
     public function setIsActivedInCart(bool $isActivedInCart): static
     {
         $this->isActivedInCart = $isActivedInCart;
+
+        return $this;
+    }
+
+    public function getPrice(): ?string
+    {
+        return $this->price;
+    }
+
+    public function setPrice(string $price): static
+    {
+        $this->price = $price;
 
         return $this;
     }
