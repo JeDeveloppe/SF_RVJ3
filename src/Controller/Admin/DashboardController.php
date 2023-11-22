@@ -32,6 +32,7 @@ use App\Entity\Tax;
 use App\Entity\User;
 use App\Repository\DocumentRepository;
 use App\Repository\DocumentStatusRepository;
+use App\Repository\ItemRepository;
 use App\Repository\OffSiteOccasionSaleRepository;
 use App\Repository\PaymentRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -46,7 +47,8 @@ class DashboardController extends AbstractDashboardController
         private OffSiteOccasionSaleRepository $offSiteOccasionSaleRepository,
         private PaymentRepository $paymentRepository,
         private DocumentRepository $documentRepository,
-        private DocumentStatusRepository $documentStatusRepository
+        private DocumentStatusRepository $documentStatusRepository,
+        private ItemRepository $itemRepository
     )
     {
         
@@ -55,22 +57,9 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        //return parent::index();
 
-        // Option 1. You can make your dashboard redirect to some common page of your backend
-        //
-        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
+        $itemsWithStockIsNull = $this->itemRepository->findByStockForSaleIsNull();
 
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
-        //
-        // if ('jane' === $this->getUser()->getUsername()) {
-        //     return $this->redirect('...');
-        // }
-
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //
         $payments = $this->paymentRepository->findAll();
         $occasionsSales = $this->offSiteOccasionSaleRepository->findAll();
 
@@ -98,7 +87,8 @@ class DashboardController extends AbstractDashboardController
         ];
 
         return $this->render('admin/dashboard.html.twig', [
-            'totals' => $totals
+            'totals' => $totals,
+            'itemsWithStockIsNull' => $itemsWithStockIsNull
         ]);
     }
 

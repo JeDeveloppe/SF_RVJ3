@@ -1,12 +1,9 @@
-let toastLiveExample = document.getElementById('liveToast')
-let flashMessage = document.getElementById('flash-messages')
+const liveToasts = document.getElementsByClassName("liveToast");
 
-if (toastLiveExample) {
-    toastLiveExample.classList.add('show');
+console.log(liveToasts);
 
-    //TODO suppression mesage flash
-    setTimeout(function() {
-        console.log('start')
-        toastLiveExample.hide();
-    }, 300);
-}
+Array.from(liveToasts).forEach((element) => 
+    setTimeout(() => {
+        element.classList.add('swing-out-top-bck');
+    }, 2000)
+)

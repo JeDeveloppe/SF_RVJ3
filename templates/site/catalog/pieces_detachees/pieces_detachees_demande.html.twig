@@ -112,7 +112,11 @@
 									<option value="">-- Choisir un article --</option>
 									{% for item in group.items %}
 										{% if boite in item.boite %}
-											<option value="{{ item.id }}">{{ item.name }} (Qté: {{ item.stockForSale }})</option>
+											{% if  item.stockForSale > 0 %}
+												<option value="{{ item.id }}">{{ item.name }} (Qté: {{ item.stockForSale }})</option>
+											{% else %}
+												<option value="">-- victime de son succès --</option>
+											{% endif %}
 										{% endif %}
 									{% endfor %}
 								</select>

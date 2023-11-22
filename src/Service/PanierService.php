@@ -128,7 +128,7 @@ class PanierService
     
         $item = $this->itemRepository->findOneBy(['id' => $article_id]);
 
-        if($item->getStockForSale() - $qte < 1){
+        if($item->getStockForSale() - $qte < 0){
 
             $reponse = ['warning', 'Stock non disponible pour cette quantité: '.$qte];
 

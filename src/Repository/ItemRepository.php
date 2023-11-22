@@ -21,6 +21,16 @@ class ItemRepository extends ServiceEntityRepository
         parent::__construct($registry, Item::class);
     }
 
+    public function findByStockForSaleIsNull(): array
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.stockForSale = :val')
+            ->setParameter('val', 0)
+            ->orderBy('i.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 //    /**
 //     * @return Item[] Returns an array of Item objects
 //     */

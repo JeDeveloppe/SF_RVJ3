@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use App\Entity\ItemGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -42,6 +43,18 @@ class ItemGroupCrudController extends AbstractCrudController
             ])->setLabel('Image')->onlyOnForms(),
             TextField::new('name')->setLabel('Nom'),
         ];
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->showEntityActionsInlined()
+            ->setPageTitle('index', 'Liste des groupes d\' articles')
+            ->setPageTitle('new', 'Nouveau groupe')
+            ->setPageTitle('edit', 'Édition d\'un groupe')
+            ->setDefaultSort(['id' => 'DESC'])
+            ->setSearchFields(['name'])
+        ;
     }
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
