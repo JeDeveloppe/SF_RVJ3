@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Panier;
+use App\Repository\ItemRepository;
 use App\Repository\OccasionRepository;
 use App\Repository\PanierRepository;
 use DateTimeImmutable;
@@ -14,6 +15,7 @@ class PanierService
     public function __construct(
         private EntityManagerInterface $em,
         private OccasionRepository $occasionRepository,
+        private ItemRepository $itemRepository,
         private PanierRepository $panierRepository,
         private Security $security
         ){
@@ -69,11 +71,19 @@ class PanierService
 
         }else{
 
-            //?on récupère l'occasion
-            $occasion = $panier->getOccasion();
-            //?on remet en ligne l'occasion
-            $occasion->setIsOnline(true);
-            $this->em->persist($occasion);
+            if(!empty($panier->getOccasion())){
+                //?on récupère l'occasion
+                $occasion = $panier->getOccasion();
+                //?on remet en ligne l'occasion
+                $occasion->setIsOnline(true);
+                $this->em->persist($occasion);
+            }else if(!empty($panier->getItem())){
+                //?on récupère l'article
+                $item = $panier->getItem();
+                //?on remet les articles en ligne
+                $item->setStockForSale($item->getStockForSale() + $panier->getQte());
+                $this->em->persist($item);
+            }
 
             //? on supprime la ligne du panier
             $this->em->remove($panier);
@@ -87,7 +97,8 @@ class PanierService
         return $reponse;
     }
 
-    public function totauxItems($items){
+    public function totauxItems($items)
+    {
 
         $totaux = [];
         $price = 0;
@@ -96,10 +107,10 @@ class PanierService
         foreach($items as $item){
 
             //en fonction du calcul voulu des articles ou occasions
-            if($item->getOccasion()->getBoite()){
+            if(!empty($item->getOccasion())){
                 $weigth += $item->getOccasion()->getBoite()->getWeigth();  
             }else{
-                $weigth += $item->getArticle()->getBoite()->getWeigth();  
+                $weigth += $item->getItem()->getWeigth() * $item->getQte();  
             }
 
             $price += $item->getPriceWithoutTax();
@@ -109,5 +120,42 @@ class PanierService
         $totaux['weigth'] = $weigth;
 
         return $totaux;
+    }
+
+    public function addArticleInCart($article_id,$qte,$user)
+    {
+
+    
+        $item = $this->itemRepository->findOneBy(['id' => $article_id]);
+
+        if($item->getStockForSale() - $qte < 1){
+
+            $reponse = ['warning', 'Stock non disponible pour cette quantité: '.$qte];
+
+        }else{
+
+            $newQte = $item->getStockForSale() - $qte;
+
+            //?on crée la ligne du panier
+            $panier = new Panier();
+            $panier->setItem($item)
+                ->setUnitPriceExclusingTax($item->getPriceExcludingTax())
+                ->setQte($qte)
+                ->setCreatedAt( new DateTimeImmutable('now'))
+                ->setUser($user)
+                ->setPriceWithoutTax($item->getPriceExcludingTax() * $qte);
+            $this->em->persist($panier);
+
+            //?on met la qte article à jour
+            $item->setStockForSale($newQte);
+            $this->em->persist($item);
+
+            //?on sauvegarde le tout
+            $this->em->flush();
+
+            $reponse = ['success', 'Article ajouté au panier'];
+        }
+
+        return $reponse;
     }
 }

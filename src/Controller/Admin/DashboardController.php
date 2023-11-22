@@ -17,6 +17,8 @@ use App\Entity\DocumentLine;
 use App\Entity\DocumentStatus;
 use App\Entity\Editor;
 use App\Entity\Envelope;
+use App\Entity\Item;
+use App\Entity\ItemGroup;
 use App\Entity\LegalInformation;
 use App\Entity\MeansOfPayement;
 use App\Entity\MovementOccasion;
@@ -151,6 +153,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Partenaires', 'fas fa-list', Partner::class);
         
         yield MenuItem::section('Gestion des articles:');
+        yield MenuItem::linkToCrud('Groupe d\'articles', 'fas fa-list', ItemGroup::class);
+        yield MenuItem::linkToCrud('Articles', 'fas fa-list', Item::class);
         yield MenuItem::linkToCrud('Couleurs', 'fas fa-list', Color::class);
         yield MenuItem::linkToCrud('Enveloppes', 'fas fa-list', Envelope::class);
 

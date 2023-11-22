@@ -2,7 +2,8 @@
 
 namespace App\Controller\Site;
 
-use App\Entity\Boite;
+use App\Form\ItemChoiceType;
+use App\Form\ItemsForm;
 use App\Form\SearchBoiteInCatalogueType;
 use App\Repository\BoiteRepository;
 use App\Repository\EditorRepository;
@@ -15,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 
 class CatalogController extends AbstractController
 {
@@ -69,7 +69,7 @@ class CatalogController extends AbstractController
 
 
     #[Route('/catalogue-pieces-detachees/{editorSlug}/{id}/{slug}', name: 'app_catalogue_pieces_detachees_demande')]
-    public function cataloguePiecesDetacheesDemande($id, $slug, $editorSlug): Response
+    public function cataloguePiecesDetacheesDemande($id, $slug, $editorSlug, Request $request): Response
     {
         $boite = $this->boiteRepository->findOneBy(['id' => $id, 'slug' => $slug, 'editor' => $this->editorRepository->findOneBy(['slug' => $editorSlug]), 'isOnline' => true]);
 
@@ -78,8 +78,19 @@ class CatalogController extends AbstractController
             return $this->redirectToRoute('app_catalogue_pieces_detachees');
         }
 
+        $groups = [];
+        $items = [];
+        foreach($boite->getItems() as $item){
+            foreach($item->getItemGroup() as $group){
+                $groups[] = $group;
+            } 
+        }
+
+        $itemGroups = array_unique($groups);
+
         return $this->render('site/catalog/pieces_detachees/pieces_detachees_demande.html.twig', [
             'boite' => $boite,
+            'itemGroups' => $itemGroups
         ]);
     }
 

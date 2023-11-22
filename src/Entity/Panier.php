@@ -33,6 +33,15 @@ class Panier
     #[ORM\Column(nullable: true)]
     private ?int $priceWithoutTax = null;
 
+    #[ORM\ManyToOne(inversedBy: 'paniers')]
+    private ?Item $item = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $qte = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $unitPriceExclusingTax = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +115,42 @@ class Panier
     public function setPriceWithoutTax(?int $priceWithoutTax): static
     {
         $this->priceWithoutTax = $priceWithoutTax;
+
+        return $this;
+    }
+
+    public function getItem(): ?Item
+    {
+        return $this->item;
+    }
+
+    public function setItem(?Item $item): static
+    {
+        $this->item = $item;
+
+        return $this;
+    }
+
+    public function getQte(): ?int
+    {
+        return $this->qte;
+    }
+
+    public function setQte(?int $qte): static
+    {
+        $this->qte = $qte;
+
+        return $this;
+    }
+
+    public function getUnitPriceExclusingTax(): ?int
+    {
+        return $this->unitPriceExclusingTax;
+    }
+
+    public function setUnitPriceExclusingTax(?int $unitPriceExclusingTax): static
+    {
+        $this->unitPriceExclusingTax = $unitPriceExclusingTax;
 
         return $this;
     }

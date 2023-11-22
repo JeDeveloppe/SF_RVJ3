@@ -22,3 +22,12 @@ vich_uploader:
             inject_on_load: false
             delete_on_update: true
             delete_on_remove: true
+
+        itemGroup:
+            uri_prefix: '%app.path.itemGroup_images%'
+            upload_destination: '%kernel.project_dir%/public%app.path.itemGroup_images%'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true

@@ -14,7 +14,7 @@ class ShippingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', EntityType::class, [
+            ->add('shipping', EntityType::class, [
                 'class' => ShippingMethod::class,
                 'placeholder' => '-- RETRAIT OU ENVOI ? --',
                 'query_builder' => function (EntityRepository $s) {
@@ -23,6 +23,7 @@ class ShippingType extends AbstractType
                         ->setParameter('value', true)
                         ->orderBy('s.name', 'ASC');
                 },
+                'mapped' => false
             ])
         ;
     }

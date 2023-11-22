@@ -45,6 +45,18 @@ class PanierRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findItemsByUser($user): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.item IS NOT NULL')
+            ->andWhere('p.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('p.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Panier[] Returns an array of Panier objects
 //     */

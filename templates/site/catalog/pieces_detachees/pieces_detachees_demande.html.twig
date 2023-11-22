@@ -22,7 +22,7 @@
 
 		<!-- BLOC PRESENTATION DU JEU  -->
 		<div class="row mb-5" id="">
-			<div class="card col-11 mx-auto col-lg-10 p-0 border shadow">
+			<div class="card col-11 mx-auto col-lg-10 p-0 border shadow mb-3">
 
 				<!-- BLOC PARTAGE RESEAUX SOCIAUX  -->
 				{% set url = path('app_catalogue_pieces_detachees_demande', { id: boite.id, slug: boite.slug, editorSlug: boite.editor.slug }) %}
@@ -97,6 +97,35 @@
 					</form> #}
 				</div>
 			</div>
+
+			{% for group in itemGroups %}
+
+				<div class="card col-11 mx-auto col-lg-10 p-0 border shadow mb-3">
+					<div class="card-header">{{ group.name }}</div>
+					<div class="card-body d-flex flex-wrap">
+						<div class="col-5 d-flex justify-content-center align-items-center">
+							<img class="img_full-width" src="{{ vich_uploader_asset(group, 'imageFile') }}"/>
+						</div>
+						<div class="col-5 d-flex flex-wrap justify-content-center align-items-center">
+							<form action="{{ path('app_panier_add_article') }}" method="POST">
+								<select name="itemId" class="form-control col-12" required>
+									<option value="">-- Choisir un article --</option>
+									{% for item in group.items %}
+										{% if boite in item.boite %}
+											<option value="{{ item.id }}">{{ item.name }} (Qté: {{ item.stockForSale }})</option>
+										{% endif %}
+									{% endfor %}
+								</select>
+								<input type="number" name="qte" min="1" step="1" value="1" placeholder="Qté" class="form-control d-block" required>
+								<input type="hidden" name="boiteId" value="{{ boite.id }}">
+								<input type="submit" class="btn btn-outline-dark" value="Panier"></input>
+							</form>
+						</div>
+					</div>
+				</div>
+				
+			{% endfor %}
+
 		</div>
 
 		<!-- BLOC BUTTON RETOUR  -->

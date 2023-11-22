@@ -10,6 +10,8 @@
 
         {% include "components/panier/_table_occasions.html.twig" with {'donnees': occasions }%}
 
+        {% include "components/panier/_table_items.html.twig" with {'donnees': items }%}
+
     </div>
 
     {% include "components/panier/_shippingMethod.html.twig" %}
@@ -24,7 +26,7 @@
                 </tr>
                 <tr>
                     <td>Sous-total articles:</td>
-                    <td>{{ (totalBoites * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                    <td>{{ (totalItems * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
                 </tr>
                 <tr>
                     <td>Livraison / retrait:<br/>

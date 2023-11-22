@@ -97,11 +97,15 @@ class Boite
     #[ORM\Column(nullable: true)]
     private ?int $rvj2id = null;
 
+    #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'boite')]
+    private Collection $items;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
         $this->documentLines = new ArrayCollection();
         $this->paniers = new ArrayCollection();
+        $this->items = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -380,7 +384,7 @@ class Boite
 
     public function __toString()
     {
-        return $this->name.' - '.$this->editor.' - '.$this->year;
+        return $this->id.' - '.$this->name.' - '.$this->editor.' - '.$this->year;
     }
 
     /**
@@ -463,6 +467,33 @@ class Boite
     public function setRvj2id(?int $rvj2id): static
     {
         $this->rvj2id = $rvj2id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Item>
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    public function addItem(Item $item): static
+    {
+        if (!$this->items->contains($item)) {
+            $this->items->add($item);
+            $item->addBoite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Item $item): static
+    {
+        if ($this->items->removeElement($item)) {
+            $item->removeBoite($this);
+        }
 
         return $this;
     }
