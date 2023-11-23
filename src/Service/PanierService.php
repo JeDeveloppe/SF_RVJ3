@@ -3,10 +3,12 @@
 namespace App\Service;
 
 use App\Entity\Panier;
-use App\Repository\ItemRepository;
-use App\Repository\OccasionRepository;
-use App\Repository\PanierRepository;
 use DateTimeImmutable;
+use App\Entity\Delivery;
+use App\Repository\ItemRepository;
+use App\Repository\PanierRepository;
+use App\Repository\DeliveryRepository;
+use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -17,6 +19,7 @@ class PanierService
         private OccasionRepository $occasionRepository,
         private ItemRepository $itemRepository,
         private PanierRepository $panierRepository,
+        private DeliveryRepository $deliveryRepository,
         private Security $security
         ){
     }
@@ -157,5 +160,36 @@ class PanierService
         }
 
         return $reponse;
+    }
+
+    public function calculateAllCart($user, $shippingForm)
+    {
+
+        $responses = [];
+
+        $responses['panier_occasions'] = $this->panierRepository->findOccasionsByUser($user);
+        $responses['panier_boites'] = $this->panierRepository->findBoitesByUser($user);
+        $responses['panier_items'] = $this->panierRepository->findItemsByUser($user);
+
+        $responses['totauxItems'] = $this->totauxItems($responses['panier_items']);
+        $responses['totauxOccasions'] = $this->totauxItems($responses['panier_occasions']);
+        $responses['totauxBoites'] = $this->totauxItems($responses['panier_boites']);
+
+        $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
+
+        if($shippingForm->get('shipping')->getData() == null){
+
+            $responses['deliveryCostWithoutTax'] = new Delivery();
+            $responses['deliveryCostWithoutTax']->setPriceExcludingTax(0);
+
+        }else{
+
+            $responses['deliveryCostWithoutTax'] = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingForm->get('shipping')->getData(), $responses['weigthPanier']);
+
+        }
+
+        $responses['totalPanier'] = $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']->getPriceExcludingTax();
+
+        return $responses;
     }
 }

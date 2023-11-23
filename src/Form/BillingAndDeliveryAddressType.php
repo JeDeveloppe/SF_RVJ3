@@ -3,17 +3,14 @@
 namespace App\Form;
 
 use App\Entity\Address;
+use App\Entity\ShippingMethod;
 use App\Entity\CollectionPoint;
-use Doctrine\ORM\Mapping\Entity;
-use App\Form\CollectionPointType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class BillingAndDeliveryAddressType extends AbstractType
 {
@@ -24,20 +21,91 @@ class BillingAndDeliveryAddressType extends AbstractType
         $shipping = $options['shipping'];
         
         $builder
-            ->add('addressBilling', BillingAdressType::class, ['user' => $user]);
+            ->add('billingAddress', EntityType::class, [
+                'class' => Address::class,
+                'label' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'mapped' => false,
+                'placeholder' => '-- Choisir une adresse de facturation --',
+                'query_builder' => function (EntityRepository $er) use ($user) {
+                    return $er->createQueryBuilder('a')
+                        ->where('a.isFacturation = :value')
+                        ->andWhere('a.user = :user')
+                        ->setParameter('user', $user)
+                        ->setParameter('value', true)
+                        ->orderBy('a.id', 'ASC');
+                },
+            ])
+            ->add('shipping', EntityType::class, [
+                'class' => ShippingMethod::class,
+                'data' => $shipping,
+                'mapped' => false,
+                'label' => false,
+                'attr' => [
+                    'class' => 'd-none'
+                ]
+
+            ]);
         
         if(!is_null($shipping)){
             if($shipping->getPrice() == 'GRATUIT'){
 
                 $builder
-                    ->add('addressDelivery', CollectionPointType::class);
+                    ->add('deliveryAddress', EntityType::class, [
+                        'class' => CollectionPoint::class,
+                        'label' => false,
+                        'attr' => [
+                            'class' => 'form-control',
+                        ],
+                        'mapped' => false,
+                        'placeholder' => '-- Choisir un lieu de retrait --',
+                        'query_builder' => function (EntityRepository $er) {
+                            return $er->createQueryBuilder('c')
+                                ->where('c.isActivedInCart = :value')
+                                ->setParameter('value', true)
+                                ->orderBy('c.name', 'ASC');
+                        },
+                    ]);
 
             }else{
 
                 $builder
-                    ->add('addressDelivery', DeliveryAdressType::class, ['user' => $user]);
+                    ->add('deliveryAddress', EntityType::class, [
+                        'class' => Address::class,
+                        'label' => false,
+                        'attr' => [
+                            'class' => 'form-control',
+                        ],
+                        'mapped' => false,
+                        'placeholder' => '-- Choisir une adresse de livraison --',
+                        'query_builder' => function (EntityRepository $er) use ($user) {
+                            return $er->createQueryBuilder('a')
+                                ->where('a.isFacturation = :value')
+                                ->andWhere('a.user = :user')
+                                ->setParameter('user', $user)
+                                ->setParameter('value', false)
+                                ->orderBy('a.id', 'ASC');
+                        },
+                    ]);
             }
         }
+
+        $builder
+            //TODO
+            // ->add('checkbox', CheckboxType::class, [
+            //     'label' => 'CGV accepté',
+            //     'attr' => [
+            //         'class' => 'form-check-label'
+            //     ]
+            // ])
+            ->add('submit', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-outline-success mt-3 text-center col-12'
+                ],
+                'label' => 'Payer'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

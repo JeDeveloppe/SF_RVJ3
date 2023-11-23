@@ -2,10 +2,10 @@
         <div class="col-12 d-flex justify-content-center">
             {{ form_start(billingAndDeliveryForm) }}
                     <div class="input-group mb-4">
-                        {{ form_widget(billingAndDeliveryForm.addressBilling) }}
+                        {{ form_widget(billingAndDeliveryForm.billingAddress) }}
                     </div>
                     <div class="input-group bg-danger">
-                        {{ form_widget(billingAndDeliveryForm.addressDelivery) }}
+                        {{ form_widget(billingAndDeliveryForm.deliveryAddress) }}
                     </div>
             {{ form_end(billingAndDeliveryForm) }}
         </div>

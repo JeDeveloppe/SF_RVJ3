@@ -2,6 +2,7 @@
 
 namespace App\Controller\Site;
 
+use App\Entity\Address;
 use App\Entity\Delivery;
 use App\Form\ShippingType;
 use App\Service\PanierService;
@@ -10,7 +11,10 @@ use App\Repository\BoiteRepository;
 use App\Repository\PanierRepository;
 use App\Repository\DeliveryRepository;
 use App\Form\BillingAndDeliveryAddressType;
+use App\Repository\AddressRepository;
+use App\Repository\CollectionPointRepository;
 use App\Repository\ItemRepository;
+use App\Repository\ShippingMethodRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,8 +28,11 @@ class PanierController extends AbstractController
         private RequestStack $request,
         private PanierService $panierService,
         private PanierRepository $panierRepository,
+        private AddressRepository $addressRepository,
         private Security $security,
+        private ShippingMethodRepository $shippingMethodRepository,
         private TaxRepository $taxRepository,
+        private CollectionPointRepository $collectionPointRepository,
         private DeliveryRepository $deliveryRepository,
         private BoiteRepository $boiteRepository,
         private ItemRepository $itemRepository
@@ -38,14 +45,17 @@ class PanierController extends AbstractController
     public function index(Request $request): Response
     {
         $user = $this->security->getUser();
-        $paniers = $this->panierRepository->findBy(['user' => $user]);
+        $user = $this->checkUserIsConnected();
 
+        $paniers = $this->panierRepository->findBy(['user' => $user]);
         if(count($paniers) < 1){
 
             $this->addFlash('warning', 'Votre panier est vide !');
             
             return $this->redirectToRoute('app_home');
         }
+
+        $tax = $this->taxRepository->findOneBy([]);
 
         $shippingForm = $this->createForm(ShippingType::class);
         $shippingForm->handleRequest($request);
@@ -56,47 +66,72 @@ class PanierController extends AbstractController
         ]);
         $billingAndDeliveryForm->handleRequest($request);
 
-        $user = $this->checkUserIsConnected();
-        $tax = $this->taxRepository->findOneBy([]);
-
-        $panier_occasions = $this->panierRepository->findOccasionsByUser($user);
-        $panier_boites = $this->panierRepository->findBoitesByUser($user);
-        $panier_items = $this->panierRepository->findItemsByUser($user);
-
-        $totauxItems = $this->panierService->totauxItems($panier_items);
-        $totauxOccasions = $this->panierService->totauxItems($panier_occasions);
-        $totauxBoites = $this->panierService->totauxItems($panier_boites);
-
-        $weigthPanier = $totauxBoites['weigth'] + $totauxOccasions['weigth'] + $totauxItems['weigth'];
-
-        if($shippingForm->get('shipping')->getData() == null){
 
 
-            $deliveryCostWithoutTax = new Delivery();
-            $deliveryCostWithoutTax->setPriceExcludingTax(0);
+        if($billingAndDeliveryForm->isSubmitted()) {
+            $allValues = $request->request->all($billingAndDeliveryForm->getName());
+
+            $billingAddress = $this->addressRepository->findOneBy(['id' => $allValues['billingAddress']]);
+            $shipping = $this->shippingMethodRepository->findOneBy(['id' => $allValues['shipping']]);
+
+            if($shipping->getPrice() == 'PAYANT'){
+                
+                $deliveryAddress = $this->addressRepository->findOneBy(['id' => $allValues['deliveryAddress']]);
+
+            }else{
+
+                $deliveryAddress = $this->collectionPointRepository->findOneBy(['id' => $allValues['deliveryAddress']]);
+            }
+
+            $reponses = $this->panierService->calculateAllCart($user,$shippingForm);
+            //TODO sauvegarde document dans BDD avec articles, boites, etc...
+            dd($deliveryAddress);
+
+            dump($allValues);
+            dd($shipping);
 
         }else{
 
-            $deliveryCostWithoutTax = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingForm->get('shipping')->getData(), $weigthPanier);
+            $reponses = $this->panierService->calculateAllCart($user,$shippingForm);
 
+            // $panier_occasions = $this->panierRepository->findOccasionsByUser($user);
+            // $panier_boites = $this->panierRepository->findBoitesByUser($user);
+            // $panier_items = $this->panierRepository->findItemsByUser($user);
+
+            // $totauxItems = $this->panierService->totauxItems($panier_items);
+            // $totauxOccasions = $this->panierService->totauxItems($panier_occasions);
+            // $totauxBoites = $this->panierService->totauxItems($panier_boites);
+
+            // $weigthPanier = $totauxBoites['weigth'] + $totauxOccasions['weigth'] + $totauxItems['weigth'];
+
+            // if($shippingForm->get('shipping')->getData() == null){
+
+            //     $deliveryCostWithoutTax = new Delivery();
+            //     $deliveryCostWithoutTax->setPriceExcludingTax(0);
+
+            // }else{
+
+            //     $deliveryCostWithoutTax = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingForm->get('shipping')->getData(), $weigthPanier);
+
+            // }
+
+            // $totalPanier = $totauxItems['price'] + $totauxBoites['price'] + $totauxOccasions['price'] + $deliveryCostWithoutTax->getPriceExcludingTax();
+
+            return $this->render('site/panier/panier.html.twig', [
+                'occasions' => $reponses['panier_occasions'],
+                'boites' => $reponses['panier_boites'],
+                'items' => $reponses['panier_items'],
+                'weigthPanier' => $reponses['weigthPanier'],
+                'totalItems' => $reponses['totauxItems']['price'],
+                'totalOccasions' => $reponses['totauxOccasions']['price'],
+                'totalBoites' => $reponses['totauxBoites']['price'],
+                'totalPanier' => $reponses['totalPanier'],
+                'tax' => $tax,
+                'deliveryCostWithoutTax' => $reponses['deliveryCostWithoutTax'],
+                'shippingForm' => $shippingForm,
+                'billingAndDeliveryForm' => $billingAndDeliveryForm,
+            ]);
         }
-
-        $totalPanier = $totauxItems['price'] + $totauxBoites['price'] + $totauxOccasions['price'] + $deliveryCostWithoutTax->getPriceExcludingTax();
-
-        return $this->render('site/panier/panier.html.twig', [
-            'occasions' => $panier_occasions,
-            'boites' => $panier_boites,
-            'items' => $panier_items,
-            'weigthPanier' => $weigthPanier,
-            'totalItems' => $totauxItems['price'],
-            'totalOccasions' => $totauxOccasions['price'],
-            'totalBoites' => $totauxBoites['price'],
-            'totalPanier' => $totalPanier,
-            'tax' => $tax,
-            'deliveryCostWithoutTax' => $deliveryCostWithoutTax,
-            'shippingForm' => $shippingForm,
-            'billingAndDeliveryForm' => $billingAndDeliveryForm,
-        ]);
     }
 
     #[Route('/panier/ajout-occasion/{occasion_id}', name: 'app_panier_add_occasion')]
