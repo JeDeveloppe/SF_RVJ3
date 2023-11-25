@@ -33,6 +33,9 @@ class Country
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: LegalInformation::class)]
     private Collection $legalInformation;
 
+    #[ORM\Column]
+    private ?bool $actifInInscriptionForm = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -191,6 +194,18 @@ class Country
                 $legalInformation->setCountry(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsActifInInscriptionForm(): ?bool
+    {
+        return $this->actifInInscriptionForm;
+    }
+
+    public function setIsActifInInscriptionForm(bool $actifInInscriptionForm): static
+    {
+        $this->actifInInscriptionForm = $actifInInscriptionForm;
 
         return $this;
     }

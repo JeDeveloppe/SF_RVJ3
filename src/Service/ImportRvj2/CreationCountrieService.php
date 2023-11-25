@@ -18,9 +18,9 @@ class CreationCountrieService
 
         $countries = [];
 
-        $countries[] = ['name' => 'FRANCE', 'isoCode' => 'FR'];
-        $countries[] = ['name' => 'BELGIQUE', 'isoCode' => 'BE'];
-        $countries[] = ['name' => 'INCONNU', 'isoCode' => 'INC'];
+        $countries[] = ['name' => 'FRANCE', 'isoCode' => 'FR', 'actif' => true];
+        $countries[] = ['name' => 'BELGIQUE', 'isoCode' => 'BE', 'actif' => true];
+        $countries[] = ['name' => 'INCONNU', 'isoCode' => 'INC', 'actif' => false];
 
         foreach($countries as $countrie){
 
@@ -30,7 +30,7 @@ class CreationCountrieService
                 $country = new Country();
             }
 
-            $country->setName($countrie['name'])->setIsocode($countrie['isoCode']);
+            $country->setName($countrie['name'])->setIsocode($countrie['isoCode'])->setActifInInscriptionForm($countrie['actif']);
             $this->em->persist($country);
 
         }

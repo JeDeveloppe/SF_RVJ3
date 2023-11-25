@@ -74,7 +74,7 @@ class InitForProd extends Command
         $io = new SymfonyStyle($input,$output);
         
         // // creation PAYS name/isocode
-        // $this->creationCountrieService->addCountries();
+        $this->creationCountrieService->addCountries();
         
         // //ON CREE OU ON MET A JOUR L'ADMIN
         // $this->userService->initForProd_adminUser($io);
@@ -135,15 +135,15 @@ class InitForProd extends Command
         // $this->importDocumentsService->importDocuments($io);
         // $this->importPaiementService->importPaiements($io);
 
-        //on importe les lignes de chaque document
-        $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
-        $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
+        // //on importe les lignes de chaque document
+        // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
+        // $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
 
-        //on cree les enveloppes et les couleurs pour les articles, les enveloppes, les joueurs, les livraisons
-        $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
-        $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
-        $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
-        $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
+        // //on cree les enveloppes et les couleurs pour les articles, les enveloppes, les joueurs, les livraisons
+        // $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
+        // $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
+        // $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
+        // $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
 
         return Command::SUCCESS;
     }
