@@ -5,16 +5,19 @@ namespace App\Service;
 use DateInterval;
 use DateTimeImmutable;
 use App\Entity\Document;
+use App\Entity\DocumentLine;
 use App\Service\UtilitiesService;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DocumentParametreRepository;
+use App\Repository\DocumentStatusRepository;
 
 class DocumentService
 {
     public function __construct(
         private DocumentRepository $documentRepository,
+        private DocumentStatusRepository $documentStatusRepository,
         private DocumentParametreRepository $documentParametreRepository,
         private Security $security,
         private AdresseService $adresseService,
@@ -82,9 +85,7 @@ class DocumentService
 
     public function saveDocumentInDataBase($panierParams,$billingAddress,$deliveryAddress)
     {
-        // "panier_occasions" => array:1 [▶]
-        // "panier_boites" => []
-        // "panier_items" => array:2 [▶]
+
         // "tax" => App\Entity\Tax {#17248 ▶}
         // "redirectAfterSubmitPanierForPaiement" => true
         // "totauxItems" => array:2 [▶]
@@ -100,12 +101,16 @@ class DocumentService
         //on cherche les parametres des documents
         $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
 
-
-
         //puis on met dans la base
         $document = new Document();
         $now = new DateTimeImmutable();
         $endDevis = $now->add(new DateInterval('P'.$docParams->getDelayBeforeDeleteDevis().'D'));
+
+        if(count($panierParams['panier_boites']) > 0){
+            $actionToSearch = 'DEVIS_WITHOUT_PRICE'; //? doit etre comme Service / importV2 / CreationDocumentStatusService
+        }else{
+            $actionToSearch = 'NO_PAID'; //? doit etre comme Service / importV2 / CreationDocumentStatusService
+        }
 
         $document
                 ->setToken($this->utilitiesService->generateRandomString())
@@ -119,47 +124,44 @@ class DocumentService
                 ->setEndOfQuoteValidation($endDevis)
                 ->setCreatedAt($now)
                 ->setTaxRate($panierParams['tax'])
+                ->setTaxRateValue($panierParams['tax']->getValue())
                 ->setCost($panierParams['preparationHt'])
                 ->setSendingMethod($panierParams['shipping'])
-                ->setUser($this->security->getUser());
+                ->setSendingBy($panierParams['shipping']->getName())
+                ->setUser($this->security->getUser())
+                ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => $actionToSearch]));
                 
 
 
         $this->em->persist($document);
-        dd($document);
 
+        //TODO a enlever
         // $this->em->flush();
 
-        $lignesDemandeBoitePrix = $request->request->get('prix');
-        $lignesDemandeBoiteReponse = $request->request->get('reponse');
+        // "panier_occasions" => array:1 [▶]
+        // "panier_boites" => []
+        // "panier_items" => array:2 [▶]
+        $paniers = array_merge($panierParams['panier_occasions'],$panierParams['panier_boites'],$panierParams['panier_items']);
 
-        $panier_occasions = $this->panierRepository->findBy(['etat' => $demande,'user' => $user, 'boite' => null]);
-        $panier_boites = $this->panierRepository->findBy(['etat' => $demande,'user' => $user, 'occasion' => null]);
-
-        foreach($panier_boites as $key=>$panier){
-            $documentLigne = new DocumentLignes();
-
-            $documentLigne->setBoite($panier->getBoite())
-                            ->setDocument($document)
-                            ->setMessage($panier->getMessage())
-                            ->setPrixVente($this->utilitiesService->prixTtcToCentsHt($lignesDemandeBoitePrix[$key],$taux))
-                            ->setReponse($lignesDemandeBoiteReponse[$key]);
-            $this->em->persist($documentLigne);
+        foreach($paniers as $panier){
+            $documentLine = new DocumentLine();
+            $documentLine
+                ->setQuestion($panier->getQuestion() ?? NULL)
+                ->setQuantity($panier->getQte() ?? 1)
+                ->setBoite($panier->getBoite() ?? NULL)
+                ->setItem($panier->getItem() ?? NULL)
+                ->setOccasion($panier->getOccasion() ?? NULL)
+                ->setDocument($document)
+                ->setPriceExcludingTax($panier->getUnitPriceExclusingTax() ?? 0);
+            
+                $this->em->persist($documentLine);
+                dump($documentLine);
         }
-
-        foreach($panier_occasions as $panier){
-            $documentLigne = new DocumentLignes();
-
-            $documentLigne->setOccasion($panier->getOccasion())
-                            ->setDocument($document)
-                            ->setPrixVente($panier->getOccasion()->getPriceHt());
-            $this->em->persist($documentLigne);
-        }
-
+ 
         //on met en BDD les differentes lignes
-        $this->em->flush();
+        //TODO a enlever
+        // $this->em->flush();
 
-        //et on return le token du document
-        return $document->getToken();
+        return $document;
     }
 }

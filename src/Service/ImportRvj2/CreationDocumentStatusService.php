@@ -47,6 +47,11 @@ class CreationDocumentStatusService
             'action' => 'NO_PAID',
             'isTreatedDaily' => false
         ];
+        $statusDocuments[] = [
+            'name' => 'DEVIS EN ATTENTE DE PRIX', 
+            'action' => 'DEVIS_WITHOUT_PRICE',
+            'isTreatedDaily' => false
+        ];
 
 
         foreach($statusDocuments as $statusDocument){

@@ -42,6 +42,9 @@ class DocumentLine
     #[ORM\Column(nullable: true)]
     private ?int $rvj2idoccasion = null;
 
+    #[ORM\ManyToOne(inversedBy: 'documentLines')]
+    private ?Item $item = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -158,5 +161,17 @@ class DocumentLine
     public function __toString()
     {
         return $this->id;
+    }
+
+    public function getItem(): ?Item
+    {
+        return $this->item;
+    }
+
+    public function setItem(?Item $item): static
+    {
+        $this->item = $item;
+
+        return $this;
     }
 }

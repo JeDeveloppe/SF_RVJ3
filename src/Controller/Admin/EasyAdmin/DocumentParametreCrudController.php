@@ -30,8 +30,8 @@ class DocumentParametreCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('billingTag')->setLabel('TAG pour les devis:')->setFormTypeOptions(['attr' => ['placeholder' => 'exemple: DEV']]),
-            TextField::new('quoteTag')->setLabel('TAG pour les factures:')->setFormTypeOptions(['attr' => ['placeholder' => 'exemple: FAC']]),
+            TextField::new('billingTag')->setLabel('TAG pour les factures:')->setFormTypeOptions(['attr' => ['placeholder' => 'exemple: FAC']]),
+            TextField::new('quoteTag')->setLabel('TAG pour les devis:')->setFormTypeOptions(['attr' => ['placeholder' => 'exemple: DEV']]),
             IntegerField::new('delayBeforeDeleteDevis')->setLabel('Délai avant supp. devis (en jours):'),
             IntegerField::new('preparation')->setLabel('Coût de préparation (en cents HT):'),
             AssociationField::new('updatedBy')->setLabel('Dernière modification par')->onlyOnForms()->setDisabled(true),

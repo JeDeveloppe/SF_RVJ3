@@ -17,6 +17,7 @@ use App\Form\BillingAndDeliveryAddressType;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\ShippingMethodRepository;
 use App\Repository\CollectionPointRepository;
+use App\Repository\DocumentRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,7 +37,8 @@ class PanierController extends AbstractController
         private DeliveryRepository $deliveryRepository,
         private BoiteRepository $boiteRepository,
         private DocumentService $documentService,
-        private ItemRepository $itemRepository
+        private ItemRepository $itemRepository,
+        private DocumentRepository $documentRepository
     )
     {
         
@@ -95,14 +97,22 @@ class PanierController extends AbstractController
             //? on recupere toutes les infos du panier
             $panierParams = $this->panierService->calculateAllCart($user,$allValues['shipping']);
 
-            //TODO sauvegarde document dans BDD avec articles, boites, etc... en fonction du Type DEVIS ou COMMANDE
-            $this->documentService->saveDocumentInDataBase($panierParams,$billingAddress,$deliveryAddress);
+            //? sauvegarde document dans BDD avec articles, boites, etc... en fonction du Type DEVIS ou COMMANDE
+            $document = $this->documentService->saveDocumentInDataBase($panierParams,$billingAddress,$deliveryAddress);
 
-            dd($panierParams);
+            if($panierParams['redirectAfterSubmitPanierForPaiement'] == true){
+                //paiement direct donc on redirige vers la page de paiement avec le numero de document
+                //TODO
+    
+                return $this->redirectToRoute('', ['tokenDocument' => $document->getToken()]);
 
-            dump($allValues);
-            dd($shipping);
+            }else{
+    
+                return $this->redirectToRoute('app_panier_success', ['tokenDocument' => $document->getToken()]);
 
+            }
+
+            dd($document);
         }
 
         return $this->render('site/panier/panier.html.twig', [
@@ -184,5 +194,20 @@ class PanierController extends AbstractController
             'slug' => $boite->getSlug(),
             'id' => $boite->getId()
         ]);
+    }
+
+    #[Route('/panier/success/{tokenDocument}', name: 'app_panier_success')]
+    public function panierSuccess($tokenDocument):Response
+    {
+
+        $document = $this->documentRepository->findOneBy(['token' => $tokenDocument]);
+
+        if(!$document){
+            $this->addFlash('warning', 'Document inconnu!');
+            return $this->redirectToRoute('app_home');
+        }
+
+        //TODO
+        return $this->render('site/panier/panier_success.html.twig', ['document' => $document]);
     }
 }

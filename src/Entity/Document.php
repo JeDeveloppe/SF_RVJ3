@@ -89,6 +89,12 @@ class Document
     #[ORM\OneToOne(mappedBy: 'document', cascade: ['persist', 'remove'])]
     private ?Payment $payment = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $sendingBy = null;
+
+    #[ORM\Column]
+    private ?int $taxRateValue = null;
+
     public function __construct()
     {
         $this->documentLines = new ArrayCollection();
@@ -399,6 +405,30 @@ class Document
         }
 
         $this->payment = $payment;
+
+        return $this;
+    }
+
+    public function getSendingBy(): ?string
+    {
+        return $this->sendingBy;
+    }
+
+    public function setSendingBy(string $sendingBy): static
+    {
+        $this->sendingBy = $sendingBy;
+
+        return $this;
+    }
+
+    public function getTaxRateValue(): ?int
+    {
+        return $this->taxRateValue;
+    }
+
+    public function setTaxRateValue(int $taxRateValue): static
+    {
+        $this->taxRateValue = $taxRateValue;
 
         return $this;
     }

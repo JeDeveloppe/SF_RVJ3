@@ -36,11 +36,15 @@ class Item
     #[ORM\Column]
     private ?int $weigth = null;
 
+    #[ORM\OneToMany(mappedBy: 'item', targetEntity: DocumentLine::class)]
+    private Collection $documentLines;
+
     public function __construct()
     {
         $this->itemGroup = new ArrayCollection();
         $this->boite = new ArrayCollection();
         $this->paniers = new ArrayCollection();
+        $this->documentLines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -175,6 +179,36 @@ class Item
     public function setWeigth(int $weigth): static
     {
         $this->weigth = $weigth;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DocumentLine>
+     */
+    public function getDocumentLines(): Collection
+    {
+        return $this->documentLines;
+    }
+
+    public function addDocumentLine(DocumentLine $documentLine): static
+    {
+        if (!$this->documentLines->contains($documentLine)) {
+            $this->documentLines->add($documentLine);
+            $documentLine->setItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentLine(DocumentLine $documentLine): static
+    {
+        if ($this->documentLines->removeElement($documentLine)) {
+            // set the owning side to null (unless already changed)
+            if ($documentLine->getItem() === $this) {
+                $documentLine->setItem(null);
+            }
+        }
 
         return $this;
     }

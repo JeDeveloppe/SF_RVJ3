@@ -1,0 +1,84 @@
+{# templates/admin/my-custom-page.html.twig #}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}TRAITEMENT DES DEVIS{% endblock %}
+
+{% block page_actions %}
+
+{% endblock %}
+
+{% block main %}
+
+    {% include "site/_flash_message.html.twig" %}
+
+    <div class="row">
+        {% dump(devisWithPrice) %}
+            <div class="card col-12 p-0 my-5">
+                <div class="card-header">Les devis à faire</div>
+                <div class="card-body">
+                    {% if devisWithoutPrice | length > 0 %}
+                        {% for document in devisWithoutPrice %}
+                            <div class="card mb-4">
+                                <div class="card-header">{{ document.quoteNumber }}</div>
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-3">
+                                        Payée le:
+                                            <p>{{ document.payment }}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        Envoi / retrait:
+                                        <p>{{ document.sendingMethod }}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        Adresse:
+                                        <p>{{ document.deliveryAddress | raw }}</p>
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        {% include "components/admin_group_buttons_traited_daily.html.twig" with {'command': data.action, 'token':document.token } %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        "NOTHING FOR THE MOMENT..."
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card col-12 p-0 my-5">
+                <div class="card-header">Les devis en cours de payement...</div>
+                <div class="card-body">
+                    {% if devisWithPrice | length > 0 %}
+                        {% for document in devisWithPrice %}
+                            <div class="card mb-4">
+                                <div class="card-header">{{ document.quoteNumber }}</div>
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-3">
+                                            <p>{{ document.totalWithTax  / 100 | number_format(2, '.', ',') }} € TTC</p>
+                                        <p>Devis fait le:<br/>
+                                            {{ document.createdAt | date("d/m/Y") }}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        Envoi / retrait:
+                                        <p>{{ document.sendingMethod }}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        Adresse:
+                                        <p>{{ document.deliveryAddress | raw }}</p>
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        {# //TODO  #}
+                                        {# {% include "components/admin_group_buttons_traited_daily.html.twig" with {'command': data.action, 'token':document.token } %} #}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        "NOTHING FOR THE MOMENT..."
+                    {% endif %}
+                </div>
+            </div>
+    </div>
+
+
+{% endblock %}

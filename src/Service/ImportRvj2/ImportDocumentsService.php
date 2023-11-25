@@ -92,6 +92,7 @@ class ImportDocumentsService
         ->setIsDeleteByUser(false)
         ->setMessage($this->utilitiesService->stringToNull($arrayDoc['commentaire']))
         ->setTaxRate($this->taxRepository->findOneBy(['value' => 0]))
+        ->setTaxRateValue(0)
         ->setCost($arrayDoc['prix_preparation'])
         ->setTokenPayment($this->utilitiesService->stringToNull($arrayDoc['num_transaction']));
 
@@ -107,7 +108,7 @@ class ImportDocumentsService
         }else{
             $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'INDEFINI']);
         }
-        $document->setSendingMethod($expedition);
+        $document->setSendingMethod($expedition)->setSendingBy($expedition->getName());
 
         //?ok version 3
         if($arrayDoc['etat'] == 2 && $arrayDoc['envoyer'] !== 0){

@@ -93,8 +93,8 @@ class DashboardController extends AbstractDashboardController
         ]);
     }
 
-    #[Route('/admin/traitement-quotidien', name: 'admin_traited_daily')]
-    public function traitedDaily(): Response
+    #[Route('/admin/traitement-quotidien/commandes', name: 'admin_traited_daily_commands')]
+    public function commandesTraitedDaily(): Response
     {
         $datas = [];
         $status = [];
@@ -117,11 +117,28 @@ class DashboardController extends AbstractDashboardController
         }
         
 
-        return $this->render('admin/traited_daily.html.twig', [
+        return $this->render('admin/traited_daily_commands.html.twig', [
             'datas' => $datas,
             'status' => $status
         ]);
     }
+
+    #[Route('/admin/traitement-quotidien/devis', name: 'admin_traited_daily_devis')]
+    public function devisTraitedDaily(): Response
+    {
+        $entityDevisWithoutPrice = $this->documentStatusRepository->findOneBy(['action' => 'DEVIS_WITHOUT_PRICE']);
+        $entityDevisWithPrice = $this->documentStatusRepository->findOneBy(['action' => 'NO_PAID']);
+
+        $devisWithoutPrice = $this->documentRepository->findBy(['documentStatus' => $entityDevisWithoutPrice]);
+        $devisWithPrice = $this->documentRepository->findBy(['documentStatus' => $entityDevisWithPrice]);
+
+        return $this->render('admin/traited_daily_devis.html.twig', [
+            'devisWithPrice' => $devisWithPrice,
+            'devisWithoutPrice' => $devisWithoutPrice
+        ]);
+    }
+
+    
 
     public function configureDashboard(): Dashboard
     {
@@ -133,7 +150,8 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToRoute('SITE','fa-solid fa-shop','app_home');
-        yield MenuItem::linkToRoute('COMMANDES','fa-solid fa-money-bill','admin_traited_daily');
+        yield MenuItem::linkToRoute('DEVIS A TRAITER','fa-solid fa-money-bill','admin_traited_daily_devis');
+        yield MenuItem::linkToRoute('COMMANDES','fa-solid fa-money-bill','admin_traited_daily_commands');
 
         yield MenuItem::section('Gestion des boites:');
         yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class);

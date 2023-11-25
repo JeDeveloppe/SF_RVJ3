@@ -115,11 +115,9 @@ class DocumentCrudController extends AbstractCrudController
                 ->setLabel('Adresse de facturation')
                 ->setDisabled(true)
                 ->onlyOnDetail(),
-            AssociationField::new('sendingMethod')
-                ->setLabel('Méthode d\'envoi')
-                ->setDisabled(true)
-                ->onlyOnDetail()
-                ->renderAsEmbeddedForm(),
+            TextField::new('sendingBy')
+                ->setLabel('Envoi / retrait:')
+                ->onlyOnDetail(),
             AssociationField::new('documentStatus')
                 ->setLabel('Status du document')
                 ->renderAsEmbeddedForm()->onlyOnIndex(),
