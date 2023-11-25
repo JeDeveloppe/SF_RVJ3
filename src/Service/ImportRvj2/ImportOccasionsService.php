@@ -67,7 +67,7 @@ class ImportOccasionsService
             $occasion = new Occasion();
         }
 
-        $occasion->setBoite($this->boiteRepository->findOneBy(['rvj2id' => $arrayOccasion['idCatalogue']]))
+        $occasion->setBoite($this->boiteRepository->findOneBy(['rvj2id' => $arrayOccasion['idCatalogue']]) ?? $this->boiteRepository->findOneBy(['name' => 'BOITE SUPPRIMEE']))
                 ->setReference($arrayOccasion['reference'])
                 ->setInformation($this->utilitiesService->stringToNull($arrayOccasion['information']))
                 ->setIsNew($this->stringToBoolean($arrayOccasion['isNeuf']))

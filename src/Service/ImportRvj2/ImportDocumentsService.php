@@ -98,13 +98,13 @@ class ImportDocumentsService
 
         //?ok version 3
         if($arrayDoc['expedition'] == "poste"){
-            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'POSTE']);
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'ENVOI PAR LA POSTE']);
         }else if($arrayDoc['expedition'] == "mondialRelay"){
-            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'MONDIAL RELAY']);
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'ENVOI PAR MONDIAL RELAY']);
         }else if($arrayDoc['expedition'] == "retrait_caen1"){
-            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT PRES DE CHEZ MOI']);
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT DANS UN DEPOT RJV']);
         }else if($arrayDoc['expedition'] == "colissimo"){
-            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'COLISSIMO']);
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'ENVOI PAR COLISSIMO']);
         }else{
             $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'INDEFINI']);
         }

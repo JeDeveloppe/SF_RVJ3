@@ -97,7 +97,7 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-jeux-occasion', name: 'app_catalogue_occasions')]
     public function catalogueOccasions(Request $request): Response
     {
-        $donnees = $this->occasionRepository->findBy(['isOnline' => true]);
+        $donnees = $this->occasionRepository->findBy(['isOnline' => true],['id' => 'DESC']);
 
         $occasions = $this->paginator->paginate(
             $donnees, /* query NOT result */

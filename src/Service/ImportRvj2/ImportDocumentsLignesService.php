@@ -95,11 +95,13 @@ class ImportDocumentsLignesService
         }
 
         //"idDocLigne","idDocument","idJeu","question","reponse","prix"
-        $document = $this->documentRepository->findOneBy(['rvj2id' => $arrayLines['idDocument']]);
+        $document = $this->documentRepository->findOneBy(['rvj2id' => $arrayLines['idDocument']]) ?? $this->documentRepository->findOneBy(['rvj2id' => 1]); // sur Antoine pr defaut
         if(!$document){
             dd('Document: '.$arrayLines['idDocument']);
         }
-        $boite = $this->boiteRepository->findOneBy(['rvj2id' => $arrayLines['idJeu']]);
+
+        $boite = $this->boiteRepository->findOneBy(['rvj2id' => $arrayLines['idJeu']]) ?? $this->boiteRepository->findOneBy(['name' => 'BOITE SUPPRIMEE']);
+
         if(!$boite){
             dd('Boite: '.$arrayLines['idJeu']);
         }

@@ -74,76 +74,78 @@ class InitForProd extends Command
         $io = new SymfonyStyle($input,$output);
         
         // creation PAYS name/isocode
-        // $this->creationCountrieService->addCountries();
+        $this->creationCountrieService->addCountries();
         
         //ON CREE OU ON MET A JOUR L'ADMIN
-        // $this->userService->initForProd_adminUser($io);
+        $this->userService->initForProd_adminUser($io);
 
         // on importe les clients
-        // $this->importClientsService->importClients($io);
+        $this->importClientsService->importClients($io);
 
         //on importe les departementss
-        // $this->importDepartementsService->importDepartements($io);
+        $this->importDepartementsService->importDepartements($io);
 
         //on importe les villes francaises
-        // $this->importVillesFrancaiseService->importVilles1_5($io);
-        // $this->importVillesBelgesService->importVilles1_5($io);
+        $this->importVillesFrancaiseService->importVilles1_5($io);
+        $this->importVillesBelgesService->importVilles1_5($io);
 
         //on importe les partenaires
-        //$this->importPartenairesService->importPartenaires($io);
+        $this->importPartenairesService->importPartenaires($io);
 
         //on importe les adresses (facturation et livraison)
-        // $this->importAdressesService->importAdresses($io);
+        $this->importAdressesService->importAdresses($io);
 
         //on creer le nombre de joueurs
-        // $this->creationNombreDeJoueursService->addplayers($io);
+        $this->creationNombreDeJoueursService->addplayers($io);
 
         //on importe les boites
-        // $this->importBoitesService->importBoites($io);
+        $this->importBoitesService->importBoites($io);
 
         //on genere les editeurs de facon distinct
-        // $this->editorService->addEditorsInDatabase($io);
+        $this->editorService->addEditorsInDatabase($io);
 
         //on importe le detail des boites
-        //$this->importPiecesService->importPieces($io);
+        $this->importPiecesService->importPieces($io);
+
+        //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
+        $this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
 
         //on cree les conditions des occasions
-        // $this->creationConditionOccasionService->addConditions($io);
+        $this->creationConditionOccasionService->addConditions($io);
 
         //on cree les MOYENS DE PAIEMENT
-        // $this->creationMoyenDePaiementService->addMoyens($io);
+        $this->creationMoyenDePaiementService->addMoyens($io);
 
         //on importe les jeux complet
         $this->importOccasionsService->importOccasions($io);
 
         //on cree les mouvements des occasions
-        // $this->creationMouvementsOccasionService->importMouvementsOccasions($io);
+        $this->creationMouvementsOccasionService->importMouvementsOccasions($io);
 
         //on met a jour les occasions avec les mouvements
-        // $this->updateOccasionMouvement->updateOccasionMouvement($io);
+        $this->updateOccasionMouvement->updateOccasionMouvement($io);
 
         //on crer les information legale et la tax
-        // $this->creationLegalInformationService->creationLegalInformation($io);
+        $this->creationLegalInformationService->creationLegalInformation($io);
 
-        //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
-        // $this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
+
 
         //on cree les status des documents
-        // $this->creationDocumentStatusService->creationStatus($io);
+        $this->creationDocumentStatusService->creationStatus($io);
 
         //on importe les documents et les paiements
-        // $this->importDocumentsService->importDocuments($io);
-        // $this->importPaiementService->importPaiements($io);
+        $this->importDocumentsService->importDocuments($io);
+        $this->importPaiementService->importPaiements($io);
 
         //on importe les lignes de chaque document
-        // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
-        // $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
+        $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
+        $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
 
         //on cree les enveloppes et les couleurs pour les articles, les enveloppes, les joueurs, les livraisons
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
+        $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
+        $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
+        $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
+        $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
 
         return Command::SUCCESS;
     }

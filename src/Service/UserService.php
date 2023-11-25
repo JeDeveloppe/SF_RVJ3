@@ -35,7 +35,7 @@ class UserService
             ->setLastvisite(new DateTimeImmutable('now'))
             ->setEmail($_ENV['ADMIN_EMAIL'])
             ->setRoles(['ROLE_SUPER_ADMIN'])
-            ->setNickname('JeDéveloppe')
+            ->setNickname('Je Développe')
             ->setPhone($_ENV['ADMIN_PHONE'])
             ->setCountry($this->countryRepository->findOneBy(['isocode' => 'FR']))
             ->setPassword(

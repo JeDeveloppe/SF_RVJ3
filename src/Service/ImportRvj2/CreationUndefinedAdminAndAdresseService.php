@@ -6,15 +6,18 @@ use App\Entity\Address;
 use App\Entity\User;
 use DateTimeImmutable;
 use App\Entity\Adresse;
+use App\Entity\Boite;
 use App\Entity\ShippingMethod;
 use App\Repository\AddressRepository;
 use App\Repository\PaysRepository;
 use App\Repository\UserRepository;
 use App\Repository\VilleRepository;
 use App\Repository\AdresseRepository;
+use App\Repository\BoiteRepository;
 use App\Repository\CityRepository;
 use App\Repository\CountryRepository;
 use App\Repository\DocumentRepository;
+use App\Repository\NumbersOfPlayersRepository;
 use App\Repository\ShippingMethodRepository;
 use App\Service\DocumentService;
 use App\Service\UtilitiesService;
@@ -32,7 +35,9 @@ class CreationUndefinedAdminAndAdresseService
         private UtilitiesService $utilitiesService,
         private AddressRepository $addressRepository,
         private CityRepository $cityRepository,
-        private ShippingMethodRepository $shippingMethodRepository
+        private ShippingMethodRepository $shippingMethodRepository,
+        private BoiteRepository $boiteRepository,
+        private NumbersOfPlayersRepository $numbersOfPlayersRepository
         ){
     }
 
@@ -42,34 +47,34 @@ class CreationUndefinedAdminAndAdresseService
 
         $shippingMethods = [];
         $shippingMethods[] = [
-            'name' => 'MONDIAL RELAY',
+            'name' => 'ENVOI PAR MONDIAL RELAY',
             'price' => 'PAYANT',
-            'actif' => false
+            'actifInCart' => false
         ];
         $shippingMethods[] = [
-            'name' => 'POSTE',
+            'name' => 'ENVOI PAR LA POSTE',
             'price' => 'PAYANT',
-            'actif' => true
+            'actifInCart' => true
         ];
         $shippingMethods[] = [
-            'name' => 'COLISSIMO',
+            'name' => 'ENVOI PAR COLISSIMO',
             'price' => 'PAYANT',
-            'actif' => false
+            'actifInCart' => false
         ];
         $shippingMethods[] = [
             'name' => 'INDEFINI',
             'price' => 'PAYANT',
-            'actif' => false
+            'actifInCart' => false
         ];
         $shippingMethods[] = [
-            'name' => 'RETRAIT PRES DE CHEZ MOI',
+            'name' => 'RETRAIT DANS UN DEPOT RJV',
             'price' => 'GRATUIT',
-            'actif' => true
+            'actifInCart' => true
         ];
         $shippingMethods[] = [
             'name' => 'RETRAIT PENDANT UNE FOIRE',
             'price' => 'GRATUIT',
-            'actif' => true
+            'actifInCart' => false
         ];
 
         foreach($shippingMethods as $shippingMethodArray){
@@ -79,7 +84,7 @@ class CreationUndefinedAdminAndAdresseService
                 $shipping = new ShippingMethod();
             }
 
-            $shipping->setName($shippingMethodArray['name'])->setIsActivedInCart($shippingMethodArray['actif']);
+            $shipping->setName($shippingMethodArray['name'])->setIsActivedInCart($shippingMethodArray['actifInCart'])->setPrice($shippingMethodArray['price']);
             $this->manager->persist($shipping);
         }
         $this->manager->flush();
@@ -112,6 +117,7 @@ class CreationUndefinedAdminAndAdresseService
 
         $this->manager->persist($user);
         $this->manager->flush();
+        $io->success('Création undéfined user ok');
 
 
         $io->title('Création / mise à jour de l\'adresse de retrait');
@@ -136,6 +142,39 @@ class CreationUndefinedAdminAndAdresseService
 
         $io->success('Terminée');
 
+
+        $io->title('Création / mise à jour boite virtuelle');
+
+        $boite = $this->boiteRepository->findOneBy(['name' => 'BOITE SUPPRIMEE']);
+
+        if(!$boite){
+            $boite = new Boite();
+        }
+        
+        //on rentre la boite
+        $boite->setName('BOITE SUPPRIMEE')
+            ->setIniteditor('EDITEUR SUPPRIMER')
+            ->setYear(2100)
+            ->setSlug('boite-supprimee')
+            ->setIsDeliverable(false)
+            ->setIsOccasion(false)
+            ->setWeigth(0)
+            ->setAge((int) 0)
+            ->setPlayers($this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
+            ->setHtPrice(0)
+            ->setCreatedBy($this->userRepository->findOneBy(['nickname' => 'Je Développe']))
+            ->setIsDeee(false)
+            ->setCreatedAt(new DateTimeImmutable('now'))
+            ->setIsOnLine(false)
+            ->setImage('aucune image');
+
+        $boite->setUpdatedAt(new DateTimeImmutable('now'))
+            ->setCreatedBy($this->userRepository->findOneBy(['nickname' => 'Je Développe']));
+
+        $this->manager->persist($boite);
+        $this->manager->flush();
+
+        $io->success('Terminée');
     }
 
 }

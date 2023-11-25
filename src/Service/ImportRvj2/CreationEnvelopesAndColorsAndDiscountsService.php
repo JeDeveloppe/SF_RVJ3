@@ -29,7 +29,7 @@ class CreationEnvelopesAndColorsAndDiscountsService
     public function addDelivery(){
         $deliveries = [];
         $deliveries[] = [
-            'shippingMethod' => $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT PRES DE CHEZ MOI']),
+            'shippingMethod' => $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT DANS UN DEPOT RJV']),
             'start' => 1,
             'end' => 9999,
             'price' => 0

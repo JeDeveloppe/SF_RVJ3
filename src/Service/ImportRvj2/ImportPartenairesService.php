@@ -87,7 +87,8 @@ class ImportPartenairesService
                 ->setSells($arrayPartenaire['vend'])
                 ->setIsAcceptDonations($arrayPartenaire['don'])
                 ->setFullUrl($arrayPartenaire['url'])
-                ->setImage($this->constructImagePath($arrayPartenaire['idPartenaire']))
+                ->setImage($this->constructImagePath($arrayPartenaire['idPartenaire']));
+        $partenaire
                 ->setIsSellsSpareParts($detachee)
                 ->setIsSellFullGames($complet)
                 ->setIsWebShop($arrayPartenaire['ecommerce'])
