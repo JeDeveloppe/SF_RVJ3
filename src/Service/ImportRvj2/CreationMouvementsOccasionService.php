@@ -10,7 +10,7 @@ use App\Repository\MeansOfPayementRepository;
 use App\Repository\MovementOccasionRepository;
 use App\Repository\OccasionRepository;
 use App\Repository\OffSiteOccasionSaleRepository;
-use App\Service\Utilities;
+use App\Service\UtilitiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -23,7 +23,7 @@ class CreationMouvementsOccasionService
         private MovementOccasionRepository $movementOccasionRepository,
         private MeansOfPayementRepository $meansOfPayementRepository,
         private ConditionOccasionRepository $conditionOccasionRepository,
-        private Utilities $utilities,
+        private UtilitiesService $utilitiesService,
         private OffSiteOccasionSaleRepository $offSiteOccasionSaleRepository,
         ){
     }
@@ -72,7 +72,7 @@ class CreationMouvementsOccasionService
                     if(count(explode("|",$arrayOccasion['don'])) > 1){
         
                         $movement = $this->movementOccasionRepository->findOneBy(['name' => 'DON']);
-                        $timeMovement = $this->utilities->getDateTimeImmutableFromTimestamp($arrayOccasion['timeDon']);
+                        $timeMovement = $this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayOccasion['timeDon']);
         
                         $donnees = explode("|",$arrayOccasion['don']);
                         if(count($donnees) > 1){
@@ -87,7 +87,7 @@ class CreationMouvementsOccasionService
                     }elseif(count(explode("|",$arrayOccasion['vente'])) > 1){
         
                         $movement = $this->movementOccasionRepository->findOneBy(['name' => 'VENTE']);
-                        $timeMovement = $this->utilities->getDateTimeImmutableFromTimestamp($arrayOccasion['timeVente']);
+                        $timeMovement = $this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayOccasion['timeVente']);
         
                         $donnees = explode("|",$arrayOccasion['vente']);
                         if(count($donnees) > 1){

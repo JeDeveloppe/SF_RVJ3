@@ -24,9 +24,9 @@ class UserCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('rvj2id')->setLabel('Rvj2Id'),
+            IdField::new('rvj2id')->setLabel('Rvj2Id')->setDisabled(true),
             TextField::new('email')->setLabel('Adresse email'),
-            TextField::new('nickname')->setLabel('Pseudo')->onlyOnForms(),
+            TextField::new('nickname')->setLabel('Pseudo')->onlyOnForms()->setFormTypeOptions(['attr' => ['placeholder' => 'Uniquement pour un admin...']]),
             TelephoneField::new('phone')->setLabel('Téléphone'),
             DateTimeField::new('createdAt')->setLabel('Date d\'inscription')->setFormat('dd.MM.yyyy')->setDisabled(true),
             DateTimeField::new('lastvisite')->setLabel('Dernière visite')->setFormat('dd.MM.yyyy')->setDisabled(true),

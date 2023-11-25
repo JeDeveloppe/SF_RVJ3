@@ -4,7 +4,7 @@ namespace App\Service\ImportRvj2;
 
 use App\Entity\User;
 use League\Csv\Reader;
-use App\Service\Utilities;
+use App\Service\UtilitiesService;
 use App\Repository\UserRepository;
 use App\Repository\CountryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,7 +16,7 @@ class ImportClientsService
         private UserRepository $userRepository,
         private EntityManagerInterface $em,
         private CountryRepository $countryRepository,
-        private Utilities $utilities
+        private UtilitiesService $utilitiesService
         ){
     }
 
@@ -81,16 +81,16 @@ class ImportClientsService
                 ->setRoles($role)
                 ->setNickname($pseudo)
                 ->setPhone($arrayClient['telephone'])
-                ->setMembership($this->utilities->getDateTimeImmutableFromTimestamp($arrayClient['isAssociation']))
+                ->setMembership($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayClient['isAssociation']))
                 ->setCountry($this->countryRepository->findOneBy(['isocode' => $arrayClient['paysFacturation']]) ?? $this->countryRepository->findOneBy(['isocode' => 'INC']) );
 
                 if($arrayClient['timeInscription'] != 0){
                     $time = $arrayClient['timeInscription'];
-                    $client->setCreatedAt($this->utilities->getDateTimeImmutableFromTimestamp($time));
+                    $client->setCreatedAt($this->utilitiesService->getDateTimeImmutableFromTimestamp($time));
                 }
 
                 $time = $arrayClient['lastVisite'];
-                $client->setLastvisite($this->utilities->getDateTimeImmutableFromTimestamp($time));
+                $client->setLastvisite($this->utilitiesService->getDateTimeImmutableFromTimestamp($time));
 
 
         return $client;

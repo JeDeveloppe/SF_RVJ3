@@ -17,7 +17,7 @@ use App\Repository\CountryRepository;
 use App\Repository\DocumentRepository;
 use App\Repository\ShippingMethodRepository;
 use App\Service\DocumentService;
-use App\Service\Utilities;
+use App\Service\UtilitiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -29,7 +29,7 @@ class CreationUndefinedAdminAndAdresseService
         private UserRepository $userRepository,
         private EntityManagerInterface $manager,
         private UserPasswordHasherInterface $userPasswordHasher,
-        private Utilities $utilities,
+        private UtilitiesService $utilitiesService,
         private AddressRepository $addressRepository,
         private CityRepository $cityRepository,
         private ShippingMethodRepository $shippingMethodRepository
@@ -66,6 +66,11 @@ class CreationUndefinedAdminAndAdresseService
             'price' => 'GRATUIT',
             'actif' => true
         ];
+        $shippingMethods[] = [
+            'name' => 'RETRAIT PENDANT UNE FOIRE',
+            'price' => 'GRATUIT',
+            'actif' => true
+        ];
 
         foreach($shippingMethods as $shippingMethodArray){
             $shipping = $this->shippingMethodRepository->findOneBy(['name' => $shippingMethodArray['name']]);
@@ -89,7 +94,7 @@ class CreationUndefinedAdminAndAdresseService
 
         $io->title('Création / mise à jour de l\'UNDEFINED_USER');
 
-        $random = $this->utilities->generateRandomString(25);
+        $random = $this->utilitiesService->generateRandomString(25);
 
             $user->setCreatedAt(new DateTimeImmutable('now'))
             ->setLastvisite(new DateTimeImmutable('now'))

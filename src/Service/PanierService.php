@@ -8,7 +8,10 @@ use App\Entity\Delivery;
 use App\Repository\ItemRepository;
 use App\Repository\PanierRepository;
 use App\Repository\DeliveryRepository;
+use App\Repository\DocumentParametreRepository;
 use App\Repository\OccasionRepository;
+use App\Repository\ShippingMethodRepository;
+use App\Repository\TaxRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -18,8 +21,11 @@ class PanierService
         private EntityManagerInterface $em,
         private OccasionRepository $occasionRepository,
         private ItemRepository $itemRepository,
+        private ShippingMethodRepository $shippingMethodRepository,
         private PanierRepository $panierRepository,
         private DeliveryRepository $deliveryRepository,
+        private TaxRepository $taxRepository,
+        private DocumentParametreRepository $documentParametreRepository,
         private Security $security
         ){
     }
@@ -162,14 +168,29 @@ class PanierService
         return $reponse;
     }
 
-    public function calculateAllCart($user, $shippingForm)
+    public function calculateAllCart($user, $shippingIdOfEntity)
     {
 
-        $responses = [];
+        $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
+        $shipping = $this->shippingMethodRepository->findOneBy(['id' => $shippingIdOfEntity]);
 
+        $responses = [];
+        
+        $responses['shipping'] = $shipping;
         $responses['panier_occasions'] = $this->panierRepository->findOccasionsByUser($user);
         $responses['panier_boites'] = $this->panierRepository->findBoitesByUser($user);
         $responses['panier_items'] = $this->panierRepository->findItemsByUser($user);
+        $responses['tax'] = $this->taxRepository->findOneBy([]);
+        $responses['preparationHt'] = $docParams->getPreparation();
+
+
+        //?action sur le bouton payer / demande de devis du panier
+        if($responses['panier_boites'] > 0){
+            //? after doc is save in bdd, redirect to paiement
+            $responses['redirectAfterSubmitPanierForPaiement'] = true; 
+        }else{
+            $responses['redirectAfterSubmitPanierForPaiement'] = false;
+        }
 
         $responses['totauxItems'] = $this->totauxItems($responses['panier_items']);
         $responses['totauxOccasions'] = $this->totauxItems($responses['panier_occasions']);
@@ -177,18 +198,18 @@ class PanierService
 
         $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
 
-        if($shippingForm->get('shipping')->getData() == null){
+        if(is_null($shipping)){
 
             $responses['deliveryCostWithoutTax'] = new Delivery();
             $responses['deliveryCostWithoutTax']->setPriceExcludingTax(0);
 
         }else{
 
-            $responses['deliveryCostWithoutTax'] = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingForm->get('shipping')->getData(), $responses['weigthPanier']);
+            $responses['deliveryCostWithoutTax'] = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingIdOfEntity, $responses['weigthPanier']);
 
         }
 
-        $responses['totalPanier'] = $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']->getPriceExcludingTax();
+        $responses['totalPanier'] = $responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']->getPriceExcludingTax();
 
         return $responses;
     }

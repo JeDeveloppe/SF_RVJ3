@@ -4,7 +4,7 @@ namespace App\Service\ImportRvj2;
 
 use League\Csv\Reader;
 use App\Repository\BoiteRepository;
-use App\Service\Utilities;
+use App\Service\UtilitiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -13,7 +13,7 @@ class ImportPiecesService
     public function __construct(
         private EntityManagerInterface $em,
         private BoiteRepository $boiteRepository,
-        private Utilities $utilities
+        private UtilitiesService $utilitiesService
         ){
     }
 
@@ -52,7 +52,7 @@ class ImportPiecesService
 
         if($boite){
             $boite->setContent($arrayPiece['contenu_total'])
-            ->setContentMessage($this->utilities->stringToNull($arrayPiece['message']));
+            ->setContentMessage($this->utilitiesService->stringToNull($arrayPiece['message']));
             $this->em->persist($boite);
         }
 

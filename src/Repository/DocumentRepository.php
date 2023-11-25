@@ -32,6 +32,18 @@ class DocumentRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findLastEntryFromThisYear($column, $year)
+    {
+        return $this->createQueryBuilder('d')
+            ->where('YEAR(d.createdAt) = :year')
+            ->andWhere('d.'.$column.' IS NOT NULL')
+            ->setParameter('year', $year)
+            ->orderBy('d.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 //    /**
 //     * @return Document[] Returns an array of Document objects
 //     */

@@ -2,11 +2,9 @@
 
 namespace App\Service;
 
-use App\Repository\ConfigurationRepository;
-use App\Repository\InformationsLegalesRepository;
 use DateTimeImmutable;
 
-class Utilities
+class UtilitiesService
 {
     public function getDateTimeImmutableFromTimestamp($timestamp)
     {
@@ -51,5 +49,11 @@ class Utilities
         }
 
         return $value;
+    }
+
+    public function htToTTC($ht,$tax)
+    {
+        return
+        $ht * (1 + ($tax / 100));
     }
 }

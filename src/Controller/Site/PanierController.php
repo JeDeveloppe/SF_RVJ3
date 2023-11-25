@@ -6,16 +6,17 @@ use App\Entity\Address;
 use App\Entity\Delivery;
 use App\Form\ShippingType;
 use App\Service\PanierService;
+use App\Service\DocumentService;
 use App\Repository\TaxRepository;
+use App\Repository\ItemRepository;
 use App\Repository\BoiteRepository;
 use App\Repository\PanierRepository;
+use App\Repository\AddressRepository;
 use App\Repository\DeliveryRepository;
 use App\Form\BillingAndDeliveryAddressType;
-use App\Repository\AddressRepository;
-use App\Repository\CollectionPointRepository;
-use App\Repository\ItemRepository;
-use App\Repository\ShippingMethodRepository;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Repository\ShippingMethodRepository;
+use App\Repository\CollectionPointRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,10 +32,10 @@ class PanierController extends AbstractController
         private AddressRepository $addressRepository,
         private Security $security,
         private ShippingMethodRepository $shippingMethodRepository,
-        private TaxRepository $taxRepository,
         private CollectionPointRepository $collectionPointRepository,
         private DeliveryRepository $deliveryRepository,
         private BoiteRepository $boiteRepository,
+        private DocumentService $documentService,
         private ItemRepository $itemRepository
     )
     {
@@ -55,83 +56,70 @@ class PanierController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $tax = $this->taxRepository->findOneBy([]);
-
         $shippingForm = $this->createForm(ShippingType::class);
         $shippingForm->handleRequest($request);
 
+        $reponses = $this->panierService->calculateAllCart($user,$shippingForm->get('shipping')->getData());
+
         $billingAndDeliveryForm = $this->createForm(BillingAndDeliveryAddressType::class, null, [
             'user' => $this->security->getUser(),
-            'shipping' => $shippingForm->get('shipping')->getData()
+            'shipping' => $shippingForm->get('shipping')->getData(),
+            'redirectAfterSubmitPanierForPaiement' => $reponses['redirectAfterSubmitPanierForPaiement']
         ]);
         $billingAndDeliveryForm->handleRequest($request);
 
+        if($billingAndDeliveryForm->isSubmitted())
+        {
+            unset($reponses);
 
-
-        if($billingAndDeliveryForm->isSubmitted()) {
             $allValues = $request->request->all($billingAndDeliveryForm->getName());
 
             $billingAddress = $this->addressRepository->findOneBy(['id' => $allValues['billingAddress']]);
-            $shipping = $this->shippingMethodRepository->findOneBy(['id' => $allValues['shipping']]);
+            $shippingMethod = $this->shippingMethodRepository->findOneBy(['id' => $allValues['shipping']]);
 
-            if($shipping->getPrice() == 'PAYANT'){
+            if($shippingMethod->getPrice() == 'PAYANT'){
                 
-                $deliveryAddress = $this->addressRepository->findOneBy(['id' => $allValues['deliveryAddress']]);
+                $deliveryAddress = $this->addressRepository->findOneBy(['id' => $allValues['deliveryAddress'], 'user' => $user]);
 
             }else{
 
-                $deliveryAddress = $this->collectionPointRepository->findOneBy(['id' => $allValues['deliveryAddress']]);
+                $deliveryAddress = $this->collectionPointRepository->findOneBy(['id' => $allValues['deliveryAddress'], 'user' => $user]);
             }
 
-            $reponses = $this->panierService->calculateAllCart($user,$shippingForm);
-            //TODO sauvegarde document dans BDD avec articles, boites, etc...
-            dd($deliveryAddress);
+            if(!$billingAddress or !$deliveryAddress){
+                $this->addFlash('warning','Less adresses ne vous appartiennent pas !');
+
+                $this->redirectToRoute('app_home');
+            }
+
+            //? on recupere toutes les infos du panier
+            $panierParams = $this->panierService->calculateAllCart($user,$allValues['shipping']);
+
+            //TODO sauvegarde document dans BDD avec articles, boites, etc... en fonction du Type DEVIS ou COMMANDE
+            $this->documentService->saveDocumentInDataBase($panierParams,$billingAddress,$deliveryAddress);
+
+            dd($panierParams);
 
             dump($allValues);
             dd($shipping);
 
-        }else{
-
-            $reponses = $this->panierService->calculateAllCart($user,$shippingForm);
-
-            // $panier_occasions = $this->panierRepository->findOccasionsByUser($user);
-            // $panier_boites = $this->panierRepository->findBoitesByUser($user);
-            // $panier_items = $this->panierRepository->findItemsByUser($user);
-
-            // $totauxItems = $this->panierService->totauxItems($panier_items);
-            // $totauxOccasions = $this->panierService->totauxItems($panier_occasions);
-            // $totauxBoites = $this->panierService->totauxItems($panier_boites);
-
-            // $weigthPanier = $totauxBoites['weigth'] + $totauxOccasions['weigth'] + $totauxItems['weigth'];
-
-            // if($shippingForm->get('shipping')->getData() == null){
-
-            //     $deliveryCostWithoutTax = new Delivery();
-            //     $deliveryCostWithoutTax->setPriceExcludingTax(0);
-
-            // }else{
-
-            //     $deliveryCostWithoutTax = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingForm->get('shipping')->getData(), $weigthPanier);
-
-            // }
-
-            // $totalPanier = $totauxItems['price'] + $totauxBoites['price'] + $totauxOccasions['price'] + $deliveryCostWithoutTax->getPriceExcludingTax();
-
-            return $this->render('site/panier/panier.html.twig', [
-                'occasions' => $reponses['panier_occasions'],
-                'boites' => $reponses['panier_boites'],
-                'items' => $reponses['panier_items'],
-                'weigthPanier' => $reponses['weigthPanier'],
-                'totalItems' => $reponses['totauxItems']['price'],
-                'totalOccasions' => $reponses['totauxOccasions']['price'],
-                'totalBoites' => $reponses['totauxBoites']['price'],
-                'totalPanier' => $reponses['totalPanier'],
-                'tax' => $tax,
-                'deliveryCostWithoutTax' => $reponses['deliveryCostWithoutTax'],
-                'shippingForm' => $shippingForm,
-                'billingAndDeliveryForm' => $billingAndDeliveryForm,
-            ]);
         }
+
+        return $this->render('site/panier/panier.html.twig', [
+            'occasions' => $reponses['panier_occasions'],
+            'boites' => $reponses['panier_boites'],
+            'items' => $reponses['panier_items'],
+            'weigthPanier' => $reponses['weigthPanier'],
+            'totalItems' => $reponses['totauxItems']['price'],
+            'totalOccasions' => $reponses['totauxOccasions']['price'],
+            'totalBoites' => $reponses['totauxBoites']['price'],
+            'totalPanier' => $reponses['totalPanier'],
+            'tax' => $reponses['tax'],
+            'preparationHt' => $reponses['preparationHt'],
+            'deliveryCostWithoutTax' => $reponses['deliveryCostWithoutTax'],
+            'shippingForm' => $shippingForm,
+            'billingAndDeliveryForm' => $billingAndDeliveryForm,
+        ]);
     }
 
     #[Route('/panier/ajout-occasion/{occasion_id}', name: 'app_panier_add_occasion')]

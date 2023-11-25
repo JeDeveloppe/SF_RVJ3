@@ -9,7 +9,7 @@ use League\Csv\Statement;
 use App\Repository\BoiteRepository;
 use App\Repository\NumbersOfPlayersRepository;
 use App\Repository\UserRepository;
-use App\Service\Utilities;
+use App\Service\UtilitiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -19,7 +19,7 @@ class ImportBoitesService
         private BoiteRepository $boiteRepository,
         private EntityManagerInterface $em,
         private UserRepository $userRepository,
-        private Utilities $utilities,
+        private UtilitiesService $utilitiesService,
         private NumbersOfPlayersRepository $numbersOfPlayersRepository
         ){
     }
@@ -152,7 +152,7 @@ class ImportBoitesService
             ->setWeigth($this->nullTo0($arrayBoite['poidBoite']))
             ->setAge((int) $arrayBoite['age'])
             ->setPlayers($this->numbersOfPlayersRepository->findOneBy(['keyword' => $arrayBoite['nbrJoueurs']]) ?? $this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
-            ->setHtPrice($this->utilities->stringToNull($arrayBoite['prix_HT']))
+            ->setHtPrice($this->utilitiesService->stringToNull($arrayBoite['prix_HT']))
             ->setCreatedBy($this->userRepository->findOneBy(['nickname' => $arrayBoite['createur']]))
             ->setIsDeee($this->nullToBoolean($arrayBoite['deee']))
             ->setCreatedAt(new DateTimeImmutable($arrayBoite['created_at']))

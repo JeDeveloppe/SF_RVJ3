@@ -75,6 +75,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Panier::class)]
     private Collection $paniers;
 
+    #[ORM\OneToMany(mappedBy: 'updatedBy', targetEntity: DocumentParametre::class)]
+    private Collection $documentParametres;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
@@ -84,6 +87,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->documents = new ArrayCollection();
         $this->occasions = new ArrayCollection();
         $this->paniers = new ArrayCollection();
+        $this->documentParametres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -449,6 +453,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($panier->getUser() === $this) {
                 $panier->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DocumentParametre>
+     */
+    public function getDocumentParametres(): Collection
+    {
+        return $this->documentParametres;
+    }
+
+    public function addDocumentParametre(DocumentParametre $documentParametre): static
+    {
+        if (!$this->documentParametres->contains($documentParametre)) {
+            $this->documentParametres->add($documentParametre);
+            $documentParametre->setUpdatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentParametre(DocumentParametre $documentParametre): static
+    {
+        if ($this->documentParametres->removeElement($documentParametre)) {
+            // set the owning side to null (unless already changed)
+            if ($documentParametre->getUpdatedBy() === $this) {
+                $documentParametre->setUpdatedBy(null);
             }
         }
 

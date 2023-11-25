@@ -11,7 +11,7 @@ use App\Repository\ShippingMethodRepository;
 use App\Repository\TaxRepository;
 use App\Repository\UserRepository;
 use App\Service\DocumentService;
-use App\Service\Utilities;
+use App\Service\UtilitiesService;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ImportDocumentsService
@@ -23,7 +23,7 @@ class ImportDocumentsService
         private UserRepository $userRepository,
         private DocumentRepository $documentRepository,
         private TaxRepository $taxRepository,
-        private Utilities $utilities,
+        private UtilitiesService $utilitiesService,
         private DocumentService $documentService
         ){
     }
@@ -69,13 +69,13 @@ class ImportDocumentsService
         $document
         ->setToken($arrayDoc['validKey'])
         ->setRvj2id($arrayDoc['idDocument'])
-        ->setQuoteNumber($this->documentService->quoteNumberGenerator(substr($arrayDoc['numero_devis'],3)));
+        ->setQuoteNumber($arrayDoc['numero_devis']);
 
         $numFacture = $arrayDoc['numero_facture'];
-        if(is_null($this->utilities->stringToNull($arrayDoc['numero_facture']))){
+        if(is_null($this->utilitiesService->stringToNull($arrayDoc['numero_facture']))){
             $numFacture = null;
         }else{
-            $numFacture = $this->documentService->billingNumberGenerator(substr($arrayDoc['numero_facture'],3));
+            $numFacture = $arrayDoc['numero_facture'];
         }
 
         $document
@@ -86,14 +86,14 @@ class ImportDocumentsService
         ->setBillingAddress($arrayDoc['adresse_facturation'])
         ->setDeliveryAddress($arrayDoc['adresse_livraison'])
         ->setIsQuoteReminder($arrayDoc['relance_devis'])
-        ->setEndOfQuoteValidation($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['end_validation']))
-        ->setCreatedAt($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time']))
-        ->setTimeOfSendingQuote($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_mail_devis']))
+        ->setEndOfQuoteValidation($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayDoc['end_validation']))
+        ->setCreatedAt($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayDoc['time']))
+        ->setTimeOfSendingQuote($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayDoc['time_mail_devis']))
         ->setIsDeleteByUser(false)
-        ->setMessage($this->utilities->stringToNull($arrayDoc['commentaire']))
+        ->setMessage($this->utilitiesService->stringToNull($arrayDoc['commentaire']))
         ->setTaxRate($this->taxRepository->findOneBy(['value' => 0]))
         ->setCost($arrayDoc['prix_preparation'])
-        ->setTokenPayment($this->utilities->stringToNull($arrayDoc['num_transaction']));
+        ->setTokenPayment($this->utilitiesService->stringToNull($arrayDoc['num_transaction']));
 
         //?ok version 3
         if($arrayDoc['expedition'] == "poste"){

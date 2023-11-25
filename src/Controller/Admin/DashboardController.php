@@ -14,6 +14,7 @@ use App\Entity\Department;
 use App\Entity\Discount;
 use App\Entity\Document;
 use App\Entity\DocumentLine;
+use App\Entity\DocumentParametre;
 use App\Entity\DocumentStatus;
 use App\Entity\Editor;
 use App\Entity\Envelope;
@@ -139,8 +140,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Éditeurs', 'fas fa-list', Editor::class);
         yield MenuItem::linkToCrud('Joueurs', 'fas fa-list', NumbersOfPlayers::class);
         
-        yield MenuItem::section('Listes');
-        yield MenuItem::linkToCrud('Partenaires', 'fas fa-list', Partner::class);
+        yield MenuItem::section('Gestion des partenaires');
+        yield MenuItem::linkToCrud('Liste des partenaires', 'fas fa-list', Partner::class);
         
         yield MenuItem::section('Gestion des articles:');
         yield MenuItem::linkToCrud('Groupe d\'articles', 'fas fa-list', ItemGroup::class);
@@ -149,8 +150,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Enveloppes', 'fas fa-list', Envelope::class);
 
         yield MenuItem::section('Gestion des utilisateurs:');
-        yield MenuItem::linkToCrud('Clients', 'fas fa-list', User::class);
-        yield MenuItem::linkToCrud('Adresses', 'fas fa-list', Address::class);
+        yield MenuItem::linkToCrud('Liste des clients', 'fas fa-list', User::class);
+        yield MenuItem::linkToCrud('Liste des adresses', 'fas fa-list', Address::class);
         
         yield MenuItem::section('Gestion des paniers:');
         yield MenuItem::linkToCrud('Moyens de retrait/envoi', 'fas fa-list', ShippingMethod::class);
@@ -161,11 +162,12 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Lignes documents', 'fas fa-list', DocumentLine::class);
         yield MenuItem::linkToCrud('Paiements', 'fas fa-list', Payment::class);
         yield MenuItem::linkToCrud('Status des documents', 'fas fa-list', DocumentStatus::class);
+        yield MenuItem::linkToCrud('Paramètres', 'fas fa-list', DocumentParametre::class);
 
         yield MenuItem::section('Gestion des occasions:');
-        yield MenuItem::linkToCrud('Occasions', 'fas fa-list', Occasion::class);
-        yield MenuItem::linkToCrud('Ventes / dons', 'fas fa-list', OffSiteOccasionSale::class);
-        yield MenuItem::linkToCrud('Mouvements des occasions', 'fas fa-list', MovementOccasion::class);
+        yield MenuItem::linkToCrud('Liste des occasions', 'fas fa-list', Occasion::class);
+        yield MenuItem::linkToCrud('Liste des ventes / dons', 'fas fa-list', OffSiteOccasionSale::class);
+        yield MenuItem::linkToCrud('Types de mouvement', 'fas fa-list', MovementOccasion::class);
         yield MenuItem::linkToCrud('Liste des états (pièces, boite, règle)', 'fas fa-list', ConditionOccasion::class);
         
         yield MenuItem::section('Légale:');

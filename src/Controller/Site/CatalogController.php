@@ -123,7 +123,6 @@ class CatalogController extends AbstractController
 
         if(!$occasion){
 
-            //TODO flash message not view
             $this->addFlash('warning', 'Jeux non disponible ou inconnu !');
             return $this->redirectToRoute('app_catalogue_occasions');
         }

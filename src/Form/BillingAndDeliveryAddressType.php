@@ -19,6 +19,12 @@ class BillingAndDeliveryAddressType extends AbstractType
     {
         $user = $options['user'];
         $shipping = $options['shipping'];
+
+        if($options['redirectAfterSubmitPanierForPaiement'] == false){
+            $labelButtonPanier = 'Demander un devis';
+        }else{
+            $labelButtonPanier = 'Payer';
+        }
         
         $builder
             ->add('billingAddress', EntityType::class, [
@@ -93,19 +99,13 @@ class BillingAndDeliveryAddressType extends AbstractType
         }
 
         $builder
-            //TODO
-            // ->add('checkbox', CheckboxType::class, [
-            //     'label' => 'CGV accepté',
-            //     'attr' => [
-            //         'class' => 'form-check-label'
-            //     ]
-            // ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-outline-success mt-3 text-center col-12'
                 ],
-                'label' => 'Payer'
+                'label' => $labelButtonPanier
             ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -113,7 +113,8 @@ class BillingAndDeliveryAddressType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Address::class,
             'user' =>  null,
-            'shipping' => null
+            'shipping' => null,
+            'redirectAfterSubmitPanierForPaiement' => null
         ]);
     }
 }

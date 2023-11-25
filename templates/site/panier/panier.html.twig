@@ -41,6 +41,10 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>Préparation:</td>
+                    <td>{{ (preparationHt * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                </tr>
+                <tr>
                     <td>Total HT:</td>
                     <td>{{ (totalPanier / 100) | number_format(2, '.', ',') }}</td>
                 </tr>

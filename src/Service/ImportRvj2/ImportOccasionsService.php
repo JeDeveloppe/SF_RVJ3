@@ -12,7 +12,7 @@ use App\Repository\MeansOfPayementRepository;
 use App\Repository\MovementOccasionRepository;
 use App\Repository\OccasionRepository;
 use App\Repository\OffSiteOccasionSaleRepository;
-use App\Service\Utilities;
+use App\Service\UtilitiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -25,7 +25,7 @@ class ImportOccasionsService
         private MovementOccasionRepository $movementOccasionRepository,
         private MeansOfPayementRepository $meansOfPayementRepository,
         private ConditionOccasionRepository $conditionOccasionRepository,
-        private Utilities $utilities,
+        private UtilitiesService $utilitiesService,
         private OffSiteOccasionSaleRepository $offSiteOccasionSaleRepository,
         ){
     }
@@ -69,7 +69,7 @@ class ImportOccasionsService
 
         $occasion->setBoite($this->boiteRepository->findOneBy(['rvj2id' => $arrayOccasion['idCatalogue']]))
                 ->setReference($arrayOccasion['reference'])
-                ->setInformation($this->utilities->stringToNull($arrayOccasion['information']))
+                ->setInformation($this->utilitiesService->stringToNull($arrayOccasion['information']))
                 ->setIsNew($this->stringToBoolean($arrayOccasion['isNeuf']))
                 ->setBoxCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatBoite']]))
                 ->setEquipmentCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatMateriel']]))
