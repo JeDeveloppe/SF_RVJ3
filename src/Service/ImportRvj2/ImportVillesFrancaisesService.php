@@ -43,6 +43,7 @@ class ImportVillesFrancaisesService
             
             $this->em->flush();
 
+            unset($cities);
             $io->progressFinish();
         
 

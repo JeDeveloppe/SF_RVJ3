@@ -35,6 +35,7 @@ class ImportBoitesService
             $this->em->persist($boite);
         }
         $this->em->flush();
+        unset($boites);
         $io->progressFinish();
         $io->success('Importation 1/3 terminée');
 
@@ -47,6 +48,7 @@ class ImportBoitesService
             $this->em->persist($boite);
         }
         $this->em->flush();
+        unset($boites);
         $io->progressFinish();
         $io->success('Importation 2/3 terminée');
 
@@ -59,6 +61,8 @@ class ImportBoitesService
             $this->em->persist($boite);
         }
         $this->em->flush();
+        unset($boites);
+
         $io->progressFinish();
         $io->success('Importation 3/3 terminée');
     }

@@ -46,6 +46,7 @@ class ImportDocumentsService
         $this->em->flush();
 
         $io->progressFinish();
+        unset($docs);
         $io->success('Importation terminée');
     }
 

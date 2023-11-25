@@ -45,6 +45,7 @@ class ImportOccasionsService
 
         $this->em->flush();
 
+        unset($occasions);
         $io->progressFinish();
         $io->success('Importation terminée');
 

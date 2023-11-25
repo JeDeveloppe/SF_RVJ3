@@ -34,6 +34,7 @@ class ImportAdressesService
         }
 
         $this->em->flush();
+        unset($clients);
         $io->progressFinish();
         $io->success('Importation terminée');
 
@@ -48,6 +49,7 @@ class ImportAdressesService
         }
 
         $this->em->flush();
+        unset($clients);
         $io->progressFinish();
         $io->success('Importation des adresses terminée');
     }

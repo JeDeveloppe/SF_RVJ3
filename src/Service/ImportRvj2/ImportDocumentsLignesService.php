@@ -40,7 +40,7 @@ class ImportDocumentsLignesService
         }
 
         $this->em->flush();
-
+        unset($lines);
         $io->progressFinish();
         $io->success('Importation terminée');
 
@@ -62,6 +62,7 @@ class ImportDocumentsLignesService
         }
 
         $this->em->flush();
+        unset($lines);
 
         $io->progressFinish();
         $io->success('Importation terminée');
