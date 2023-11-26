@@ -32,6 +32,9 @@ class Payment
     #[ORM\JoinColumn(nullable: false)]
     private ?Document $document = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $details = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -98,6 +101,18 @@ class Payment
     public function setDocument(Document $document): static
     {
         $this->document = $document;
+
+        return $this;
+    }
+
+    public function getDetails(): ?string
+    {
+        return $this->details;
+    }
+
+    public function setDetails(?string $details): static
+    {
+        $this->details = $details;
 
         return $this;
     }

@@ -1,0 +1,23 @@
+{% extends 'site/base.html.twig' %}
+
+{% block title %}Paiement terminé{% endblock %}
+
+{% block body %}
+
+    <div class="row justify-content-center my-5 py-4">
+        <div class="jumbotron col-11 col-md-6 my-5 h-100">
+            <h1 class="display-4">PAIEMENT TERMINÉ</h1>
+            <p class="lead">Nous vous remerçions de votre commande!</p>
+            <p class="lead">Votre paiement a bien été pris en compte.</p>
+            <p class="lead">Un email vous sera envoyé dès que votre commande sera expédiée ou déposée à la COOP 5 POUR 100.</p>
+            <p class="lead">(Retrait sur CAEN: prévoir un délai maximum de 7 jours.)</p>
+            <hr class="my-4">
+            <div class="col-12 my-5">
+                <div class="text-center">
+                    <a class="btn btn-primary btn-lg" href="{{ path('app_home') }}" role="button">Retour à l'accueil...</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

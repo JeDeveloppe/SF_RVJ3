@@ -104,7 +104,7 @@ class PanierController extends AbstractController
                 //paiement direct donc on redirige vers la page de paiement avec le numero de document
                 //TODO
     
-                return $this->redirectToRoute('', ['tokenDocument' => $document->getToken()]);
+                return $this->redirectToRoute('app_paiement', ['tokenDocument' => $document->getToken()]);
 
             }else{
     

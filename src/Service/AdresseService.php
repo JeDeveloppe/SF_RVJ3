@@ -7,11 +7,13 @@ class AdresseService
 {
     public function constructAdresseForSaveInDatabase($adresse)
     {
+        $completeAdresse = '';
 
-        return
-        $adresse->getOrganization().'<br/>'
-        .$adresse->getlastname().'<br/>'
-        .$adresse->getFirstname().'<br/>'
+        if(!is_null($adresse->getOrganization())){
+            $completeAdresse .= $adresse->getOrganization().'<br/>';
+        }
+
+        return $completeAdresse.$adresse->getlastname().' '.$adresse->getFirstname().'<br/>'
         .$adresse->getStreet().'<br/>'
         .$adresse->getCity().'<br/>'
         .$adresse->getCity()->getCountry()->getIsocode();

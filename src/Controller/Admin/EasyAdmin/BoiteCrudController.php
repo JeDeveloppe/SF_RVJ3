@@ -11,7 +11,9 @@ use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -21,7 +23,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
 class BoiteCrudController extends AbstractCrudController
 {
@@ -39,6 +40,7 @@ class BoiteCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            FormField::addTab('Général'),
             ImageField::new('image')->setBasePath($this->getParameter('app.path.boites_images'))->onlyOnIndex(),
             TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
                 //TODO vérifier les options
@@ -63,13 +65,22 @@ class BoiteCrudController extends AbstractCrudController
                 ->renderAsEmbeddedForm()->onlyOnIndex(),
             TextareaField::new('content')->setLabel('Contenu d\'une boite entière')->onlyOnForms(),
             TextField::new('contentMessage')->setLabel('Message d\'alerte sur le contenu de la boite')->onlyOnForms(),
-            IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms(),
             IntegerField::new('age')->setLabel('A partir de (âge)')->onlyOnForms(),
             AssociationField::new('players')->setLabel('A partir de (joueurs)')->onlyOnForms(),
-            AssociationField::new('documentLines')
-            ->setLabel('Nbre de demandes')->setDisabled(true),
+            BooleanField::new('isOnline')->setLabel('En ligne'),
+
+            FormField::addTab('Occasion / Articles'),
             BooleanField::new('isOccasion')->setLabel('En occasion'),
+            IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms(),
             IntegerField::new('htPrice')->setLabel('Prix HT (en cents) d\'une boite complête en bon état')->onlyOnForms(),
+            AssociationField::new('items')->setLabel('Articles:')->setDisabled(true),
+
+            
+            FormField::addTab('Paramètres'),
+            BooleanField::new('isDeliverable')->setLabel('Livrable')->onlyOnForms(),
+            BooleanField::new('isDeee')->setLabel('Deee'),
+
+            FormField::addTab('Création / Mise à jour'),
             DateTimeField::new('createdAt')->setLabel('Créé le')
                 ->setFormat('dd-MM-yyyy')
                 ->setDisabled()
@@ -79,13 +90,14 @@ class BoiteCrudController extends AbstractCrudController
                 ->setDisabled(true)
                 ->setFormTypeOptions(['placeholder' => 'Créateur de la boite...'])
                 ->onlyOnForms(),
-            BooleanField::new('isDeliverable')->setLabel('Livrable')->onlyOnForms(),
-            BooleanField::new('isDeee')->setLabel('Deee'),
-            BooleanField::new('isOnline')->setLabel('En ligne'),
             DateTimeField::new('updatedAt')->setLabel('Mise à jour le')
                 ->setFormat('dd-MM-yyyy')
                 ->setDisabled()
                 ->onlyOnForms(),
+
+            FormField::addTab('Ventes'),
+            AssociationField::new('documentLines')
+            ->setLabel('Nbre de demandes')->setDisabled(true),
         ];
     }
 
@@ -97,7 +109,7 @@ class BoiteCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Nouvelle boite')
             ->setPageTitle('edit', 'Édition d\'une boite')
             ->setDefaultSort(['id' => 'DESC'])
-            ->setSearchFields(['name', 'editor.name'])
+            ->setSearchFields(['name', 'editor.name','id'])
         ;
     }
 

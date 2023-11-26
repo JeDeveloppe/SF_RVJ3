@@ -1,0 +1,16 @@
+{% extends 'member/base.html.twig' %}
+
+{% block member %}
+
+    <a class="btn btn-primary" href="{{ path('app_member_adresses') }}">Retour aux adresses</a>
+
+    <div class="row my-5">
+    <h3>Édition d'une adresse:</h3>
+
+    
+    {{ include('member/adresse/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+    {{ include('member/adresse/_delete_form.html.twig') }}
+
+    </div>
+{% endblock %}

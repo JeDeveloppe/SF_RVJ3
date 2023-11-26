@@ -100,12 +100,16 @@ class Boite
     #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'boite')]
     private Collection $items;
 
+    #[ORM\ManyToMany(targetEntity: ItemGroup::class, mappedBy: 'boite')]
+    private Collection $itemGroups;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
         $this->documentLines = new ArrayCollection();
         $this->paniers = new ArrayCollection();
         $this->items = new ArrayCollection();
+        $this->itemGroups = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -493,6 +497,33 @@ class Boite
     {
         if ($this->items->removeElement($item)) {
             $item->removeBoite($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ItemGroup>
+     */
+    public function getItemGroups(): Collection
+    {
+        return $this->itemGroups;
+    }
+
+    public function addItemGroup(ItemGroup $itemGroup): static
+    {
+        if (!$this->itemGroups->contains($itemGroup)) {
+            $this->itemGroups->add($itemGroup);
+            $itemGroup->addBoite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItemGroup(ItemGroup $itemGroup): static
+    {
+        if ($this->itemGroups->removeElement($itemGroup)) {
+            $itemGroup->removeBoite($this);
         }
 
         return $this;

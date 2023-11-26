@@ -38,9 +38,13 @@ class ItemGroup
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\ManyToMany(targetEntity: Boite::class, inversedBy: 'itemGroups')]
+    private Collection $boite;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->boite = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,6 +143,30 @@ class ItemGroup
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, Boite>
+     */
+    public function getBoite(): Collection
+    {
+        return $this->boite;
+    }
+
+    public function addBoite(Boite $boite): static
+    {
+        if (!$this->boite->contains($boite)) {
+            $this->boite->add($boite);
+        }
+
+        return $this;
+    }
+
+    public function removeBoite(Boite $boite): static
+    {
+        $this->boite->removeElement($boite);
+
+        return $this;
     }
 }
 

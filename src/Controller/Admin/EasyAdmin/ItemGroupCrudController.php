@@ -28,7 +28,9 @@ class ItemGroupCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
+        return [  
+            AssociationField::new('boite')
+                ->setLabel('Boites principale:'),
             ImageField::new('image')->setBasePath($this->getParameter('app.path.itemGroup_images'))->onlyOnIndex(),
             TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
                 //TODO vérifier les options

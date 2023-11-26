@@ -143,17 +143,33 @@ class PanierService
 
         }else{
 
+            $panier = $this->panierRepository->findOneBy(['item' => $item, 'user' => $this->security->getUser()]);
+
             $newQte = $item->getStockForSale() - $qte;
 
-            //?on crée la ligne du panier
-            $panier = new Panier();
-            $panier->setItem($item)
+            if($panier){
+
+                $panier
+                ->setQte($panier->getQte() + $qte)
                 ->setUnitPriceExclusingTax($item->getPriceExcludingTax())
-                ->setQte($qte)
                 ->setCreatedAt( new DateTimeImmutable('now'))
-                ->setUser($user)
-                ->setPriceWithoutTax($item->getPriceExcludingTax() * $qte);
-            $this->em->persist($panier);
+                ->setPriceWithoutTax(($item->getPriceExcludingTax()) * ($panier->getQte() + $qte));
+
+                $this->em->persist($panier);
+
+            }else{
+
+                //?on crée la ligne du panier
+                $panier = new Panier();
+                $panier->setItem($item)
+                    ->setUnitPriceExclusingTax($item->getPriceExcludingTax())
+                    ->setQte($qte)
+                    ->setCreatedAt( new DateTimeImmutable('now'))
+                    ->setUser($user)
+                    ->setPriceWithoutTax($item->getPriceExcludingTax() * $qte);
+                $this->em->persist($panier);
+            }
+
 
             //?on met la qte article à jour
             $item->setStockForSale($newQte);

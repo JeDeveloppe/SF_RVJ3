@@ -129,6 +129,8 @@ class DocumentService
                 ->setSendingMethod($panierParams['shipping'])
                 ->setSendingBy($panierParams['shipping']->getName())
                 ->setUser($this->security->getUser())
+                ->setIsDeleteByUser(false)
+                ->setTimeOfSendingQuote(new DateTimeImmutable('now'))
                 ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => $actionToSearch]));
                 
 
@@ -136,7 +138,7 @@ class DocumentService
         $this->em->persist($document);
 
         //TODO a enlever
-        // $this->em->flush();
+        $this->em->flush();
 
         // "panier_occasions" => array:1 [▶]
         // "panier_boites" => []
@@ -160,7 +162,7 @@ class DocumentService
  
         //on met en BDD les differentes lignes
         //TODO a enlever
-        // $this->em->flush();
+        $this->em->flush();
 
         return $document;
     }

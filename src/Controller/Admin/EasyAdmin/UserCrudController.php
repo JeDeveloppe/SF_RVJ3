@@ -27,7 +27,7 @@ class UserCrudController extends AbstractCrudController
             IdField::new('rvj2id')->setLabel('Rvj2Id')->setDisabled(true),
             TextField::new('email')->setLabel('Adresse email'),
             TextField::new('nickname')->setLabel('Pseudo')->onlyOnForms()->setFormTypeOptions(['attr' => ['placeholder' => 'Uniquement pour un admin...']]),
-            TelephoneField::new('phone')->setLabel('Téléphone'),
+            TelephoneField::new('phone')->setLabel('Téléphone')->onlyOnForms(),
             DateTimeField::new('createdAt')->setLabel('Date d\'inscription')->setFormat('dd.MM.yyyy')->setDisabled(true),
             DateTimeField::new('lastvisite')->setLabel('Dernière visite')->setFormat('dd.MM.yyyy')->setDisabled(true),
             DateTimeField::new('membership')->setLabel('Abonnement jusqu\'au')->setFormat('dd.MM.yyyy')->onlyOnForms()->setDisabled(true),
@@ -50,9 +50,19 @@ class UserCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+        $impersonate = Action::new('impersonate', false, 'fa fa-fw fa-user-lock')
+        //changed from linkToRoute to linkToUrl. note that linkToUrl has only one parameter.
+        //"admin/.. can be adjusted to another URL"
+        ->linkToUrl(function (User $entity) {
+            return 'admin/?_switch_user='.$entity->getEmail();
+        })
+        ;
+
+
         return $actions
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->remove(Crud::PAGE_DETAIL, Action::DELETE)
+            ->add(Crud::PAGE_INDEX, $impersonate)
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN');
         

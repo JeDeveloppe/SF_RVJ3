@@ -2,13 +2,16 @@
 
 namespace App\Controller\Admin;
 
-use App\Repository\DocumentRepository;
-use App\Repository\DocumentStatusRepository;
+use App\Form\SwithUserType;
 use App\Service\EmailService;
+use App\Repository\UserRepository;
+use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\DocumentStatusRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
 {
@@ -16,7 +19,8 @@ class AdminController extends AbstractController
         private DocumentRepository $documentRepository,
         private DocumentStatusRepository $documentStatusRepository,
         private EntityManagerInterface $em,
-        private EmailService $emailService
+        private EmailService $emailService,
+        private UserRepository $userRepository
     )
     {
     }
