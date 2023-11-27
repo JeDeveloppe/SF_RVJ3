@@ -6,12 +6,15 @@ use DateInterval;
 use DateTimeImmutable;
 use App\Entity\Document;
 use App\Entity\DocumentLine;
+use App\Entity\Returndetailstostock;
 use App\Service\UtilitiesService;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DocumentParametreRepository;
 use App\Repository\DocumentStatusRepository;
+use App\Repository\ItemRepository;
+use App\Repository\OccasionRepository;
 
 class DocumentService
 {
@@ -22,6 +25,8 @@ class DocumentService
         private Security $security,
         private AdresseService $adresseService,
         private UtilitiesService $utilitiesService,
+        private ItemRepository $itemRepository,
+        private OccasionRepository $occasionRepository,
         private EntityManagerInterface $em
         ){
     }
@@ -103,7 +108,7 @@ class DocumentService
 
         //puis on met dans la base
         $document = new Document();
-        $now = new DateTimeImmutable();
+        $now = new DateTimeImmutable('now');
         $endDevis = $now->add(new DateInterval('P'.$docParams->getDelayBeforeDeleteDevis().'D'));
 
         if(count($panierParams['panier_boites']) > 0){
@@ -157,7 +162,7 @@ class DocumentService
                 ->setPriceExcludingTax($panier->getUnitPriceExclusingTax() ?? 0);
             
                 $this->em->persist($documentLine);
-                dump($documentLine);
+                $this->em->remove($panier);
         }
  
         //on met en BDD les differentes lignes
@@ -165,5 +170,55 @@ class DocumentService
         $this->em->flush();
 
         return $document;
+    }
+
+    public function deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock(){
+        
+        $now = new DateTimeImmutable('now');
+
+        $docToDeletes = $this->documentRepository->findByDevisToDelete($now);
+
+        foreach($docToDeletes as $doc){
+
+            $nextDocument = $this->documentRepository->findOneBy(['id' => $doc->getId() + 1]);
+
+            if($nextDocument){
+
+                $docLines = $doc->getDocumentLines();
+
+                foreach($docLines as $docLine){
+                    
+                    if(!is_null($docLine->getItem())){
+                        $itemInDatabase = $this->itemRepository->find($docLine->getItem());
+                        $itemInDatabase->setStockForSale($itemInDatabase->getStockForSale() + $docLine->getQuantity());
+                        $this->em->persist($itemInDatabase);
+                        $this->em->remove($docLine);
+                    }
+
+                    if(!is_null($docLine->getOccasion())){
+                        $occasionInDatabase = $this->occasionRepository->find($docLine->getOccasion());
+                        $occasionInDatabase->setIsOnline(true);
+                        $this->em->persist($occasionInDatabase);
+                        $this->em->remove($docLine);
+                    }
+
+                    if(!is_null($docLine->getBoite())){
+                        $returnInStock = new Returndetailstostock();
+                        $returnInStock->setDocument($doc->getQuoteNumber())
+                            ->setQuestion($docLine->getQuestion())
+                            ->setAnswer($docLine->getAnswer());
+                        $this->em->persist($returnInStock);
+                        $this->em->remove($docLine);
+                    }
+
+                }
+
+                $this->em->remove($doc);
+
+                $this->em->flush();
+            }
+
+        }
+
     }
 }

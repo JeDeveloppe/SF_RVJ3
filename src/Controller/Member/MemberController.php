@@ -2,24 +2,26 @@
 
 namespace App\Controller\Member;
 
-use App\Entity\DocumentParametre;
+use DateInterval;
+use App\Form\UserType;
 use DateTimeImmutable;
 use App\Service\Utilities;
-use App\Form\UserType;
-use App\Repository\AddressRepository;
 use App\Service\DocumentService;
+use App\Entity\DocumentParametre;
+use App\Service\UtilitiesService;
 use App\Repository\UserRepository;
 use App\Repository\PanierRepository;
+use App\Repository\AddressRepository;
 use App\Repository\AdresseRepository;
 use App\Repository\DocumentRepository;
 use App\Repository\ConfigurationRepository;
 use App\Repository\DocumentLignesRepository;
-use App\Repository\DocumentParametreRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
+use App\Repository\DocumentParametreRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\UtilitiesService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -31,13 +33,18 @@ class MemberController extends AbstractController
         private Security $security,
         private UtilitiesService $utilitiesService,
         private PanierRepository $panierRepository,
-        private AddressRepository $addressRepository)
+        private AddressRepository $addressRepository,
+        private DocumentService $documentService,
+        private EntityManagerInterface $em
+        )
     {
     }
 
     #[Route('/membre', name: 'app_member')]
     public function index(): Response
     {
+        $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
+
         return $this->render('member/index.html.twig', []);
     }
 
@@ -58,7 +65,7 @@ class MemberController extends AbstractController
     public function membreHistorique(DocumentParametreRepository $documentParametreRepository): Response
     {
         $user = $this->security->getUser();
-
+                
         $documents = $user->getDocuments();
 
         return $this->render('member/historique.html.twig', [

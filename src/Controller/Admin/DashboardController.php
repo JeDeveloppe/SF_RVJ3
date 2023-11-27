@@ -28,6 +28,7 @@ use App\Entity\Occasion;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Partner;
 use App\Entity\Payment;
+use App\Entity\Returndetailstostock;
 use App\Entity\ShippingMethod;
 use App\Entity\Tax;
 use App\Entity\User;
@@ -36,6 +37,7 @@ use App\Repository\DocumentStatusRepository;
 use App\Repository\ItemRepository;
 use App\Repository\OffSiteOccasionSaleRepository;
 use App\Repository\PaymentRepository;
+use App\Service\DocumentService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -49,7 +51,8 @@ class DashboardController extends AbstractDashboardController
         private PaymentRepository $paymentRepository,
         private DocumentRepository $documentRepository,
         private DocumentStatusRepository $documentStatusRepository,
-        private ItemRepository $itemRepository
+        private ItemRepository $itemRepository,
+        private DocumentService $documentService
     )
     {
         
@@ -58,6 +61,8 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
+
+        $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
         $itemsWithStockIsNull = $this->itemRepository->findByStockForSaleIsNull();
 
@@ -150,7 +155,10 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');        
         yield MenuItem::linkToRoute('SITE','fa-solid fa-shop','app_home');
-        yield MenuItem::linkToRoute('DEVIS A TRAITER','fa-solid fa-money-bill','admin_traited_daily_devis');
+
+        yield MenuItem::section('Traitements quotidien:');
+        yield MenuItem::linkToCrud('RETOUR EN STOCK','fa-solid fa-rotate-left', Returndetailstostock::class);
+        yield MenuItem::linkToRoute('DEVIS','fa-solid fa-money-bill','admin_traited_daily_devis');
         yield MenuItem::linkToRoute('COMMANDES','fa-solid fa-money-bill','admin_traited_daily_commands');
 
         yield MenuItem::section('Gestion des boites:');

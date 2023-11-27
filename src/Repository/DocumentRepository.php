@@ -44,6 +44,20 @@ class DocumentRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findByDevisToDelete($now){
+
+        return $this->createQueryBuilder('d')
+            ->where('d.endOfQuoteValidation < :now')
+            ->andWhere('d.billNumber IS NULL')
+            ->andWhere('d.isQuoteReminder = :value')
+            ->setParameter('now', $now)
+            ->setParameter('value', true)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Document[] Returns an array of Document objects
 //     */

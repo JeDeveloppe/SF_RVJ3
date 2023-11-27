@@ -52,22 +52,22 @@ class BoiteCrudController extends AbstractCrudController
                 'image_uri' => true,
                 // 'imagine_pattern' => '...',
                 'asset_helper' => true,
-            ])->setLabel('Image')->onlyOnForms(),
-            TextField::new('name')->setLabel('Nom'),
-            SlugField::new('slug')->setTargetFieldName('name')->setLabel('Slug')->onlyOnForms(),
-            IntegerField::new('year')->setLabel('Année'),
+            ])->setLabel('Image')->onlyOnForms()->setColumns(6),
+            BooleanField::new('isOnline')->setLabel('En ligne')->setColumns(6),
+            TextField::new('name')->setLabel('Nom')->setColumns(6),
+            SlugField::new('slug')->setTargetFieldName('name')->setLabel('Slug')->onlyOnForms()->setColumns(6),
+            IntegerField::new('year')->setLabel('Année')->setColumns(6),
             AssociationField::new('editor')
                 ->setLabel('Éditeur')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner un éditeur...'])
-                ->onlyOnForms(),
+                ->onlyOnForms()->setColumns(6),
             AssociationField::new('editor')
                 ->setLabel('Éditeur')
                 ->renderAsEmbeddedForm()->onlyOnIndex(),
-            TextareaField::new('content')->setLabel('Contenu d\'une boite entière')->onlyOnForms(),
-            TextField::new('contentMessage')->setLabel('Message d\'alerte sur le contenu de la boite')->onlyOnForms(),
-            IntegerField::new('age')->setLabel('A partir de (âge)')->onlyOnForms(),
-            AssociationField::new('players')->setLabel('A partir de (joueurs)')->onlyOnForms(),
-            BooleanField::new('isOnline')->setLabel('En ligne'),
+            TextareaField::new('content')->setLabel('Contenu d\'une boite entière')->onlyOnForms()->setColumns(6),
+            TextField::new('contentMessage')->setLabel('Message d\'alerte sur le contenu de la boite')->onlyOnForms()->setColumns(6),
+            IntegerField::new('age')->setLabel('A partir de (âge)')->onlyOnForms()->setColumns(6),
+            AssociationField::new('players')->setLabel('A partir de (joueurs)')->onlyOnForms()->setColumns(6),
 
             FormField::addTab('Occasion / Articles'),
             BooleanField::new('isOccasion')->setLabel('En occasion'),

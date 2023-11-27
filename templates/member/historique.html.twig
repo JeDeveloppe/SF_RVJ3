@@ -2,10 +2,10 @@
 
 {% block member %}
 
-<div class="row my-5 card py-2">
+<div class="row bg-success card py-2">
    {% if documents | length > 0 %}
       <div class="col-11 mx-auto  py-2">
-         <p class="col-12 text-center text-danger"><i class="fas fa-info-circle"></i> Les devis de plus de {{ docParams.delayBeforeDeleteDevis }} jours sont automatiquement supprimés.</p>
+         <p class="col-12 text-center text-danger"><i class="fas fa-info-circle"></i> Les devis de plus de {{ docParams.delayBeforeDeleteDevis * 2 }} jours sont automatiquement supprimés.</p>
          <table class="table text-center align-middle">
             <thead>
                <th>Numéro de devis</th>
@@ -16,7 +16,7 @@
                <th></th>
             </thead>
             <tbody>
-               {% for document in documents %}
+               {% for document in documents|reverse %}
                   <tr>
                         <td>{{ document.quoteNumber }}</td>
                         <td>{{ document.createdAt|date('d-m-Y') }}</td>
@@ -24,9 +24,10 @@
                         <td>{{ (document.totalWithTax / 100) |number_format(2, '.', ',') }} €</td>
                         <td>
                            {% if document.billNumber is not null %}
-                              Payé le {{ document.paiement.timeTransaction|date('d-m-Y') }} <br/>par {{ document.paiement.moyenPaiement }} 
+                              {% dump(document) %}
+                              Payé le {{ document.payment.timeOfTransaction|date('d-m-Y') }} <br/>par {{ document.payment.details }}
                            {% else %}
-                              <a class="btn btn-outline-warning" href="{{ path('lecture_devis_avant_paiement', {'token': document.token }) }}">Visualiser le devis</a>
+                              {# <a class="btn btn-outline-warning" href="{{ path('lecture_devis_avant_paiement', {'token': document.token }) }}">Visualiser le devis</a> #}
                            {% endif %}
                         </td>
                         <td>

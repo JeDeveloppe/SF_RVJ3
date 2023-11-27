@@ -7,6 +7,7 @@ use DateInterval;
 use Stripe\Stripe;
 use DateTimeImmutable;
 use App\Entity\Payment;
+use App\Repository\DocumentParametreRepository;
 use App\Repository\DocumentRepository;
 use App\Repository\DocumentStatusRepository;
 use App\Repository\PaiementRepository;
@@ -27,6 +28,7 @@ class PaiementService
         private UtilitiesService $utilities,
         private DocumentService $documentService,
         private DocumentRepository $documentRepository,
+        private DocumentParametreRepository $documentParametreRepository,
         private UrlGeneratorInterface $urlGeneratorInterface,
         private Security $security,
         private RouterInterface $router,
@@ -171,6 +173,7 @@ class PaiementService
         $response = [];
 
         $document = $this->documentRepository->findOneBy(['token' => $token]);
+        $docParams = $this->documentParametreRepository->findOneBy([]);
 
         if(!$document){
             //pas de devis
@@ -212,7 +215,7 @@ class PaiementService
                 
                 //on met a jour le document en BDD
                 $etat = $this->documentStatusRepository->findOneBy(['action' => 'TO_PREPARE']);
-                $document->setDocumentStatus($etat)->setBillNumber($newNumero);
+                $document->setDocumentStatus($etat)->setBillNumber($docParams->getBillingTag().$newNumero);
                 $this->em->persist($document);
                 $this->em->flush();
 
@@ -233,6 +236,8 @@ class PaiementService
         //TODO
         //on s'identifie
         $this->payplugAuth();
+
+        $docParams = $this->documentParametreRepository->findOneBy([]);
 
         $input = file_get_contents('php://input');
 
@@ -263,7 +268,7 @@ class PaiementService
                 
                 //on met a jour le document en BDD
                 $etat = $this->documentStatusRepository->findOneBy(['action' => 'TO_PREPARE']);
-                $document->setDocumentStatus($etat)->setBillNumber($newNumero);
+                $document->setDocumentStatus($etat)->setBillNumber($docParams->getBillingTag().$newNumero);
                 $this->em->persist($document);
                 $this->em->flush();
             }
