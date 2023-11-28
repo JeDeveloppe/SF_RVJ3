@@ -172,7 +172,8 @@ class DocumentService
         return $document;
     }
 
-    public function deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock(){
+    public function deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock()
+    {
         
         $now = new DateTimeImmutable('now');
 
@@ -221,4 +222,5 @@ class DocumentService
         }
 
     }
+
 }

@@ -1,0 +1,28 @@
+{% if docLine_items | length > 0 %}
+
+    <div class="row justify-content-center mb-4">
+        <h3>Article(s):</h3> 
+        <div class="col-11 col-8">
+            <table class="table table-striped text-center">
+                <thead>
+                    <th>Nom</th>
+                    <th>Référence</th>
+                    <th>Quantité</th>
+                    <th>Prix de vente TTC</th>
+                </thead>
+                <tbody>
+                    {% for docLine in docLine_items %}
+                    {% dump(docLine) %}
+                        <tr>
+                            <td>{{ docLine.item.name }}</td>
+                            <td>{{ docLine.item.id }}</td>
+                            <td>{{ docLine.quantity }}</td>
+                            <td>{{ (docLine.priceExcludingTax * ( 1 + docLine.document.taxRateValue / 100)) | number_format(2, '.', ',')  }} €</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endif %}

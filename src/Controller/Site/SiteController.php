@@ -3,10 +3,14 @@
 namespace App\Controller\Site;
 
 use App\Form\ContactType;
+use App\Repository\DocumentLineRepository;
+use App\Service\PanierService;
 use App\Repository\PartnerRepository;
+use App\Repository\DocumentRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
-use App\Service\PanierService;
+use App\Service\DocumentService;
+use App\Service\UtilitiesService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,7 +19,9 @@ class SiteController extends AbstractController
 {
     public function __construct(
         private LegalInformationRepository $legalInformationRepository,
-        private PanierService $panierService
+        private PanierService $panierService,
+        private DocumentService $documentService,
+        private UtilitiesService $utilitiesService
     )
     {
     }
@@ -85,9 +91,59 @@ class SiteController extends AbstractController
         ]);
     }
 
+    #[Route('/document/{tokenDocument}', name: 'app_document_view')]
+    public function lectureDevis(
+        $tokenDocument,
+        DocumentRepository $documentRepository,
+        DocumentLineRepository $documentLineRepository
+        ): Response
+    {
 
+        //on cherche le devis par le token et s'il n'est pas deja annuler par l'utilisateur
+        // $devis = $documentRepository->findOneBy(['token' => $token, 'isDeleteByUser' => null, 'numeroFacture' => null]);
 
+        $document = $documentRepository->findOneBy(['token' => $tokenDocument]);
 
+        if(!$document){
 
-   
+            $tableau = [
+                'h1' => 'Document non trouvé !',
+                'p1' => 'La consultation de ce document est impossible!',
+                'p2' => 'Document inconnu ou supprimé !'
+            ];
+
+            return $this->render('site/document_view/_end_view.html.twig', [
+                'tableau' => $tableau
+            ]);
+
+        }else{
+
+            // if($this->securiserService->isGranted($user, 'ROLE_ADMIN')){
+            //     $checkRole = false;
+            // }
+            $docLines = $document->getDocumentLines();
+
+            foreach($docLines as $docLine){
+
+                $docLine_items = $documentLineRepository->findBy(['id' => $docLine->getId(), 'occasion' => null, 'boite' => null ]);
+                $docLine_occasions = $documentLineRepository->findBy(['id' => $docLine->getId(), 'item' => null, 'boite' => null]);
+                $docLine_boites = $documentLineRepository->findBy(['id' => $docLine->getId(), 'occasion' => null, 'item' => null]);
+
+            }
+
+            $totauxItems = $this->utilitiesService->totauxItems($docLine_items);
+            $totauxOccasions = $this->utilitiesService->totauxItems($docLine_occasions);
+            $totauxBoites = $this->utilitiesService->totauxItems($docLine_boites);
+
+            return $this->render('site/document_view/_document_view.html.twig', [
+                'document' => $document,
+                'docLine_items' => $docLine_items,
+                'docLine_occasions' => $docLine_occasions,
+                'docLine_boites' => $docLine_boites,
+                'totauxItems' => $totauxItems,
+                'totauxOccasions' => $totauxOccasions,
+                'totauxBoites' => $totauxBoites
+            ]);
+        }
+    }
 }

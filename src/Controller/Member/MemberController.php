@@ -43,7 +43,6 @@ class MemberController extends AbstractController
     #[Route('/membre', name: 'app_member')]
     public function index(): Response
     {
-        $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
         return $this->render('member/index.html.twig', []);
     }
@@ -54,12 +53,11 @@ class MemberController extends AbstractController
         $user = $this->security->getUser();
 
         return $this->render('member/adresse/index.html.twig', [
-            'livraison_adresses' => $this->addressRepository->findBy(['user' => $user, 'isFacturation' => null]),
+            'livraison_adresses' => $this->addressRepository->findBy(['user' => $user, 'isFacturation' => false]),
             'facturation_adresses' => $this->addressRepository->findBy(['user' => $user, 'isFacturation' => true]),
         ]);
 
     }
-
 
     #[Route('/membre/historique', name: 'app_member_historique')]
     public function membreHistorique(DocumentParametreRepository $documentParametreRepository): Response

@@ -1,0 +1,29 @@
+{% if occasions | length > 0 %}
+    {% set visibilityOfTrTotalOccasions = 'd-block' %}
+    <div class="row justify-content-center mb-4">
+        <h3>Occasion(s):</h3>
+        <div class="col-11 col-8">
+            <table class="table table-striped text-center">
+                <thead>
+                    <th>Nom / Éditeur / Année</th>
+                    <th>Référence</th>
+                    <th>Quantité</th>
+                    <th>Prix de vente TTC</th>
+                </thead>
+                <tbody>
+                    {% for occasion in occasions %}
+                        <tr>
+                            <td>{{ occasion.boite.name }} - {{ occasion.boite.editor }} - {{ occasion.boite.year }}</td>
+                            <td>{{ occasion.reference }}</td>
+                            <td>1</td>
+                            <td>{{ (occasion.priceHt * tva / 100) | number_format(2, '.', ',')  }} €</td>
+                            {% set totalOccasions = totalOccasions + occasion.priceHt %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    {% set visibilityOfTrTotalOccasions = 'd-none' %}
+{% endif %}

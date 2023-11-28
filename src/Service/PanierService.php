@@ -24,6 +24,7 @@ class PanierService
         private ShippingMethodRepository $shippingMethodRepository,
         private PanierRepository $panierRepository,
         private DeliveryRepository $deliveryRepository,
+        private UtilitiesService $utilitiesService,
         private TaxRepository $taxRepository,
         private DocumentParametreRepository $documentParametreRepository,
         private Security $security
@@ -106,31 +107,6 @@ class PanierService
         return $reponse;
     }
 
-    public function totauxItems($items)
-    {
-
-        $totaux = [];
-        $price = 0;
-        $weigth = 0;
-
-        foreach($items as $item){
-
-            //en fonction du calcul voulu des articles ou occasions
-            if(!empty($item->getOccasion())){
-                $weigth += $item->getOccasion()->getBoite()->getWeigth();  
-            }else{
-                $weigth += $item->getItem()->getWeigth() * $item->getQte();  
-            }
-
-            $price += $item->getPriceWithoutTax();
-        }
-
-        $totaux['price'] = $price;
-        $totaux['weigth'] = $weigth;
-
-        return $totaux;
-    }
-
     public function addArticleInCart($article_id,$qte,$user)
     {
 
@@ -208,9 +184,9 @@ class PanierService
             $responses['redirectAfterSubmitPanierForPaiement'] = false;
         }
 
-        $responses['totauxItems'] = $this->totauxItems($responses['panier_items']);
-        $responses['totauxOccasions'] = $this->totauxItems($responses['panier_occasions']);
-        $responses['totauxBoites'] = $this->totauxItems($responses['panier_boites']);
+        $responses['totauxItems'] = $this->utilitiesService->totauxItems($responses['panier_items']);
+        $responses['totauxOccasions'] = $this->utilitiesService->totauxItems($responses['panier_occasions']);
+        $responses['totauxBoites'] = $this->utilitiesService->totauxItems($responses['panier_boites']);
 
         $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
 

@@ -27,7 +27,7 @@
                               {% dump(document) %}
                               Payé le {{ document.payment.timeOfTransaction|date('d-m-Y') }} <br/>par {{ document.payment.details }}
                            {% else %}
-                              {# <a class="btn btn-outline-warning" href="{{ path('lecture_devis_avant_paiement', {'token': document.token }) }}">Visualiser le devis</a> #}
+                              <a class="btn btn-outline-warning" href="{{ path('app_document_view', {'tokenDocument': document.token }) }}">Visualiser le devis</a>
                            {% endif %}
                         </td>
                         <td>

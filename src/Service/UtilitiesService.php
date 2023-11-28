@@ -18,7 +18,8 @@ class UtilitiesService
         }
     }
 
-    public function generateRandomString($length = 250, $characters = '0123456789abcdefghijklmnopqrstuvwxyz@!_ABCDEFGHIJKLMNOPQRSTUVWXYZ'){
+    public function generateRandomString($length = 250, $characters = '0123456789abcdefghijklmnopqrstuvwxyz@!_ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    {
         $charactersLength = strlen($characters);
         $randomString = "";
         for($i = 0; $i < $length; $i++) {
@@ -27,13 +28,15 @@ class UtilitiesService
         return $randomString;
     }
 
-    public function calculTauxTva($taux){
+    public function calculTauxTva($taux)
+    {
 
         return ($taux + 100) / 100;
 
     }
 
-    public function prixTtcToCentsHt($ttc,$taux){
+    public function prixTtcToCentsHt($ttc,$taux)
+    {
 
         $tauxTva = $this->calculTauxTva($taux);
 
@@ -42,7 +45,8 @@ class UtilitiesService
         return $ht;
     }
 
-    public function stringToNull($value){
+    public function stringToNull($value)
+    {
 
         if($value == 'NULL' ){
             $value = NULL;
@@ -55,5 +59,30 @@ class UtilitiesService
     {
         return
         $ht * (1 + ($tax / 100));
+    }
+
+    public function totauxItems($items)
+    {
+
+        $totaux = [];
+        $price = 0;
+        $weigth = 0;
+
+        foreach($items as $item){
+
+            //en fonction du calcul voulu des articles ou occasions
+            if(!empty($item->getOccasion())){
+                $weigth += $item->getOccasion()->getBoite()->getWeigth();  
+            }else{
+                $weigth += $item->getItem()->getWeigth() * $item->getQte();  
+            }
+
+            $price += $item->getPriceWithoutTax();
+        }
+
+        $totaux['price'] = $price;
+        $totaux['weigth'] = $weigth;
+
+        return $totaux;
     }
 }
