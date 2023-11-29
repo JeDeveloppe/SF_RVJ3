@@ -14,6 +14,7 @@ use App\Service\UtilitiesService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class SiteController extends AbstractController
 {
@@ -95,7 +96,8 @@ class SiteController extends AbstractController
     public function lectureDevis(
         $tokenDocument,
         DocumentRepository $documentRepository,
-        DocumentLineRepository $documentLineRepository
+        DocumentLineRepository $documentLineRepository,
+        Security $security
         ): Response
     {
 
@@ -122,27 +124,22 @@ class SiteController extends AbstractController
             //     $checkRole = false;
             // }
             $docLines = $document->getDocumentLines();
+            $tauxTva = $this->utilitiesService->calculTauxTva($document->getTaxRateValue());
 
             foreach($docLines as $docLine){
 
-                $docLine_items = $documentLineRepository->findBy(['id' => $docLine->getId(), 'occasion' => null, 'boite' => null ]);
-                $docLine_occasions = $documentLineRepository->findBy(['id' => $docLine->getId(), 'item' => null, 'boite' => null]);
-                $docLine_boites = $documentLineRepository->findBy(['id' => $docLine->getId(), 'occasion' => null, 'item' => null]);
+                $docLine_items = $documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'occasion' => null, 'boite' => null ]);
+                $docLine_occasions = $documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'item' => null, 'boite' => null]);
+                $docLine_boites = $documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'occasion' => null, 'item' => null]);
 
             }
-
-            $totauxItems = $this->utilitiesService->totauxItems($docLine_items);
-            $totauxOccasions = $this->utilitiesService->totauxItems($docLine_occasions);
-            $totauxBoites = $this->utilitiesService->totauxItems($docLine_boites);
 
             return $this->render('site/document_view/_document_view.html.twig', [
                 'document' => $document,
                 'docLine_items' => $docLine_items,
                 'docLine_occasions' => $docLine_occasions,
                 'docLine_boites' => $docLine_boites,
-                'totauxItems' => $totauxItems,
-                'totauxOccasions' => $totauxOccasions,
-                'totauxBoites' => $totauxBoites
+                'tva' => $tauxTva
             ]);
         }
     }

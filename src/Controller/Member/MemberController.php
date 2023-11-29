@@ -92,6 +92,41 @@ class MemberController extends AbstractController
             ]);
     }
 
+    #[Route('/membre/delete/document/{tokenDocument}', name: 'app_member_delete_document')]
+    public function deleteDocument($tokenDocument)
+    {
+
+        $documentsToDelete = [];
+
+        $document = $this->documentRepository->findOneBy(['token' => $tokenDocument]);
+        
+        if(!$document){
+
+            $tableau = [
+                'h1' => 'Document non trouvé !',
+                'p1' => 'La modification de ce document est impossible!',
+                'p2' => 'Document inconnu ou supprimé !'
+            ];
+
+        }else{
+            
+            $documentsToDelete[] = $document;
+
+            $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock($documentsToDelete);
+
+            $tableau = [
+                'h1' => 'Document supprimé !',
+                'p1' => 'La modification de ce document est prise en compte !',
+                'p2' => 'Vous ne pouvez plus le consulter !'
+            ];
+
+        }
+
+        return $this->render('site/document_view/_end_view.html.twig', [
+            'tableau' => $tableau
+        ]);
+    }
+
     #[Route('/membre/download/facture/{token}', name: 'app_member_facture_download')]
     public function factureDownload($token, DocumentService $documentService)
     {

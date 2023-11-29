@@ -74,7 +74,7 @@ class InitForProd extends Command
         $io = new SymfonyStyle($input,$output);
         
         // // creation PAYS name/isocode
-        $this->creationCountrieService->addCountries();
+        //$this->creationCountrieService->addCountries();
         
         // //ON CREE OU ON MET A JOUR L'ADMIN
         // $this->userService->initForProd_adminUser($io);
@@ -138,6 +138,7 @@ class InitForProd extends Command
         // //on importe les lignes de chaque document
         // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
         // $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
+        $this->importDocumentsLignesService->generateDocumentsTotals($io);
 
         // //on cree les enveloppes et les couleurs pour les articles, les enveloppes, les joueurs, les livraisons
         // $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();

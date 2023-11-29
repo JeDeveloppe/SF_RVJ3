@@ -6,6 +6,7 @@ use DateInterval;
 use DateTimeImmutable;
 use App\Entity\Document;
 use App\Entity\DocumentLine;
+use App\Entity\DocumentLineTotals;
 use App\Entity\Returndetailstostock;
 use App\Service\UtilitiesService;
 use App\Repository\DocumentRepository;
@@ -137,14 +138,19 @@ class DocumentService
                 ->setIsDeleteByUser(false)
                 ->setTimeOfSendingQuote(new DateTimeImmutable('now'))
                 ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => $actionToSearch]));
-                
-
 
         $this->em->persist($document);
-
-        //TODO a enlever
         $this->em->flush();
 
+
+        $docLineTotals = new DocumentLineTotals();
+        $docLineTotals
+            ->setDocument($document)
+            ->setBoitesWeigth($panierParams['totauxBoites']['weigth'])->setBoitesPriceWithoutTax($panierParams['totauxBoites']['price'])
+            ->setItemsWeigth($panierParams['totauxItems']['weigth'])->setItemsPriceWithoutTax($panierParams['totauxItems']['price'])
+            ->setOccasionsWeigth($panierParams['totauxOccasions']['weigth'])->setOccasionsPriceWithoutTax($panierParams['totauxOccasions']['price']);
+        $this->em->persist($docLineTotals);
+        $this->em->flush();
         // "panier_occasions" => array:1 [▶]
         // "panier_boites" => []
         // "panier_items" => array:2 [▶]
@@ -159,27 +165,21 @@ class DocumentService
                 ->setItem($panier->getItem() ?? NULL)
                 ->setOccasion($panier->getOccasion() ?? NULL)
                 ->setDocument($document)
-                ->setPriceExcludingTax($panier->getUnitPriceExclusingTax() ?? 0);
+                ->setPriceExcludingTax($panier->getPriceWithoutTax());
             
                 $this->em->persist($documentLine);
                 $this->em->remove($panier);
         }
- 
         //on met en BDD les differentes lignes
-        //TODO a enlever
         $this->em->flush();
 
         return $document;
     }
 
-    public function deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock()
+    public function deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock(array $documentsToDelete)
     {
-        
-        $now = new DateTimeImmutable('now');
 
-        $docToDeletes = $this->documentRepository->findByDevisToDelete($now);
-
-        foreach($docToDeletes as $doc){
+        foreach($documentsToDelete as $doc){
 
             $nextDocument = $this->documentRepository->findOneBy(['id' => $doc->getId() + 1]);
 

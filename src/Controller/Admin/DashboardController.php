@@ -2,47 +2,48 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Address;
-use App\Entity\Boite;
+use App\Entity\Tax;
 use App\Entity\City;
-use App\Entity\CollectionPoint;
-use App\Entity\Color;
-use App\Entity\ConditionOccasion;
-use App\Entity\Country;
-use App\Entity\Delivery;
-use App\Entity\Department;
-use App\Entity\Discount;
-use App\Entity\Document;
-use App\Entity\DocumentLine;
-use App\Entity\DocumentParametre;
-use App\Entity\DocumentStatus;
-use App\Entity\Editor;
-use App\Entity\Envelope;
 use App\Entity\Item;
-use App\Entity\ItemGroup;
-use App\Entity\LegalInformation;
-use App\Entity\MeansOfPayement;
-use App\Entity\MovementOccasion;
-use App\Entity\NumbersOfPlayers;
-use App\Entity\Occasion;
-use App\Entity\OffSiteOccasionSale;
+use App\Entity\User;
+use App\Entity\Boite;
+use App\Entity\Color;
+use App\Entity\Editor;
+use DateTimeImmutable;
+use App\Entity\Address;
+use App\Entity\Country;
 use App\Entity\Partner;
 use App\Entity\Payment;
-use App\Entity\Returndetailstostock;
+use App\Entity\Delivery;
+use App\Entity\Discount;
+use App\Entity\Document;
+use App\Entity\Envelope;
+use App\Entity\Occasion;
+use App\Entity\ItemGroup;
+use App\Entity\Department;
+use App\Entity\DocumentLine;
+use App\Entity\DocumentStatus;
 use App\Entity\ShippingMethod;
-use App\Entity\Tax;
-use App\Entity\User;
+use App\Entity\CollectionPoint;
+use App\Entity\MeansOfPayement;
+use App\Entity\LegalInformation;
+use App\Entity\MovementOccasion;
+use App\Entity\NumbersOfPlayers;
+use App\Service\DocumentService;
+use App\Entity\ConditionOccasion;
+use App\Entity\DocumentParametre;
+use App\Repository\ItemRepository;
+use App\Entity\OffSiteOccasionSale;
+use App\Entity\Returndetailstostock;
+use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
 use App\Repository\DocumentStatusRepository;
-use App\Repository\ItemRepository;
-use App\Repository\OffSiteOccasionSaleRepository;
-use App\Repository\PaymentRepository;
-use App\Service\DocumentService;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
-use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\OffSiteOccasionSaleRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -62,7 +63,11 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
 
-        $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
+        $now = new DateTimeImmutable('now');
+
+        $documentsToDelete = $this->documentRepository->findByDevisToDelete($now);
+
+        $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock($documentsToDelete);
 
         $itemsWithStockIsNull = $this->itemRepository->findByStockForSaleIsNull();
 

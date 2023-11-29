@@ -80,22 +80,22 @@ class ImportDocumentsService
         }
 
         $document
-        ->setBillNumber($numFacture)
-        ->setTotalExcludingTax($arrayDoc['totalHT'])
-        ->setTotalWithTax($arrayDoc['totalTTC'])
-        ->setDeliveryPriceExcludingTax($arrayDoc['prix_expedition'])
-        ->setBillingAddress($arrayDoc['adresse_facturation'])
-        ->setDeliveryAddress($arrayDoc['adresse_livraison'])
-        ->setIsQuoteReminder($arrayDoc['relance_devis'])
-        ->setEndOfQuoteValidation($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayDoc['end_validation']))
-        ->setCreatedAt($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayDoc['time']))
-        ->setTimeOfSendingQuote($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayDoc['time_mail_devis']))
-        ->setIsDeleteByUser(false)
-        ->setMessage($this->utilitiesService->stringToNull($arrayDoc['commentaire']))
-        ->setTaxRate($this->taxRepository->findOneBy(['value' => 0]))
-        ->setTaxRateValue(0)
-        ->setCost($arrayDoc['prix_preparation'])
-        ->setTokenPayment($this->utilitiesService->stringToNull($arrayDoc['num_transaction']));
+            ->setBillNumber($numFacture)
+            ->setTotalExcludingTax($arrayDoc['totalHT'])
+            ->setTotalWithTax($arrayDoc['totalTTC'])
+            ->setDeliveryPriceExcludingTax($arrayDoc['prix_expedition'])
+            ->setBillingAddress($arrayDoc['adresse_facturation'])
+            ->setDeliveryAddress($arrayDoc['adresse_livraison'])
+            ->setIsQuoteReminder($arrayDoc['relance_devis'])
+            ->setEndOfQuoteValidation($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayDoc['end_validation']))
+            ->setCreatedAt($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayDoc['time']))
+            ->setTimeOfSendingQuote($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayDoc['time_mail_devis']))
+            ->setIsDeleteByUser(false)
+            ->setMessage($this->utilitiesService->stringToNull($arrayDoc['commentaire']))
+            ->setTaxRate($this->taxRepository->findOneBy(['value' => 0]))
+            ->setTaxRateValue(0)
+            ->setCost($arrayDoc['prix_preparation'])
+            ->setTokenPayment($this->utilitiesService->stringToNull($arrayDoc['num_transaction']));
 
         //?ok version 3
         if($arrayDoc['expedition'] == "poste"){

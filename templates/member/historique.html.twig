@@ -2,45 +2,45 @@
 
 {% block member %}
 
-<div class="row bg-success card py-2">
-   {% if documents | length > 0 %}
-      <div class="col-11 mx-auto  py-2">
-         <p class="col-12 text-center text-danger"><i class="fas fa-info-circle"></i> Les devis de plus de {{ docParams.delayBeforeDeleteDevis * 2 }} jours sont automatiquement supprimés.</p>
-         <table class="table text-center align-middle">
-            <thead>
-               <th>Numéro de devis</th>
-               <th>Date du devis</th>
-               <th>Numéro de facture</th>
-               <th>Total TTC</th>
-               <th></th>
-               <th></th>
-            </thead>
-            <tbody>
-               {% for document in documents|reverse %}
-                  <tr>
-                        <td>{{ document.quoteNumber }}</td>
-                        <td>{{ document.createdAt|date('d-m-Y') }}</td>
-                        <td>{{ document.billNumber ? document.billNumber : "PAS DE PAIEMENT" }}</td>
-                        <td>{{ (document.totalWithTax / 100) |number_format(2, '.', ',') }} €</td>
-                        <td>
-                           {% if document.billNumber is not null %}
-                              {% dump(document) %}
-                              Payé le {{ document.payment.timeOfTransaction|date('d-m-Y') }} <br/>par {{ document.payment.details }}
-                           {% else %}
-                              <a class="btn btn-outline-warning" href="{{ path('app_document_view', {'tokenDocument': document.token }) }}">Visualiser le devis</a>
-                           {% endif %}
-                        </td>
-                        <td>
-                           {% if document.billNumber is not null %}
-                              <a href="{{ path('app_member_facture_download', {'token': document.token }) }}" data-toggle="tooltip" data-html="true" title="Facture"><i class="fas fa-print fa-2x"></i></a>
-                           {% endif %}
-                        </td>
-                        
-                  </tr>
-               {% endfor %}
-            </tbody>
-         </table>
-      </div>
-   {% endif %}
-</div>
+   <div class="row">
+      {% if documents | length > 0 %}
+         <div class="col-11 mx-auto py-2">
+            <p class="col-12 text-center text-danger"><i class="fas fa-info-circle"></i> Les devis de plus de {{ docParams.delayBeforeDeleteDevis * 2 }} jours sont automatiquement supprimés.</p>
+            <table class="table text-center align-middle">
+               <thead>
+                  <th>Numéro de devis</th>
+                  <th>Date du devis</th>
+                  <th>Numéro de facture</th>
+                  <th>Total TTC</th>
+                  <th></th>
+                  <th></th>
+               </thead>
+               <tbody>
+                  {% for document in documents|reverse  %}
+                     <tr>
+                           <td>{{ document.quoteNumber }}</td>
+                           <td>{{ document.createdAt|date('d-m-Y') }}</td>
+                           <td>{{ document.billNumber ? document.billNumber : "PAS DE PAIEMENT" }}</td>
+                           <td>{{ (document.totalWithTax / 100) |number_format(2, '.', ',') }} €</td>
+                           <td>
+                              {% if document.billNumber is not null %}
+                                 Payé le {{ document.payment.timeOfTransaction|date('d-m-Y') }} <br/>par {{ document.payment.details }}
+                              {% else %}
+                                 <a class="btn btn-outline-warning" href="{{ path('app_document_view', {'tokenDocument': document.token }) }}">Visualiser le devis</a>
+                              {% endif %}
+                           </td>
+                           <td>
+                              {% if document.billNumber is not null %}
+                                 <a href="{{ path('app_member_facture_download', {'token': document.token }) }}" data-toggle="tooltip" data-html="true" title="Facture"><i class="fas fa-print fa-2x"></i></a>
+                              {% endif %}
+                           </td>
+                           
+                     </tr>
+                  {% endfor %}
+               </tbody>
+            </table>
+         </div>
+      {% endif %}
+   </div>
+
 {% endblock %}

@@ -112,7 +112,6 @@ class PanierController extends AbstractController
 
             }
 
-            dd($document);
         }
 
         return $this->render('site/panier/panier.html.twig', [

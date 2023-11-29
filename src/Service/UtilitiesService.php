@@ -85,4 +85,70 @@ class UtilitiesService
 
         return $totaux;
     }
+
+    public function totauxItemsImportV2($items)
+    {
+
+        $totaux = [];
+        $price = 0;
+        $weigth = 0;
+
+        foreach($items as $item){
+
+            if(is_null($item->getBoite())){
+                
+                $boiteWeigth = 0;
+
+            }else{
+
+                $boiteWeigth = $item->getBoite()->getWeigth();
+            }
+
+            $weigth += $boiteWeigth * $item->getQuantity();  
+            $price += $item->getPriceExcludingTax();
+        }
+
+        $totaux['price'] = $price;
+        $totaux['weigth'] = $weigth;
+
+        return $totaux;
+    }
+
+    public function totauxOccasionsImportV2($items)
+    {
+
+        $totaux = [];
+        $price = 0;
+        $weigth = 0;
+
+        foreach($items as $item){
+
+            $weigth += $item->getOccasion()->getBoite()->getWeigth() * $item->getQuantity();  
+            $price += $item->getPriceExcludingTax();
+        }
+
+        $totaux['price'] = $price;
+        $totaux['weigth'] = $weigth;
+
+        return $totaux;
+    }
+
+    public function totauxBoitesImportV2($items)
+    {
+
+        $totaux = [];
+        $price = 0;
+        $weigth = 0;
+
+        foreach($items as $item){
+
+            $weigth += $item->getBoite()->getWeigth() * $item->getQuantity();  
+            $price += $item->getPriceExcludingTax();
+        }
+
+        $totaux['price'] = $price;
+        $totaux['weigth'] = $weigth;
+
+        return $totaux;
+    }
 }

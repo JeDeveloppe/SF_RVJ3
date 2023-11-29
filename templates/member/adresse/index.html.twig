@@ -11,7 +11,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% dump(facturation_adresses) %}
                 {% for adresse in facturation_adresses %}
                     <tr>
                         <td class="col-9">{{ adresse.organization ?? "" }} {{ adresse.lastname }} {{ adresse.firstname }}, {{ adresse.street }}, {{ adresse.city }}</td>

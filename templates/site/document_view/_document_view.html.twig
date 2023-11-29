@@ -1,75 +1,22 @@
 {% extends 'site/base.html.twig' %}
 
-{% block title %}Visualisation d'un document{% endblock %}
+{% block title %}{{ document.quoteNumber }}{% endblock %}
 
 {% block body %}
 
-    {% if document.payment is not null %}
-        {% set disabled = "disabled" %}
-        {% set disabled_facture = "" %}
+    {% if document.cost == 200 %}
+    {# il s'agit d'une cotisation #}
+        {% set tdText = 'Adhésion annuelle:' %}
+    {% elseif document.cost == 150 %}
+    {# il s'agit d'une préparation #}
+        {% set tdText = 'Préparation:' %}
     {% else %}
-        {% set disabled = "" %}
-        {% set disabled_facture = "disabled" %}
+        {# //TODO nom de la préparation sur les documents #}
+        {% set tdText = 'Frais de gestion:' %}
     {% endif %}
 
-    <h3 class="col-12 text-center my-5">Visualisation d'un document</h3>
-        <div class="row justify-content-center my-5">
-            <div class="col-11">
-                <table class="table text-center align-middle">
-                    <thead>
-                        <th>Numéro de document</th>
-                        <th>document supprimer par l'utilisateur</th>
-                        <th>Numéro de facture</th>
-                        <th>Paiement</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                {{ document.quoteNumber }} <br>
-                                Créé le: {{ document.createdAt|date('d/m/Y') }} <br/>
-                            </td>
-                            <td>
-                                {% if document.isDeleteByUser == true %}
-                                    {% set bg = 'warning' %}
-                                {% else %}
-                                    {% set bg = 'success' %}
-                                {% endif %}
-                                    <button class="btn btn-{{bg}}"> NON / OUI </button>
-                            </td>
-                            <td>{{ document.billNumber ? document.billNumber : "PAS DE PAIEMENT" }}</td>
-                            <td>
-                                {% if document.payment is not null %}
-                                    AUCUN
-                                {% else %}
-                                    {{ document.payment.timeOfTransaction|date('d/m/Y') }} <br/>par {{ document.payment.details }}
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="4">
-                                document:
-                                    {% if document.isQuoteReminder %}
-                                        <i class="fa-solid fa-rotate-right text-success"></i> (relancer) -
-                                    {% else %}
-                                        <i class="fa-solid fa-rotate-right text-danger"></i> (non relancer) -
-                                    {% endif %}
-
-                                    {% if document.timeOfSendingQuote is not null %}
-                                        <i class="fa-solid fa-paper-plane text-success"></i> (email envoyé) le {{ document.timeOfSendingQuote|date('d/m/Y') }} -
-                                    {% else %}
-                                        <i class="fa-solid fa-paper-plane text-danger"></i> (non envoyé) -
-                                    {% endif %}
-                                    
-                                    Fin de validitée du document: {{ document.endOfQuoteValidation|date('d/m/Y') }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
     <h3 class="col-12 text-center my-5">
-        document numéro {{ document.quoteNumber }} <br>
+        Devis {{ document.quoteNumber }} <br>
         du {{ document.createdAt|date('d-m-Y') }} <br/>
         <span class="small">(valable jusqu'au {{ document.endOfQuoteValidation|date('d-m-Y') }})</span>
     </h3>
@@ -79,17 +26,11 @@
 
 
     {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
-    {# {% include "site/document_view/_occasions_view.html.twig" %} #}
+    {% include "site/document_view/_occasions_view.html.twig" %}
 
 
     {# SI Y A DES DEMANDES DE PIECES DETACHEES DANS LE PANIER #}
-    {# {% if boites | length > 0 %}
-        {% set visibilityOfTrTotalBoites = '' %}
-        {% include "components/table_pieces_detachees.html.twig" %}
-    {% else %}
-        {% set visibilityOfTrTotalBoites = 'd-none' %}
-    {% endif %} #}
-
+    {% include "site/document_view/_boites_view.html.twig" %}
 
 
     {# PARITE LIVRAISON #}
@@ -120,100 +61,77 @@
         </div>
     </div>
 
-    'totauxItems' => $totauxItems,
-                'totauxOccasions' => $totauxOccasions,
-                'totauxBoites' => $totauxBoites
     {# PARITE TOTAUX #}
     <div class="row justify-content-center my-5">
         <h3 class="col-12 text-start">Totaux:</h3>
 
         <div class="col-11 col-md-8">
             <table class="table">
-                {% if totauxOccasions > 0 %}
+                {% if document.documentLineTotals.occasionsPriceWithoutTax > 0 %}
                     <tr>
                         <td>Occasions:</td>
-                        <td>{{ (totauxOccasions / 100 * tva) | number_format(2, '.', ',') }}</td>
+                        <td>{{ (document.documentLineTotals.occasionsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100)) | number_format(2, '.', ',') }}</td>
                     </tr>
                 {% endif %}
-                {% if totauxBoites > 0 %}
+                {% if document.documentLineTotals.boitesPriceWithoutTax > 0 %}
                     <tr>
-                        <td>Pièces détachées:</td>
-                        <td>{{ (totauxBoites / 100 * tva) | number_format(2, '.', ',') }}</td>
+                        <td>Pièces détachées (devis):</td>
+                        <td>{{ (document.documentLineTotals.boitesPriceWithoutTax / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }}</td>
                     </tr>
                 {% endif %}
-                {% if totauxItems > 0 %}
+                {% if document.documentLineTotals.itemsPriceWithoutTax > 0 %}
                     <tr>
                         <td>Articles:</td>
-                        <td>{{ (totauxItems / 100 * tva) | number_format(2, '.', ',') }}</td>
+                        <td>{{ (document.documentLineTotals.itemsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }}</td>
                     </tr>
                 {% endif %}
                 <tr>
                     <td>Livraison / Retrait:</td>
-                    <td>{{ (document.deliveryPriceHt / 100 * tva) | number_format(2, '.', ',') }}</td>
+                    <td>{{ (document.deliveryPriceExcludingTax / 100 * tva) | number_format(2, '.', ',') }}</td>
                 </tr>
-                    <tr>
-                    <td>Adhésion annuelle (v2) / Préparation:</td>
+                <tr>
+                    <td>{{ tdText }}</td>
                     <td>{{ (document.cost / 100 * tva) | number_format(2, '.', ',') }}</td>
                 </tr>
                 <tr>
                     <td>Total HT:</td>
-                    <td>{{ (document.totalHt / 100) | number_format(2, '.', ',') }}</td>
+                    <td>{{ (document.totalExcludingTax / 100) | number_format(2, '.', ',') }}</td>
                 </tr>
                 <tr>
                     <td>TVA:</td>
-                    <td>{{ ((document.totalTtc - document.totalHt) / 100) | number_format(2, '.', ',') }}</td>
+                    <td>{{ ((document.totalWithTax - document.totalExcludingTax) / 100) | number_format(2, '.', ',') }}</td>
                 </tr>
                 <tr>
                     <td>Total TTC:</td>
-                    <td>{{ (document.totalTtc / 100) | number_format(2, '.', ',')}}</td>
+                    <td>{{ (document.totalWithTax / 100) | number_format(2, '.', ',')}}</td>
                 </tr>
             </table>
         </div>
     </div>
 
     {# PARTIE BOUTONS #}
-    {% if is_granted('ROLE_ADMIN') and checkRole is not defined  %}
+    {% if document.billNumber is null %}
         <div class="row my-5">
             <div class="col-6 text-center">
-                {% if document.billNumber and document.isDeleteByUser == false %}
-                    <span class="btn btn-lg btn-success disabled">DÉJA FACTURÉ</span>
-                {% elseif(document.isDeleteByUser == false)%}
-                    {{ form(form) }}
-                {% endif %}
+                <a href="{{ path('app_paiement', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-success" >Payer</a><br/>
+                <img class="img-thumbnail col-9 col-md-6 col-lg-4 mt-4" src="{{ asset('build/images/design/logo-PAYPLUG.png') }}" alt="Paiement avec PAYPLUG"/>
             </div>
-            <div class="col-6 d-flex flex-column justify-content-around align-items-center">
-                {% if document.isDeleteByUser == false %}
-                    {# si le document n'est pas echu on affiche les boutons #}
-                    {% set enddocument = document.endValidationdocument %}
-                    {% set difference = date(enddocument).diff(date(now)) %}
-                    {% set leftDays = difference.days %}
-                    {% if leftDays >= 0 and document.envoiEmaildocument is null %}
-                        <div class="col-6">
-                            <a class="btn btn-success disabled" href="{{ path('admin_prevenir_document_disponible', {'token': document.token, 'days': 0 }) }}">Envoyer email => document mis à disposition</a>
-                        </div>
-                    {% endif %}
-                {% endif %}
 
-
-
-                {% if document.billNumber is not null %}
-                    <a class="btn btn-lg btn-outline-danger disabled col-8 mx-auto mt-2" href="{{ path('suppression_document_par_utilisateur', {'token': document.token}) }}">Facturé: suppression impossible</a>
-                {% else %}
-                     {% include "admin/documents/document/_delete_form.html.twig" %}
-                {% endif %}
-                {% if document.isDeleteByUser == false and document.billNumber is null and document.envoiEmaildocument is not null %}
-                    <a class="btn btn-primary col-8 mx-auto" href="{{ path('admin_relance_document', {'token': document.token }) }}">Relancer l'utilisateur (+ {{ delaidocument }} jours)</a>                
-                {% endif %}
-            </div>
+            {% if app.user is not null and app.user.password == document.user.password %}
+                <div class="col-6 text-center">
+                    <a href="{{ path('app_member_delete_document', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>
+                </div>
+            {% endif %}
         </div>
     {% else %}
-        <div class="row my-5">
-            <div class="col-6 text-center">
-                <a href="{{ path('app_paiement', {'token': document.token}) }}" class="btn btn-lg btn-success" >Payer</a><br/>
-                <img class="img-thumbnail col-9 col-md-6 col-lg-4 mt-4" src="{{ asset('build/images/design/paiement/logo-' ~ module_paiement ~ '.png') }}" alt="Paiement avec {{ module_paiement }}"/>
-            </div>
-            <div class="col-6 text-center">
-                <a href="{{ path('suppression_document_par_utilisateur', {'token': document.token}) }}" class="btn btn-lg btn-outline-danger" >Annuler le document</a>
+        <div class="row justify-content-center my-5">
+            <div class="card col-11 col-md-6 p-0">
+                <div class="card-header"><i class="fa-solid fa-file-invoice text-success"></i> Document payé - {{ document.billNumber }}</div>
+                <div class="card-body">
+                    <p>Le {{ document.payment.timeOfTransaction | date('d-m-Y') }} par {{ document.payment.meansOfPayment.name }}</p>
+                    <p>{{ document.sendingBy }}</p>
+                </div>
+                <div class="card-footer text-end">{{ document.documentStatus.name }}</div>
             </div>
         </div>
     {% endif %}

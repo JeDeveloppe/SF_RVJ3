@@ -173,8 +173,20 @@ class PanierService
         $responses['panier_boites'] = $this->panierRepository->findBoitesByUser($user);
         $responses['panier_items'] = $this->panierRepository->findItemsByUser($user);
         $responses['tax'] = $this->taxRepository->findOneBy([]);
-        $responses['preparationHt'] = $docParams->getPreparation();
 
+        $now = new DateTimeImmutable('now');
+
+        //gestion membership au niveau du panier
+        if($user->getMembership() > $now){
+
+            $responses['preparationHt'] = 0;
+
+        }else{
+
+            $responses['preparationHt'] = $docParams->getPreparation();
+
+        }
+        
 
         //?action sur le bouton payer / demande de devis du panier
         if($responses['panier_boites'] > 0){

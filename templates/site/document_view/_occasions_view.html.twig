@@ -1,5 +1,4 @@
-{% if occasions | length > 0 %}
-    {% set visibilityOfTrTotalOccasions = 'd-block' %}
+{% if docLine_occasions | length > 0 %}
     <div class="row justify-content-center mb-4">
         <h3>Occasion(s):</h3>
         <div class="col-11 col-8">
@@ -11,19 +10,16 @@
                     <th>Prix de vente TTC</th>
                 </thead>
                 <tbody>
-                    {% for occasion in occasions %}
+                    {% for docLine in docLine_occasions %}
                         <tr>
-                            <td>{{ occasion.boite.name }} - {{ occasion.boite.editor }} - {{ occasion.boite.year }}</td>
-                            <td>{{ occasion.reference }}</td>
+                            <td>{{ docLine.occasion.boite.name }} - {{ docLine.occasion.boite.editor }} - {{ docLine.occasion.boite.year }}</td>
+                            <td>{{ docLine.occasion.reference }}</td>
                             <td>1</td>
-                            <td>{{ (occasion.priceHt * tva / 100) | number_format(2, '.', ',')  }} €</td>
-                            {% set totalOccasions = totalOccasions + occasion.priceHt %}
+                            <td>{{ (docLine.priceExcludingTax * tva) / 100 | number_format(2, '.', ',')  }} €</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-{% else %}
-    {% set visibilityOfTrTotalOccasions = 'd-none' %}
 {% endif %}

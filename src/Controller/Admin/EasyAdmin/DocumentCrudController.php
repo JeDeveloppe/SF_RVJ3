@@ -122,6 +122,8 @@ class DocumentCrudController extends AbstractCrudController
                 ->setLabel('Status du document')
                 ->renderAsEmbeddedForm()->onlyOnIndex(),
             AssociationField::new('documentStatus')
+                ->setLabel('Status du document')->onlyOnForms(),
+            AssociationField::new('documentStatus')
                 ->setLabel('Status du document')
                 ->onlyOnForms()->setDisabled($disabled),
             AssociationField::new('payment')
