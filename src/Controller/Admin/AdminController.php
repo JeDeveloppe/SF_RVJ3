@@ -34,7 +34,7 @@ class AdminController extends AbstractController
         if(!$document || !$status){
 
             $this->addFlash('warning', 'Document inconnu !');
-            return $this->redirectToRoute('admin_traited_daily');
+            return $this->redirectToRoute('admin_traited_daily_commands');
 
         }else{
 
@@ -46,7 +46,7 @@ class AdminController extends AbstractController
             $this->em->flush();
 
             $this->addFlash('success', 'Status mis à jour !');
-            return $this->redirectToRoute('admin_traited_daily');
+            return $this->redirectToRoute('admin_traited_daily_commands');
 
         }
     }

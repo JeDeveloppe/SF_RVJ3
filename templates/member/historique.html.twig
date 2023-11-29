@@ -1,7 +1,7 @@
 {% extends 'member/base.html.twig' %}
 
 {% block member %}
-
+{# //TODO format smartphone #}
    <div class="row">
       {% if documents | length > 0 %}
          <div class="col-11 mx-auto py-2">
@@ -12,6 +12,7 @@
                   <th>Date du devis</th>
                   <th>Numéro de facture</th>
                   <th>Total TTC</th>
+                  <th></th>
                   <th></th>
                   <th></th>
                </thead>
@@ -28,6 +29,9 @@
                               {% else %}
                                  <a class="btn btn-outline-warning" href="{{ path('app_document_view', {'tokenDocument': document.token }) }}">Visualiser le devis</a>
                               {% endif %}
+                           </td>
+                           <td>
+                              {{ document.documentStatus.name }}
                            </td>
                            <td>
                               {% if document.billNumber is not null %}
