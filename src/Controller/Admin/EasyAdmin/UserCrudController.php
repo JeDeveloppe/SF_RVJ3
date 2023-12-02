@@ -57,7 +57,8 @@ class UserCrudController extends AbstractCrudController
             ->showEntityActionsInlined()
             ->setPageTitle('index', 'Liste des clients')
             ->setPageTitle('new', 'Nouveau client')
-            ->setPageTitle('edit', 'Édition du client');
+            ->setPageTitle('edit', 'Édition du client')
+            ->setSearchFields(['level.name', 'email']);
     }
 
     public function configureActions(Actions $actions): Actions
@@ -74,7 +75,7 @@ class UserCrudController extends AbstractCrudController
     {
         if ($entityInstance instanceof User) {
             $roleMax = [];
-            $roleMax[] = $entityInstance->getLevel();
+            $roleMax[] = $entityInstance->getLevel()->getNameInDatabase();
             $entityInstance->setRoles($roleMax);
 
             $entityManager->persist($entityInstance);

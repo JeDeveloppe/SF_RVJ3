@@ -183,7 +183,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Gestion des utilisateurs:');
         yield MenuItem::linkToCrud('Liste des clients', 'fas fa-list', User::class);
-        yield MenuItem::linkToCrud('Liste des levels', 'fas fa-list', Level::class)->setPermission('SUPER_ADMIN');
+        yield MenuItem::linkToCrud('Liste des levels', 'fas fa-list', Level::class)->setPermission('ROLE_SUPER_ADMIN');
         yield MenuItem::linkToCrud('Liste des adresses', 'fas fa-list', Address::class);
         
         yield MenuItem::section('Gestion des paniers:');
