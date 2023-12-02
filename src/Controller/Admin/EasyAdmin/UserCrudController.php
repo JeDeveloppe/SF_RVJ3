@@ -3,19 +3,21 @@
 namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -27,14 +29,11 @@ class UserCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
 
-        $choices = json_decode(ArrayField::new('roles'));
-        dd($choices);
-
         return [
 
             FormField::addTab('Infos générales'),
-            IdField::new('rvj2id')->setLabel('Rvj2Id')->setDisabled(true),
-            ArrayField::new('roles')->setLabel('Roles'),
+            IdField::new('rvj2id')->setLabel('Rvj2Id')->setDisabled(true)->onlyOnForms(),
+            AssociationField::new('level')->setLabel('Role'),
             TextField::new('email')->setLabel('Adresse email'),
             TextField::new('nickname')->setLabel('Pseudo (pour les admins)')->onlyOnForms()->setFormTypeOptions(['attr' => ['placeholder' => 'Uniquement pour un admin...']]),
             TelephoneField::new('phone')->setLabel('Téléphone')->onlyOnForms(),
@@ -58,9 +57,7 @@ class UserCrudController extends AbstractCrudController
             ->showEntityActionsInlined()
             ->setPageTitle('index', 'Liste des clients')
             ->setPageTitle('new', 'Nouveau client')
-            ->setPageTitle('edit', 'Édition du client')
-
-        ;
+            ->setPageTitle('edit', 'Édition du client');
     }
 
     public function configureActions(Actions $actions): Actions
@@ -71,5 +68,17 @@ class UserCrudController extends AbstractCrudController
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN');
         
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if ($entityInstance instanceof User) {
+            $roleMax = [];
+            $roleMax[] = $entityInstance->getLevel();
+            $entityInstance->setRoles($roleMax);
+
+            $entityManager->persist($entityInstance);
+            $entityManager->flush();
+        }
     }
 }

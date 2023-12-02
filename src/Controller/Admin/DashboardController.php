@@ -32,6 +32,7 @@ use App\Entity\NumbersOfPlayers;
 use App\Service\DocumentService;
 use App\Entity\ConditionOccasion;
 use App\Entity\DocumentParametre;
+use App\Entity\Level;
 use App\Repository\ItemRepository;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Returndetailstostock;
@@ -182,6 +183,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Gestion des utilisateurs:');
         yield MenuItem::linkToCrud('Liste des clients', 'fas fa-list', User::class);
+        yield MenuItem::linkToCrud('Liste des levels', 'fas fa-list', Level::class)->setPermission('SUPER_ADMIN');
         yield MenuItem::linkToCrud('Liste des adresses', 'fas fa-list', Address::class);
         
         yield MenuItem::section('Gestion des paniers:');
