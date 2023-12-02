@@ -54,7 +54,7 @@ class MemberController extends AbstractController
 
     }
 
-    #[Route('/membre/historique', name: 'member')]
+    #[Route('/membre', name: 'member')]
     public function membreHistorique(DocumentParametreRepository $documentParametreRepository, Request $request): Response
     {
         $user = $this->security->getUser();

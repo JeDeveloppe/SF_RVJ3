@@ -23,22 +23,22 @@
                     </div>
                 </div>
             {% endfor %}
-            {% if facturation_adresses | length < 2 %}
-                <a class="btn btn-outline-primary mt-3" href="{{ path('adresse_new', {'slug': 'facturation'}) }}">Créer une nouvelle adresse (maximum 2)</a>
-            {% else %}
-                <p class="p-2 text-center h5 mt-3">Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
-            {% endif %}
         {% else %}
             <div class="card p-0">
                 <div class="card-header">Aucune pour le moment...</div>
             </div>
+        {% endif %}
+        {% if facturation_adresses | length < 2 %}
+            <a class="btn btn-outline-primary mt-3" href="{{ path('adresse_new') }}">Créer une nouvelle adresse (maximum 2)</a>
+        {% else %}
+            <p class="p-2 text-center h5 mt-3">Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
         {% endif %}
     </div>
 
     <div class="h3 mt-5" id="facturation">Les adresses de livraison</div>
 
     <div class="row justify-content-center mb-5">
-            {% if livraison_adresses | length >  0 %}
+        {% if livraison_adresses | length >  0 %}
             {% for adresse in livraison_adresses %}
                 <div class="card col-12 col-md-7 p-0">
                     <div class="card-body d-flex flex-column">
@@ -46,21 +46,21 @@
                             {{ adresse.organization ?? "" }} {{ adresse.lastname }} {{ adresse.firstname }}, {{ adresse.street }}, {{ adresse.city }}
                         </div>
                         <div class="col-12 d-flex justify-content-end align-items-center">
-                            <a class="btn btn-warning" href="{{ path('adresse_edit', {'id': adresse.id}) }}">Éditer</a> 
+                            <a class="btn btn-warning" href="{{ path('adresse_edit') }}">Éditer</a> 
                             {{ include('member/adresse/_delete_form.html.twig') }}
                         </div>
                     </div>
                 </div>
             {% endfor %}
-            {% if livraison_adresses | length < 2 %}
-                <a class="btn btn-outline-primary mt-3" href="{{ path('adresse_new', {'slug': 'facturation'}) }}">Créer une nouvelle adresse (maximum 2)</a>
-            {% else %}
-                <p class="p-2 text-center h5 mt-3">Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
-            {% endif %}
         {% else %}
             <div class="card p-0">
                 <div class="card-header">Aucune pour le moment...</div>
             </div>
+        {% endif %}
+        {% if livraison_adresses | length < 2 %}
+            <a class="btn btn-outline-primary mt-3" href="{{ path('adresse_new', {'slug': 'facturation'}) }}">Créer une nouvelle adresse (maximum 2)</a>
+        {% else %}
+            <p class="p-2 text-center h5 mt-3">Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
         {% endif %}
     </div>
   
