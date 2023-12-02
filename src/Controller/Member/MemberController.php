@@ -42,13 +42,6 @@ class MemberController extends AbstractController
     {
     }
 
-    #[Route('/membre', name: 'member')]
-    public function index(): Response
-    {
-
-        return $this->render('member/index.html.twig', []);
-    }
-
     #[Route('/membre/adresses', name: 'member_adresses')]
     public function membreAdresses(): Response
     {
@@ -61,7 +54,7 @@ class MemberController extends AbstractController
 
     }
 
-    #[Route('/membre/historique', name: 'member_historique')]
+    #[Route('/membre/historique', name: 'member')]
     public function membreHistorique(DocumentParametreRepository $documentParametreRepository, Request $request): Response
     {
         $user = $this->security->getUser();
