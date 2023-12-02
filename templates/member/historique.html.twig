@@ -2,7 +2,7 @@
 
 {% block member %}
 {# //TODO format smartphone #}
-   <div class="row">
+   <div class="row mb-3">
       {% if documents | length > 0 %}
          <div class="col-11 mx-auto py-2">
             <p class="col-12 text-center text-danger"><i class="fas fa-info-circle"></i> Les devis de plus de {{ docParams.delayBeforeDeleteDevis * 2 }} jours sont automatiquement supprimés.</p>
@@ -45,6 +45,12 @@
             </table>
          </div>
       {% endif %}
+   </div>
+
+   <div class="row">
+      <div class="col-12 d-flex justify-content-center">
+            {{ knp_pagination_render(documents, 'components/pagination.html.twig') }}
+      </div>
    </div>
 
 {% endblock %}

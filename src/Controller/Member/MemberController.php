@@ -14,13 +14,14 @@ use App\Repository\PanierRepository;
 use App\Repository\AddressRepository;
 use App\Repository\AdresseRepository;
 use App\Repository\DocumentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ConfigurationRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\DocumentLignesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\DocumentParametreRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -32,6 +33,7 @@ class MemberController extends AbstractController
         private DocumentRepository $documentRepository,
         private Security $security,
         private UtilitiesService $utilitiesService,
+        private PaginatorInterface $paginator,
         private PanierRepository $panierRepository,
         private AddressRepository $addressRepository,
         private DocumentService $documentService,
@@ -60,11 +62,17 @@ class MemberController extends AbstractController
     }
 
     #[Route('/membre/historique', name: 'app_member_historique')]
-    public function membreHistorique(DocumentParametreRepository $documentParametreRepository): Response
+    public function membreHistorique(DocumentParametreRepository $documentParametreRepository, Request $request): Response
     {
         $user = $this->security->getUser();
                 
-        $documents = $user->getDocuments();
+        $donnees = $user->getDocuments();
+
+        $documents = $this->paginator->paginate(
+            $donnees, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
 
         return $this->render('member/historique.html.twig', [
             'documents' => $documents,
