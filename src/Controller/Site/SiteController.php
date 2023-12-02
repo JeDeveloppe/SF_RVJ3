@@ -92,7 +92,7 @@ class SiteController extends AbstractController
         ]);
     }
 
-    #[Route('/document/{tokenDocument}', name: 'app_document_view')]
+    #[Route('/document/{tokenDocument}', name: 'document_view')]
     public function lectureDevis(
         $tokenDocument,
         DocumentRepository $documentRepository,

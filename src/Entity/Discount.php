@@ -66,7 +66,7 @@ class Discount
         return $this;
     }
 
-    public function isIsOnline(): ?bool
+    public function getIsOnline(): ?bool
     {
         return $this->isOnline;
     }

@@ -1,17 +1,17 @@
 
 {% if command == 'TO_PREPARE' %}  
         <div class="btn-group" role="group">
-            <a href="{{ path('app_admin_change_status_document', {'document': token,'status': status.SET_ASIDE }) }}" class="btn btn-info">Mettre de côté</a>
-            <a href="{{ path('app_admin_change_status_document', {'document': token,'status': status.END }) }}" class="btn btn-success">Ok expédier</a>
+            <a href="{{ path('admin_change_status_document', {'document': token,'status': status.SET_ASIDE }) }}" class="btn btn-info">Mettre de côté</a>
+            <a href="{{ path('admin_change_status_document', {'document': token,'status': status.END }) }}" class="btn btn-success">Ok expédier</a>
         </div>
 {% elseif command == 'SET_ASIDE' %}
         <div class="btn-group" role="group">
-            <a href="{{ path('app_admin_change_status_document', {'document': token,'status': status.TO_PREPARE }) }}" class="btn btn-warning">A préparer</a>
-            <a href="{{ path('app_admin_change_status_document', {'document': token,'status': status.END }) }}" class="btn btn-success">Ok expédier</a>
+            <a href="{{ path('admin_change_status_document', {'document': token,'status': status.TO_PREPARE }) }}" class="btn btn-warning">A préparer</a>
+            <a href="{{ path('admin_change_status_document', {'document': token,'status': status.END }) }}" class="btn btn-success">Ok expédier</a>
         </div>
 {% elseif command == 'UNKNOWN' %}
         <div class="btn-group" role="group">
-            <a href="{{ path('app_admin_change_status_document', {'document': token,'status': status.SET_ASIDE }) }}" class="btn btn-info">Mettre de côté</a>
-            <a href="{{ path('app_admin_change_status_document', {'document': token,'status': status.END }) }}" class="btn btn-success">Ok expédier</a>
+            <a href="{{ path('admin_change_status_document', {'document': token,'status': status.SET_ASIDE }) }}" class="btn btn-info">Mettre de côté</a>
+            <a href="{{ path('admin_change_status_document', {'document': token,'status': status.END }) }}" class="btn btn-success">Ok expédier</a>
         </div>
 {% endif %}

@@ -23,7 +23,7 @@ class PaiementController extends AbstractController
     ){  
     }
 
-    #[Route('/paiement/{tokenDocument}', name: 'app_paiement')]
+    #[Route('/paiement/{tokenDocument}', name: 'paiement')]
     public function creationPaiement($tokenDocument)
     {
         if($_ENV["PAIEMENT_MODULE"] == "STRIPE")
@@ -41,7 +41,7 @@ class PaiementController extends AbstractController
         }
     }
 
-    #[Route('/paiement/validation/{tokenDocument}', name: 'app_paiement_success')]
+    #[Route('/paiement/validation/{tokenDocument}', name: 'paiement_success')]
     public function paiementSuccess($tokenDocument)
     {
         if($_ENV["PAIEMENT_MODULE"] == "STRIPE")
@@ -67,7 +67,7 @@ class PaiementController extends AbstractController
         }
     }
 
-    #[Route('/paiement/annulation-achat/{tokenDocument}', name: 'app_paiement_canceled')]
+    #[Route('/paiement/annulation-achat/{tokenDocument}', name: 'paiement_canceled')]
     public function paiementCancel($tokenDocument)
     {
         $document = $this->documentRepository->findOneBy(['token' => $tokenDocument]);
@@ -86,7 +86,7 @@ class PaiementController extends AbstractController
     }
 
     //TODO
-    #[Route('/paiement/notificationUrl/{tokenDocument}', name: 'app_paiement_notificationUrl')]
+    #[Route('/paiement/notificationUrl/{tokenDocument}', name: 'paiement_notificationUrl')]
     public function notificationUrl($tokenDocument)
     {
         if($_ENV["PAIEMENT_MODULE"] == "STRIPE")

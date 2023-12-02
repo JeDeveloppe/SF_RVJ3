@@ -2,10 +2,18 @@
 
 {% block member %}
 
-   <div class="row my-5 card py-4">
+   <h1 class="col-12 text-center my-5">Mon compte</h1>
+
+   {% include "member/nav.html.twig" %}
+
+   <div class="row my-5 py-4">
       <div class="col-12 col-md-6 mx-auto">
          {{ form_start(form) }}
-            {{ form_widget(form) }}
+            {{ form_widget(form.email) }}
+            {{ form_widget(form.password) }}
+            <p class="col-12 text-end">Changer de mot de passe ?</p>
+            {{ form_widget(form.phone) }}
+            {{ form_widget(form.country) }}
             <div class="col-12 text-center">
                <button class="btn btn-success my-3">{{ button_label|default('Enregistrer') }}</button>
             </div>

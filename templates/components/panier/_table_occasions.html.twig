@@ -21,7 +21,7 @@
                     </p>
                 </td>
                 <td class="align-middle text-center">{{ (panier.priceWithoutTax  * (1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</td>
-                <td class="align-middle text-center"><a href="{{ path('app_panier_delete_item', {'item_id': panier.id }) }}"><i class="fa-solid fa-trash text-danger"></i></a></td>
+                <td class="align-middle text-center"><a href="{{ path('panier_delete_item', {'item_id': panier.id }) }}"><i class="fa-solid fa-trash text-danger"></i></a></td>
             </tr>
         {% endfor %}
     </table>

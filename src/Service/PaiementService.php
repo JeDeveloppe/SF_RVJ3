@@ -132,10 +132,10 @@ class PaiementService
                     'delivery_type' => 'BILLING'
                 ],
                 'hosted_payment' => [
-                    'return_url' => $this->urlGeneratorInterface->generate('app_paiement_success', ['tokenDocument' => $customer_id], UrlGeneratorInterface::ABSOLUTE_URL),
-                    'cancel_url' => $this->urlGeneratorInterface->generate('app_paiement_canceled', ['tokenDocument' => $customer_id], UrlGeneratorInterface::ABSOLUTE_URL)
+                    'return_url' => $this->urlGeneratorInterface->generate('paiement_success', ['tokenDocument' => $customer_id], UrlGeneratorInterface::ABSOLUTE_URL),
+                    'cancel_url' => $this->urlGeneratorInterface->generate('paiement_canceled', ['tokenDocument' => $customer_id], UrlGeneratorInterface::ABSOLUTE_URL)
                 ],
-                'notification_url' => $this->urlGeneratorInterface->generate('app_paiement_notificationUrl', ['tokenDocument' => $customer_id], UrlGeneratorInterface::ABSOLUTE_URL),
+                'notification_url' => $this->urlGeneratorInterface->generate('paiement_notificationUrl', ['tokenDocument' => $customer_id], UrlGeneratorInterface::ABSOLUTE_URL),
                 'metadata'         => [
                     'customer_id'  => $customer_id
                 ]

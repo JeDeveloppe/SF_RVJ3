@@ -1,16 +1,10 @@
 {% extends 'site/base.html.twig' %}
 
-{% block title %}Mon compte{% endblock %}
+{% block title %}Espace membre{% endblock %}
 
 
 {% block body %}
 
-    <h1 class="col-12 text-center my-5">Espace membre</h1>
-
-    {% include "member/nav.html.twig" %}
-
-         <div class="container mb-3">
-            {% block member %}{% endblock %}
-        </div>
-
+    {% block member %}{% endblock %}
+    
 {% endblock %}

@@ -16,7 +16,7 @@
                         <td class="col-9">{{ adresse.organization ?? "" }} {{ adresse.lastname }} {{ adresse.firstname }}, {{ adresse.street }}, {{ adresse.city }}</td>
                         <td class="col-3 text-center align-self-center">
                             {# //TODO
-                            <a class="btn btn-warning" href="{{ path('app_adresse_edit', {'id': adresse.id}) }}">Éditer</a> 
+                            <a class="btn btn-warning" href="{{ path('adresse_edit', {'id': adresse.id}) }}">Éditer</a> 
                             {{ include('member/adresse/_delete_form.html.twig') }}#}
                         </td>
                     </tr>
@@ -29,7 +29,7 @@
             </table>
             {# //TODO
             {% if facturation_adresses | length < 2 %}
-                <a class="btn btn-outline-primary" href="{{ path('app_adresse_new', {'slug': 'facturation'}) }}">Créer une nouvelle adresse (maximum 2)</a>
+                <a class="btn btn-outline-primary" href="{{ path('adresse_new', {'slug': 'facturation'}) }}">Créer une nouvelle adresse (maximum 2)</a>
             {% else %}
                 <p class="p-2 text-center h5">Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
             {% endif %} #}
@@ -39,7 +39,7 @@
     {# {% if panier | length > 0 %}
         <div class="row my-2">
             <div class="col-12 text-center">
-                <a class="btn btn-secondary" href="{{ path('app_panier') }}">Retourner au panier</a>
+                <a class="btn btn-secondary" href="{{ path('panier') }}">Retourner au panier</a>
             </div>
         </div>
     {% endif %} #}
@@ -58,7 +58,7 @@
                         <td class="col-9">{{ adresse.organization ?? "" }} {{ adresse.lastname }} {{ adresse.firstname }}, {{ adresse.street }}, {{ adresse.city }}</td>
                         <td class="col-3 text-center align-self-center">
                             {# //TODO
-                            <a class="btn btn-warning" href="{{ path('app_adresse_edit', {'id': adresse.id}) }}">Éditer</a>
+                            <a class="btn btn-warning" href="{{ path('adresse_edit', {'id': adresse.id}) }}">Éditer</a>
                             {{ include('member/adresse/_delete_form.html.twig') }} #}
                         </td>
                     </tr>
@@ -71,7 +71,7 @@
             </table>
             {% if livraison_adresses | length < 2 %}
                 {# //TODO
-                <a class="btn btn-outline-primary" href="{{ path('app_adresse_new', {'slug': 'livraison'}) }}">Créer une nouvelle adresse (maximum 2)</a> #}
+                <a class="btn btn-outline-primary" href="{{ path('adresse_new', {'slug': 'livraison'}) }}">Créer une nouvelle adresse (maximum 2)</a> #}
             {% else %}
                 <p class="p-2 text-center h5">Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
             {% endif %}

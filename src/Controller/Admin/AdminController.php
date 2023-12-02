@@ -25,7 +25,7 @@ class AdminController extends AbstractController
     {
     }
 
-    #[Route('/admin/change-status-of-document/{document}/{status}', name: 'app_admin_change_status_document')]
+    #[Route('/admin/change-status-of-document/{document}/{status}', name: 'admin_change_status_document')]
     public function changeStatusDocument($document,$status): Response
     {
         $document = $this->documentRepository->findOneBy(['token' => $document]);

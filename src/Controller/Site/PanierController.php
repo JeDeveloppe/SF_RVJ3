@@ -44,7 +44,7 @@ class PanierController extends AbstractController
         
     }
     
-    #[Route('/panier', name: 'app_panier')]
+    #[Route('/panier', name: 'panier')]
     public function index(Request $request): Response
     {
         $user = $this->security->getUser();
@@ -104,11 +104,11 @@ class PanierController extends AbstractController
                 //paiement direct donc on redirige vers la page de paiement avec le numero de document
                 //TODO
     
-                return $this->redirectToRoute('app_paiement', ['tokenDocument' => $document->getToken()]);
+                return $this->redirectToRoute('paiement', ['tokenDocument' => $document->getToken()]);
 
             }else{
     
-                return $this->redirectToRoute('app_panier_success', ['tokenDocument' => $document->getToken()]);
+                return $this->redirectToRoute('panier_success', ['tokenDocument' => $document->getToken()]);
 
             }
 
@@ -131,7 +131,7 @@ class PanierController extends AbstractController
         ]);
     }
 
-    #[Route('/panier/ajout-occasion/{occasion_id}', name: 'app_panier_add_occasion')]
+    #[Route('/panier/ajout-occasion/{occasion_id}', name: 'panier_add_occasion')]
     public function addOccasion($occasion_id): Response
     {
         $user = $this->checkUserIsConnected();
@@ -143,7 +143,7 @@ class PanierController extends AbstractController
         return $this->redirectToRoute('app_catalogue_occasions');
     }
 
-    #[Route('/panier/ajout-demande/{boite}', name: 'app_panier_add_demande')]
+    #[Route('/panier/ajout-demande/{boite}', name: 'panier_add_demande')]
     public function addDemande(): Response
     {
         //TODO
@@ -164,7 +164,7 @@ class PanierController extends AbstractController
         return $user;
     }
 
-    #[Route('/panier/delete-item/{item_id}', name: 'app_panier_delete_item')]
+    #[Route('/panier/delete-item/{item_id}', name: 'panier_delete_item')]
     public function deleteItemInPanier($item_id): Response
     {
         $user = $this->checkUserIsConnected();
@@ -173,10 +173,10 @@ class PanierController extends AbstractController
 
         $this->addFlash($reponse[0], $reponse[1]);
 
-        return $this->redirectToRoute('app_panier');
+        return $this->redirectToRoute('panier');
     }
 
-    #[Route('/panier/ajout-article/', name: 'app_panier_add_article')]
+    #[Route('/panier/ajout-article/', name: 'panier_add_article')]
     public function addArticle(Request $request): Response
     {
 
@@ -188,14 +188,14 @@ class PanierController extends AbstractController
 
         $boite = $this->boiteRepository->findOneBy(['id' => $request->request->get('boiteId')]);
 
-        return $this->redirectToRoute('app_catalogue_pieces_detachees_demande', [
+        return $this->redirectToRoute('catalogue_pieces_detachees_demande', [
             'editorSlug' => $boite->getEditor()->getSlug(),
             'slug' => $boite->getSlug(),
             'id' => $boite->getId()
         ]);
     }
 
-    #[Route('/panier/success/{tokenDocument}', name: 'app_panier_success')]
+    #[Route('/panier/success/{tokenDocument}', name: 'panier_success')]
     public function panierSuccess($tokenDocument):Response
     {
 

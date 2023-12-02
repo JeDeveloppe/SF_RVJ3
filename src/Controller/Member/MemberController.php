@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Repository\DocumentParametreRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class MemberController extends AbstractController
 {
@@ -42,14 +42,14 @@ class MemberController extends AbstractController
     {
     }
 
-    #[Route('/membre', name: 'app_member')]
+    #[Route('/membre', name: 'member')]
     public function index(): Response
     {
 
         return $this->render('member/index.html.twig', []);
     }
 
-    #[Route('/membre/adresses', name: 'app_member_adresses')]
+    #[Route('/membre/adresses', name: 'member_adresses')]
     public function membreAdresses(): Response
     {
         $user = $this->security->getUser();
@@ -61,7 +61,7 @@ class MemberController extends AbstractController
 
     }
 
-    #[Route('/membre/historique', name: 'app_member_historique')]
+    #[Route('/membre/historique', name: 'member_historique')]
     public function membreHistorique(DocumentParametreRepository $documentParametreRepository, Request $request): Response
     {
         $user = $this->security->getUser();
@@ -80,10 +80,11 @@ class MemberController extends AbstractController
         ]);
     }
 
-    #[Route('/membre/mon-compte', name: 'app_member_compte')]
+    #[Route('/membre/mon-compte', name: 'member_compte')]
     public function membreCompte(
         Request $request,
-        UserRepository $userRepository,): Response
+        UserRepository $userRepository,
+        UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $user = $this->security->getUser();
 
@@ -91,8 +92,15 @@ class MemberController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+dd($user);
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
             $userRepository->add($user);
-            return $this->redirectToRoute('app_member_compte', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('member_compte', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('member/compte.html.twig', [
@@ -100,7 +108,7 @@ class MemberController extends AbstractController
             ]);
     }
 
-    #[Route('/membre/delete/document/{tokenDocument}', name: 'app_member_delete_document')]
+    #[Route('/membre/delete/document/{tokenDocument}', name: 'member_delete_document')]
     public function deleteDocument($tokenDocument)
     {
 
@@ -135,7 +143,7 @@ class MemberController extends AbstractController
         ]);
     }
 
-    #[Route('/membre/download/facture/{token}', name: 'app_member_facture_download')]
+    #[Route('/membre/download/facture/{token}', name: 'member_facture_download')]
     public function factureDownload($token, DocumentService $documentService)
     {
         $documentService->factureToPdf($token);

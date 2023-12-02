@@ -68,7 +68,7 @@ class CatalogController extends AbstractController
     }
 
 
-    #[Route('/catalogue-pieces-detachees/{editorSlug}/{id}/{slug}', name: 'app_catalogue_pieces_detachees_demande')]
+    #[Route('/catalogue-pieces-detachees/{editorSlug}/{id}/{slug}', name: 'catalogue_pieces_detachees_demande')]
     public function cataloguePiecesDetacheesDemande($id, $slug, $editorSlug, Request $request): Response
     {
         $boite = $this->boiteRepository->findOneBy(['id' => $id, 'slug' => $slug, 'editor' => $this->editorRepository->findOneBy(['slug' => $editorSlug]), 'isOnline' => true]);
@@ -111,7 +111,7 @@ class CatalogController extends AbstractController
         ]);
     }
 
-    #[Route('/jeu-occasion/{reference_occasion}/{editor_slug}/{boite_slug}', name: 'app_occasion')]
+    #[Route('/jeu-occasion/{reference_occasion}/{editor_slug}/{boite_slug}', name: 'occasion')]
     public function occasion($reference_occasion, $editor_slug): Response
     {
 

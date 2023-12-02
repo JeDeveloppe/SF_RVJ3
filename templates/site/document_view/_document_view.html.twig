@@ -113,13 +113,13 @@
     {% if document.billNumber is null %}
         <div class="row my-5">
             <div class="col-6 text-center">
-                <a href="{{ path('app_paiement', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-success" >Payer</a><br/>
+                <a href="{{ path('paiement', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-success" >Payer</a><br/>
                 <img class="img-thumbnail col-9 col-md-6 col-lg-4 mt-4" src="{{ asset('build/images/design/logo-PAYPLUG.png') }}" alt="Paiement avec PAYPLUG"/>
             </div>
 
             {% if app.user is not null and app.user.password == document.user.password %}
                 <div class="col-6 text-center">
-                    <a href="{{ path('app_member_delete_document', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>
+                    <a href="{{ path('member_delete_document', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>
                 </div>
             {% endif %}
         </div>

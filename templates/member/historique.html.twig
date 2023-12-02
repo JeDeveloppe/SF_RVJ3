@@ -2,6 +2,11 @@
 
 {% block member %}
 {# //TODO format smartphone #}
+
+   <h1 class="col-12 text-center my-5">Mon historique</h1>
+
+   {% include "member/nav.html.twig" %}
+
    <div class="row mb-3">
       {% if documents | length > 0 %}
          <div class="col-11 mx-auto py-2">
@@ -27,7 +32,7 @@
                               {% if document.billNumber is not null %}
                                  Payé le {{ document.payment.timeOfTransaction|date('d-m-Y') }} <br/>par {{ document.payment.details }}
                               {% else %}
-                                 <a class="btn btn-outline-warning" href="{{ path('app_document_view', {'tokenDocument': document.token }) }}">Visualiser le devis</a>
+                                 <a class="btn btn-outline-warning" href="{{ path('document_view', {'tokenDocument': document.token }) }}">Visualiser le devis</a>
                               {% endif %}
                            </td>
                            <td>
@@ -35,7 +40,7 @@
                            </td>
                            <td>
                               {% if document.billNumber is not null %}
-                                 <a href="{{ path('app_member_facture_download', {'token': document.token }) }}" data-toggle="tooltip" data-html="true" title="Facture"><i class="fas fa-print fa-2x"></i></a>
+                                 <a href="{{ path('member_facture_download', {'token': document.token }) }}" data-toggle="tooltip" data-html="true" title="Facture"><i class="fas fa-print fa-2x"></i></a>
                               {% endif %}
                            </td>
                            
@@ -47,7 +52,7 @@
       {% endif %}
    </div>
 
-   <div class="row">
+   <div class="row mb-3">
       <div class="col-12 d-flex justify-content-center">
             {{ knp_pagination_render(documents, 'components/pagination.html.twig') }}
       </div>
