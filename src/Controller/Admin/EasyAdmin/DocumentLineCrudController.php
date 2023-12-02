@@ -39,6 +39,7 @@ class DocumentLineCrudController extends AbstractCrudController
     {
         return $crud
             ->showEntityActionsInlined()
+            ->setDefaultSort(['document' => 'DESC'])
             ->setPageTitle('index', 'Liste des lignes des documents')
             ->setPageTitle('detail', 'Détail d\'une ligne de document')
         ;

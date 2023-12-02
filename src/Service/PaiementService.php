@@ -314,11 +314,11 @@ class PaiementService
         return $arrayAdresse;
     }
     
-    private function payplugAuth()
+    public function payplugAuth()
     {
         \Payplug\Payplug::init(['secretKey' => $_ENV["PAYPLUG_SECRET"]]);
     }
-    private function stripeAuth()
+    public function stripeAuth()
     {
         $stripe = new Stripe();
         $stripe->setApiKey($_ENV["STRIPE_SECRET"]);

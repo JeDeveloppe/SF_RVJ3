@@ -8,6 +8,8 @@ use App\Repository\UserRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DocumentStatusRepository;
+use App\Repository\PaymentRepository;
+use App\Service\PaiementService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,7 +21,9 @@ class AdminController extends AbstractController
         private DocumentRepository $documentRepository,
         private DocumentStatusRepository $documentStatusRepository,
         private EntityManagerInterface $em,
+        private PaymentRepository $paymentRepository,
         private EmailService $emailService,
+        private PaiementService $paiementService,
         private UserRepository $userRepository
     )
     {
@@ -50,4 +54,20 @@ class AdminController extends AbstractController
 
         }
     }
+
+    #[Route('/admin/details-payment/{token}', name: 'admin_invoice_details')]
+    public function paymentDetails($token){
+
+        $payment = $this->paymentRepository->findOneBy(['tokenPayment' => $token]);
+
+        $this->paiementService->payplugAuth();
+
+        $result = \Payplug\Payment::retrieve($token);
+
+        return $this->render('admin/details_payment.html.twig', [
+            'payment' => $payment,
+            'result' => $result
+        ]);
+    }
+
 }

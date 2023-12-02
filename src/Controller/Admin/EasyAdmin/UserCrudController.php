@@ -11,11 +11,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
@@ -43,9 +40,9 @@ class UserCrudController extends AbstractCrudController
 
             FormField::addTab('Adresses'),
             AssociationField::new('addresses')->setLabel('Adresses')->onlyOnIndex(),
-            AssociationField::new('addresses')->setLabel('Adresses')->onlyOnForms()->setDisabled(true),
+            ArrayField::new('addresses')->setLabel('Adresses')->onlyOnForms()->setDisabled(true),
             
-            FormField::addTab('Achats'),
+            FormField::addTab('Documents'),
             AssociationField::new('documents')->setLabel('Documents')->onlyOnIndex(),
             AssociationField::new('documents')->setLabel('Documents')->onlyOnForms()->setDisabled(true),
         ];

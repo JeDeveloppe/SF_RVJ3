@@ -61,10 +61,18 @@ class PaymentCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+        $viewInvoice = Action::new('viewInvoice', 'Détails', 'fa fa-file-invoice')
+            ->linkToRoute('admin_invoice_details', function (Payment $payment): array {
+                return [
+                    'token' => $payment->getTokenPayment(),
+                ];
+            });
+
         return $actions
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->remove(Crud::PAGE_INDEX, Action::EDIT)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->add(Crud::PAGE_DETAIL, $viewInvoice)
             ->remove(Crud::PAGE_DETAIL, Action::DELETE)
             ->remove(Crud::PAGE_DETAIL, Action::EDIT)
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
