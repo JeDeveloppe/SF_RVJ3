@@ -61,9 +61,9 @@
 						<p>Prix de vente TTC:
 							{% if occasion.discountedPriceWithoutTax > 0 %}
 								<strike class="text-danger"><b>{{ (occasion.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</b></strike>
-								<b>{{ (occasion.discountedPriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</b>
+								<b>{{ (occasion.discountedPriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €</b>
 							{% else %}
-								{{ (occasion.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}
+								{{ (occasion.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €
 							{% endif %}
 						
 						</p>
