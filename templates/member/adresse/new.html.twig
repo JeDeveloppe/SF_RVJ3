@@ -4,11 +4,15 @@
 
     <div class="row my-5">
     
-        <a class="btn btn-primary text-center" href="{{ path('member_adresses') }}">Retour aux adresses</a>
-        
         <h3 class="col-12 text-center my-4">Création d'une adresse:</h3>
+        
+        <div class="col-6">
+            <a class="btn btn-primary text-center" href="{{ path('member_adresses') }}">Retour aux adresses</a>
+        </div>
+        
 
         {{ include('member/adresse/_form.html.twig') }}
 
     </div>
+
 {% endblock %}

@@ -5,12 +5,12 @@
     <a class="btn btn-primary" href="{{ path('member_adresses') }}">Retour aux adresses</a>
 
     <div class="row my-5">
-    <h3>Édition d'une adresse:</h3>
+        <h3>Édition d'une adresse:</h3>
 
-    
-    {{ include('member/adresse/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+        
+        {{ include('member/adresse/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    {{ include('member/adresse/_delete_form.html.twig') }}
+        {{ include('member/adresse/_delete_form.html.twig', {'adresse': address }) }}
 
     </div>
 {% endblock %}

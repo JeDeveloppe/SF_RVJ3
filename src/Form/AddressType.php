@@ -6,10 +6,12 @@ use App\Entity\Address;
 use App\Entity\City;
 use Symfony\Component\Form\AbstractType;
 use App\Form\AdressesVilleAutocompleteField;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class AddressType extends AbstractType
 {
@@ -18,22 +20,43 @@ class AddressType extends AbstractType
         $builder
             ->add('isFacturation', ChoiceType::class, [
                 'label' => 'Adresse de:',
+                'placeholder' => 'Faire un choix...',
                 'attr' => [
-                    'placeholder' => 'Faire un choix'
+                    'class' => 'form-control'
                 ],
                 'choices' => [
                     'FACTURATION' => true,
                     'LIVRAISON' => false
                     ]
                 ])
-            ->add('organization')
-            ->add('firstname')
-            ->add('lastname')
-            ->add('street')
-            // ->add('city', AdressesVilleAutocompleteField::class)
-            ->add('city', EntityType::class, [
-                'class' => City::class,
-                'autocomplete' => true,
+            ->add('organization', TextType::class, [
+                'label' => 'Organisation:',
+                'attr' => [
+                    'class' => 'form-control'
+                ],
+            ])
+            ->add('firstname', TextType::class, [
+                'label' => 'Prénom:',
+                'attr' => [
+                    'class' => 'form-control'
+                ],
+            ])
+            ->add('lastname', TextType::class, [
+                'label' => 'Nom:',
+                'attr' => [
+                    'class' => 'form-control'
+                ],
+            ])
+            ->add('street', TextType::class, [
+                'label' => 'Adresse complète:',
+                'attr' => [
+                    'class' => 'form-control'
+                ],
+            ])
+            ->add('city', AdressesVilleAutocompleteField::class, [
+                'attr' => [
+                    'class' => 'form-control'
+                ]
             ])
         ;
     }

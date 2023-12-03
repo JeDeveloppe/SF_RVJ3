@@ -34,12 +34,16 @@ class AdresseController extends AbstractController
         $form = $this->createForm(AddressType::class);
         $form->handleRequest($request);
 
-        // if($form->isSubmitted() && $form->isValid()) {
-        //     dd($form);
-        //     $this->addressRepository->add($adresse);
-        //     $this->addFlash('success', 'Adresse créée !');
-        //     return $this->redirectToRoute('member_adresses', [], Response::HTTP_SEE_OTHER);
-        // }
+        if($form->isSubmitted() && $form->isValid()) {
+            $user = $security->getUser();
+
+            $adresse = $form->getData();
+            $adresse->setUser($user);
+
+            $this->addressRepository->add($adresse);
+            $this->addFlash('success', 'Adresse créée !');
+            return $this->redirectToRoute('member_adresses', [], Response::HTTP_SEE_OTHER);
+        }
 
         return $this->render('member/adresse/new.html.twig', [
             'form' => $form
@@ -56,21 +60,36 @@ class AdresseController extends AbstractController
 
     #[Route('/membre/adresses/{id}/edit', name: 'adresse_edit')]
     public function edit(
+        $id,
         Request $request,
         Address $adresse,
         Security $security,
         ): Response
     {
-        $form = $this->createForm(AddressType::class);
+        $user = $security->getUser();
+
+        $adresse = $this->addressRepository->findOneBy(['id' => $id, 'user' => $user]);
+
+        if(!$adresse){
+
+            $this->addFlash('warning', 'Cette adresse ne vous appartient pas !');
+            return $this->redirectToRoute('app_home');
+        }
+
+        $form = $this->createForm(AddressType::class, $adresse);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->addFlash('success', 'Adresse mise à jour!');
+
             $this->addressRepository->add($adresse);
             return $this->redirectToRoute('member_adresses', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('member/adresse/edit.html.twig', [
             'form' => $form,
+            'address' => $id
         ]);
     }
 

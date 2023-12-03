@@ -9,6 +9,7 @@
 import './styles/template_bootstrap.scss';
 import './styles/site.scss';
 import './toast';
+import './bootstrap.js';
 
 require('bootstrap');
 

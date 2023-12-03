@@ -17,12 +17,13 @@ class AdressesVilleAutocompleteField extends AbstractType
     {
         $resolver->setDefaults([
             'class' => City::class,
-            'placeholder' => 'exemple:   FR: 14000 Caen',
+            'label' => 'Ville:',
+            'placeholder' => 'exemple:      14000 Caen',
             'choice_label' => function (City $city) {
-                return $city->getCountry().': ' . $city->getPostalcode().' '.$city->getName() ;
+                return $city->getPostalcode().' '.$city->getName() ;
             },
             'no_more_results_text' => 'PAS PLUS DE RESULTATS',
-            'searchable_fields' => ['name','postalCode'],
+            // 'searchable_fields' => ['name','postalCode'],
             'query_builder' => function(CityRepository $cityRepository) {
                 return $cityRepository->createQueryBuilder('c');
             },

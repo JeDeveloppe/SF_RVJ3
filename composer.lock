@@ -7349,16 +7349,16 @@
         },
         {
             "name": "symfony/ux-autocomplete",
-            "version": "v2.13.2",
+            "version": "v2.13.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-autocomplete.git",
-                "reference": "40b329b45559624a6c26f0edcedc379cf0ebe9a0"
+                "reference": "6e2a25a580eda54903905e90097e4384c77d960d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/40b329b45559624a6c26f0edcedc379cf0ebe9a0",
-                "reference": "40b329b45559624a6c26f0edcedc379cf0ebe9a0",
+                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/6e2a25a580eda54903905e90097e4384c77d960d",
+                "reference": "6e2a25a580eda54903905e90097e4384c77d960d",
                 "shasum": ""
             },
             "require": {
@@ -7420,7 +7420,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-autocomplete/tree/v2.13.2"
+                "source": "https://github.com/symfony/ux-autocomplete/tree/v2.13.3"
             },
             "funding": [
                 {
@@ -7436,7 +7436,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-11T01:20:31+00:00"
+            "time": "2023-11-12T21:55:15+00:00"
         },
         {
             "name": "symfony/validator",
