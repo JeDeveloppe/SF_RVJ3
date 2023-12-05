@@ -10,8 +10,7 @@
       <div class="col-12 col-md-6 mx-auto">
          {{ form_start(form) }}
             {{ form_widget(form.email) }}
-            {{ form_widget(form.password) }}
-            <p class="col-12 text-end">Changer de mot de passe ?</p>
+            <p class="col-12 text-end"><a href="{{ path('app_check_email') }}">Changer de mot de passe ?</a></p>
             {{ form_widget(form.phone) }}
             {{ form_widget(form.country) }}
             <div class="col-12 text-center">

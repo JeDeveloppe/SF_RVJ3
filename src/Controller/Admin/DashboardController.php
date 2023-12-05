@@ -8,6 +8,7 @@ use App\Entity\Item;
 use App\Entity\User;
 use App\Entity\Boite;
 use App\Entity\Color;
+use App\Entity\Level;
 use App\Entity\Editor;
 use DateTimeImmutable;
 use App\Entity\Address;
@@ -22,6 +23,7 @@ use App\Entity\Occasion;
 use App\Entity\ItemGroup;
 use App\Entity\Department;
 use App\Entity\DocumentLine;
+use App\Entity\ResetPassword;
 use App\Entity\DocumentStatus;
 use App\Entity\ShippingMethod;
 use App\Entity\CollectionPoint;
@@ -32,12 +34,12 @@ use App\Entity\NumbersOfPlayers;
 use App\Service\DocumentService;
 use App\Entity\ConditionOccasion;
 use App\Entity\DocumentParametre;
-use App\Entity\Level;
 use App\Repository\ItemRepository;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Returndetailstostock;
 use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
+use App\Repository\ResetPasswordRepository;
 use App\Repository\DocumentStatusRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,7 +56,8 @@ class DashboardController extends AbstractDashboardController
         private DocumentRepository $documentRepository,
         private DocumentStatusRepository $documentStatusRepository,
         private ItemRepository $itemRepository,
-        private DocumentService $documentService
+        private DocumentService $documentService,
+        private ResetPasswordRepository $resetPasswordRepository
     )
     {
         
@@ -63,7 +66,6 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-
         $now = new DateTimeImmutable('now');
 
         $documentsToDelete = $this->documentRepository->findByDevisToDelete($now);
@@ -159,6 +161,8 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
+        $resetPasswords = $this->resetPasswordRepository->findBy(['isUsed' => false]);
+
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');        
         yield MenuItem::linkToRoute('SITE','fa-solid fa-shop','app_home');
 
@@ -185,6 +189,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Liste des clients', 'fas fa-list', User::class);
         yield MenuItem::linkToCrud('Liste des levels', 'fas fa-list', Level::class)->setPermission('ROLE_SUPER_ADMIN');
         yield MenuItem::linkToCrud('Liste des adresses', 'fas fa-list', Address::class);
+        yield MenuItem::linkToCrud('Chgmts de mdp', 'fas fa-list', ResetPassword::class)
+            ->setBadge(count($resetPasswords),'info');
         
         yield MenuItem::section('Gestion des paniers:');
         yield MenuItem::linkToCrud('Moyens de retrait/envoi', 'fas fa-list', ShippingMethod::class);

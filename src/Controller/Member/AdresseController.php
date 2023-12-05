@@ -36,10 +36,12 @@ class AdresseController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
             $user = $security->getUser();
+            $isFacturation = $form->get('isFacturation')->getData();
 
-            $adresses = $this->addressRepository->findBy(['user' => $user]);
+            $adressesFacturation = $this->addressRepository->findBy(['user' => $user, 'isFacturation' => true]);
+            $adressesLivraison = $this->addressRepository->findBy(['user' => $user, 'isFacturation' => false]);
 
-            if(count($adresses) > 4){
+            if(count($adressesFacturation) >= 2 && $isFacturation == true || count($adressesLivraison) >= 2 && $isFacturation == false){
 
                 $this->addFlash('warning', 'Vous avez atteint(e) le nombre maximum d\'adresses !');
 
@@ -109,6 +111,8 @@ class AdresseController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$adresse->getId(), $request->request->get('_token'))) {
             $this->addressRepository->remove($adresse);
         }
+
+        $this->addFlash('success', 'Adresse supprimée!');
 
         return $this->redirectToRoute('member_adresses', [], Response::HTTP_SEE_OTHER);
     }

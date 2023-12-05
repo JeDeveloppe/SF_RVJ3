@@ -2,15 +2,13 @@
 
 namespace App\Controller\Admin;
 
-use App\Form\SwithUserType;
-use App\Service\EmailService;
 use App\Repository\UserRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DocumentStatusRepository;
 use App\Repository\PaymentRepository;
+use App\Service\MailService;
 use App\Service\PaiementService;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +20,7 @@ class AdminController extends AbstractController
         private DocumentStatusRepository $documentStatusRepository,
         private EntityManagerInterface $em,
         private PaymentRepository $paymentRepository,
-        private EmailService $emailService,
+        private MailService $mailService,
         private PaiementService $paiementService,
         private UserRepository $userRepository
     )

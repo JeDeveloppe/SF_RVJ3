@@ -3,18 +3,28 @@
 namespace App\Controller\Site;
 
 use App\Form\ContactType;
-use App\Repository\DocumentLineRepository;
+use App\Entity\ResetPassword;
 use App\Service\PanierService;
+use App\Service\DocumentService;
+use App\Service\PasswordService;
+use App\Service\UtilitiesService;
+use App\Repository\UserRepository;
 use App\Repository\PartnerRepository;
+use Symfony\Component\Form\FormError;
 use App\Repository\DocumentRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\DocumentLineRepository;
+use App\Form\EmailForSendResetPasswordType;
+use App\Repository\ResetPasswordRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
-use App\Service\DocumentService;
-use App\Service\UtilitiesService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security\UserAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class SiteController extends AbstractController
 {
@@ -22,7 +32,10 @@ class SiteController extends AbstractController
         private LegalInformationRepository $legalInformationRepository,
         private PanierService $panierService,
         private DocumentService $documentService,
-        private UtilitiesService $utilitiesService
+        private UtilitiesService $utilitiesService,
+        private UserRepository $userRepository,
+        private PasswordService $passwordService,
+        private ResetPasswordRepository $resetPasswordRepository
     )
     {
     }
@@ -142,5 +155,87 @@ class SiteController extends AbstractController
                 'tva' => $tauxTva
             ]);
         }
+    }
+
+    #[Route('/check-email', name: 'app_check_email')]
+    public function checkEmail(Request $request): Response
+    {
+
+        $form = $this->createForm(EmailForSendResetPasswordType::class, null);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            $user = $this->userRepository->findOneBy(['email' => $form->get('email')->getData()]);
+
+            if(!$user){
+
+                $form->get('email')->addError(new FormError('Aucun compte n\'est associé à cette adresse email...'));
+
+            }else{
+
+                $resetPassword = new ResetPassword();
+                $resetPassword->setEmail($form->get('email')->getData());
+                $this->passwordService->saveResetPasswordInDatabaseAndSendEmail($resetPassword);
+
+                $this->addFlash('success', 'Un lien viens de vous être envoyé...');
+                return $this->redirectToRoute('app_home');
+            }
+        }
+
+        return $this->render('site/password/email_to_send_link_for_reset_password.html.twig', [
+            'emailForSendResetPasswordForm' => $form->createView()
+        ]);
+    }
+
+    #[Route('/reset-password/{uuid}', name: 'reset_password')]
+    public function resetPassword($uuid, Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    {
+
+        $resetPassword = $this->resetPasswordRepository->findOneBy(['uuid' => $uuid]);
+
+        if(!$resetPassword OR $resetPassword->isIsUsed() != false){
+
+            $this->addFlash('warning', 'Demande inconnue ou déjà utilisée !');
+            return $this->redirectToRoute('app_home');
+        }
+
+        $form = $this->createForm(ResetPasswordType::class, null);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            if($form->get('password')->getData() !== $form->get('passwordVerify')->getData()){
+
+                $form->get('password')->addError(new FormError('Les mots de passe ne sont pas identiques...'));
+
+            }else{
+
+                // encode the plain password
+                $user = $this->userRepository->findOneBy(['email' => $resetPassword->getEmail()]);
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $user,
+                        $form->get('password')->getData()
+                    )
+                    );
+
+                $entityManager->persist($user);
+
+                //update invitation
+                $resetPassword->setIsUsed(true);
+
+                $entityManager->persist($resetPassword);
+
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Mot de passe mis à jour !');
+                return $this->redirectToRoute('app_home');
+            }
+        }
+
+        return $this->render('site/registration/reset_password.html.twig', [
+            'resetPasswordForm' => $form->createView()
+        ]);
     }
 }

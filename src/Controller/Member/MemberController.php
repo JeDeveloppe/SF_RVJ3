@@ -84,15 +84,11 @@ class MemberController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-dd($user);
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-            $userRepository->add($user);
+        if($form->isSubmitted() && $form->isValid()) {
+    
+            $this->em->persist($user);
+            $this->em->flush();
+            
             return $this->redirectToRoute('member_compte', [], Response::HTTP_SEE_OTHER);
         }
 

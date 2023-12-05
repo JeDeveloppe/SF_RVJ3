@@ -26,14 +26,7 @@ class UserType extends AbstractType
                 ]
             ])
             // ->add('roles')
-            ->add('password', PasswordType::class, [
-                'label' => 'Mot de passe:',
-                'attr' => [
-                    'placeholder' => '* * * * * * * * * *',
-                    'class' => 'form-control mb-3',
-                    'readonly' => true
-                ]
-            ])
+
             ->add('phone', TelType::class, [
                 'label' => 'Téléphone:',
                 'attr' => [
