@@ -17,12 +17,15 @@ class AddressType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $edit = $options['edit'];
+
         $builder
             ->add('isFacturation', ChoiceType::class, [
                 'label' => 'Adresse de:',
                 'placeholder' => 'Faire un choix...',
+                'disabled' => $edit,
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
                 ],
                 'choices' => [
                     'FACTURATION' => true,
@@ -65,6 +68,7 @@ class AddressType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Address::class,
+            'edit' => null ?? false
         ]);
     }
 }

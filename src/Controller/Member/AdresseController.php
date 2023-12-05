@@ -37,11 +37,21 @@ class AdresseController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             $user = $security->getUser();
 
-            $adresse = $form->getData();
-            $adresse->setUser($user);
+            $adresses = $this->addressRepository->findBy(['user' => $user]);
 
-            $this->addressRepository->add($adresse);
-            $this->addFlash('success', 'Adresse créée !');
+            if(count($adresses) > 4){
+
+                $this->addFlash('warning', 'Vous avez atteint(e) le nombre maximum d\'adresses !');
+
+            }else{
+
+                $adresse = $form->getData();
+                $adresse->setUser($user);
+    
+                $this->addressRepository->add($adresse);
+                $this->addFlash('success', 'Adresse créée !');
+            }
+
             return $this->redirectToRoute('member_adresses', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -76,7 +86,7 @@ class AdresseController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $form = $this->createForm(AddressType::class, $adresse);
+        $form = $this->createForm(AddressType::class, $adresse, ['edit' => true]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
