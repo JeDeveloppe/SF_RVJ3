@@ -17,7 +17,8 @@ class ResetPasswordType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                     'class' => 'form-control'
-                ]
+                ],
+                'toggle' => true,
             ])
             ->add('passwordVerify', PasswordType::class, [
                 'label' => 'Vérification du mot de passe:',
@@ -25,7 +26,8 @@ class ResetPasswordType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'La même chose qu\'avant...'
-                ]
+                ],
+                'toggle' => true
             ])
         ;
     }

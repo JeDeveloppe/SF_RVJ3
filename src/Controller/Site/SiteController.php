@@ -5,6 +5,7 @@ namespace App\Controller\Site;
 use App\Form\ContactType;
 use App\Entity\ResetPassword;
 use App\Service\PanierService;
+use App\Form\ResetPasswordType;
 use App\Service\DocumentService;
 use App\Service\PasswordService;
 use App\Service\UtilitiesService;
@@ -189,7 +190,7 @@ class SiteController extends AbstractController
     }
 
     #[Route('/reset-password/{uuid}', name: 'reset_password')]
-    public function resetPassword($uuid, Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function resetPassword($uuid, Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
 
         $resetPassword = $this->resetPasswordRepository->findOneBy(['uuid' => $uuid]);
@@ -234,7 +235,7 @@ class SiteController extends AbstractController
             }
         }
 
-        return $this->render('site/registration/reset_password.html.twig', [
+        return $this->render('site/password/reset_password.html.twig', [
             'resetPasswordForm' => $form->createView()
         ]);
     }
