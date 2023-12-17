@@ -1,0 +1,16 @@
+<div class="row justify-content-around my-5 align-items-center">
+    <div class="col-6">
+        {% set facturations = document.billingAddress|split('<br/>') %}
+        Livraison / Retrait:<br/>
+        {{ document.sendingBy }}<br/>
+        {% for facturation in facturations %}
+            {{ facturation }}<br/>
+        {% endfor %}
+    </div>
+    <div class="col-6 text-end">
+        Numéro: {{ document.billNumber }}<br/>
+        Payé le: {{ document.payment.timeOfTransaction | date('d-m-Y') }}<br/>
+        {{ document.payment.details }}
+    </div>
+</div>
+

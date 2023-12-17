@@ -2,28 +2,27 @@
 
 namespace App\Controller\Member;
 
-use DateInterval;
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Form\UserType;
 use DateTimeImmutable;
-use App\Service\Utilities;
 use App\Service\DocumentService;
-use App\Entity\DocumentParametre;
 use App\Service\UtilitiesService;
 use App\Repository\UserRepository;
 use App\Repository\PanierRepository;
 use App\Repository\AddressRepository;
-use App\Repository\AdresseRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\ConfigurationRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use App\Repository\DocumentLignesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\DocumentParametreRepository;
+use App\Repository\LegalInformationRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class MemberController extends AbstractController
@@ -37,6 +36,7 @@ class MemberController extends AbstractController
         private PanierRepository $panierRepository,
         private AddressRepository $addressRepository,
         private DocumentService $documentService,
+        private LegalInformationRepository $legalInformationRepository,
         private EntityManagerInterface $em
         )
     {
@@ -75,9 +75,7 @@ class MemberController extends AbstractController
 
     #[Route('/membre/mon-compte', name: 'member_compte')]
     public function membreCompte(
-        Request $request,
-        UserRepository $userRepository,
-        UserPasswordHasherInterface $userPasswordHasher): Response
+        Request $request): Response
     {
         $user = $this->security->getUser();
 
@@ -132,11 +130,44 @@ class MemberController extends AbstractController
         ]);
     }
 
-    #[Route('/membre/download/facture/{token}', name: 'member_facture_download')]
-    public function factureDownload($token, DocumentService $documentService)
+    #[Route('/membre/download/facture/{tokenDocument}', name: 'member_facture_download')]
+    public function factureDownload($tokenDocument, Request $request)
     {
-        $documentService->factureToPdf($token);
+        $user = $this->security->getUser();
 
-        return new Response();
+        $document = $this->documentRepository->findOneBy(['token' => $tokenDocument, 'user' => $user]);
+
+        if(!$document){
+
+            $tableau = [
+                'h1' => 'Document non trouvé !',
+                'p1' => 'La consultation de ce document est impossible!',
+                'p2' => 'Document inconnu, supprimé ou ne vous appartenant pas!'
+            ];
+
+            return $this->render('site/document_view/_end_view.html.twig', [
+                'tableau' => $tableau
+            ]);
+
+        }else{
+
+            // $this->documentService->generatePdf($document, $request);
+
+            // return new Response();
+
+            $results = $this->documentService->generateValuesForDocument($document);
+            $legales = $this->legalInformationRepository->findOneBy([]);
+
+            return $this->render('site/document_download/_document_download.html.twig', [
+                'document' => $document,
+                'legales' => $legales,
+                'css' => file_get_contents('https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'),
+                "docLines" => $document->getDocumentLines(),
+                "tva" => $results['tauxTva'],
+                "docLine_items" => $results['docLine_items'],
+                "docLine_occasions" => $results['docLine_occasions'],
+                "docLine_boites" => $results['docLine_boites']
+            ]);
+        }
     }
 }

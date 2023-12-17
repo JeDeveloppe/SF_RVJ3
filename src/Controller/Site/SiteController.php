@@ -36,6 +36,7 @@ class SiteController extends AbstractController
         private UtilitiesService $utilitiesService,
         private UserRepository $userRepository,
         private PasswordService $passwordService,
+        private DocumentRepository $documentRepository,
         private ResetPasswordRepository $resetPasswordRepository
     )
     {
@@ -109,16 +110,10 @@ class SiteController extends AbstractController
     #[Route('/document/{tokenDocument}', name: 'document_view')]
     public function lectureDevis(
         $tokenDocument,
-        DocumentRepository $documentRepository,
-        DocumentLineRepository $documentLineRepository,
-        Security $security
         ): Response
     {
 
-        //on cherche le devis par le token et s'il n'est pas deja annuler par l'utilisateur
-        // $devis = $documentRepository->findOneBy(['token' => $token, 'isDeleteByUser' => null, 'numeroFacture' => null]);
-
-        $document = $documentRepository->findOneBy(['token' => $tokenDocument]);
+        $document = $this->documentRepository->findOneBy(['token' => $tokenDocument]);
 
         if(!$document){
 
@@ -134,26 +129,14 @@ class SiteController extends AbstractController
 
         }else{
 
-            // if($this->securiserService->isGranted($user, 'ROLE_ADMIN')){
-            //     $checkRole = false;
-            // }
-            $docLines = $document->getDocumentLines();
-            $tauxTva = $this->utilitiesService->calculTauxTva($document->getTaxRateValue());
-
-            foreach($docLines as $docLine){
-
-                $docLine_items = $documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'occasion' => null, 'boite' => null ]);
-                $docLine_occasions = $documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'item' => null, 'boite' => null]);
-                $docLine_boites = $documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'occasion' => null, 'item' => null]);
-
-            }
+            $results = $this->documentService->generateValuesForDocument($document);
 
             return $this->render('site/document_view/_document_view.html.twig', [
                 'document' => $document,
-                'docLine_items' => $docLine_items,
-                'docLine_occasions' => $docLine_occasions,
-                'docLine_boites' => $docLine_boites,
-                'tva' => $tauxTva
+                'docLine_items' => $results['docLine_items'],
+                'docLine_occasions' => $results['docLine_occasions'],
+                'docLine_boites' => $results['docLine_boites'],
+                'tva' => $results['tauxTva']
             ]);
         }
     }

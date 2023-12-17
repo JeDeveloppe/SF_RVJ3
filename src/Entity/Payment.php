@@ -90,7 +90,7 @@ class Payment
 
     public function __toString()
     {
-        return $this->timeOfTransaction->format('d-m-Y à H:i:s').' par '.$this->meansOfPayment ?? 'PAS DE DOCUMENT DEFINI';
+        return 'Paiement: #'.$this->id;
     }
 
     public function getDocument(): ?Document

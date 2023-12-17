@@ -50,7 +50,7 @@ class DocumentCrudController extends AbstractCrudController
         }
 
         return [
-            TextField::new('token')->setLabel('Token')->setDisabled(true)->onlyOnDetail(),
+            TextField::new('token')->setLabel('Token')->onlyOnDetail()->setColumns(4),
             TextField::new('quoteNumber')->setLabel('Num. devis')->setDisabled(true),
             TextField::new('BillNumber')->setLabel('Num. facture')->setDisabled(true),
             MoneyField::new('totalExcludingTax')
@@ -122,14 +122,14 @@ class DocumentCrudController extends AbstractCrudController
                 ->setLabel('Status du document')
                 ->renderAsEmbeddedForm()->onlyOnIndex(),
             AssociationField::new('documentStatus')
-                ->setLabel('Status du document')->onlyOnForms(),
-            AssociationField::new('documentStatus')
                 ->setLabel('Status du document')
-                ->onlyOnForms()->setDisabled($disabled),
+                ->renderAsEmbeddedForm()->onlyOnDetail(),
+            AssociationField::new('documentStatus')
+                ->setLabel('Status du document')->onlyOnForms(),
             AssociationField::new('payment')
                 ->setLabel('Paiement')
                 ->setDisabled(true),
-            TextField::new('tokenPayment')
+            TextField::new('payment.tokenPayment')
                 ->setLabel('Token du paiement')
                 ->setDisabled(true)
                 ->onlyOnForms(),
@@ -154,7 +154,6 @@ class DocumentCrudController extends AbstractCrudController
     {
         return $actions
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->remove(Crud::PAGE_INDEX, Action::EDIT)
             ->remove(Crud::PAGE_INDEX, Action::NEW)
             ->remove(Crud::PAGE_DETAIL, Action::DELETE)
             ->remove(Crud::PAGE_DETAIL, Action::EDIT)

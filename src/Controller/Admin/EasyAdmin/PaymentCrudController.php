@@ -44,6 +44,7 @@ class PaymentCrudController extends AbstractCrudController
                 ->setLabel('Token de paiement')
                 ->setFormTypeOptions(['attr' => ['value' => 'RefaitesVosJeuxManuel']])
                 ->setDisabled(true),
+            TextField::new('details')->setLabel('Détail:'),
             DateTimeField::new('createdAt')->setLabel('Enregistré le')->setFormat('dd.MM.yyyy à HH:mm:ss')->onlyOnDetail(),
         ];
     }
@@ -61,7 +62,7 @@ class PaymentCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        $viewInvoice = Action::new('viewInvoice', 'Détails', 'fa fa-file-invoice')
+        $viewInvoice = Action::new('viewInvoice', '+ infos', 'fa fa-file-invoice')
             ->linkToRoute('admin_invoice_details', function (Payment $payment): array {
                 return [
                     'token' => $payment->getTokenPayment(),
