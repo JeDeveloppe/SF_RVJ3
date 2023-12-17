@@ -43,7 +43,6 @@ class BoiteCrudController extends AbstractCrudController
             FormField::addTab('Général'),
             ImageField::new('image')->setBasePath($this->getParameter('app.path.boites_images'))->onlyOnIndex(),
             TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
-                //TODO vérifier les options
                 'required' => false,
                 'allow_delete' => false,
                 'delete_label' => 'Supprimer du serveur ?',

@@ -33,7 +33,6 @@ class ItemGroupCrudController extends AbstractCrudController
                 ->setLabel('Boites principale:'),
             ImageField::new('image')->setBasePath($this->getParameter('app.path.itemGroup_images'))->onlyOnIndex(),
             TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
-                //TODO vérifier les options
                 'required' => false,
                 'allow_delete' => false,
                 'delete_label' => 'Supprimer du serveur ?',

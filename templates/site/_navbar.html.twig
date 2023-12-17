@@ -20,6 +20,16 @@
    
       </ul>
       <ul class="navbar-nav">
+        {% if is_granted('ROLE_AMBASSADOR') %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Ambassadeur</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{{ path('ambassador_home') }}">Espace ambassadeur</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+        {% endif %}
         {% if is_granted('ROLE_USER') %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Mon espace</a>

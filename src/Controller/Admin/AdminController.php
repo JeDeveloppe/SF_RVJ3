@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DocumentStatusRepository;
+use App\Repository\LegalInformationRepository;
 use App\Repository\PaymentRepository;
 use App\Service\MailService;
 use App\Service\PaiementService;
@@ -20,6 +21,7 @@ class AdminController extends AbstractController
         private DocumentStatusRepository $documentStatusRepository,
         private EntityManagerInterface $em,
         private PaymentRepository $paymentRepository,
+        private LegalInformationRepository $legalInformationRepository,
         private MailService $mailService,
         private PaiementService $paiementService,
         private UserRepository $userRepository
@@ -40,12 +42,22 @@ class AdminController extends AbstractController
 
         }else{
 
-            //TODO envoi email
-            //$this->emailService->sendEmailWhenDocumentIsChangingStatus($document,$status);
+            $legales = $this->legalInformationRepository->findOneBy([]);
 
             $document->setDocumentStatus($status);
             $this->em->persist($document);
             $this->em->flush();
+
+            //TODO envoi email
+            $this->mailService->sendMail(
+                $document->getUser()->getEmail(),
+                'Suivi de votre document '.$document->getBillNumber(),
+                'changement_statut',
+                [
+                    'document' => $document,
+                    'legales' => $legales
+                ]
+            );
 
             $this->addFlash('success', 'Status mis à jour !');
             return $this->redirectToRoute('admin_traited_daily_commands');

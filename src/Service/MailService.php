@@ -12,7 +12,7 @@ use App\Repository\DocumentParametreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-//TODO
+//TODO montrer les differents email de l'application
 class MailService
 {
     public function __construct(
