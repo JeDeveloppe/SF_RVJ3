@@ -39,6 +39,7 @@ use App\Entity\DocumentParametre;
 use App\Repository\ItemRepository;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Returndetailstostock;
+use App\Entity\SiteSetting;
 use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -235,6 +236,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Remises', 'fas fa-list', Discount::class);
         yield MenuItem::linkToCrud('Prix des livraisons', 'fas fa-list', Delivery::class);
 
+        yield MenuItem::section('Paramètres du site:');
+        yield MenuItem::linkToCrud('Paramètres', 'fas fa-gear', SiteSetting::class);
 
     }
 }

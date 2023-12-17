@@ -9,6 +9,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use App\Repository\LegalInformationRepository;
 use App\Repository\DocumentParametreRepository;
+use App\Repository\SiteSettingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -20,30 +21,37 @@ class MailService
         private MailerInterface $mailer,
         private LegalInformationRepository $legalInformationRepository,
         private DocumentParametreRepository $documentParametreRepository,
+        private SiteSettingRepository $siteSettingRepository,
         private EntityManagerInterface $em
         ){
     }
 
     public function sendMail($recipient, $subject, $template, array $donnees = null, $replyTo = null){
 
-        if(is_null($donnees)){
-            $donnees = [];
-        }
+        $siteSettings = $this->siteSettingRepository->findOneBy([]);
 
-        $legales = $this->legalInformationRepository->findOneBy([]);
+        //? parametre du site envoi des emails bloque si besoin de mettre a jour des statut ou autre
+        if($siteSettings->getBlockEmailSending() != true){
 
-        $mail = (new TemplatedEmail())
-            ->from(new Address($legales->getEmailCompany(), $legales->getCompanyName()))
-            ->to($recipient)
-            ->replyTo($replyTo ? $replyTo : 'no_reply@refaitesvosjeux.fr')
-            ->subject($subject)
-            ->htmlTemplate('email/templates/'.$template.'.html.twig')
-            ->context($donnees);
+            if(is_null($donnees)){
+                $donnees = [];
+            }
 
-        try{
-            $this->mailer->send($mail);
-        } catch (TransportExceptionInterface $e) {
-            dump($e->getDebug());
+            $legales = $this->legalInformationRepository->findOneBy([]);
+
+            $mail = (new TemplatedEmail())
+                ->from(new Address($legales->getEmailCompany(), $legales->getCompanyName()))
+                ->to($recipient)
+                ->replyTo($replyTo ? $replyTo : 'no_reply@refaitesvosjeux.fr')
+                ->subject($subject)
+                ->htmlTemplate('email/templates/'.$template.'.html.twig')
+                ->context($donnees);
+
+            try{
+                $this->mailer->send($mail);
+            } catch (TransportExceptionInterface $e) {
+                dump($e->getDebug());
+            }
         }
     }
 
