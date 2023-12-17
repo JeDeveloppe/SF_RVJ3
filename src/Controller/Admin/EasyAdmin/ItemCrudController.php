@@ -31,6 +31,8 @@ class ItemCrudController extends AbstractCrudController
                 ->setLabel('Prix unitaire HT (en cents):'),
             IntegerField::new('weigth')
                 ->setLabel('Poid (en gramme):'),
+            AssociationField::new('Envelope')->setLabel('Enveloppe:')
+            ->setFormTypeOptions(['placeholder' => 'Sélectionner une enveloppe...'])
         ];
     }
 

@@ -30,7 +30,7 @@ class CreationCountrieService
                 $country = new Country();
             }
 
-            $country->setName($countrie['name'])->setIsocode($countrie['isoCode'])->setActifInInscriptionForm($countrie['actif']);
+            $country->setName($countrie['name'])->setIsocode($countrie['isoCode'])->setIsActifInInscriptionForm($countrie['actif']);
             $this->em->persist($country);
 
         }

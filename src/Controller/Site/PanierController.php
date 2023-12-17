@@ -85,7 +85,7 @@ class PanierController extends AbstractController
 
             }else{
 
-                $deliveryAddress = $this->collectionPointRepository->findOneBy(['id' => $allValues['deliveryAddress'], 'user' => $user]);
+                $deliveryAddress = $this->collectionPointRepository->findOneBy(['id' => $allValues['deliveryAddress']]);
             }
 
             if(!$billingAddress or !$deliveryAddress){

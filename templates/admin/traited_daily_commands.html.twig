@@ -17,21 +17,22 @@
                 <div class="card-header">{{ data.value }}</div>
                 <div class="card-body">
                     {% if data .documents | length > 0 %}
-                        {% for document in data.documents %}
+                        {% for document in data.documents|reverse %}
                             <div class="card mb-4">
                                 <div class="card-header">{{ document.quoteNumber }} - {{ document.billNumber }}</div>
                                 <div class="card-body d-flex align-items-center">
                                     <div class="col-3">
-                                        Payée le:
-                                            <p>{{ document.payment.timeOfTransaction | date('d-m-Y') }}<br/>
+                                        <p>Payée le: {{ document.payment.timeOfTransaction | date('d-m-Y') }}<br/>
                                             {{ document.payment.details }}</p>
-                                    </div>
-                                    <div class="col-3">
-                                        Envoi / retrait:
+                                        <b>Envoi / retrait:</b>
                                         <p>{{ document.sendingMethod }}</p>
                                     </div>
                                     <div class="col-3">
-                                        Adresse:
+                                        <b>Adresse de facturation:</b>
+                                        <p>{{ document.billingAddress | raw }}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <b>Adresse de livraison:</b>
                                         <p>{{ document.deliveryAddress | raw }}</p>
                                     </div>
                                     <div class="col-3 text-center">

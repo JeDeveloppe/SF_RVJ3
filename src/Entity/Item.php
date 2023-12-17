@@ -39,6 +39,10 @@ class Item
     #[ORM\OneToMany(mappedBy: 'item', targetEntity: DocumentLine::class)]
     private Collection $documentLines;
 
+    #[ORM\ManyToOne(inversedBy: 'items')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Envelope $Envelope = null;
+
     public function __construct()
     {
         $this->itemGroup = new ArrayCollection();
@@ -209,6 +213,18 @@ class Item
                 $documentLine->setItem(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEnvelope(): ?Envelope
+    {
+        return $this->Envelope;
+    }
+
+    public function setEnvelope(?Envelope $Envelope): static
+    {
+        $this->Envelope = $Envelope;
 
         return $this;
     }

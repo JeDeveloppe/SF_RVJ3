@@ -206,6 +206,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Gestion des paniers:');
         yield MenuItem::linkToCrud('Moyens de retrait/envoi', 'fas fa-list', ShippingMethod::class);
         yield MenuItem::linkToCrud('Lieux de retrait', 'fas fa-list', CollectionPoint::class);
+        yield MenuItem::linkToCrud('Remises', 'fas fa-list', Discount::class);
+        yield MenuItem::linkToCrud('Prix des livraisons', 'fas fa-list', Delivery::class);
 
         yield MenuItem::section('Gestion des documents:');
         yield MenuItem::linkToCrud('Documents', 'fas fa-list', Document::class);
@@ -231,10 +233,6 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Paramètres de ventes:');
         yield MenuItem::linkToCrud('Moyens de paiement', 'fas fa-list', MeansOfPayement::class);
-
-        yield MenuItem::section('Paramètres du panier:');
-        yield MenuItem::linkToCrud('Remises', 'fas fa-list', Discount::class);
-        yield MenuItem::linkToCrud('Prix des livraisons', 'fas fa-list', Delivery::class);
 
         yield MenuItem::section('Paramètres du site:');
         yield MenuItem::linkToCrud('Paramètres', 'fas fa-gear', SiteSetting::class);
