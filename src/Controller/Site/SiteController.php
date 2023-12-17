@@ -20,6 +20,8 @@ use App\Repository\ResetPasswordRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
+use App\Service\MailService;
+use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security\UserAuthenticator;
@@ -32,6 +34,7 @@ class SiteController extends AbstractController
     public function __construct(
         private LegalInformationRepository $legalInformationRepository,
         private PanierService $panierService,
+        private MailService $mailService,
         private DocumentService $documentService,
         private UtilitiesService $utilitiesService,
         private UserRepository $userRepository,
@@ -88,18 +91,22 @@ class SiteController extends AbstractController
     
         if($form->isSubmitted() && $form->isValid()) {
     
-            $mailerService->sendEmailContact(
-                $informationsLegales->getAdresseMailSite(),
-                $form->get('email')->getData(),
-                "Message du site concernant: ".$form->get('sujet')->getData(),
+            $legales = $this->legalInformationRepository->findOneBy([]);
+
+            $this->mailService->sendMail(
+                $legales->getEmailCompany(),
+                "Message du site en date du ".(new DateTimeImmutable('now'))->format('d-m-Y').": ".$form->get('sujet')->getData(),
+                'contact_question',
                 [
-                    'expediteur' => $form->get('email')->getData(),
-                    'message' => $form->get('message')->getData()
-                ]
+                    'mail' => $form->get('email')->getData(),
+                    'question' => $form->get('message')->getData(),
+                    'legales' => $legales
+                ],
+                $form->get('email')->getData()
             );
     
             $this->addFlash('success', 'Message bien envoyé!');
-            return $this->redirectToRoute('contact');
+            return $this->redirectToRoute('app_contact');
         }
     
         return $this->render('site/contact/contact.html.twig', [

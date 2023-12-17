@@ -23,7 +23,7 @@ class MailService
         ){
     }
 
-    public function sendMail($recipient, $subject, $template, array $donnees = null){
+    public function sendMail($recipient, $subject, $template, array $donnees = null, $replyTo = null){
 
         if(is_null($donnees)){
             $donnees = [];
@@ -34,7 +34,7 @@ class MailService
         $mail = (new TemplatedEmail())
             ->from(new Address($legales->getEmailCompany(), $legales->getCompanyName()))
             ->to($recipient)
-            ->replyTo('no_reply@refaitesvosjeux.fr')
+            ->replyTo($replyTo ? $replyTo : 'no_reply@refaitesvosjeux.fr')
             ->subject($subject)
             ->htmlTemplate('email/templates/'.$template.'.html.twig')
             ->context($donnees);

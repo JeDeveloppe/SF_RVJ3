@@ -16,26 +16,30 @@ class ContactType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'label' => 'Votre adresse email:',
-                'required' => true
+                'required' => true,
+                'attr' => ['class' => 'form-control mb-3'],
             ])
             ->add('sujet', ChoiceType::class, [
                 'label' => 'Sujet de votre demande:',
                 'choices' => [
-                    'PARTENARIAT' => 'PARTENARIAT',
+                    'PARTENARIAT / AMBASSADEUR' => 'PARTENARIAT / AMBASSADEUR',
                     'PRESSE'      => 'PRESSE',
                     'DON DE JEUX' => 'DON DE JEUX',
                     'DONNEES PERSONNELLES' => 'DONNEES PERSONNELLES',
                     'AUTRE' => 'AUTRE'
                 ],
                 'placeholder' => 'Choisir...',
-                'required' => true
+                'required' => true,
+                'attr' => ['class' => 'form-control mb-3'],
             ])
             ->add('message', TextareaType::class, [
                 'label' => 'Votre message:',
-                'required' => true
+                'required' => true,
+                'attr' => ['class' => 'form-control mb-3'],
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Envoyer votre message'
+                'label' => 'Envoyer votre message',
+                'attr' => ['class' => 'btn btn-success'],
             ])
         ;
     }
