@@ -42,6 +42,9 @@ class OffSiteOccasionSale
     #[ORM\OneToMany(mappedBy: 'offSiteOccasionSale', targetEntity: Occasion::class)]
     private Collection $occasions;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $placeOfTransaction = null;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
@@ -167,6 +170,18 @@ class OffSiteOccasionSale
                 $occasion->setOffSiteOccasionSale(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPlaceOfTransaction(): ?string
+    {
+        return $this->placeOfTransaction;
+    }
+
+    public function setPlaceOfTransaction(?string $placeOfTransaction): static
+    {
+        $this->placeOfTransaction = $placeOfTransaction;
 
         return $this;
     }

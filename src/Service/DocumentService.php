@@ -19,6 +19,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DocumentStatusRepository;
 use App\Repository\LegalInformationRepository;
 use App\Repository\DocumentParametreRepository;
+use App\Repository\UserRepository;
 use Dompdf\Options;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -39,6 +40,7 @@ class DocumentService
         private OccasionRepository $occasionRepository,
         private EntityManagerInterface $em,
         private Environment $twig,
+        private UserRepository $userRepository,
         private ParameterBagInterface $parameter
         ){
     }
@@ -122,9 +124,21 @@ class DocumentService
         $document
                 ->setToken($this->utilitiesService->generateRandomString())
                 ->setQuoteNumber($docParams->getQuoteTag().$newNumero)
-                ->setTotalExcludingTax($panierParams['totalPanier'])
-                ->setDeliveryAddress($this->adresseService->constructAdresseForSaveInDatabase($deliveryAddress))
-                ->setBillingAddress($this->adresseService->constructAdresseForSaveInDatabase($billingAddress))
+                ->setTotalExcludingTax($panierParams['totalPanier']);
+
+                if(is_string($deliveryAddress)){ //? vente direct d'un occasion
+                    $document
+                        ->setDeliveryAddress($deliveryAddress)
+                        ->setUser($this->userRepository->findOneBy(['email' => 'client_de_passage@refaitesvosjeux.fr']))
+                        ->setBillingAddress($billingAddress);
+                }else{
+                    $document
+                        ->setUser($this->security->getUser())
+                        ->setDeliveryAddress($this->adresseService->constructAdresseForSaveInDatabase($deliveryAddress))
+                        ->setBillingAddress($this->adresseService->constructAdresseForSaveInDatabase($billingAddress));
+                }
+
+        $document
                 ->setTotalWithTax($this->utilitiesService->htToTTC($panierParams['totalPanier'],$panierParams['tax']->getValue()))
                 ->setDeliveryPriceExcludingTax($panierParams['deliveryCostWithoutTax']->getPriceExcludingTax())
                 ->setIsQuoteReminder(false)
@@ -135,7 +149,6 @@ class DocumentService
                 ->setCost($panierParams['preparationHt'])
                 ->setSendingMethod($panierParams['shipping'])
                 ->setSendingBy($panierParams['shipping']->getName())
-                ->setUser($this->security->getUser())
                 ->setIsDeleteByUser(false)
                 ->setTimeOfSendingQuote(new DateTimeImmutable('now'))
                 ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => $actionToSearch]));
@@ -157,22 +170,35 @@ class DocumentService
         // "panier_items" => array:2 [▶]
         $paniers = array_merge($panierParams['panier_occasions'],$panierParams['panier_boites'],$panierParams['panier_items']);
 
-        foreach($paniers as $panier){
+        if(is_string($deliveryAddress)){ //? vente direct d'un occasion
             $documentLine = new DocumentLine();
             $documentLine
-                ->setQuestion($panier->getQuestion() ?? NULL)
-                ->setQuantity($panier->getQte() ?? 1)
-                ->setBoite($panier->getBoite() ?? NULL)
-                ->setItem($panier->getItem() ?? NULL)
-                ->setOccasion($panier->getOccasion() ?? NULL)
+                ->setOccasion($panierParams['occasion'])
+                ->setQuantity(1)
                 ->setDocument($document)
-                ->setPriceExcludingTax($panier->getPriceWithoutTax());
+                ->setPriceExcludingTax($panierParams['totauxItems']['price']);
             
                 $this->em->persist($documentLine);
-                $this->em->remove($panier);
+                $this->em->flush();
+
+        }else{
+            foreach($paniers as $panier){
+                $documentLine = new DocumentLine();
+                $documentLine
+                    ->setQuestion($panier->getQuestion() ?? NULL)
+                    ->setQuantity($panier->getQte() ?? 1)
+                    ->setBoite($panier->getBoite() ?? NULL)
+                    ->setItem($panier->getItem() ?? NULL)
+                    ->setOccasion($panier->getOccasion() ?? NULL)
+                    ->setDocument($document)
+                    ->setPriceExcludingTax($panier->getPriceWithoutTax());
+                
+                    $this->em->persist($documentLine);
+                    $this->em->remove($panier);
+            }
+            //on met en BDD les differentes lignes
+            $this->em->flush();
         }
-        //on met en BDD les differentes lignes
-        $this->em->flush();
 
         return $document;
     }

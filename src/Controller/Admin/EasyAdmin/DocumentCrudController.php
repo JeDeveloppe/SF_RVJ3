@@ -50,7 +50,7 @@ class DocumentCrudController extends AbstractCrudController
         }
 
         return [
-            TextField::new('token')->setLabel('Token')->onlyOnDetail()->setColumns(4),
+            TextField::new('token')->setLabel('Token')->onlyOnForms()->setDisabled(true),
             TextField::new('quoteNumber')->setLabel('Num. devis')->setDisabled(true),
             TextField::new('BillNumber')->setLabel('Num. facture')->setDisabled(true),
             MoneyField::new('totalExcludingTax')

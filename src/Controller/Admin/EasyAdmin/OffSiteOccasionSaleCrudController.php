@@ -3,19 +3,29 @@
 namespace App\Controller\Admin\EasyAdmin;
 
 use DateTimeImmutable;
+use App\Entity\Payment;
+use App\Entity\Delivery;
 use App\Entity\Occasion;
 use Doctrine\ORM\QueryBuilder;
+use App\Service\DocumentService;
+use App\Repository\TaxRepository;
 use App\Entity\OffSiteOccasionSale;
+use App\Repository\DocumentParametreRepository;
+use App\Repository\DocumentStatusRepository;
+use App\Repository\PaymentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Repository\ShippingMethodRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use Symfony\Component\HttpFoundation\RequestStack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use Symfony\Component\HttpFoundation\RequestStack;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
 class OffSiteOccasionSaleCrudController extends AbstractCrudController
 {
@@ -28,6 +38,12 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
         private Security $security,
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
+        private TaxRepository $taxRepository,
+        private ShippingMethodRepository $shippingMethodRepository,
+        private DocumentStatusRepository $documentStatusRepository,
+        private DocumentParametreRepository $documentParametreRepository,
+        private PaymentRepository $paymentRepository,
+        private DocumentService $documentService
     )
     { 
     }
@@ -39,8 +55,10 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
             $occasionField = AssociationField::new('occasion')->setLabel('Occasion')
             ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
             ->setDisabled($disabled);
+            $required = false;
         }else{
             $disabled = false;
+            $required = true;
             $occasionField = AssociationField::new('occasion')->setLabel('Occasion')
                                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                                 ->setQueryBuilder(
@@ -55,11 +73,11 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
             DateTimeField::new('movementTime')
                 ->setLabel('Date de mouvement')
                 ->setFormat('dd-MM-yyy à HH:mm' )->setDisabled($disabled),
+            TextField::new('placeOfTransaction')->setLabel('Lieu de vente/ don:')->setRequired($required)->setDisabled($disabled),
             $occasionField,
-            MoneyField::new('movementPrice')
+            IntegerField::new('movementPrice')
                 ->setLabel('Prix du mouvement (HT)')
-                ->setTextAlign('center')
-                ->setCurrency('EUR')->setStoredAsCents(),
+                ->setTextAlign('center'),
             AssociationField::new('movement')
                 ->setLabel('Mouvement:')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
@@ -87,14 +105,75 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
     {
         return $actions
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
-            ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN');
+            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
         
     }
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if($entityInstance instanceof OffSiteOccasionSale) {
+
+        
+            $docParams = $this->documentParametreRepository->findOneBy([]);
+
+            $billingAddress = 'CLIENT(E) de passage';
+            $deliveryAddress = $entityInstance->getPlaceOfTransaction();
+            $details = [];
+            $details['panier_boites'] = ['init' => 'init']; // for action in admin
+            $details['totalPanier'] = $entityInstance->getMovementPrice();
+            $details['tax'] = $this->taxRepository->findOneBy([]);
+            $details['deliveryCostWithoutTax'] = new Delivery();
+            $details['deliveryCostWithoutTax']->setPriceExcludingTax(0);
+            $details['preparationHt'] = 0;
+            $details['shipping'] = $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT PENDANT UNE FOIRE']); //TODO mettre à jour comme CreationUndefined...
+            $details['totauxBoites']['weigth'] = 0;
+            $details['totauxBoites']['price'] = 0;
+            $details['totauxItems']['weigth'] = 0;
+            $details['totauxItems']['price'] = 0;
+            $details['totauxOccasions']['weigth'] = $entityInstance->getOccasion()->getBoite()->getWeigth();
+            $details['totauxOccasions']['price'] = $entityInstance->getMovementPrice();
+            $details['panier_occasions'] = [];
+            $details['panier_boites'] = [];
+            $details['panier_items'] = [];
+            $details['occasion'] = $entityInstance->getOccasion();
+
+            $document = $this->documentService->saveDocumentInDataBase($details,$billingAddress,$deliveryAddress);
+
+            $entityManager->persist($document);
+
+            $paiement = $this->paymentRepository->findOneBy(['document' => $document]);
+
+            if(!$paiement){
+                $paiement = new Payment();
+            }
+    
+            //on renseigne le paiement
+            $paiement->setDocument($document)
+                    ->setMeansOfPayment($entityInstance->getMeansOfPaiement())
+                    ->setTokenPayment('MANUEL')
+                    ->setCreatedAt(new DateTimeImmutable('now'))
+                    ->setTimeOfTransaction($entityInstance->getMovementTime());
+            //on sauvegarde le paiement
+            $entityManager->persist($paiement);
+            $entityManager->flush();
+
+            //il faut creer le numero de facture
+            $newNumero = $this->documentService->generateNewNumberOf('billNumber', 'getBillNumber');
+
+            //on renseigne le paiement
+            $paiement->setDetails('MANUEL')
+                    ->setTimeOfTransaction($entityInstance->getMovementTime());
+            //on sauvegarde le paiement
+            $entityManager->persist($paiement);
+            $entityManager->flush();
+
+            //on met a jour le document en BDD
+            $etat = $this->documentStatusRepository->findOneBy(['action' => 'END']);
+            $document->setDocumentStatus($etat)->setBillNumber($docParams->getBillingTag().$newNumero);
+            $entityManager->persist($document);
+            $entityManager->flush();
+
+
             $user = $this->security->getUser();
             $entityInstance->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user);
             $entityManager->persist($entityInstance);
@@ -107,4 +186,5 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
         }
 
     }
+
 }

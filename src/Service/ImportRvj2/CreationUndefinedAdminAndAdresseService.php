@@ -72,7 +72,7 @@ class CreationUndefinedAdminAndAdresseService
             'actifInCart' => true
         ];
         $shippingMethods[] = [
-            'name' => 'RETRAIT PENDANT UNE FOIRE',
+            'name' => 'RETRAIT PENDANT UNE FOIRE', //TODO non a modifier
             'price' => 'GRATUIT',
             'actifInCart' => false
         ];

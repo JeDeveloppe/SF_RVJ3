@@ -15,6 +15,7 @@ class UserService
         private EntityManagerInterface $em,
         private UserPasswordHasherInterface $userPasswordHasher,
         private UserRepository $userRepository,
+        private UtilitiesService $utilitiesService,
         private CountryRepository $countryRepository
         ){
     }
@@ -42,6 +43,30 @@ class UserService
                 $this->userPasswordHasher->hashPassword(
                         $user,
                         $_ENV['ADMIN_PASSWORD']
+                    )
+                );
+
+        $this->em->persist($user);
+        $this->em->flush();
+
+        //on vérifié si on a déjà créé l'admin
+        $user = $this->userRepository->findOneBy(['email' => 'client_de_passage@refaitesvosjeux.fr']);
+
+        if(!$user){
+
+            $user = new User();
+        }
+
+        $user->setCreatedAt(new DateTimeImmutable('now'))
+            ->setLastvisite(new DateTimeImmutable('now'))
+            ->setEmail('client_de_passage@refaitesvosjeux.fr')
+            ->setRoles(['ROLE_USER'])
+            ->setPhone(0000000000)
+            ->setCountry($this->countryRepository->findOneBy(['isocode' => 'FR']))
+            ->setPassword(
+                $this->userPasswordHasher->hashPassword(
+                        $user,
+                        $this->utilitiesService->generateRandomString(20)
                     )
                 );
 
