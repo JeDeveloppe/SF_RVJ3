@@ -48,7 +48,6 @@ class AdminController extends AbstractController
             $this->em->persist($document);
             $this->em->flush();
 
-            //TODO envoi email
             $this->mailService->sendMail(
                 $document->getUser()->getEmail(),
                 'Suivi de votre document '.$document->getBillNumber(),

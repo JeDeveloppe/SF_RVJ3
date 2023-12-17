@@ -13,6 +13,7 @@
         "doctrine/orm": "^2.16",
         "dompdf/dompdf": "^2.0",
         "easycorp/easyadmin-bundle": "^4.7",
+        "karser/karser-recaptcha3-bundle": "^0.1.24",
         "knplabs/knp-paginator-bundle": "^6.2",
         "league/csv": "^9.10",
         "payplug/payplug-php": "^3.5",
