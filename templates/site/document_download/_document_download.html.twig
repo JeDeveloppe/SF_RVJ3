@@ -1,0 +1,40 @@
+{% extends 'site/document_download/base.html.twig' %}
+
+{% block title %}{{ document.billNumber }}{% endblock %}
+
+{% block body %}
+
+    {# COMPANY NAME / ADRESSE #}
+    {% include "site/document_download/_header.html.twig" %}
+
+    {# ADRESSE DE LIVRAISON #}
+    {% include "site/document_download/_deliveryAdresse.html.twig" %}
+
+    {# DOCUMENT DETAILS #}
+    {% include "site/document_download/_beforeBody.html.twig" %}
+
+
+        <table class="col-sm-12 table table-striped table-bordered align-middle my-5">
+            <thead>
+                <th style="width:50%;">Désignation</th>
+                <th style="text-align:center">Référence</th>
+                <th style="text-align:center">Qté</th>
+                <th style="text-align:center">Total HT</th>
+            </thead>
+            <tbody>
+                {# SI Y A DES DEMANDES D'ARTICLES DANS LE PANIER #}
+                {% include "site/document_download/_tableItems.html.twig" %}
+
+                {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
+                {% include "site/document_download/_tableOccasions.html.twig" %}
+
+                {# SI Y A DES DEMANDES DE PIECES DETACHEES DANS LE PANIER #}
+                {% include "site/document_download/_tableBoites.html.twig" %}
+            </tbody>
+        </table>
+
+
+    {# PARITE TOTAUX #}
+    {% include "site/document_download/_totalsTable.html.twig" %}
+
+{% endblock %}

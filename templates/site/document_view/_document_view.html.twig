@@ -16,9 +16,13 @@
     {% endif %}
 
     <h3 class="col-12 text-center my-5">
-        Devis {{ document.quoteNumber }} <br>
-        du {{ document.createdAt|date('d-m-Y') }} <br/>
-        <span class="small">(valable jusqu'au {{ document.endOfQuoteValidation|date('d-m-Y') }})</span>
+        {% if document.billNumber is null %}
+            Devis {{ document.quoteNumber }} <br>
+            du {{ document.createdAt|date('d-m-Y') }} <br/>
+            <span class="small">(valable jusqu'au {{ document.endOfQuoteValidation|date('d-m-Y') }})</span>
+        {% else %}
+            Facture {{ document.billNumber }} 
+        {% endif %}
     </h3>
 
     {# SI Y A DES DEMANDES D'ARTICLES DANS LE PANIER #}

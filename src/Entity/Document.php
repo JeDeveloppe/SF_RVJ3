@@ -98,6 +98,9 @@ class Document
     #[ORM\OneToOne(mappedBy: 'document', cascade: ['persist', 'remove'])]
     private ?DocumentLineTotals $documentLineTotals = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isLastQuoteCantBeDeleted = null;
+
     public function __construct()
     {
         $this->documentLines = new ArrayCollection();
@@ -454,6 +457,18 @@ class Document
         }
 
         $this->documentLineTotals = $documentLineTotals;
+
+        return $this;
+    }
+
+    public function getIsLastQuoteCantBeDeleted(): ?bool
+    {
+        return $this->isLastQuoteCantBeDeleted;
+    }
+
+    public function setIsLastQuoteCantBeDeleted(?bool $isLastQuoteCantBeDeleted): static
+    {
+        $this->isLastQuoteCantBeDeleted = $isLastQuoteCantBeDeleted;
 
         return $this;
     }

@@ -50,7 +50,7 @@ class DocumentRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('d')
             ->where('d.endOfQuoteValidation < :now')
             ->andWhere('d.billNumber IS NULL')
-            ->andWhere('d.isQuoteReminder = :value')
+            ->andWhere('d.isQuoteReminder = :value') //devis bien relancer par email, on a donc remis X jours
             ->setParameter('now', $now)
             ->setParameter('value', true)
             ->getQuery()
@@ -58,6 +58,18 @@ class DocumentRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByDevisToReminder($now){
+
+        return $this->createQueryBuilder('d')
+            ->where('d.endOfQuoteValidation < :now')
+            ->andWhere('d.billNumber IS NULL')
+            ->andWhere('d.isQuoteReminder = :value')
+            ->setParameter('now', $now)
+            ->setParameter('value', false)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 //    /**
 //     * @return Document[] Returns an array of Document objects
 //     */

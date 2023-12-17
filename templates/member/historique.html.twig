@@ -13,32 +13,47 @@
    <div class="row mb-3 justify-content-center">
       {% if documents | length > 0 %}
          {% for document in documents|reverse  %}
-            <div class="card col-12 col-md-8 col-xl-7 p-0 mb-3">
-               <div class="card-header d-flex justify-content-between">
-                  <div class="col-8">{{ document.quoteNumber }} du {{ document.createdAt|date('d-m-Y') }}</div>
-                  <div class="col-4 text-end">{{ (document.totalWithTax / 100) |number_format(2, '.', ',') }} €</div>
+            {% if document.IsLastQuoteCantBeDeleted is null %}
+               <div class="card col-12 col-md-8 col-xl-7 p-0 mb-3">
+                  <div class="card-header d-flex justify-content-between">
+                     <div class="col-8">
+                        {% if document.billNumber is not null %}
+                           {{ document.billNumber }}
+                        {% else %}
+                           {{ document.quoteNumber }} du {{ document.createdAt|date('d-m-Y') }}
+                        {% endif %}
+                     </div>
+                     <div class="col-4 text-end">{{ (document.totalWithTax / 100) |number_format(2, '.', ',') }} €</div>
+                  </div>
+                  <div class="card-body d-flex align-items-center">
+                        {% if document.billNumber is not null %}
+                           <div class="col-8">
+                              Payé le {{ document.payment.timeOfTransaction|date('d-m-Y') }} <br/>par {{ document.payment.details }}
+                           </div>
+                           <div class="col-4 text-center">
+                              <a href="{{ path('member_facture_download', {'tokenDocument': document.token }) }}" data-toggle="tooltip" data-html="true" title="Facture en pdf"><i class="fas fa-print fa-2x"></i></a>
+                           </div>
+                        {% else %}
+                           <div class="col-6 text-center">
+                              <span class='text-info'>PAS DE PAIEMENT</span><br/>
+                              Valable jusqu'au {{ document.endOfQuoteValidation | date('d-m-Y') }}<br/>
+                                 {% if document.isQuoteReminder is null %}
+                                    {% set color = 'red' %}
+                                 {% else %}
+                                    {% set color = 'success' %}
+                                 {% endif %}
+                              Relancé par email: <i class="fa-solid fa-paper-plane text-{{ color }}"></i>
+                           </div>
+                           <div class="col-6 text-center">
+                              <a class="btn btn-outline-warning" href="{{ path('document_view', {'tokenDocument': document.token }) }}">Visualiser le devis</a>
+                           </div>
+                        {% endif %}
+                  </div>
+                  <div class="card-footer text-center">
+                     {{ document.documentStatus.name }}
+                  </div>
                </div>
-               <div class="card-body d-flex align-items-center">
-                     {% if document.billNumber is not null %}
-                        <div class="col-8">
-                           Payé le {{ document.payment.timeOfTransaction|date('d-m-Y') }} <br/>par {{ document.payment.details }}
-                        </div>
-                        <div class="col-4 text-center">
-                           <a href="{{ path('member_facture_download', {'token': document.token }) }}" data-toggle="tooltip" data-html="true" title="Facture"><i class="fas fa-print fa-2x"></i></a>
-                        </div>
-                     {% else %}
-                        <div class="col-6 text-center">
-                           {{ document.billNumber ? document.billNumber : "<span class='text-info'>PAS DE PAIEMENT</span>" }}
-                        </div>
-                        <div class="col-6 text-center">
-                           <a class="btn btn-outline-warning" href="{{ path('document_view', {'tokenDocument': document.token }) }}">Visualiser le devis</a>
-                        </div>
-                     {% endif %}
-               </div>
-               <div class="card-footer text-center">
-                  {{ document.documentStatus.name }}
-               </div>
-            </div>
+            {% endif %}
          {% endfor %}
       {% else %}
          <div class="col-12 text-center">PAS ENCORE DE DOCUMENTS</div>

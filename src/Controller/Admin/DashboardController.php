@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use DateInterval;
 use App\Entity\Tax;
 use App\Entity\City;
 use App\Entity\Item;
@@ -23,6 +24,7 @@ use App\Entity\Occasion;
 use App\Entity\ItemGroup;
 use App\Entity\Department;
 use App\Entity\DocumentLine;
+use App\Service\MailService;
 use App\Entity\ResetPassword;
 use App\Entity\DocumentStatus;
 use App\Entity\ShippingMethod;
@@ -39,6 +41,7 @@ use App\Entity\OffSiteOccasionSale;
 use App\Entity\Returndetailstostock;
 use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ResetPasswordRepository;
 use App\Repository\DocumentStatusRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,7 +60,9 @@ class DashboardController extends AbstractDashboardController
         private DocumentStatusRepository $documentStatusRepository,
         private ItemRepository $itemRepository,
         private DocumentService $documentService,
-        private ResetPasswordRepository $resetPasswordRepository
+        private ResetPasswordRepository $resetPasswordRepository,
+        private MailService $mailService,
+        private EntityManagerInterface $em
     )
     {
         
@@ -67,6 +72,11 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
         $now = new DateTimeImmutable('now');
+
+        $documentsToReminder = $this->documentRepository->findByDevisToReminder($now);
+
+        
+        $this->mailService->reminderQuotes($documentsToReminder, $now);
 
         $documentsToDelete = $this->documentRepository->findByDevisToDelete($now);
 

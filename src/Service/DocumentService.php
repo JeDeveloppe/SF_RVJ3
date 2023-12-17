@@ -3,19 +3,26 @@
 namespace App\Service;
 
 use DateInterval;
+use Dompdf\Dompdf;
 use DateTimeImmutable;
 use App\Entity\Document;
 use App\Entity\DocumentLine;
-use App\Entity\DocumentLineTotals;
-use App\Entity\Returndetailstostock;
 use App\Service\UtilitiesService;
-use App\Repository\DocumentRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
-use App\Repository\DocumentParametreRepository;
-use App\Repository\DocumentStatusRepository;
+use App\Entity\DocumentLineTotals;
 use App\Repository\ItemRepository;
+use App\Entity\Returndetailstostock;
+use App\Repository\DocumentRepository;
 use App\Repository\OccasionRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\DocumentLineRepository;
+use Symfony\Bundle\SecurityBundle\Security;
+use App\Repository\DocumentStatusRepository;
+use App\Repository\LegalInformationRepository;
+use App\Repository\DocumentParametreRepository;
+use Dompdf\Options;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Twig\Environment;
 
 class DocumentService
 {
@@ -23,12 +30,16 @@ class DocumentService
         private DocumentRepository $documentRepository,
         private DocumentStatusRepository $documentStatusRepository,
         private DocumentParametreRepository $documentParametreRepository,
+        private DocumentLineRepository $documentLineRepository,
         private Security $security,
         private AdresseService $adresseService,
         private UtilitiesService $utilitiesService,
         private ItemRepository $itemRepository,
+        private LegalInformationRepository $legalInformationRepository,
         private OccasionRepository $occasionRepository,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private Environment $twig,
+        private ParameterBagInterface $parameter
         ){
     }
 
@@ -91,16 +102,6 @@ class DocumentService
 
     public function saveDocumentInDataBase($panierParams,$billingAddress,$deliveryAddress)
     {
-
-        // "tax" => App\Entity\Tax {#17248 ▶}
-        // "redirectAfterSubmitPanierForPaiement" => true
-        // "totauxItems" => array:2 [▶]
-        // "totauxOccasions" => array:2 [▶]
-        // "totauxBoites" => array:2 [▶]
-        // "weigthPanier" => 1490
-        // "deliveryCostWithoutTax" => App\Entity\Delivery {#16415 ▶}
-        // "totalPanier" => 1630
-
         //ON genere un nouveau numero
         $newNumero = $this->generateNewNumberOf("quoteNumber", "getQuoteNumber");
 
@@ -217,10 +218,241 @@ class DocumentService
                 $this->em->remove($doc);
 
                 $this->em->flush();
+            }else{
+
+                //? pour ne pas afficher dans la partie membre
+                $doc->setIsLastQuoteCantBeDeleted(true);
+                $this->em->persist($doc);
+                $this->em->flush();
             }
 
         }
 
     }
+
+    public function generateValuesForDocument($document):array
+    { 
+
+        $results = [];
+
+        $results['docLines'] = $document->getDocumentLines();
+        $results['tauxTva'] = $this->utilitiesService->calculTauxTva($document->getTaxRateValue());
+
+        foreach($results['docLines'] as $docLine){
+
+            $results['docLine_items'] = $this->documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'occasion' => null, 'boite' => null ]);
+            $results['docLine_occasions'] = $this->documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'item' => null, 'boite' => null]);
+            $results['docLine_boites'] = $this->documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'occasion' => null, 'item' => null]);
+
+        }
+
+        return $results;
+    }
+
+    public function generatePdf($document,$request){
+
+        $results = $this->generateValuesForDocument($document);
+        $legales = $this->legalInformationRepository->findOneBy([]);
+
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+
+        $pathToBootstrapCss = $this->parameter->get('kernel.project_dir').'/assets/styles/template_bootstrap.css';
+
+        $dompdf = new Dompdf($options);
+        $html = $this->twig->render('site/document_download/_document_download.html.twig', [
+            'document' => $document,
+            'css' => file_get_contents('https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'),
+            'legales' => $legales,
+            "docLines" => $document->getDocumentLines(),
+            "tva" => $results['tauxTva'],
+            "docLine_items" => $results['docLine_items'],
+            "docLine_occasions" => $results['docLine_occasions'],
+            "docLine_boites" => $results['docLine_boites']
+        ]);
+
+        $dompdf->loadHtml($html);
+        $dompdf->setBasePath($pathToBootstrapCss);
+        $dompdf->set_option('isHtml5ParserEnabled', true);
+
+dd($dompdf);
+      
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+        // Render the HTML as PDF
+        $dompdf->render();
+        // Output the generated PDF to Browser
+        $dompdf->stream($document->getBillNumber().".pdf");
+
+    }
+
+    //HEADER
+    // $pdf->Image('build/images/design/logoSite.png',$leftMargin,6,30);
+    // // Infos de la socièté sous le logo à gauche
+    // $pdf->SetFont('Helvetica','',8);
+    // $pdf->Text($leftMargin,35,utf8_decode($legales->getStreetCompany().', '.$legales->getPostalCodeCompany().' '.$legales->getCityCompany()));
+    // $pdf->Text($leftMargin,40,'Siret : '.$legales->getSiretCompany());
+
+
+
+
+
+
+
+
+
+    // //EN TETE DU TABLEAU
+    // $position_entete_produits = 105;
+    // $lines = $document->getDocumentLines();
+    // $tableDesignationsHeader = ['Désignation','Qté','P.U HT', 'Total HT'];
+
+
+
+
+
+
+
+
+
+
+
+    // // entete_table_accessoires($position_entete_produits);
+
+    // $positionLigneAchat = 8;
+
+
+    //    //     'document' => $document,
+    //     //     'docLine_items' => $results['docLine_items'],
+    //     //     'docLine_occasions' => $results['docLine_occasions'],
+    //     //     'docLine_boites' => $results['docLine_boites'],
+    //     //     'tva' => $results['tauxTva']
+
+    // if(count($results['docLine_occasions']) > 0){
+    //     foreach($results['docLine_occasions'] as $ligneAchat){
+    //         $pdf->SetY($position_entete_produits + $positionLigneAchat);
+    //         $pdf->SetX(10);
+    //         $pdf->MultiCell(168,8,utf8_decode("Jeu d'occasion: ".$ligneAchat->getOccasion()->getBoite()->getName().' - '.$ligneAchat->getOccasion()->getBoite()->getEditor()),1,'C');
+    //         $pdf->SetY($position_entete_produits + $positionLigneAchat);
+    //         $pdf->SetX(176);
+    //         $pdf->MultiCell(26,8,number_format($ligneAchat->getPriceExcludingTax() / 100 ,2),1,'R');
+    //         $positionLigneAchat += 6;
+    //     }
+    // }
+
+    // $position_detail = $position_entete_produits + $positionLigneAchat; // Position à 9mm de l'entête
+
+    //LIGNE FOURNITURES
+    // if(count($boites) > 0){
+    //     $pdf->SetY($position_detail);
+    //     $pdf->SetX(8);
+    //     $pdf->MultiCell(168,8,utf8_decode("Fourniture(s) de pièce(s)"),1,'C');
+    //     $pdf->SetY($position_detail);
+    //     $pdf->SetX(176);
+    //     $pdf->MultiCell(24,8,number_format($totalDetachees / 100,2),1,'R');
+    // }else{
+    //     $position_detail -= 8;
+    // }
+
+
+    //LIGNE LIVRAISON
+    // $livraisons = explode('<br/>',$document->getDeliveryAddress());
+
+    // $destinationLivraisonOuRetrait = '';
+
+    // foreach($livraisons as $livraison){
+    //     $destinationLivraisonOuRetrait .= $livraison.' ';
+    // }
+
+    // $pdf->SetY($position_detail + 16);
+    // $pdf->SetX(8);
+    // if($document->getDeliveryPriceExcludingTax() == 0){
+    //     $pdf->MultiCell(168,8,utf8_decode("RETRAIT: ".$destinationLivraisonOuRetrait),1,'R');
+    // }else{
+    //     $pdf->MultiCell(168,8,utf8_decode("LIVRAISON: ".$destinationLivraisonOuRetrait),1,'R');
+    // }
+    // $pdf->SetY($position_detail + 16);
+    // $pdf->SetX(176);
+    // $pdf->MultiCell(24,8,number_format($document->getDeliveryPriceExcludingTax() / 100,2),1,'R');
+
+
+
+    //tableau des totaux
+    // $totalsTableHeader = ['Occasions','Pièces D.','Articles','Livraison','Préparation','HT','TVA (%)','TTC'];
+    // $totalsTableDatas = $document->getDocumentLineTotals();
+
+    // $tableauTotauxY = $position_detail + 50;       
+
+    // // Couleurs, épaisseur du trait et police grasse
+    // $pdf->SetFillColor(255,0,0);
+    // $pdf->SetTextColor(255);
+    // $pdf->SetDrawColor(128,0,0);
+    // $pdf->SetLineWidth(.3);
+    // $pdf->SetFont('','B');
+    // //positionnement à partir du bas
+    // $pdf->SetY(-15); 
+    // // En-tête 
+    // $w = array(25, 25, 25, 25, 25, 25, 25, 25);
+    // for($i=0;$i<count($totalsTableHeader);$i++)
+    //     $pdf->Cell($w[$i],7,$totalsTableHeader[$i],1,0,'C',true);
+    // $pdf->Ln();
+    // // Restauration des couleurs et de la police
+    // $pdf->SetFillColor(224,235,255);
+    // $pdf->SetTextColor(0);
+    // $pdf->SetFont('');
+    // // Données
+    // $fill = false;
+
+    // // -itemsWeigth: 0
+    // // -itemsPriceWithoutTax: 0
+    // // -occasionsWeigth: 139
+    // // -occasionsPriceWithoutTax: 300
+    // // -boitesWeigth: 0
+    // // -boitesPriceWithoutTax: 0
+    // $pdf->Cell($w[0],6,number_format($totalsTableDatas->getItemsPriceWithoutTax() / 100 ,2),'LR',0,'C',$fill);
+    // $pdf->Cell($w[1],6,number_format($totalsTableDatas->getOccasionsPriceWithoutTax() / 100 ,2),'LR',0,'C',$fill);
+    // $pdf->Cell($w[2],6,number_format($totalsTableDatas->getBoitesPriceWithoutTax() / 100 ,2),'LR',0,'C',$fill);
+    // $pdf->Cell($w[3],6,number_format($document->getDeliveryPriceExcludingTax() / 100 ,2),'LR',0,'C',$fill);
+    // $pdf->Cell($w[4],6,number_format($document->getCost() / 100 ,2),'LR',0,'C',$fill);
+    // $pdf->Cell($w[5],6,number_format($document->getTotalExcludingTax() / 100 ,2),'LR',0,'C',$fill);
+    // $pdf->Cell($w[6],6,number_format(($document->getTotalWithTax() - $document->getTotalExcludingTax()) / 100 ,2),'LR',0,'C',$fill);
+    // $pdf->Cell($w[7],6,number_format($document->getTotalWithTax() / 100 ,2),'LR',0,'C',$fill);
+    // $pdf->Ln();
+    // $fill = !$fill;
+    
+    // // Trait de terminaison
+    // $pdf->Cell(array_sum($w),0,'','T');
+
+    // $pdf->SetY($tableauTotauxY);
+    // $pdf->SetX(148);
+    // $pdf->MultiCell(28,8,"Total HT:",1,'L');
+    // $pdf->SetY($tableauTotauxY);
+    // $pdf->SetX(176);
+    // $pdf->MultiCell(24,8,number_format($document->getTotalExcludingTax() / 100,"2",".",""),1,'R');
+    // $pdf->SetY($tableauTotauxY + 8);
+    // $pdf->SetX(148);
+    // $pdf->MultiCell(28,8,"TVA:",1,'L');
+    // $pdf->SetY($tableauTotauxY + 8);
+    // $pdf->SetX(176);
+    // $pdf->MultiCell(24,8,number_format(($document->getTotalWithTax() - $document->getTotalExcludingTax())  / 100,"2",".",""),1,'R');
+    // $pdf->SetY($tableauTotauxY + 16);
+    // $pdf->SetX(148);
+    // $pdf->MultiCell(28,8,"Total TTC:",1,'L');
+    // $pdf->SetY($tableauTotauxY + 16);
+    // $pdf->SetX(176);
+    // $pdf->MultiCell(24,8,number_format($document->getTotalWithTax() / 100,"2",".",""),1,'R');
+
+    //LIGNE REMERCIEMENT
+    // $pdf->SetFont('Helvetica','',12);
+    // $pdf->SetY(250);
+    // $pdf->SetX(10);
+    // $pdf->MultiCell(190,8,utf8_decode("MERCI POUR VOTRE COMMANDE."),0,'C');
+
+    // //ligne TVA dans table de config vaut 1 = PAS DE TVA
+    // if($document->getDeliveryPriceExcludingTax() == 0){
+    // $pdf->SetFont('Helvetica','',8);
+    // $pdf->SetY(262);
+    // $pdf->SetX(10);
+    // $pdf->MultiCell(190,8,utf8_decode("TVA non applicable, article 293B du code général des impôts."),0,'C');
+    
 
 }
