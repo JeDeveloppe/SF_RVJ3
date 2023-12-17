@@ -46,29 +46,40 @@
             </div>
 
             <div class="card col-12 p-0 my-5">
-                <div class="card-header">Les devis en cours de payement...</div>
+                <div class="card-header">Les devis en attente de payement...</div>
                 <div class="card-body">
                     {% if devisWithPrice | length > 0 %}
                         {% for document in devisWithPrice %}
                             <div class="card mb-4">
-                                <div class="card-header">{{ document.quoteNumber }}</div>
+                                <div class="card-header d-flex">
+                                    <div class="col-4">
+                                        {{ document.quoteNumber }}
+                                    </div>
+                                    <div class="col-4">
+                                        Valable jusqu'au {{ document.endOfQuoteValidation | date('d-m-Y') }}
+                                    </div>
+                                    <div class="col-4">
+                                        {% if document.isQuoteReminder is null %}
+                                            {% set color = 'red' %}
+                                        {% else %}
+                                            {% set color = 'success' %}
+                                        {% endif %}
+                                        Relancé par email: <i class="fa-solid fa-paper-plane text-{{ color }}"></i>
+                                    </div>
+                                </div>
                                 <div class="card-body d-flex align-items-center">
-                                    <div class="col-3">
+                                    <div class="col-4">
                                             <p>{{ document.totalWithTax  / 100 | number_format(2, '.', ',') }} € TTC</p>
                                         <p>Devis fait le:<br/>
                                             {{ document.createdAt | date("d/m/Y") }}</p>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         Envoi / retrait:
                                         <p>{{ document.sendingMethod }}</p>
                                     </div>
-                                    <div class="col-3">
-                                        Adresse:
+                                    <div class="col-4">
+                                        Adresse de livraison:
                                         <p>{{ document.deliveryAddress | raw }}</p>
-                                    </div>
-                                    <div class="col-3 text-center">
-                                        {# //TODO  #}
-                                        {# {% include "components/admin_group_buttons_traited_daily.html.twig" with {'command': data.action, 'token':document.token } %} #}
                                     </div>
                                 </div>
                             </div>
