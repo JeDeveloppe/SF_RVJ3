@@ -77,13 +77,13 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
             $occasionField,
             IntegerField::new('movementPrice')
                 ->setLabel('Prix du mouvement (HT)')
-                ->setTextAlign('center'),
+                ->setTextAlign('center')->setDisabled($disabled),
             AssociationField::new('movement')
                 ->setLabel('Mouvement:')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])->renderAsEmbeddedForm(),
             AssociationField::new('meansOfPaiement')
                 ->setLabel('Moyen de paiement')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])->renderAsEmbeddedForm(),
             DateTimeField::new('createdAt')->setLabel('Saisie le')->setFormat('dd-MM-yyyy')->onlyOnForms()->setDisabled(true),
             AssociationField::new('createdBy')->setLabel('Saisie par')->onlyOnForms()->setDisabled(true),
         ];
@@ -113,7 +113,6 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
     {
         if($entityInstance instanceof OffSiteOccasionSale) {
 
-        
             $docParams = $this->documentParametreRepository->findOneBy([]);
 
             $billingAddress = 'CLIENT(E) de passage';
@@ -126,10 +125,6 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
             $details['deliveryCostWithoutTax']->setPriceExcludingTax(0);
             $details['preparationHt'] = 0;
             $details['shipping'] = $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT PENDANT UNE FOIRE']); //TODO mettre à jour comme CreationUndefined...
-            $details['totauxBoites']['weigth'] = 0;
-            $details['totauxBoites']['price'] = 0;
-            $details['totauxItems']['weigth'] = 0;
-            $details['totauxItems']['price'] = 0;
             $details['totauxOccasions']['weigth'] = $entityInstance->getOccasion()->getBoite()->getWeigth();
             $details['totauxOccasions']['price'] = $entityInstance->getMovementPrice();
             $details['panier_occasions'] = [];
@@ -137,42 +132,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
             $details['panier_items'] = [];
             $details['occasion'] = $entityInstance->getOccasion();
 
-            $document = $this->documentService->saveDocumentInDataBase($details,$billingAddress,$deliveryAddress);
-
-            $entityManager->persist($document);
-
-            $paiement = $this->paymentRepository->findOneBy(['document' => $document]);
-
-            if(!$paiement){
-                $paiement = new Payment();
-            }
-    
-            //on renseigne le paiement
-            $paiement->setDocument($document)
-                    ->setMeansOfPayment($entityInstance->getMeansOfPaiement())
-                    ->setTokenPayment('MANUEL')
-                    ->setCreatedAt(new DateTimeImmutable('now'))
-                    ->setTimeOfTransaction($entityInstance->getMovementTime());
-            //on sauvegarde le paiement
-            $entityManager->persist($paiement);
-            $entityManager->flush();
-
-            //il faut creer le numero de facture
-            $newNumero = $this->documentService->generateNewNumberOf('billNumber', 'getBillNumber');
-
-            //on renseigne le paiement
-            $paiement->setDetails('MANUEL')
-                    ->setTimeOfTransaction($entityInstance->getMovementTime());
-            //on sauvegarde le paiement
-            $entityManager->persist($paiement);
-            $entityManager->flush();
-
-            //on met a jour le document en BDD
-            $etat = $this->documentStatusRepository->findOneBy(['action' => 'END']);
-            $document->setDocumentStatus($etat)->setBillNumber($docParams->getBillingTag().$newNumero);
-            $entityManager->persist($document);
-            $entityManager->flush();
-
+            $document = $this->documentService->generateDocumentInDatabaseFromSaleDuringAfair($details,$billingAddress,$deliveryAddress,$entityInstance);
 
             $user = $this->security->getUser();
             $entityInstance->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user);

@@ -136,7 +136,7 @@ class DocumentCrudController extends AbstractCrudController
             AssociationField::new('user')
                 ->setLabel('Client')
                 ->setDisabled(true),
-            CollectionField::new('documentLines')->onlyOnDetail(),
+            CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twig')->setDisabled(true)->onlyOnDetail(),
         ];
     }
 

@@ -208,7 +208,7 @@ class PanierService
             $responses['deliveryCostWithoutTax']->setPriceExcludingTax(0);
 
         }else{
-
+                
             $responses['deliveryCostWithoutTax'] = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingIdOfEntity, $responses['weigthPanier']);
 
         }

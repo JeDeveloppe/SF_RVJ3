@@ -4,13 +4,18 @@ namespace App\Service;
 
 use DateInterval;
 use Dompdf\Dompdf;
+use Dompdf\Options;
+use Twig\Environment;
 use DateTimeImmutable;
+use App\Entity\Payment;
 use App\Entity\Document;
 use App\Entity\DocumentLine;
 use App\Service\UtilitiesService;
 use App\Entity\DocumentLineTotals;
 use App\Repository\ItemRepository;
+use App\Repository\UserRepository;
 use App\Entity\Returndetailstostock;
+use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,11 +24,8 @@ use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DocumentStatusRepository;
 use App\Repository\LegalInformationRepository;
 use App\Repository\DocumentParametreRepository;
-use App\Repository\UserRepository;
-use Dompdf\Options;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Twig\Environment;
 
 class DocumentService
 {
@@ -39,20 +41,11 @@ class DocumentService
         private LegalInformationRepository $legalInformationRepository,
         private OccasionRepository $occasionRepository,
         private EntityManagerInterface $em,
+        private PaymentRepository $paymentRepository,
         private Environment $twig,
         private UserRepository $userRepository,
         private ParameterBagInterface $parameter
         ){
-    }
-
-    public function quoteNumberGenerator($numberWithoutPrefix)
-    {
-        return $_ENV['QUOTE_TAG'].$numberWithoutPrefix;
-    }
-
-    public function billingNumberGenerator($numberWithoutPrefix)
-    {
-        return $_ENV['BILLING_TAG'].$numberWithoutPrefix;
     }
 
     public function generateNewNumberOf($column, $methode)
@@ -275,7 +268,8 @@ class DocumentService
         return $results;
     }
 
-    public function generatePdf($document,$request){
+    public function generatePdf($document,$request)
+    {
 
         $results = $this->generateValuesForDocument($document);
         $legales = $this->legalInformationRepository->findOneBy([]);
@@ -301,7 +295,7 @@ class DocumentService
         $dompdf->setBasePath($pathToBootstrapCss);
         $dompdf->set_option('isHtml5ParserEnabled', true);
 
-dd($dompdf);
+        dd($dompdf);    
       
         // (Optional) Setup the paper size and orientation
         $dompdf->setPaper('A4', 'portrait');
@@ -312,173 +306,98 @@ dd($dompdf);
 
     }
 
-    //HEADER
-    // $pdf->Image('build/images/design/logoSite.png',$leftMargin,6,30);
-    // // Infos de la socièté sous le logo à gauche
-    // $pdf->SetFont('Helvetica','',8);
-    // $pdf->Text($leftMargin,35,utf8_decode($legales->getStreetCompany().', '.$legales->getPostalCodeCompany().' '.$legales->getCityCompany()));
-    // $pdf->Text($leftMargin,40,'Siret : '.$legales->getSiretCompany());
+    public function generateDocumentInDatabaseFromSaleDuringAfair($panierParams,$billingAddress,$deliveryAddress,$entityInstance)
+    {
+
+        //ON genere un nouveau numero
+        $newNumero = $this->generateNewNumberOf("quoteNumber", "getQuoteNumber");
+
+        //on cherche les parametres des documents
+        $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
+
+        //puis on met dans la base
+        $document = new Document();
+        $now = new DateTimeImmutable('now');
+        $endDevis = $now->add(new DateInterval('P'.$docParams->getDelayBeforeDeleteDevis().'D'));
+ 
+        $document
+                ->setToken($this->utilitiesService->generateRandomString())
+                ->setQuoteNumber($docParams->getQuoteTag().$newNumero)
+                ->setTotalExcludingTax($panierParams['totalPanier'])
+                ->setDeliveryAddress($deliveryAddress)
+                ->setUser($this->userRepository->findOneBy(['email' => 'client_de_passage@refaitesvosjeux.fr']))
+                ->setBillingAddress($billingAddress)
+                ->setTotalWithTax($this->utilitiesService->htToTTC($panierParams['totalPanier'],$panierParams['tax']->getValue()))
+                ->setDeliveryPriceExcludingTax($panierParams['deliveryCostWithoutTax']->getPriceExcludingTax())
+                ->setIsQuoteReminder(false)
+                ->setEndOfQuoteValidation($endDevis)
+                ->setCreatedAt($now)
+                ->setTaxRate($panierParams['tax'])
+                ->setTaxRateValue($panierParams['tax']->getValue())
+                ->setCost($panierParams['preparationHt'])
+                ->setSendingMethod($panierParams['shipping'])
+                ->setSendingBy($panierParams['shipping']->getName())
+                ->setIsDeleteByUser(false)
+                ->setTimeOfSendingQuote(new DateTimeImmutable('now'))
+                ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => 'END']));
+
+        $this->em->persist($document);
+        $this->em->flush();
+ 
+ 
+        $docLineTotals = new DocumentLineTotals();
+        $docLineTotals
+            ->setDocument($document)
+            ->setBoitesWeigth(0)->setBoitesPriceWithoutTax(0)
+            ->setItemsWeigth(0)->setItemsPriceWithoutTax(0)
+            ->setOccasionsWeigth($panierParams['totauxOccasions']['weigth'])->setOccasionsPriceWithoutTax($panierParams['totauxOccasions']['price']);
+        $this->em->persist($docLineTotals);
+        $this->em->flush();
 
 
+        $documentLine = new DocumentLine();
+        $documentLine
+            ->setOccasion($panierParams['occasion'])
+            ->setQuantity(1)
+            ->setDocument($document)
+            ->setPriceExcludingTax($panierParams['totauxOccasions']['price']);
+        
+        $this->em->persist($documentLine);
+        $this->em->flush();
 
 
+        $paiement = $this->paymentRepository->findOneBy(['document' => $document]);
 
+        if(!$paiement){
+            $paiement = new Payment();
+        }
 
+        //on renseigne le paiement
+        $paiement->setDocument($document)
+                ->setMeansOfPayment($entityInstance->getMeansOfPaiement())
+                ->setTokenPayment('AUCUN')
+                ->setCreatedAt(new DateTimeImmutable('now'))
+                ->setTimeOfTransaction($entityInstance->getMovementTime());
+        //on sauvegarde le paiement
+        $this->em->persist($paiement);
+        $this->em->flush();
 
+        //il faut creer le numero de facture
+        $newNumero = $this->generateNewNumberOf('billNumber', 'getBillNumber');
 
+        //on renseigne le paiement
+        $paiement->setDetails('AUCUN DETAILS')
+                ->setTimeOfTransaction($entityInstance->getMovementTime());
+        //on sauvegarde le paiement
+        $this->em->persist($paiement);
+        $this->em->flush();
 
-    // //EN TETE DU TABLEAU
-    // $position_entete_produits = 105;
-    // $lines = $document->getDocumentLines();
-    // $tableDesignationsHeader = ['Désignation','Qté','P.U HT', 'Total HT'];
+        //on met a jour le document en BDD
+        $etat = $this->documentStatusRepository->findOneBy(['action' => 'END']);
+        $document->setDocumentStatus($etat)->setBillNumber($docParams->getBillingTag().$newNumero);
+        $this->em->persist($document);
+        $this->em->flush();
 
-
-
-
-
-
-
-
-
-
-
-    // // entete_table_accessoires($position_entete_produits);
-
-    // $positionLigneAchat = 8;
-
-
-    //    //     'document' => $document,
-    //     //     'docLine_items' => $results['docLine_items'],
-    //     //     'docLine_occasions' => $results['docLine_occasions'],
-    //     //     'docLine_boites' => $results['docLine_boites'],
-    //     //     'tva' => $results['tauxTva']
-
-    // if(count($results['docLine_occasions']) > 0){
-    //     foreach($results['docLine_occasions'] as $ligneAchat){
-    //         $pdf->SetY($position_entete_produits + $positionLigneAchat);
-    //         $pdf->SetX(10);
-    //         $pdf->MultiCell(168,8,utf8_decode("Jeu d'occasion: ".$ligneAchat->getOccasion()->getBoite()->getName().' - '.$ligneAchat->getOccasion()->getBoite()->getEditor()),1,'C');
-    //         $pdf->SetY($position_entete_produits + $positionLigneAchat);
-    //         $pdf->SetX(176);
-    //         $pdf->MultiCell(26,8,number_format($ligneAchat->getPriceExcludingTax() / 100 ,2),1,'R');
-    //         $positionLigneAchat += 6;
-    //     }
-    // }
-
-    // $position_detail = $position_entete_produits + $positionLigneAchat; // Position à 9mm de l'entête
-
-    //LIGNE FOURNITURES
-    // if(count($boites) > 0){
-    //     $pdf->SetY($position_detail);
-    //     $pdf->SetX(8);
-    //     $pdf->MultiCell(168,8,utf8_decode("Fourniture(s) de pièce(s)"),1,'C');
-    //     $pdf->SetY($position_detail);
-    //     $pdf->SetX(176);
-    //     $pdf->MultiCell(24,8,number_format($totalDetachees / 100,2),1,'R');
-    // }else{
-    //     $position_detail -= 8;
-    // }
-
-
-    //LIGNE LIVRAISON
-    // $livraisons = explode('<br/>',$document->getDeliveryAddress());
-
-    // $destinationLivraisonOuRetrait = '';
-
-    // foreach($livraisons as $livraison){
-    //     $destinationLivraisonOuRetrait .= $livraison.' ';
-    // }
-
-    // $pdf->SetY($position_detail + 16);
-    // $pdf->SetX(8);
-    // if($document->getDeliveryPriceExcludingTax() == 0){
-    //     $pdf->MultiCell(168,8,utf8_decode("RETRAIT: ".$destinationLivraisonOuRetrait),1,'R');
-    // }else{
-    //     $pdf->MultiCell(168,8,utf8_decode("LIVRAISON: ".$destinationLivraisonOuRetrait),1,'R');
-    // }
-    // $pdf->SetY($position_detail + 16);
-    // $pdf->SetX(176);
-    // $pdf->MultiCell(24,8,number_format($document->getDeliveryPriceExcludingTax() / 100,2),1,'R');
-
-
-
-    //tableau des totaux
-    // $totalsTableHeader = ['Occasions','Pièces D.','Articles','Livraison','Préparation','HT','TVA (%)','TTC'];
-    // $totalsTableDatas = $document->getDocumentLineTotals();
-
-    // $tableauTotauxY = $position_detail + 50;       
-
-    // // Couleurs, épaisseur du trait et police grasse
-    // $pdf->SetFillColor(255,0,0);
-    // $pdf->SetTextColor(255);
-    // $pdf->SetDrawColor(128,0,0);
-    // $pdf->SetLineWidth(.3);
-    // $pdf->SetFont('','B');
-    // //positionnement à partir du bas
-    // $pdf->SetY(-15); 
-    // // En-tête 
-    // $w = array(25, 25, 25, 25, 25, 25, 25, 25);
-    // for($i=0;$i<count($totalsTableHeader);$i++)
-    //     $pdf->Cell($w[$i],7,$totalsTableHeader[$i],1,0,'C',true);
-    // $pdf->Ln();
-    // // Restauration des couleurs et de la police
-    // $pdf->SetFillColor(224,235,255);
-    // $pdf->SetTextColor(0);
-    // $pdf->SetFont('');
-    // // Données
-    // $fill = false;
-
-    // // -itemsWeigth: 0
-    // // -itemsPriceWithoutTax: 0
-    // // -occasionsWeigth: 139
-    // // -occasionsPriceWithoutTax: 300
-    // // -boitesWeigth: 0
-    // // -boitesPriceWithoutTax: 0
-    // $pdf->Cell($w[0],6,number_format($totalsTableDatas->getItemsPriceWithoutTax() / 100 ,2),'LR',0,'C',$fill);
-    // $pdf->Cell($w[1],6,number_format($totalsTableDatas->getOccasionsPriceWithoutTax() / 100 ,2),'LR',0,'C',$fill);
-    // $pdf->Cell($w[2],6,number_format($totalsTableDatas->getBoitesPriceWithoutTax() / 100 ,2),'LR',0,'C',$fill);
-    // $pdf->Cell($w[3],6,number_format($document->getDeliveryPriceExcludingTax() / 100 ,2),'LR',0,'C',$fill);
-    // $pdf->Cell($w[4],6,number_format($document->getCost() / 100 ,2),'LR',0,'C',$fill);
-    // $pdf->Cell($w[5],6,number_format($document->getTotalExcludingTax() / 100 ,2),'LR',0,'C',$fill);
-    // $pdf->Cell($w[6],6,number_format(($document->getTotalWithTax() - $document->getTotalExcludingTax()) / 100 ,2),'LR',0,'C',$fill);
-    // $pdf->Cell($w[7],6,number_format($document->getTotalWithTax() / 100 ,2),'LR',0,'C',$fill);
-    // $pdf->Ln();
-    // $fill = !$fill;
-    
-    // // Trait de terminaison
-    // $pdf->Cell(array_sum($w),0,'','T');
-
-    // $pdf->SetY($tableauTotauxY);
-    // $pdf->SetX(148);
-    // $pdf->MultiCell(28,8,"Total HT:",1,'L');
-    // $pdf->SetY($tableauTotauxY);
-    // $pdf->SetX(176);
-    // $pdf->MultiCell(24,8,number_format($document->getTotalExcludingTax() / 100,"2",".",""),1,'R');
-    // $pdf->SetY($tableauTotauxY + 8);
-    // $pdf->SetX(148);
-    // $pdf->MultiCell(28,8,"TVA:",1,'L');
-    // $pdf->SetY($tableauTotauxY + 8);
-    // $pdf->SetX(176);
-    // $pdf->MultiCell(24,8,number_format(($document->getTotalWithTax() - $document->getTotalExcludingTax())  / 100,"2",".",""),1,'R');
-    // $pdf->SetY($tableauTotauxY + 16);
-    // $pdf->SetX(148);
-    // $pdf->MultiCell(28,8,"Total TTC:",1,'L');
-    // $pdf->SetY($tableauTotauxY + 16);
-    // $pdf->SetX(176);
-    // $pdf->MultiCell(24,8,number_format($document->getTotalWithTax() / 100,"2",".",""),1,'R');
-
-    //LIGNE REMERCIEMENT
-    // $pdf->SetFont('Helvetica','',12);
-    // $pdf->SetY(250);
-    // $pdf->SetX(10);
-    // $pdf->MultiCell(190,8,utf8_decode("MERCI POUR VOTRE COMMANDE."),0,'C');
-
-    // //ligne TVA dans table de config vaut 1 = PAS DE TVA
-    // if($document->getDeliveryPriceExcludingTax() == 0){
-    // $pdf->SetFont('Helvetica','',8);
-    // $pdf->SetY(262);
-    // $pdf->SetX(10);
-    // $pdf->MultiCell(190,8,utf8_decode("TVA non applicable, article 293B du code général des impôts."),0,'C');
-    
-
+        return $document;
+    }
 }
