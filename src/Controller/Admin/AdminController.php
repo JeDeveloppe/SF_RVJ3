@@ -2,17 +2,20 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\SiteSetting;
 use App\Repository\UserRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DocumentStatusRepository;
 use App\Repository\LegalInformationRepository;
 use App\Repository\PaymentRepository;
+use App\Repository\SiteSettingRepository;
 use App\Service\MailService;
 use App\Service\PaiementService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends AbstractController
 {
@@ -24,6 +27,7 @@ class AdminController extends AbstractController
         private LegalInformationRepository $legalInformationRepository,
         private MailService $mailService,
         private PaiementService $paiementService,
+        private SiteSettingRepository $siteSettingRepository,
         private UserRepository $userRepository
     )
     {
@@ -65,7 +69,8 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/details-payment/{token}', name: 'admin_invoice_details')]
-    public function paymentDetails($token){
+    public function paymentDetails($token)
+    {
 
         $payment = $this->paymentRepository->findOneBy(['tokenPayment' => $token]);
 
@@ -79,4 +84,25 @@ class AdminController extends AbstractController
         ]);
     }
 
+    #[Route('/admin/change-status-of-option/{option}/{value}', name: 'admin_change_status_option')]
+    public function changeStatusOption($option,$value, Request $request): Response
+    {
+
+        $setting = $this->siteSettingRepository->findOneBy([]);
+
+        switch ($option) {
+            case 'setBlockEmailSending':
+                $this->addFlash('success', 'Status mis à jour !');
+                $setting->setBlockEmailSending($value);
+                break;
+            default:
+                $this->addFlash('danger', 'Méthode inconnue dans le switch !');
+        }
+
+        $this->em->persist($setting);
+        $this->em->flush();
+
+        return $this->redirect($request->headers->get('referer'));
+
+    }
 }

@@ -48,6 +48,7 @@ use App\Repository\DocumentStatusRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\OffSiteOccasionSaleRepository;
+use App\Repository\SiteSettingRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -62,6 +63,7 @@ class DashboardController extends AbstractDashboardController
         private ItemRepository $itemRepository,
         private DocumentService $documentService,
         private ResetPasswordRepository $resetPasswordRepository,
+        private SiteSettingRepository $siteSettingRepository,
         private MailService $mailService,
         private EntityManagerInterface $em
     )
@@ -124,6 +126,7 @@ class DashboardController extends AbstractDashboardController
         $status = [];
         $statusToBeTraitedDailys = $this->documentStatusRepository->findStatusIsTraitedDaily();
         $actions = $this->documentStatusRepository->findAll();
+        $setting = $this->siteSettingRepository->findOneBy([]);
 
         foreach($actions as $action){
             $status[$action->getAction()] = $action->getAction();
@@ -143,7 +146,8 @@ class DashboardController extends AbstractDashboardController
 
         return $this->render('admin/traited_daily_commands.html.twig', [
             'datas' => $datas,
-            'status' => $status
+            'status' => $status,
+            'setting' => $setting
         ]);
     }
 

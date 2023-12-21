@@ -1,13 +1,12 @@
 {# templates/admin/my-custom-page.html.twig #}
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
+
 {% block content_title %}TRAITEMENT DES COMMANDES{% endblock %}
 
-{% block page_actions %}
-
-{% endblock %}
-
 {% block main %}
+
+    {% include "admin/components/_options_page.html.twig" %}
 
     {% include "site/_flash_message.html.twig" %}
 
