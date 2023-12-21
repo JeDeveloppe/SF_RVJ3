@@ -15,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -31,7 +32,7 @@ class UserCrudController extends AbstractCrudController
             FormField::addTab('Infos générales'),
             IdField::new('rvj2id')->setLabel('Rvj2Id')->setDisabled(true)->onlyOnForms(),
             AssociationField::new('level')->setLabel('Role'),
-            TextField::new('email')->setLabel('Adresse email'),
+            TextField::new('email')->setLabel('Adresse email')->setDisabled(true),
             TextField::new('nickname')->setLabel('Pseudo (pour les admins)')->onlyOnForms()->setFormTypeOptions(['attr' => ['placeholder' => 'Uniquement pour un admin...']]),
             TelephoneField::new('phone')->setLabel('Téléphone')->onlyOnForms(),
             DateTimeField::new('createdAt')->setLabel('Date d\'inscription')->setFormat('dd.MM.yyyy')->setDisabled(true),
@@ -44,7 +45,8 @@ class UserCrudController extends AbstractCrudController
             
             FormField::addTab('Documents'),
             AssociationField::new('documents')->setLabel('Documents')->onlyOnIndex(),
-            AssociationField::new('documents')->setLabel('Documents')->onlyOnForms()->setDisabled(true),
+            CollectionField::new('documents')->setLabel('Documents')->onlyOnForms()->setDisabled(true),
+            // CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twig')->setDisabled(true)->onlyOnDetail(),
         ];
     }
 

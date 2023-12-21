@@ -85,6 +85,7 @@ class PaiementService
 
         return $session;
     }
+
     public function creationPaiementWithPayplug($token)
     {
 
@@ -168,6 +169,7 @@ class PaiementService
     {
         throw new Exception('function paiementSuccessWithStripe in paiementService NOT INFORM');
     }
+    
     public function paiementSuccessWithPayplug($token)
     {
         $response = [];
@@ -273,6 +275,7 @@ class PaiementService
                 $this->em->flush();
             }
     }
+
     public function notificationUrlWithStripe($token)
     {
         throw new Exception('function notificationUrlWithStripe in paiementService NOT INFORM');
@@ -318,6 +321,7 @@ class PaiementService
     {
         \Payplug\Payplug::init(['secretKey' => $_ENV["PAYPLUG_SECRET"]]);
     }
+
     public function stripeAuth()
     {
         $stripe = new Stripe();

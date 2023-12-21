@@ -215,7 +215,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Gestion des documents:');
         yield MenuItem::linkToCrud('Documents', 'fas fa-list', Document::class);
-        yield MenuItem::linkToCrud('Lignes documents', 'fas fa-list', DocumentLine::class);
+        // yield MenuItem::linkToCrud('Lignes documents', 'fas fa-list', DocumentLine::class);
         yield MenuItem::linkToCrud('Paiements', 'fas fa-list', Payment::class);
         yield MenuItem::linkToCrud('Status des documents', 'fas fa-list', DocumentStatus::class);
         yield MenuItem::linkToCrud('Paramètres', 'fas fa-list', DocumentParametre::class);
