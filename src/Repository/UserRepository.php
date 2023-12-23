@@ -40,6 +40,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function findInscriptions($month,$year)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('MONTH(p.createdAt) = :month')
+            ->setParameter('month', $month)
+            ->andWhere('YEAR(p.createdAt) = :year')
+            ->setParameter('year', $year)
+            ->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

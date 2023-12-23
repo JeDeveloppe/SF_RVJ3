@@ -49,6 +49,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\OffSiteOccasionSaleRepository;
 use App\Repository\SiteSettingRepository;
+use App\Repository\UserRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -65,7 +66,8 @@ class DashboardController extends AbstractDashboardController
         private ResetPasswordRepository $resetPasswordRepository,
         private SiteSettingRepository $siteSettingRepository,
         private MailService $mailService,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private UserRepository $userRepository
     )
     {
         
@@ -88,7 +90,11 @@ class DashboardController extends AbstractDashboardController
         $itemsWithStockIsNull = $this->itemRepository->findByStockForSaleIsNull();
 
         $payments = $this->paymentRepository->findAll();
-        $occasionsSales = $this->offSiteOccasionSaleRepository->findAll();
+        //? on recupere dans un tableau les occasions vendu avant la création de document
+        $occasionsSales = $this->offSiteOccasionSaleRepository->findBy(['placeOfTransaction' => NULL]);
+
+        $devisEnAttenteDePaiement = $this->documentRepository->findBy(['billNumber' => NULL]);
+        $clients = $this->userRepository->findAll();
 
         $totalPayment = 0;
         foreach($payments as $payment){
@@ -106,11 +112,24 @@ class DashboardController extends AbstractDashboardController
 
         $totals[] = [
             'name' => 'CA - Ventes sur le site',
-            'total' => $totalPayment
+            'total' => $totalPayment,
+            'isMoney' => true
         ];
         $totals[] = [
             'name' => 'CA - Ventes hors site (occasions)',
-            'total' => $totalOccasionSale
+            'total' => $totalOccasionSale,
+            'isMoney' => true
+            
+        ];
+        $totals[] = [
+            'name' => 'Devis en attente de paiement',
+            'total' => count($devisEnAttenteDePaiement),
+            'isMoney' => false
+        ];
+        $totals[] = [
+            'name' => 'Nombre d\'inscrits sur le site:',
+            'total' => count($clients),
+            'isMoney' => false
         ];
 
         return $this->render('admin/dashboard.html.twig', [
@@ -166,8 +185,6 @@ class DashboardController extends AbstractDashboardController
         ]);
     }
 
-    
-
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
@@ -185,6 +202,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('RETOUR EN STOCK','fa-solid fa-rotate-left', Returndetailstostock::class);
         yield MenuItem::linkToRoute('DEVIS','fa-solid fa-money-bill','admin_traited_daily_devis');
         yield MenuItem::linkToRoute('COMMANDES','fa-solid fa-money-bill','admin_traited_daily_commands');
+        yield MenuItem::linkToRoute('GRAPHIQUES','fa-solid fa-chart-simple','jpgraph');
+
+        
 
         yield MenuItem::section('Gestion des boites:');
         yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class);
