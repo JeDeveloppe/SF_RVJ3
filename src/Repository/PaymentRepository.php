@@ -21,6 +21,30 @@ class PaymentRepository extends ServiceEntityRepository
         parent::__construct($registry, Payment::class);
     }
 
+    public function findPaiementsAndReturnCA($month,$year)
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.document','d')
+            ->select('SUM(d.totalExcludingTax) as totalExcludingTaxInMonth')
+            ->where('MONTH(p.timeOfTransaction) = :month')
+            ->setParameter('month', $month)
+            ->andWhere('YEAR(p.timeOfTransaction) = :year')
+            ->setParameter('year', $year)
+            ->getQuery()->getSingleScalarResult();
+    }
+
+    public function findPaiements($month,$year)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('MONTH(p.timeOfTransaction) = :month')
+            ->setParameter('month', $month)
+            ->andWhere('YEAR(p.timeOfTransaction) = :year')
+            ->setParameter('year', $year)
+            ->getQuery()->getResult();
+    }
+
+
+
 //    /**
 //     * @return Payment[] Returns an array of Payment objects
 //     */
