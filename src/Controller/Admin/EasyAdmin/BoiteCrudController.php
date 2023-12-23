@@ -23,6 +23,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 
 class BoiteCrudController extends AbstractCrudController
 {
@@ -69,15 +70,20 @@ class BoiteCrudController extends AbstractCrudController
             AssociationField::new('players')->setLabel('A partir de (joueurs)')->onlyOnForms()->setColumns(6),
 
             FormField::addTab('Occasion / Articles'),
-            BooleanField::new('isOccasion')->setLabel('En occasion'),
+            BooleanField::new('isOccasion')->setLabel('Disponilbe en occasion'),
             IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms(),
             IntegerField::new('htPrice')->setLabel('Prix HT (en cents) d\'une boite complête en bon état')->onlyOnForms(),
-            AssociationField::new('items')->setLabel('Articles:')->setDisabled(true),
+            AssociationField::new('itemsSecondaire')->setLabel('Articles:'),
 
             
             FormField::addTab('Paramètres'),
             BooleanField::new('isDeliverable')->setLabel('Livrable')->onlyOnForms(),
             BooleanField::new('isDeee')->setLabel('Deee'),
+
+            
+            FormField::addTab('Ventes'),
+            AssociationField::new('documentLines')->onlyOnIndex(),
+            CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twig')->setDisabled(true)->onlyOnForms(),
 
             FormField::addTab('Création / Mise à jour'),
             DateTimeField::new('createdAt')->setLabel('Créé le')
@@ -93,10 +99,6 @@ class BoiteCrudController extends AbstractCrudController
                 ->setFormat('dd-MM-yyyy')
                 ->setDisabled()
                 ->onlyOnForms(),
-
-            FormField::addTab('Ventes'),
-            AssociationField::new('documentLines')
-            ->setLabel('Nbre de demandes')->setDisabled(true),
         ];
     }
 
@@ -115,8 +117,7 @@ class BoiteCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            // ->remove(Crud::PAGE_INDEX, Action::DELETE);
-            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
+            ->remove(Crud::PAGE_INDEX, Action::DELETE);
         
     }
 

@@ -27,8 +27,7 @@ class Item
     #[ORM\Column]
     private ?int $priceExcludingTax = null;
 
-    #[ORM\ManyToMany(targetEntity: Boite::class, inversedBy: 'items')]
-    private Collection $boite;
+
 
     #[ORM\OneToMany(mappedBy: 'Item', targetEntity: Panier::class)]
     private Collection $paniers;
@@ -43,12 +42,19 @@ class Item
     #[ORM\JoinColumn(nullable: false)]
     private ?Envelope $Envelope = null;
 
+    #[ORM\ManyToMany(targetEntity: Boite::class, inversedBy: 'itemsOrigine')]
+    private Collection $BoiteOrigine;
+
+    #[ORM\ManyToMany(targetEntity: Boite::class, mappedBy: 'itemsSecondaire')]
+    private Collection $BoiteSecondaire;
+
     public function __construct()
     {
         $this->itemGroup = new ArrayCollection();
-        $this->boite = new ArrayCollection();
         $this->paniers = new ArrayCollection();
         $this->documentLines = new ArrayCollection();
+        $this->BoiteOrigine = new ArrayCollection();
+        $this->BoiteSecondaire = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -119,30 +125,6 @@ class Item
     public function __toString()
     {
         return $this->name.' (Qté en stock: '.$this->stockForSale.')';
-    }
-
-    /**
-     * @return Collection<int, Boite>
-     */
-    public function getBoite(): Collection
-    {
-        return $this->boite;
-    }
-
-    public function addBoite(Boite $boite): static
-    {
-        if (!$this->boite->contains($boite)) {
-            $this->boite->add($boite);
-        }
-
-        return $this;
-    }
-
-    public function removeBoite(Boite $boite): static
-    {
-        $this->boite->removeElement($boite);
-
-        return $this;
     }
 
     /**
@@ -225,6 +207,54 @@ class Item
     public function setEnvelope(?Envelope $Envelope): static
     {
         $this->Envelope = $Envelope;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Boite>
+     */
+    public function getBoiteOrigine(): Collection
+    {
+        return $this->BoiteOrigine;
+    }
+
+    public function addBoiteOrigine(Boite $boiteOrigine): static
+    {
+        if (!$this->BoiteOrigine->contains($boiteOrigine)) {
+            $this->BoiteOrigine->add($boiteOrigine);
+        }
+
+        return $this;
+    }
+
+    public function removeBoiteOrigine(Boite $boiteOrigine): static
+    {
+        $this->BoiteOrigine->removeElement($boiteOrigine);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Boite>
+     */
+    public function getBoiteSecondaire(): Collection
+    {
+        return $this->BoiteSecondaire;
+    }
+
+    public function addBoiteSecondaire(Boite $boiteSecondaire): static
+    {
+        if (!$this->BoiteSecondaire->contains($boiteSecondaire)) {
+            $this->BoiteSecondaire->add($boiteSecondaire);
+        }
+
+        return $this;
+    }
+
+    public function removeBoiteSecondaire(Boite $boiteSecondaire): static
+    {
+        $this->BoiteSecondaire->removeElement($boiteSecondaire);
 
         return $this;
     }

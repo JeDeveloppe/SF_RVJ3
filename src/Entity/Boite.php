@@ -97,19 +97,23 @@ class Boite
     #[ORM\Column(nullable: true)]
     private ?int $rvj2id = null;
 
-    #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'boite')]
-    private Collection $items;
-
     #[ORM\ManyToMany(targetEntity: ItemGroup::class, mappedBy: 'boite')]
     private Collection $itemGroups;
+
+    #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'BoiteOrigine')]
+    private Collection $itemsOrigine;
+
+    #[ORM\ManyToMany(targetEntity: Item::class, inversedBy: 'BoiteSecondaire')]
+    private Collection $itemsSecondaire;
 
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
         $this->documentLines = new ArrayCollection();
         $this->paniers = new ArrayCollection();
-        $this->items = new ArrayCollection();
         $this->itemGroups = new ArrayCollection();
+        $this->itemsOrigine = new ArrayCollection();
+        $this->itemsSecondaire = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -476,33 +480,6 @@ class Boite
     }
 
     /**
-     * @return Collection<int, Item>
-     */
-    public function getItems(): Collection
-    {
-        return $this->items;
-    }
-
-    public function addItem(Item $item): static
-    {
-        if (!$this->items->contains($item)) {
-            $this->items->add($item);
-            $item->addBoite($this);
-        }
-
-        return $this;
-    }
-
-    public function removeItem(Item $item): static
-    {
-        if ($this->items->removeElement($item)) {
-            $item->removeBoite($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, ItemGroup>
      */
     public function getItemGroups(): Collection
@@ -524,6 +501,60 @@ class Boite
     {
         if ($this->itemGroups->removeElement($itemGroup)) {
             $itemGroup->removeBoite($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Item>
+     */
+    public function getItemsOrigine(): Collection
+    {
+        return $this->itemsOrigine;
+    }
+
+    public function addItemsOrigine(Item $itemsOrigine): static
+    {
+        if (!$this->itemsOrigine->contains($itemsOrigine)) {
+            $this->itemsOrigine->add($itemsOrigine);
+            $itemsOrigine->addBoiteOrigine($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItemsOrigine(Item $itemsOrigine): static
+    {
+        if ($this->itemsOrigine->removeElement($itemsOrigine)) {
+            $itemsOrigine->removeBoiteOrigine($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Item>
+     */
+    public function getItemsSecondaire(): Collection
+    {
+        return $this->itemsSecondaire;
+    }
+
+    public function addItemsSecondaire(Item $itemsSecondaire): static
+    {
+        if (!$this->itemsSecondaire->contains($itemsSecondaire)) {
+            $this->itemsSecondaire->add($itemsSecondaire);
+            $itemsSecondaire->addBoiteSecondaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItemsSecondaire(Item $itemsSecondaire): static
+    {
+        if ($this->itemsSecondaire->removeElement($itemsSecondaire)) {
+            $itemsSecondaire->removeBoiteSecondaire($this);
         }
 
         return $this;

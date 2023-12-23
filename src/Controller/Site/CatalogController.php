@@ -78,19 +78,8 @@ class CatalogController extends AbstractController
             return $this->redirectToRoute('app_catalogue_pieces_detachees');
         }
 
-        $groups = [];
-        $items = [];
-        foreach($boite->getItems() as $item){
-            foreach($item->getItemGroup() as $group){
-                $groups[] = $group;
-            } 
-        }
-
-        $itemGroups = array_unique($groups);
-
         return $this->render('site/catalog/pieces_detachees/pieces_detachees_demande.html.twig', [
-            'boite' => $boite,
-            'itemGroups' => $itemGroups
+            'boite' => $boite
         ]);
     }
 

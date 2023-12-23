@@ -9,7 +9,7 @@
 
 {% block body %}
 
-	<h1 class="col-12 text-center mt-5 pt-3 mb-3">
+	<h1 class="col-12 text-center mt-1 pt-3 mb-3">
 	{{ boite.name }}<br/>
 	{{ boite.editor }}<br/>
 		{% if boite.year is not null %}
@@ -127,15 +127,32 @@
 									<div class="form-group mb-3">
 										<select name="itemId" class="form-control text-center" required>
 											<option value="">-- Choisir un article --</option>
-											{% for item in group.items %}
-												{% if boite in item.boite %}
-													{% if  item.stockForSale > 0 %}
-														<option value="{{ item.id }}">{{ item.name }} (Qté: {{ item.stockForSale }})</option>
+												<optgroup label="Pièces originales">
+													{% if boite.itemsOrigine | length > 0 %}
+														{% for item in boite.itemsOrigine %}
+																{% if item in group.items %}
+																	{% if  item.stockForSale > 0 %}
+																		<option value="{{ item.id }}">{{ item.name }} (Qté: {{ item.stockForSale }})</option>
+																	{% endif %}
+																{% endif %}
+														{% endfor %}
 													{% else %}
-														<option value="">-- victime de son succès --</option>
+														<option value="">Victime de son succès...</option>
 													{% endif %}
-												{% endif %}
-											{% endfor %}
+												</optgroup>
+												<optgroup label="Pièces similaires">
+													{% if boite.itemsSecondaire | length > 0 %}
+														{% for item in boite.itemsSecondaire %}
+																{% if item in group.items %}
+																	{% if  item.stockForSale > 0 %}
+																		<option value="{{ item.id }}">{{ item.name }} (Qté: {{ item.stockForSale }})</option>
+																	{% endif %}
+																{% endif %}
+														{% endfor %}
+													{% else %}
+														<option value="">Victime de son succès...</option>
+													{% endif %}
+												</optgroup>
 										</select>
 									</div>
 									<div class="form-group d-flex justify-content-around align-items-center">
