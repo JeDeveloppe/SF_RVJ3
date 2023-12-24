@@ -21,6 +21,19 @@ class DiscountRepository extends ServiceEntityRepository
         parent::__construct($registry, Discount::class);
     }
 
+    public function findDiscountPercentage($qte)
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.start <= :qte')
+            ->andWhere('d.end >= :qte')
+            ->andWhere('d.isOnline = :value')
+            ->setParameter('qte', $qte)
+            ->setParameter('value', true)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 //    /**
 //     * @return Discount[] Returns an array of Discount objects
 //     */

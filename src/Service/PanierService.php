@@ -8,9 +8,11 @@ use App\Entity\Delivery;
 use App\Repository\ItemRepository;
 use App\Repository\PanierRepository;
 use App\Repository\DeliveryRepository;
+use App\Repository\DiscountRepository;
 use App\Repository\DocumentParametreRepository;
 use App\Repository\OccasionRepository;
 use App\Repository\ShippingMethodRepository;
+use App\Repository\SiteSettingRepository;
 use App\Repository\TaxRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -19,6 +21,8 @@ class PanierService
 {
     public function __construct(
         private EntityManagerInterface $em,
+        private SiteSettingRepository $siteSettingRepository,
+        private DiscountRepository $discountRepository,
         private OccasionRepository $occasionRepository,
         private ItemRepository $itemRepository,
         private ShippingMethodRepository $shippingMethodRepository,
@@ -121,15 +125,17 @@ class PanierService
 
             $panier = $this->panierRepository->findOneBy(['item' => $item, 'user' => $this->security->getUser()]);
 
-            $newQte = $item->getStockForSale() - $qte;
+            $newQteInStock = $item->getStockForSale() - $qte;
 
             if($panier){
 
+                $newQteInPanier = $panier->getQte() + $qte;
+
                 $panier
-                ->setQte($panier->getQte() + $qte)
+                ->setQte($newQteInPanier)
                 ->setUnitPriceExclusingTax($item->getPriceExcludingTax())
                 ->setCreatedAt( new DateTimeImmutable('now'))
-                ->setPriceWithoutTax(($item->getPriceExcludingTax()) * ($panier->getQte() + $qte));
+                ->setPriceWithoutTax($item->getPriceExcludingTax() * $newQteInPanier);
 
                 $this->em->persist($panier);
 
@@ -148,7 +154,7 @@ class PanierService
 
 
             //?on met la qte article à jour
-            $item->setStockForSale($newQte);
+            $item->setStockForSale($newQteInStock);
             $this->em->persist($item);
 
             //?on sauvegarde le tout
@@ -167,12 +173,15 @@ class PanierService
         $shipping = $this->shippingMethodRepository->findOneBy(['id' => $shippingIdOfEntity]);
 
         $responses = [];
+        //? calcul de la remise sur les articles
+        $responses['remises'] = $this->calculateRemise($this->panierRepository->findBy(['user' => $user]));
         
         $responses['shipping'] = $shipping;
         $responses['panier_occasions'] = $this->panierRepository->findOccasionsByUser($user);
         $responses['panier_boites'] = $this->panierRepository->findBoitesByUser($user);
         $responses['panier_items'] = $this->panierRepository->findItemsByUser($user);
         $responses['tax'] = $this->taxRepository->findOneBy([]);
+
 
         $now = new DateTimeImmutable('now');
 
@@ -213,8 +222,54 @@ class PanierService
 
         }
 
-        $responses['totalPanier'] = $responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']->getPriceExcludingTax();
+        //? calcule de la remise sur les articles
+        $responses['remises']['remiseDeQte'] = $responses['totauxItems']['price'] * $responses['remises']['value'] / 100;
+
+        $responses['totalPanier'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']->getPriceExcludingTax()) - $responses['remises']['remiseDeQte'];
 
         return $responses;
+    }
+
+    public function calculateRemise($paniers)
+    {
+
+        $qte = 0;
+        foreach($paniers as $panier){
+            //?remise que sur les articles
+            if($panier->getItem() != NULL){
+                $qte += $panier->getQte();
+            }
+        }
+
+        $discount = $this->discountRepository->findDiscountPercentage($qte);
+    
+        if($discount)
+        {
+            $remises['actif'] = true;
+            $remises['qte'] = $qte;
+            $remises['value'] = $discount->getValue();
+            $remises['nextQteForRemiseSupplementaire'] = $discount->getEnd() + 1;
+            $nextRemise = $this->discountRepository->findDiscountPercentage($remises['nextQteForRemiseSupplementaire']);
+
+            if($nextRemise)
+            {
+                $remises['nextRemiseSupplementaire'] = $nextRemise->getValue();
+
+            }else{
+
+                $remises['nextRemiseSupplementaire'] = false;
+            }
+
+        }else{
+
+            $remises['actif'] = false;
+            $remises['qte'] = 0;
+            $remises['value'] = 0;
+            $remises['nextQteForRemiseSupplementaire'] = 0;
+            $remises['nextRemiseSupplementaire'] = 0;
+        }
+        
+
+        return $remises;
     }
 }

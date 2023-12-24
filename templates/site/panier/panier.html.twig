@@ -8,9 +8,9 @@
 
     <div class="col-12 col-md-10 mx-auto">
 
-        {% include "components/panier/_table_occasions.html.twig" with {'donnees': occasions }%}
-
         {% include "components/panier/_table_items.html.twig" with {'donnees': items }%}
+
+        {% include "components/panier/_table_occasions.html.twig" with {'donnees': occasions }%}
 
     </div>
 
@@ -21,12 +21,23 @@
         <div class="col-12 col-md-6 mx-auto my-5">
             <table class="table table-striped align-middle">
                 <tr>
-                    <td>Sous-total occasions:</td>
-                    <td>{{ (totalOccasions * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-                </tr>
-                <tr>
                     <td>Sous-total articles:</td>
                     <td>{{ (totalItems * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                </tr>
+                {% if remises.actif == true %}
+                    <tr>
+                        <td>
+                        Remise sur les articles ( - {{ remises.value }}%):<br/>
+                            {% if remises.nextRemiseSupplementaire is not same as false %}
+                                Prochain pallier dès {{ remises.nextQteForRemiseSupplementaire }} articles pour {{ remises.nextRemiseSupplementaire }} % de remise.
+                            {% endif %}
+                        </td>
+                        <td> - {{ (remises.remiseDeQte * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>Sous-total occasions:</td>
+                    <td>{{ (totalOccasions * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
                 </tr>
                 <tr>
                     <td>Livraison / retrait:<br/>

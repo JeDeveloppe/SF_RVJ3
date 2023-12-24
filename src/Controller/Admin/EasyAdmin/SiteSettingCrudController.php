@@ -17,6 +17,7 @@ class SiteSettingCrudController extends AbstractCrudController
     {
         return [
             BooleanField::new('BlockEmailSending')->setLabel('Envoi des emails bloqué:'),
+            BooleanField::new('QuantityDiscountInCart')->setLabel('Remises dans le panier activé:'),
         ];
     }
 }

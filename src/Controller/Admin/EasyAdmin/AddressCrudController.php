@@ -40,6 +40,7 @@ class AddressCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Nouvelle adresse')
             ->setPageTitle('edit', 'Édition de l\'adresse')
             ->setDefaultSort(['id' => 'DESC'])
+            ->setSearchFields(['city.name','city.postalcode','street','organization','firstname','lastname','user.email'])
 
         ;
     }

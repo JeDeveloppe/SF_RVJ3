@@ -116,6 +116,7 @@ class PanierController extends AbstractController
             'occasions' => $reponses['panier_occasions'],
             'boites' => $reponses['panier_boites'],
             'items' => $reponses['panier_items'],
+            'remises' => $reponses['remises'],
             'weigthPanier' => $reponses['weigthPanier'],
             'totalItems' => $reponses['totauxItems']['price'],
             'totalOccasions' => $reponses['totauxOccasions']['price'],
