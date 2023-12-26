@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Controller\Admin\EasyAdmin;
+
+use App\Service\MailService;
+use App\Entity\VoucherDiscount;
+use App\Service\VoucherDiscountService;
+use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Symfony\Bundle\SecurityBundle\Security;
+
+class VoucherDiscountCrudController extends AbstractCrudController
+{
+    public static function getEntityFqcn(): string
+    {
+        return VoucherDiscount::class;
+    }
+
+    public function __construct(
+        private VoucherDiscountService $voucherDiscountService
+    )
+    {
+    }
+    
+    public function configureFields(string $pageName): iterable
+    {
+        return [
+            TextField::new('email')->setLabel('Email d\'envoi qui devrait être l\'utilisateur:')->onlyOnForms(),
+            TextField::new('email')->setLabel('Destinataire:')->onlyOnIndex(),
+            TextField::new('email')->setLabel('Destinataire:')->onlyOnDetail(),
+            DateTimeField::new('endOfTheCollect')->setLabel('Date de la collecte:'),
+            TextField::new('uuid')->onlyOnDetail()->setLabel('Token:')->setDisabled(true),
+            IntegerField::new('numberOfKilosCollected')->setLabel('Nombre de kilos collectés (arrondi):')->onlyOnForms(),
+            IntegerField::new('numberOfKilosCollected')->setLabel('Nombre de kilos collectés (arrondi):')->onlyOnDetail(),
+            IntegerField::new('discountValueExcludingTax')->setLabel('Montant de la remise (en cents HT):'),
+            DateTimeField::new('validUntil')->setLabel('Valide jusqu\'au:'),
+            DateTimeField::new('createdAt')->setFormat('dd.MM.yyyy à HH:mm')->setLabel('Créé / envoyé:')->onlyOnDetail()->setDisabled(true),
+            BooleanField::new('isUsed')->hideWhenCreating()->setLabel('Utilisé:')->setDisabled(true),
+            TextField::new('createdBy')->onlyOnDetail()->setDisabled(true)
+        ];
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->showEntityActionsInlined()
+            ->setPageTitle('index', 'Liste des bons d\'achat')
+            ->setPageTitle('new', 'Nouveau bon d\'achat')
+            ->setPageTitle('edit', 'Édition d\'un bon d\'achat')
+            ->setDefaultSort(['id' => 'DESC'])
+            ;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->remove(Crud::PAGE_INDEX, Action::EDIT)
+            ->remove(Crud::PAGE_DETAIL, Action::EDIT)
+            ->add(Crud::PAGE_INDEX, Action::DETAIL);
+        
+    }
+
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if($entityInstance instanceof VoucherDiscount) {
+
+        $this->voucherDiscountService->saveVoucherDiscountInDatabaseAndSendEmail($entityInstance);
+
+        }
+    }
+}

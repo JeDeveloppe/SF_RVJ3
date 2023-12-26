@@ -81,6 +81,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Level $level = null;
 
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: VoucherDiscount::class)]
+    private Collection $voucherDiscounts;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
@@ -91,6 +94,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->occasions = new ArrayCollection();
         $this->paniers = new ArrayCollection();
         $this->documentParametres = new ArrayCollection();
+        $this->voucherDiscounts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -500,6 +504,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLevel(?Level $level): static
     {
         $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, VoucherDiscount>
+     */
+    public function getVoucherDiscounts(): Collection
+    {
+        return $this->voucherDiscounts;
+    }
+
+    public function addVoucherDiscount(VoucherDiscount $voucherDiscount): static
+    {
+        if (!$this->voucherDiscounts->contains($voucherDiscount)) {
+            $this->voucherDiscounts->add($voucherDiscount);
+            $voucherDiscount->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoucherDiscount(VoucherDiscount $voucherDiscount): static
+    {
+        if ($this->voucherDiscounts->removeElement($voucherDiscount)) {
+            // set the owning side to null (unless already changed)
+            if ($voucherDiscount->getCreatedBy() === $this) {
+                $voucherDiscount->setCreatedBy(null);
+            }
+        }
 
         return $this;
     }

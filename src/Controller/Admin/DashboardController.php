@@ -40,6 +40,7 @@ use App\Repository\ItemRepository;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Returndetailstostock;
 use App\Entity\SiteSetting;
+use App\Entity\VoucherDiscount;
 use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -231,6 +232,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Moyens de retrait/envoi', 'fas fa-list', ShippingMethod::class);
         yield MenuItem::linkToCrud('Lieux de retrait', 'fas fa-list', CollectionPoint::class);
         yield MenuItem::linkToCrud('Remises', 'fas fa-list', Discount::class);
+        yield MenuItem::linkToCrud('Bon d\'achat', 'fas fa-list', VoucherDiscount::class);
         yield MenuItem::linkToCrud('Prix des livraisons', 'fas fa-list', Delivery::class);
 
         yield MenuItem::section('Gestion des documents:');
