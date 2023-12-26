@@ -32,9 +32,9 @@ use App\Service\ImportRvj2\CreationMouvementsOccasionService;
 use App\Service\ImportRvj2\CreationUndefinedAdminAndAdresseService;
 use App\Service\ImportRvj2\CreationEnvelopesAndColorsAndDiscountsService;
 
-#[AsCommand(name: 'app:initforprod')]
+#[AsCommand(name: 'app:initforprod2')]
 
-class InitForProd extends Command
+class InitForProd2 extends Command
 {
     public function __construct(
             private UserService $userService,
@@ -76,8 +76,8 @@ class InitForProd extends Command
         // // creation PAYS name/isocode
         // $this->creationCountrieService->addCountries();
         
-        //ON CREE OU ON MET A JOUR L'ADMIN
-        $this->userService->initForProd_adminUser($io);
+        // //ON CREE OU ON MET A JOUR L'ADMIN
+        // $this->userService->initForProd_adminUser($io);
 
         // // on importe les clients
         // $this->importClientsService->importClients($io);
@@ -89,62 +89,62 @@ class InitForProd extends Command
         // $this->importVillesFrancaiseService->importVilles1_5($io);
         // $this->importVillesBelgesService->importVilles1_5($io);
 
-        // //on importe les partenaires
-        // $this->importPartenairesService->importPartenaires($io);
+        //on importe les partenaires
+        $this->importPartenairesService->importPartenaires($io);
 
-        // //on importe les adresses (facturation et livraison)
-        // $this->importAdressesService->importAdresses($io);
+        //on importe les adresses (facturation et livraison)
+        $this->importAdressesService->importAdresses($io);
 
-        // //on creer le nombre de joueurs
-        // $this->creationNombreDeJoueursService->addplayers($io);
+        //on creer le nombre de joueurs
+        $this->creationNombreDeJoueursService->addplayers($io);
 
-        // //on importe les boites
-        // $this->importBoitesService->importBoites($io);
+        //on importe les boites
+        $this->importBoitesService->importBoites($io);
 
-        // //on genere les editeurs de facon distinct
-        // $this->editorService->addEditorsInDatabase($io);
+        //on genere les editeurs de facon distinct
+        $this->editorService->addEditorsInDatabase($io);
 
-        // //on importe le detail des boites
-        // $this->importPiecesService->importPieces($io);
+        //on importe le detail des boites
+        $this->importPiecesService->importPieces($io);
 
-        // //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
-        // $this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
+        //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
+        $this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
 
-        // //on cree les conditions des occasions
-        // $this->creationConditionOccasionService->addConditions($io);
+        //on cree les conditions des occasions
+        $this->creationConditionOccasionService->addConditions($io);
 
-        // //on cree les MOYENS DE PAIEMENT
-        // $this->creationMoyenDePaiementService->addMoyens($io);
+        //on cree les MOYENS DE PAIEMENT
+        $this->creationMoyenDePaiementService->addMoyens($io);
 
-        // //on importe les jeux complet
-        // $this->importOccasionsService->importOccasions($io);
+        //on importe les jeux complet
+        $this->importOccasionsService->importOccasions($io);
 
-        // //on cree les mouvements des occasions
-        // $this->creationMouvementsOccasionService->importMouvementsOccasions($io);
+        //on cree les mouvements des occasions
+        $this->creationMouvementsOccasionService->importMouvementsOccasions($io);
 
-        // //on met a jour les occasions avec les mouvements
-        // $this->updateOccasionMouvement->updateOccasionMouvement($io);
+        //on met a jour les occasions avec les mouvements
+        $this->updateOccasionMouvement->updateOccasionMouvement($io);
 
-        // //on crer les information legale et la tax
-        // $this->creationLegalInformationService->creationLegalInformation($io);
+        //on crer les information legale et la tax
+        $this->creationLegalInformationService->creationLegalInformation($io);
 
-        // //on cree les status des documents
-        // $this->creationDocumentStatusService->creationStatus($io);
+        //on cree les status des documents
+        $this->creationDocumentStatusService->creationStatus($io);
 
-        // //on importe les documents et les paiements
-        // $this->importDocumentsService->importDocuments($io);
-        // $this->importPaiementService->importPaiements($io);
+        //on importe les documents et les paiements
+        $this->importDocumentsService->importDocuments($io);
+        $this->importPaiementService->importPaiements($io);
 
-        // //on importe les lignes de chaque document
-        // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
-        // $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
-        // $this->importDocumentsLignesService->generateDocumentsTotals($io);
+        //on importe les lignes de chaque document
+        $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
+        $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
+        $this->importDocumentsLignesService->generateDocumentsTotals($io);
 
-        // //on cree les enveloppes et les couleurs pour les articles, les enveloppes, les joueurs, les livraisons
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
+        //on cree les enveloppes et les couleurs pour les articles, les enveloppes, les joueurs, les livraisons
+        $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
+        $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
+        $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
+        $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
 
         return Command::SUCCESS;
     }
