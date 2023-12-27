@@ -41,7 +41,7 @@ class VoucherDiscountService
         $this->em->persist($voucherDiscount);
         $this->em->flush();
 
-        $this->mailService->sendMail($voucherDiscount->getEmail(),'Bon d\'achat sur Refaites Vos Jeux', 'voucher_discount', $donnees);
+        $this->mailService->sendMail($voucherDiscount->getEmail(),'Bon d\'achat sur Refaites Vos Jeux', 'voucher_discount', $donnees, null, false);
     }
 
 }

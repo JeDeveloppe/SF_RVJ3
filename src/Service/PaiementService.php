@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\MeansOfPayementRepository;
 use App\Repository\PaymentRepository;
 use Symfony\Component\BrowserKit\Response;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

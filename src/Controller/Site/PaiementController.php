@@ -9,7 +9,7 @@ use App\Service\PaiementService;
 use App\Service\UtilitiesService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class PaiementController extends AbstractController
 {

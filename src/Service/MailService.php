@@ -26,7 +26,7 @@ class MailService
         ){
     }
 
-    public function sendMail($recipient, $subject, $template, array $donnees = null, $replyTo = null){
+    public function sendMail($recipient, $subject, $template, array $donnees = null, $replyTo = null, string $dnsCommande = null){
 
         $siteSettings = $this->siteSettingRepository->findOneBy([]);
 
@@ -48,6 +48,11 @@ class MailService
                 ->context($donnees);
 
             try{
+                //?utilisation de la boite email spéciale COMMANDES
+                if($dnsCommande == true){
+
+                    $mail->getHeaders()->addTextHeader('X-Transport', 'commande');
+                }
                 $this->mailer->send($mail);
             } catch (TransportExceptionInterface $e) {
                 dump($e->getDebug());
@@ -75,7 +80,9 @@ class MailService
                     'endDevis' => $document->getEndOfQuoteValidation(),
                     'docParams' => $docParams,
                     'legales' => $legales
-                    ]
+                ],
+                null,
+                false
             );
 
         }

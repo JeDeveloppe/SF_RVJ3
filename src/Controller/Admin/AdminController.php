@@ -59,7 +59,8 @@ class AdminController extends AbstractController
                 [
                     'document' => $document,
                     'legales' => $legales
-                ]
+                ],
+                true
             );
 
             $this->addFlash('success', 'Status mis à jour !');

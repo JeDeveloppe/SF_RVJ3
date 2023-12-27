@@ -96,13 +96,14 @@ class SiteController extends AbstractController
             $this->mailService->sendMail(
                 $legales->getEmailCompany(),
                 "Message du site en date du ".(new DateTimeImmutable('now'))->format('d-m-Y').": ".$form->get('sujet')->getData(),
-                'contact_question',
+                'contact',
                 [
                     'mail' => $form->get('email')->getData(),
                     'question' => $form->get('message')->getData(),
                     'legales' => $legales
                 ],
-                $form->get('email')->getData()
+                $form->get('email')->getData(),
+                false
             );
     
             $this->addFlash('success', 'Message bien envoyé!');

@@ -41,11 +41,13 @@ class UserCrudController extends AbstractCrudController
 
             FormField::addTab('Adresses'),
             AssociationField::new('addresses')->setLabel('Adresses')->onlyOnIndex(),
+            CollectionField::new('addresses')->setLabel('Adresses')->onlyOnDetail(),
             ArrayField::new('addresses')->setLabel('Adresses')->onlyOnForms()->setDisabled(true),
             
             FormField::addTab('Documents'),
             AssociationField::new('documents')->setLabel('Documents')->onlyOnIndex(),
             CollectionField::new('documents')->setLabel('Documents')->onlyOnForms()->setDisabled(true),
+            CollectionField::new('documents')->setLabel('Documents')->onlyOnDetail(),
             // CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twig')->setDisabled(true)->onlyOnDetail(),
         ];
     }
