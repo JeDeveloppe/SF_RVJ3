@@ -3,8 +3,9 @@
 namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\SiteSetting;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class SiteSettingCrudController extends AbstractCrudController
 {
@@ -17,7 +18,7 @@ class SiteSettingCrudController extends AbstractCrudController
     {
         return [
             BooleanField::new('BlockEmailSending')->setLabel('Envoi des emails bloqué:'),
-            BooleanField::new('QuantityDiscountInCart')->setLabel('Remises dans le panier activé:'),
+            TextareaField::new('marquee')->setLabel('Texte d\'absence: (laisser vide pour désactiver')
         ];
     }
 }

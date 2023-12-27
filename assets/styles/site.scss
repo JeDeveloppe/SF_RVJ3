@@ -156,3 +156,32 @@
       }
     }
   }
+
+
+  
+  .rightCSS { 
+    background: #a35dc1;
+    overflow: hidden;
+    background-color: lightgrey;
+  } 
+  .rightCSS div {
+    position: relative;
+    animation: CSSright linear 18s infinite;
+  } 
+  @keyframes CSSright {
+    0% { right: -100% }
+    100% { right: 100% }
+  }
+  .rightCSS:hover div {
+    animation-play-state: paused;
+  }
+  
+  .li {
+    float: left;
+    width: 80%;
+    padding: 2%;
+    margin: 1% 10%;
+    height: 20px;
+    border-radius: 0.5em;
+    box-shadow: 0 0.1em 0.5em;
+  }
