@@ -17,8 +17,9 @@ class SiteSettingCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            BooleanField::new('maintenanceMode')->setLabel('Site en mode maintenance:'),
             BooleanField::new('BlockEmailSending')->setLabel('Envoi des emails bloqué:'),
-            TextareaField::new('marquee')->setLabel('Texte d\'absence: (laisser vide pour désactiver')
+            TextareaField::new('marquee')->setLabel('Texte d\'absence: (laisser vide pour désactiver'),
         ];
     }
 }

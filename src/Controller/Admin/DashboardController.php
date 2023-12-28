@@ -55,6 +55,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
+#[Route('v3', name: '')]
 class DashboardController extends AbstractDashboardController
 {
     public function __construct(

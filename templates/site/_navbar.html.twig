@@ -48,6 +48,9 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ path('app_login') }}"><i class="fa-solid fa-user"></i></a>
           </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_register') }}"><i class="fa-solid fa-user-plus"></i></a>
+          </li>
         {% endif %}
         <li class="nav-item">
           {% if is_granted('ROLE_USER') %}
