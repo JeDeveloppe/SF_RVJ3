@@ -71,10 +71,11 @@ class DocumentRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByDocumentWithPaiement(){
+    public function findByDocumentWithPaiementInYear(string $billTag, int $year = null){
 
         return $this->createQueryBuilder('d')
-            ->where('d.billNumber IS NOT NULL')
+            ->where('d.billNumber LIKE :docstart')
+            ->setParameter('docstart', $billTag.$year.'%')
             ->getQuery()
             ->getResult()
         ;

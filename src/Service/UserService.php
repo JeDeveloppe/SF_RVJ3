@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\User;
 use App\Repository\AddressRepository;
 use App\Repository\CountryRepository;
+use App\Repository\DocumentParametreRepository;
 use App\Repository\DocumentRepository;
 use App\Repository\PartnerRepository;
 use DateTimeImmutable;
@@ -22,7 +23,8 @@ class UserService
         private CountryRepository $countryRepository,
         private DocumentRepository $documentRepository,
         private AddressRepository $addressRepository,
-        private PartnerRepository $partnerRepository
+        private PartnerRepository $partnerRepository,
+        private DocumentParametreRepository $documentParametreRepository
         ){
     }
 
@@ -87,7 +89,9 @@ class UserService
     {
 
         $donnees = []; //? toutes les réponses seront dans ce tableau final
-        $documents = $this->documentRepository->findByDocumentWithPaiement();
+        $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
+        //TODO affichage / an ou total ?
+        $documents = $this->documentRepository->findByDocumentWithPaiementInYear($docParams->getBillingTag(), null);
 
         $users = [];
 
@@ -95,25 +99,28 @@ class UserService
             $users[] = $document->getUser();
         }
     
-
         foreach($users as $user){
             if(!is_null($user->getaddresses())){
 
-                $adress = $this->addressRepository->findOneBy(['user' => $user, 'isFacturation' => NULL]);
-    
-                $places[] = 
-                [
-                    "lat" => $adress->getCity()->getLatitude(),
-                    "lng" => $adress->getCity()->getLongitude(),
-                    "color" => "#000000",
-                ];
+                $adress = $this->addressRepository->findOneBy(['user' => $user, 'isFacturation' => false]);
+
+                if(!is_null($adress)){
+                    $color = $this->utilitiesService->generateRandomHtmlColor();
+                    
+                    $places[] = 
+                    [
+                        "lat" => $adress->getCity()->getLatitude(),
+                        "lng" => $adress->getCity()->getLongitude(),
+                        "color" => "#".$color,
+                        "name" => "MERCI"
+                    ];
+                }
             }
         }
-    
 
         $jsonPlaces = json_encode($places, JSON_FORCE_OBJECT); 
 
-        $donnees['places'] = $jsonPlaces;
+        $donnees = $jsonPlaces;
 
         return $donnees;
     }

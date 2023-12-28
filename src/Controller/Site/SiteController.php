@@ -42,6 +42,7 @@ class SiteController extends AbstractController
         private UserRepository $userRepository,
         private PasswordService $passwordService,
         private DocumentRepository $documentRepository,
+        private UserService $userService,
         private ResetPasswordRepository $resetPasswordRepository,
         private PartnerService $partnerService
     )
@@ -77,15 +78,17 @@ class SiteController extends AbstractController
     }
 
     #[Route('/nos-partenaires', name: 'app_partenaires')]
-    public function partenaires(Request $request): Response
+    public function partenaires(Request $request, PartnerRepository $partnerRepository): Response
     {
-        // $partenaires = $partnerRepository->findBy(['isOnline' => true], ['name' => 'ASC']);
+        $partenaires = $partnerRepository->findBy(['isOnline' => true], ['name' => 'ASC']);
+        
         $baseUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
 
         $donnees = $this->partnerService->constructionMapOfFranceWithPartners($baseUrl);
 
         return $this->render('site/partner/partners.html.twig', [
             'donnees' => $donnees,
+            'partners' => $partenaires
         ]);
     }
 
@@ -119,6 +122,20 @@ class SiteController extends AbstractController
         return $this->render('site/contact/contact.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/merci', name: 'app_thanks')]
+    public function tanks(Request $request): Response
+    {
+        
+        $baseUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+
+        $donnees = $this->userService->constructionMapOfFranceWithUserWhoHaveCommanded($baseUrl);
+
+        return $this->render('site/thanks/thanks.html.twig', [
+            'donnees' => $donnees
+        ]);
+
     }
 
     #[Route('/document/{tokenDocument}', name: 'document_view')]

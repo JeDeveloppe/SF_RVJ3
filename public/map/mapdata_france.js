@@ -20,7 +20,7 @@ var simplemaps_countrymap_mapdata={
     all_states_zoomable: "yes",
     
 		//Location defaults
-		location_description: "Location description",
+		location_description: "",
     location_url: "",
     location_color: "#FF0067",
     location_opacity: 0.8,
@@ -44,7 +44,7 @@ var simplemaps_countrymap_mapdata={
 
 		//Zoom settings
 		zoom: "yes",
-    // manual_zoom: "no",
+    manual_zoom: "yes",
     back_image: "no",
     initial_back: "no",
     initial_zoom: "-1",
@@ -64,7 +64,7 @@ var simplemaps_countrymap_mapdata={
     popup_nocss: "no",
     
 		//Advanced settings
-		div: "map",
+		div: "map_france",
     auto_load: "yes",
     url_new_tab: "no",
     images_directory: "default",
@@ -179,7 +179,7 @@ var simplemaps_countrymap_mapdata={
       name: "Gironde"
     },
     FRA5296: {
-      name: "Haute-Rhin"
+      name: "Haut-Rhin"
     },
     FRA5297: {
       name: "Haute-Corse"
