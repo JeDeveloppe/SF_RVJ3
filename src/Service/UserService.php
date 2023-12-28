@@ -90,8 +90,12 @@ class UserService
 
         $donnees = []; //? toutes les réponses seront dans ce tableau final
         $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
-        //TODO affichage / an ou total ?
-        $documents = $this->documentRepository->findByDocumentWithPaiementInYear($docParams->getBillingTag(), null);
+        $now = new DateTimeImmutable('now');
+        $year = $now->format('Y');
+        //TODO affichage / année en cours / année passée / ou total ?
+        $year = null; //null
+        
+        $documents = $this->documentRepository->findByDocumentWithPaiementInYear($docParams->getBillingTag(), $year);
 
         $users = [];
 
@@ -99,12 +103,13 @@ class UserService
             $users[] = $document->getUser();
         }
     
+        $count = 0;
         foreach($users as $user){
             if(!is_null($user->getaddresses())){
 
                 $adress = $this->addressRepository->findOneBy(['user' => $user, 'isFacturation' => false]);
-
-                if(!is_null($adress)){
+                if(!is_null($adress) AND $adress->getCity()->getCountry()->getIsocode() == "FR"){
+                    $count += 1;
                     $color = $this->utilitiesService->generateRandomHtmlColor();
                     
                     $places[] = 
@@ -120,7 +125,9 @@ class UserService
 
         $jsonPlaces = json_encode($places, JSON_FORCE_OBJECT); 
 
-        $donnees = $jsonPlaces;
+        $donnees['places'] = $jsonPlaces;
+        $donnees['count'] = $count;
+        $donnees['year'] = $year;
 
         return $donnees;
     }

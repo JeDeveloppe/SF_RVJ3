@@ -73,9 +73,13 @@ class DocumentRepository extends ServiceEntityRepository
 
     public function findByDocumentWithPaiementInYear(string $billTag, int $year = null){
 
+        if(is_int($year)){
+            $year = substr($year, -2);
+        }
+
         return $this->createQueryBuilder('d')
             ->where('d.billNumber LIKE :docstart')
-            ->setParameter('docstart', $billTag.$year.'%')
+            ->setParameter('docstart', $billTag.$year.'%') //only 23 in 2023
             ->getQuery()
             ->getResult()
         ;

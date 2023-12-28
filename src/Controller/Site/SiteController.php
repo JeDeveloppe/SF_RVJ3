@@ -128,9 +128,7 @@ class SiteController extends AbstractController
     public function tanks(Request $request): Response
     {
         
-        $baseUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-
-        $donnees = $this->userService->constructionMapOfFranceWithUserWhoHaveCommanded($baseUrl);
+        $donnees = $this->userService->constructionMapOfFranceWithUserWhoHaveCommanded();
 
         return $this->render('site/thanks/thanks.html.twig', [
             'donnees' => $donnees

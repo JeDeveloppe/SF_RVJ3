@@ -1,12 +1,23 @@
 {% extends 'site/base.html.twig' %}
 
-{% block title %}Mercis{% endblock %}
+{% block title %}Merci{% endblock %}
 
 {% block body %}
 
-    <div class="js-locations" data-locations="{{ donnees }}"></div>
+    <div class="js-locations" data-locations="{{ donnees.places }}"></div>
 
     <h1 class="col-12 mt-5 text-center">Merci</h1>
+
+    <div class="row my-5">
+        <div class="col-11 text-center">
+        {% if donnees.year == null %}
+            {% set phrase = 'depuis sa création' %}
+        {% elseif donnees.year matches '/^\\d+$/' %}
+            {% set phrase = 'en '~ donnees.year %}
+        {% endif %}
+        Nous tenons à faire une page spécial pour vous remerciez vous, les {{ donnees.count }} personnes qui ont passées une commande sur le site {{ phrase }}
+        </div>
+    </div>
 
     <div class="row my-4">
         <div class="col-11 col-md-9 col-lg-6 mx-auto">
@@ -15,6 +26,10 @@
     
             <div id="map_france"></div>
         </div>
+    </div>
+
+    <div class="row my-4">
+        <div class="col-12 text-center small"> 🙏 <a href="https://simplemaps.com/" target="_blank">Simplemaps.com</a> ❤️ </div>
     </div>
 
 {% endblock %}
