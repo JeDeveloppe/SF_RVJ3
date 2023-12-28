@@ -3,7 +3,10 @@
 namespace App\Service;
 
 use App\Entity\User;
+use App\Repository\AddressRepository;
 use App\Repository\CountryRepository;
+use App\Repository\DocumentRepository;
+use App\Repository\PartnerRepository;
 use DateTimeImmutable;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,7 +19,10 @@ class UserService
         private UserPasswordHasherInterface $userPasswordHasher,
         private UserRepository $userRepository,
         private UtilitiesService $utilitiesService,
-        private CountryRepository $countryRepository
+        private CountryRepository $countryRepository,
+        private DocumentRepository $documentRepository,
+        private AddressRepository $addressRepository,
+        private PartnerRepository $partnerRepository
         ){
     }
 
@@ -75,5 +81,40 @@ class UserService
 
         $io->success('Admin créé / mise à jour!');
 
+    }
+
+    public function constructionMapOfFranceWithUserWhoHaveCommanded()
+    {
+
+        $donnees = []; //? toutes les réponses seront dans ce tableau final
+        $documents = $this->documentRepository->findByDocumentWithPaiement();
+
+        $users = [];
+
+        foreach($documents as $document){
+            $users[] = $document->getUser();
+        }
+    
+
+        foreach($users as $user){
+            if(!is_null($user->getaddresses())){
+
+                $adress = $this->addressRepository->findOneBy(['user' => $user, 'isFacturation' => NULL]);
+    
+                $places[] = 
+                [
+                    "lat" => $adress->getCity()->getLatitude(),
+                    "lng" => $adress->getCity()->getLongitude(),
+                    "color" => "#000000",
+                ];
+            }
+        }
+    
+
+        $jsonPlaces = json_encode($places, JSON_FORCE_OBJECT); 
+
+        $donnees['places'] = $jsonPlaces;
+
+        return $donnees;
     }
 }

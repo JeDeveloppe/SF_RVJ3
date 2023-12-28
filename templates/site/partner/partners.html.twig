@@ -4,9 +4,11 @@
 
 {% block body %}
 
+    <div class="js-locations" data-locations="{{ donnees }}"></div>
+
     <h1 class="col-12 mt-5 text-center">Nos partenaires</h1>
 
-    <div class="row my-4 justify-content-center">
+    {# <div class="row my-4 justify-content-center">
 
         {% for partner in partners %}
 
@@ -14,6 +16,14 @@
 
         {% endfor %}
 
+    </div> #}
+
+    <div class="row mt-5">
+        <div class="col-11 col-md-9 col-lg-6 mx-auto">
+            <script type="text/javascript" src="{{ asset('map/mapdata.js') }}"></script> 
+            <script type="text/javascript" src="{{ asset('map/countrymap.js') }}"></script> 
+            <div id="map"></div>
+        </div>
     </div>
 
 {% endblock %}

@@ -21,6 +21,8 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
 use App\Service\MailService;
+use App\Service\PartnerService;
+use App\Service\UserService;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,7 +42,8 @@ class SiteController extends AbstractController
         private UserRepository $userRepository,
         private PasswordService $passwordService,
         private DocumentRepository $documentRepository,
-        private ResetPasswordRepository $resetPasswordRepository
+        private ResetPasswordRepository $resetPasswordRepository,
+        private PartnerService $partnerService
     )
     {
     }
@@ -74,12 +77,15 @@ class SiteController extends AbstractController
     }
 
     #[Route('/nos-partenaires', name: 'app_partenaires')]
-    public function partenaires(PartnerRepository $partnerRepository): Response
+    public function partenaires(Request $request): Response
     {
-        $partenaires = $partnerRepository->findBy(['isOnline' => true], ['name' => 'ASC']);
+        // $partenaires = $partnerRepository->findBy(['isOnline' => true], ['name' => 'ASC']);
+        $baseUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+
+        $donnees = $this->partnerService->constructionMapOfFranceWithPartners($baseUrl);
 
         return $this->render('site/partner/partners.html.twig', [
-            'partners' => $partenaires,
+            'donnees' => $donnees,
         ]);
     }
 

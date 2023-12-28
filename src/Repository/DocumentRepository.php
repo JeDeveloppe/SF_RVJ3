@@ -71,6 +71,15 @@ class DocumentRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByDocumentWithPaiement(){
+
+        return $this->createQueryBuilder('d')
+            ->where('d.billNumber IS NOT NULL')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Document[] Returns an array of Document objects
 //     */
