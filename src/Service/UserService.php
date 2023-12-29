@@ -108,7 +108,9 @@ class UserService
             if(!is_null($user->getaddresses())){
 
                 $adress = $this->addressRepository->findOneBy(['user' => $user, 'isFacturation' => false]);
-                if(!is_null($adress) AND $adress->getCity()->getCountry()->getIsocode() == "FR"){
+                //TODO all countries ?
+                $countries = ['FR','BE'];
+                if(!is_null($adress) AND in_array($adress->getCity()->getCountry()->getIsocode(), $countries)){
                     $count += 1;
                     $color = $this->utilitiesService->generateRandomHtmlColor();
                     
