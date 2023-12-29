@@ -291,12 +291,9 @@ class DocumentService
             "docLine_boites" => $results['docLine_boites']
         ]);
 
-        $dompdf->loadHtml($html);
         $dompdf->setBasePath($pathToBootstrapCss);
-        $dompdf->set_option('isHtml5ParserEnabled', true);
+        $dompdf->loadHtml($html);
 
-        dd($dompdf);    
-      
         // (Optional) Setup the paper size and orientation
         $dompdf->setPaper('A4', 'portrait');
         // Render the HTML as PDF
