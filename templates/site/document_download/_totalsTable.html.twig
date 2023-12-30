@@ -9,32 +9,32 @@
     {% set tdText = 'Frais de gestion:' %}
 {% endif %}
 
-<div class="row">
-    <div class="col-xs-12">
-        <table class="table table-bordered text-center">
-            <tr>
-                <td colspan="9">Totaux</td>
-            </tr>
-            <tr>
-                <td>Occasions</td>
-                <td>Pièces détachées</td>
-                <td>Articles</td>
-                <td>Livraison</td>
-                <td>{{ tdText }}</td>
-                <td>HT</td>
-                <td>TVA ({{ document.taxRateValue }}%)</td>
-                <td>TTC</td>
-            </tr>
-            <tr>
-                <td>{{ (document.documentLineTotals.occasionsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100)) | number_format(2, '.', ',') }}</td>
-                <td>{{ (document.documentLineTotals.boitesPriceWithoutTax / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }}</td>
-                <td>{{ (document.documentLineTotals.itemsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }}</td>
-                <td>{{ (document.deliveryPriceExcludingTax / 100 * tva) | number_format(2, '.', ',') }}</td>
-                <td>{{ (document.cost / 100 * tva) | number_format(2, '.', ',') }}</td>
-                <td>{{ (document.totalExcludingTax / 100) | number_format(2, '.', ',') }}</td>
-                <td>{{ ((document.totalWithTax - document.totalExcludingTax) / 100) | number_format(2, '.', ',') }}</td>
-                <td>{{ (document.totalWithTax / 100) | number_format(2, '.', ',')}}</td>
-            </tr>
-        </table>
-    </div>
-</div>
+
+<table class="my-3 text-center" style="width:100%;border:1px solid black;border-collapse:collapse;">
+    <thead>
+        <tr style="border:1px solid black;background-color:ghostwhite">
+            <th colspan="9" class="text-center">Totaux</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border:1px solid black">Occasions</td>
+            <td style="border:1px solid black">Pièces détachées</td>
+            <td style="border:1px solid black">Livraison</td>
+            <td style="border:1px solid black">{{ tdText }}</td>
+            <td style="border:1px solid black">HT</td>
+            <td style="border:1px solid black">TVA ({{ document.taxRateValue }}%)</td>
+            <td>TTC</td>
+        </tr>
+        <tr>
+            <td style="border:1px solid black">{{ (document.documentLineTotals.occasionsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100)) | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black">{{ ((document.documentLineTotals.boitesPriceWithoutTax + document.documentLineTotals.itemsPriceWithoutTax) / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black">{{ (document.deliveryPriceExcludingTax / 100 * tva) | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black">{{ (document.cost / 100 * tva) | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black">{{ (document.totalExcludingTax / 100) | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black">{{ ((document.totalWithTax - document.totalExcludingTax) / 100) | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black">{{ (document.totalWithTax / 100) | number_format(2, '.', ',')}}</td>
+        </tr>
+    </tbody>
+</table>
+<div class="col-12 text-center">Page {PAGENO}</div>

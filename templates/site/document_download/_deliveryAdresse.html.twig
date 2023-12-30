@@ -1,8 +1,6 @@
-<div class="row justify-content-end my-5">
-    <div class="col-5">
-        {% set facturations = document.billingAddress|split('<br/>') %}
-        {% for facturation in facturations %}
-            {{ facturation }}<br/>
-        {% endfor %}
-    </div>
+<div class="offset-7" style="font-size:14px">
+    {% set facturations = document.billingAddress|split('<br/>') %}
+    {% for facturation in facturations %}
+        {{ facturation }}<br/>
+    {% endfor %}
 </div>

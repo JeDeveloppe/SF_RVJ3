@@ -152,7 +152,7 @@ class MemberController extends AbstractController
 
         }else{
 
-            $this->documentService->generatePdf($document, $request);
+            $this->documentService->generateFpdf($document, $request);
 
             return new Response();
 
