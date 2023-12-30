@@ -27,8 +27,6 @@ class Item
     #[ORM\Column]
     private ?int $priceExcludingTax = null;
 
-
-
     #[ORM\OneToMany(mappedBy: 'Item', targetEntity: Panier::class)]
     private Collection $paniers;
 
@@ -47,6 +45,16 @@ class Item
 
     #[ORM\ManyToMany(targetEntity: Boite::class, mappedBy: 'itemsSecondaire')]
     private Collection $BoiteSecondaire;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $createdBy = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $reference = null;
 
     public function __construct()
     {
@@ -255,6 +263,42 @@ class Item
     public function removeBoiteSecondaire(Boite $boiteSecondaire): static
     {
         $this->BoiteSecondaire->removeElement($boiteSecondaire);
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(?string $reference): static
+    {
+        $this->reference = $reference;
 
         return $this;
     }

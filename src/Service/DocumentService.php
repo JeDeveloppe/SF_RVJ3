@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Mpdf\Mpdf;
 use DateInterval;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -24,7 +25,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DocumentStatusRepository;
 use App\Repository\LegalInformationRepository;
 use App\Repository\DocumentParametreRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class DocumentService
@@ -396,5 +396,48 @@ class DocumentService
         $this->em->flush();
 
         return $document;
+    }
+
+    public function generateFpdf($document)
+    {
+
+        $results = $this->generateValuesForDocument($document);
+        $legales = $this->legalInformationRepository->findOneBy([]);
+
+        $header = $this->twig->render('site/document_download/_header.html.twig', [
+            'legales' => $legales,
+            'document' => $document,
+
+        ]);
+        $html = $this->twig->render('site/document_download/_document_download.html.twig', [
+            'document' => $document,
+            'legales' => $legales,
+            "docLines" => $document->getDocumentLines(),
+            "tva" => $results['tauxTva'],
+            "docLine_items" => $results['docLine_items'],
+            "docLine_occasions" => $results['docLine_occasions'],
+            "docLine_boites" => $results['docLine_boites']
+        ]);
+        $footer = $this->twig->render('site/document_download/_totalsTable.html.twig', [
+            'document' => $document,
+            "tva" => $results['tauxTva'],
+            "docLine_items" => $results['docLine_items'],
+            "docLine_occasions" => $results['docLine_occasions'],
+            "docLine_boites" => $results['docLine_boites']
+        ]);
+
+
+        $mpdf = new Mpdf([
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'orientation' => 'P',
+            'setAutoTopMargin' => 'stretch',
+            'autoMarginPadding' => 30
+        ]);
+
+        $mpdf->SetHTMLHeader($header);
+        $mpdf->WriteHTML($html);
+        $mpdf->SetHTMLFooter($footer);
+        $mpdf->Output();
     }
 }

@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 
 class ItemGroupCrudController extends AbstractCrudController
 {
@@ -42,7 +43,7 @@ class ItemGroupCrudController extends AbstractCrudController
                 // 'imagine_pattern' => '...',
                 'asset_helper' => true,
             ])->setLabel('Image')->onlyOnForms(),
-            TextField::new('name')->setLabel('Nom'),
+            TextField::new('name')->setLabel('Nom')
         ];
     }
 
@@ -61,7 +62,6 @@ class ItemGroupCrudController extends AbstractCrudController
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if ($entityInstance instanceof ItemGroup) {
-            $user = $this->security->getUser();
             $entityInstance->setUpdatedAt(new DateTimeImmutable ('now'));
 
             $entityManager->persist($entityInstance);

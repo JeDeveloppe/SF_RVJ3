@@ -3,7 +3,7 @@
     {% for docLine in docLine_items %}
         <tr>
             <td>Article:<br/>{{ docLine.item.name }}</td>
-            <td class="text-center">###</td>
+            <td class="text-center">{{ docLine.item.reference }}</td>
             <td class="text-center">{{ docLine.quantity }}</td>
             <td class="text-center">{{ docLine.priceExcludingTax / 100 | number_format(2, '.', ',')  }} €</td>
         </tr>

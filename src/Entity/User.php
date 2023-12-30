@@ -84,6 +84,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: VoucherDiscount::class)]
     private Collection $voucherDiscounts;
 
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Item::class)]
+    private Collection $items;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
@@ -95,6 +98,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->paniers = new ArrayCollection();
         $this->documentParametres = new ArrayCollection();
         $this->voucherDiscounts = new ArrayCollection();
+        $this->items = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -532,6 +536,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($voucherDiscount->getCreatedBy() === $this) {
                 $voucherDiscount->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Item>
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    public function addItem(Item $item): static
+    {
+        if (!$this->items->contains($item)) {
+            $this->items->add($item);
+            $item->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Item $item): static
+    {
+        if ($this->items->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getCreatedBy() === $this) {
+                $item->setCreatedBy(null);
             }
         }
 
