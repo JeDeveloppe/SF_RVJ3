@@ -175,6 +175,40 @@ class CreationUndefinedAdminAndAdresseService
         $this->manager->flush();
 
         $io->success('Terminée');
+
+
+        $io->title('Création / mise à jour boite virtuelle');
+
+        $boite = $this->boiteRepository->findOneBy(['name' => 'BOITE SUPPRIMEE']);
+
+        if(!$boite){
+            $boite = new Boite();
+        }
+        
+        //on rentre la boite
+        $boite->setName('BOITE SUPPRIMEE')
+            ->setIniteditor('EDITEUR SUPPRIMER')
+            ->setYear(2100)
+            ->setSlug('boite-supprimee')
+            ->setIsDeliverable(false)
+            ->setIsOccasion(false)
+            ->setWeigth(0)
+            ->setAge((int) 0)
+            ->setPlayers($this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
+            ->setHtPrice(0)
+            ->setCreatedBy($this->userRepository->findOneBy(['nickname' => 'Je Développe']))
+            ->setIsDeee(false)
+            ->setCreatedAt(new DateTimeImmutable('now'))
+            ->setIsOnLine(false)
+            ->setImage('aucune image');
+
+        $boite->setUpdatedAt(new DateTimeImmutable('now'))
+            ->setCreatedBy($this->userRepository->findOneBy(['nickname' => 'Je Développe']));
+
+        $this->manager->persist($boite);
+        $this->manager->flush();
+
+        $io->success('Terminée');
     }
 
 }

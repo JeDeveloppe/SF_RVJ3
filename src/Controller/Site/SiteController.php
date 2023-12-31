@@ -14,10 +14,8 @@ use App\Repository\PartnerRepository;
 use Symfony\Component\Form\FormError;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\DocumentLineRepository;
 use App\Form\EmailForSendResetPasswordType;
 use App\Repository\ResetPasswordRepository;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
 use App\Service\MailService;
@@ -26,10 +24,8 @@ use App\Service\UserService;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\SecurityBundle\Security\UserAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 #[Route('v3', name: '')]
 class SiteController extends AbstractController
