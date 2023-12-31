@@ -39,7 +39,7 @@ class ImportPiecesService
     //lecture des fichiers exportes dans le dossier import
     private function readCsvFilePieces(): Reader
     {
-        $csvPieces = Reader::createFromPath('%kernel.root.dir%/../import/pieces.csv','r');
+        $csvPieces = Reader::createFromPath('%kernel.root.dir%/../import/_table_pieces.csv','r');
         $csvPieces->setHeaderOffset(0);
 
         return $csvPieces;

@@ -48,7 +48,7 @@ class ImportPartenairesService
     //lecture des fichiers exportes dans le dossier import
     private function readCsvFilePartenaire(): Reader
     {
-        $csvCatalogue = Reader::createFromPath('%kernel.root.dir%/../import/partenaires.csv','r');
+        $csvCatalogue = Reader::createFromPath('%kernel.root.dir%/../import/_table_partenaires.csv','r');
         $csvCatalogue->setHeaderOffset(0);
 
         return $csvCatalogue;

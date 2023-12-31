@@ -53,7 +53,7 @@ class ImportVillesFrancaisesService
     //lecture des fichiers exportes dans le dossier import
     private function readCsvFileVille($offset, $limit): ResultSet
     {
-        $csv = Reader::createFromPath('%kernel.root.dir%/../import/villes_france.csv','r');
+        $csv = Reader::createFromPath('%kernel.root.dir%/../import/_table_villes_france.csv','r');
         $csv->setHeaderOffset(0);
         //get 25 records starting from the 11th row
         $stmt = Statement::create()
@@ -67,7 +67,7 @@ class ImportVillesFrancaisesService
 
     private function readCsvFileTotalVille(): Reader
     {
-        $csv = Reader::createFromPath('%kernel.root.dir%/../import/villes_france.csv','r');
+        $csv = Reader::createFromPath('%kernel.root.dir%/../import/_table_villes_france.csv','r');
         $csv->setHeaderOffset(0);
 
         return $csv;

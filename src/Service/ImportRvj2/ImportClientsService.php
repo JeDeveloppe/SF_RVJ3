@@ -43,7 +43,7 @@ class ImportClientsService
     //lecture des fichiers exportes dans le dossier import
     private function readCsvFileClients(): Reader
     {
-        $csvClients = Reader::createFromPath('%kernel.root.dir%/../import/clients.csv','r');
+        $csvClients = Reader::createFromPath('%kernel.root.dir%/../import/_table_clients.csv','r');
         $csvClients->setHeaderOffset(0);
 
         return $csvClients;

@@ -51,7 +51,7 @@ class CreationMouvementsOccasionService
     //lecture des fichiers exportes dans le dossier import
     private function readCsvFileJeuxComplets(): Reader
     {
-        $csvOccasions = Reader::createFromPath('%kernel.root.dir%/../import/jeux_complets.csv','r');
+        $csvOccasions = Reader::createFromPath('%kernel.root.dir%/../import/_table_jeux_complets.csv','r');
         $csvOccasions->setHeaderOffset(0);
 
         return $csvOccasions;

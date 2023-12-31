@@ -70,7 +70,7 @@ class ImportBoitesService
     //lecture des fichiers exportes dans le dossier import
     private function readCsvFileCatalogue1_3()
     {
-        $csvCatalogue = Reader::createFromPath('%kernel.root.dir%/../import/catalogue.csv','r');
+        $csvCatalogue = Reader::createFromPath('%kernel.root.dir%/../import/_table_catalogue.csv','r');
         $csvCatalogue->setHeaderOffset(0);
 
         //Calcul du milieu
@@ -88,7 +88,7 @@ class ImportBoitesService
 
     private function readCsvFileCatalogue2_3()
     {
-        $csvCatalogue = Reader::createFromPath('%kernel.root.dir%/../import/catalogue.csv','r');
+        $csvCatalogue = Reader::createFromPath('%kernel.root.dir%/../import/_table_catalogue.csv','r');
         $csvCatalogue->setHeaderOffset(0);
 
         //Calcul du milieu
@@ -106,7 +106,7 @@ class ImportBoitesService
 
     private function readCsvFileCatalogue3_3()
     {
-        $csvCatalogue = Reader::createFromPath('%kernel.root.dir%/../import/catalogue.csv','r');
+        $csvCatalogue = Reader::createFromPath('%kernel.root.dir%/../import/_table_catalogue.csv','r');
         $csvCatalogue->setHeaderOffset(0);
 
         //Calcul du milieu

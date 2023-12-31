@@ -46,7 +46,7 @@ class ImportDepartementsService
     //lecture des fichiers exportes dans le dossier import
     private function readCsvFileDepartements(): Reader
     {
-        $csvDepartement = Reader::createFromPath('%kernel.root.dir%/../import/departement.csv','r');
+        $csvDepartement = Reader::createFromPath('%kernel.root.dir%/../import/_table_departement.csv','r');
         $csvDepartement->setHeaderOffset(0);
 
         return $csvDepartement;

@@ -76,7 +76,7 @@ class ImportDocumentsLignesService
 
     private function readCsvFileDocumentslinesBoite(): Reader
     {
-        $csvDocuments = Reader::createFromPath('%kernel.root.dir%/../import/documents_lignes.csv','r');
+        $csvDocuments = Reader::createFromPath('%kernel.root.dir%/../import/_table_documents_lignes.csv','r');
         $csvDocuments->setHeaderOffset(0);
 
         return $csvDocuments;
@@ -84,7 +84,7 @@ class ImportDocumentsLignesService
 
     private function readCsvFileDocumentslinesOccasion(): Reader
     {
-        $csvDocuments = Reader::createFromPath('%kernel.root.dir%/../import/documents_lignes_achats.csv','r');
+        $csvDocuments = Reader::createFromPath('%kernel.root.dir%/../import/_table_documents_lignes_achats.csv','r');
         $csvDocuments->setHeaderOffset(0);
 
         return $csvDocuments;

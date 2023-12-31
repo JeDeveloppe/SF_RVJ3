@@ -53,7 +53,7 @@ class ImportDocumentsService
     //lecture des fichiers exportes dans le dossier import
     private function readCsvFileDocuments(): Reader
     {
-        $csvDocuments = Reader::createFromPath('%kernel.root.dir%/../import/documents.csv','r');
+        $csvDocuments = Reader::createFromPath('%kernel.root.dir%/../import/_table_documents.csv','r');
         $csvDocuments->setHeaderOffset(0);
 
         return $csvDocuments;
