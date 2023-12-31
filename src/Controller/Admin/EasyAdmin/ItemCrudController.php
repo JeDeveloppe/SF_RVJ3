@@ -58,9 +58,16 @@ class ItemCrudController extends AbstractCrudController
             ->setFormTypeOptions(['placeholder' => 'Sélectionner une enveloppe...'])->onlyOnForms()->setColumns(6),
             ArrayField::new('BoiteOrigine')
             ->setLabel('Boites Originale:')->onlyOnIndex(),
+
+            FormField::addTab('Ventes'),
+            AssociationField::new('documentLines')->setLabel('Ventes')->onlyOnForms()->setDisabled(true),
+            // CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twi')->setDisabled(true)->onlyOnForms(),
+            
             FormField::addTab('Création / Mise à jour'),
-            AssociationField::new('createdBy')->setDisabled(true)->onlyOnForms(),
-            DateTimeField::new('createdAt')->setDisabled(true)->onlyOnForms()
+            AssociationField::new('updatedBy')->setLabel('Mise à jour par:')->setDisabled(true)->onlyOnForms(),
+            DateTimeField::new('updatedAt')->setLabel('Mise à jour le:')->setDisabled(true)->onlyOnForms(),
+            AssociationField::new('createdBy')->setLabel('Créé par:')->setDisabled(true)->onlyOnForms(),
+            DateTimeField::new('createdAt')->setLabel('Créé le:')->setDisabled(true)->onlyOnForms()
         ];
     }
 
@@ -87,7 +94,8 @@ class ItemCrudController extends AbstractCrudController
     {
         if ($entityInstance instanceof Item) {
             $user = $this->security->getUser();
-            $entityInstance->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user);
+            $now = new DateTimeImmutable ('now');
+            $entityInstance->setCreatedAt($now)->setCreatedBy($user)->setUpdatedAt($now)->setUpdatedBy($user);
 
             $entityManager->persist($entityInstance);
             $entityManager->flush();
@@ -102,6 +110,18 @@ class ItemCrudController extends AbstractCrudController
             $entityManager->persist($entityInstance);
             $entityManager->flush();
 
+        }
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if ($entityInstance instanceof Item) {
+            $user = $this->security->getUser();
+            $now = new DateTimeImmutable ('now');
+            $entityInstance->setUpdatedAt($now)->setUpdatedBy($user);
+
+            $entityManager->persist($entityInstance);
+            $entityManager->flush();
         }
     }
 }

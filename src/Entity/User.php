@@ -87,6 +87,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Item::class)]
     private Collection $items;
 
+    #[ORM\OneToMany(mappedBy: 'updatedBy', targetEntity: Item::class)]
+    private Collection $itemsUpdated;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
@@ -99,6 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->documentParametres = new ArrayCollection();
         $this->voucherDiscounts = new ArrayCollection();
         $this->items = new ArrayCollection();
+        $this->itemsUpdated = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -566,6 +570,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($item->getCreatedBy() === $this) {
                 $item->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Item>
+     */
+    public function getItemsUpdated(): Collection
+    {
+        return $this->itemsUpdated;
+    }
+
+    public function addItemsUpdated(Item $itemsUpdated): static
+    {
+        if (!$this->itemsUpdated->contains($itemsUpdated)) {
+            $this->itemsUpdated->add($itemsUpdated);
+            $itemsUpdated->setUpdatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItemsUpdated(Item $itemsUpdated): static
+    {
+        if ($this->itemsUpdated->removeElement($itemsUpdated)) {
+            // set the owning side to null (unless already changed)
+            if ($itemsUpdated->getUpdatedBy() === $this) {
+                $itemsUpdated->setUpdatedBy(null);
             }
         }
 
