@@ -31,7 +31,7 @@ class MailService
         $siteSettings = $this->siteSettingRepository->findOneBy([]);
 
         //? parametre du site envoi des emails bloque si besoin de mettre a jour des statut ou autre
-        if($siteSettings->getBlockEmailSending() != true){
+        if($siteSettings->getBlockEmailSending() == false){
 
             if(is_null($donnees)){
                 $donnees = [];
