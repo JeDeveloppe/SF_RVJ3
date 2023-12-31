@@ -31,7 +31,9 @@
             <div class="p-2" style="font-size:12px;border:1px solid black;">
             Numéro: {{ document.billNumber }}<br/>
             Payé le: {{ document.payment.timeOfTransaction | date('d-m-Y') }}<br/>
-            {{ document.payment.details }}
+                {% if document.payment.details is not NULL %}
+                    {{ document.payment.details }} 
+                {% endif %}
             </div>
         </div>
     </article>

@@ -2,17 +2,21 @@
 
 namespace App\Controller\Admin\EasyAdmin;
 
+use App\Entity\Boite;
 use DateTimeImmutable;
 use App\Entity\ItemGroup;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 
 class ItemGroupCrudController extends AbstractCrudController
 {
@@ -22,16 +26,27 @@ class ItemGroupCrudController extends AbstractCrudController
     }
 
     public function __construct(
-        private Security $security
+        private Security $security,
+        private EntityManagerInterface $entityManager
     )
     {
     }
 
     public function configureFields(string $pageName): iterable
     {
+        $boiteRepository = $this->entityManager->getRepository(Boite::class);
+
         return [  
-            AssociationField::new('boite')
-                ->setLabel('Boites principale:'),
+            // AssociationField::new('boite')
+            //     ->setLabel('Boites principale:'),
+            AssociationField::new('boite')->setLabel('Boites principale: (uniquement celles en ligne)')
+            ->setQueryBuilder(
+                fn(QueryBuilder $queryBuilder) => 
+                $queryBuilder
+                ->where('entity.isOnline = :value')
+                ->setParameter('value', true)
+                ->orderBy('entity.id', 'ASC')
+            )->onlyOnForms(),
             ImageField::new('image')->setBasePath($this->getParameter('app.path.itemGroup_images'))->onlyOnIndex(),
             TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
                 'required' => false,
@@ -57,6 +72,14 @@ class ItemGroupCrudController extends AbstractCrudController
             ->setDefaultSort(['id' => 'DESC'])
             ->setSearchFields(['name'])
         ;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        
+        return $actions
+            ->remove(Crud::PAGE_INDEX, Action::DELETE);
+        
     }
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void

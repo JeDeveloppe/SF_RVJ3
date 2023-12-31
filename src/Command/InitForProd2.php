@@ -106,7 +106,7 @@ class InitForProd2 extends Command
         // $this->creationDocumentStatusService->creationStatus($io);
 
         // //on importe les documents et les paiements
-        // $this->importDocumentsService->importDocuments($io);
+        $this->importDocumentsService->importDocuments($io);
         // $this->importPaiementService->importPaiements($io);
 
         // //on importe les lignes de chaque document
@@ -121,7 +121,7 @@ class InitForProd2 extends Command
         // $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
 
         //on cree les settings du site
-        $this->siteSettingsService->addSettings($io);
+        // $this->siteSettingsService->addSettings($io);
 
         return Command::SUCCESS;
     }

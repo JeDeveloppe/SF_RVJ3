@@ -14,8 +14,8 @@
         {% for data in datas %}
             <div class="card col-12 p-0 my-5">
                 <div class="card-header">{{ data.value }}</div>
-                <div class="card-body">
-                    {% if data .documents | length > 0 %}
+                <div class="card-body bg-secondary">
+                    {% if data.documents | length > 0 %}
                         {% for document in data.documents|reverse %}
                             <div class="card mb-4">
                                 <div class="card-header">{{ document.quoteNumber }} - {{ document.billNumber }}</div>
@@ -35,13 +35,13 @@
                                         <p>{{ document.deliveryAddress | raw }}</p>
                                     </div>
                                     <div class="col-3 text-center">
-                                        {% include "components/admin_group_buttons_traited_daily.html.twig" with {'command': data.action, 'token':document.token } %}
+                                        {% include "components/admin_group_buttons_traited_daily.html.twig" with {'command': data.action, 'token':document.token, 'id': document.id } %}
                                     </div>
                                 </div>
                             </div>
                         {% endfor %}
                     {% else %}
-                        "NOTHING FOR THE MOMENT..."
+                        <p class="text-center h5">"NOTHING FOR THE MOMENT..."</p>
                     {% endif %}
                 </div>
             </div>

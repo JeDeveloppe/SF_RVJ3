@@ -101,6 +101,9 @@ class Document
     #[ORM\Column(nullable: true)]
     private ?bool $isLastQuoteCantBeDeleted = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $goodsSendAt = null;
+
     public function __construct()
     {
         $this->documentLines = new ArrayCollection();
@@ -469,6 +472,18 @@ class Document
     public function setIsLastQuoteCantBeDeleted(?bool $isLastQuoteCantBeDeleted): static
     {
         $this->isLastQuoteCantBeDeleted = $isLastQuoteCantBeDeleted;
+
+        return $this;
+    }
+
+    public function getGoodsSendAt(): ?\DateTimeImmutable
+    {
+        return $this->goodsSendAt;
+    }
+
+    public function setGoodsSendAt(?\DateTimeImmutable $goodsSendAt): static
+    {
+        $this->goodsSendAt = $goodsSendAt;
 
         return $this;
     }

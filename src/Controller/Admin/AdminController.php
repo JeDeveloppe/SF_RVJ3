@@ -12,6 +12,7 @@ use App\Repository\PaymentRepository;
 use App\Repository\SiteSettingRepository;
 use App\Service\MailService;
 use App\Service\PaiementService;
+use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -49,6 +50,12 @@ class AdminController extends AbstractController
 
             $legales = $this->legalInformationRepository->findOneBy([]);
 
+            if($status == 'END'){
+                $now = new DateTimeImmutable('now');
+
+                $document->setGoodsSendAt($now);
+            }
+            
             $document->setDocumentStatus($status);
             $this->em->persist($document);
             $this->em->flush();

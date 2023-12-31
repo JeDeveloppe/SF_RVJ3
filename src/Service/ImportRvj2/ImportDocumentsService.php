@@ -112,10 +112,12 @@ class ImportDocumentsService
         $document->setSendingMethod($expedition)->setSendingBy($expedition->getName());
 
         //?ok version 3
-        if($arrayDoc['etat'] == 2 && $arrayDoc['envoyer'] !== 0){
+        $envoyer = explode('|',$arrayDoc['envoyer']);
+
+        if($arrayDoc['etat'] == 2 && count($envoyer) > 1){
             $etat = $this->documentStatusRepository->findOneBy(['name' => 'EXPÉDIÉE / TERMINÉE']);
-        }else if($arrayDoc['etat'] == 3){ // 3 = mis de cote dans la version 2
-            $etat = $this->documentStatusRepository->findOneBy(['name' => 'PAYÉE / MISE DE CÔTÉ']); 
+        }else if($arrayDoc['etat'] == 3){ // 3 = envoyé dans la version 2
+            $etat = $this->documentStatusRepository->findOneBy(['name' => 'EXPÉDIÉE / TERMINÉE']); 
         }else if($arrayDoc['etat'] == 2 && $arrayDoc['envoyer'] == 0){
             $etat = $this->documentStatusRepository->findOneBy(['name' => 'PAYÉE / A PRÉPARER']); 
         }else if($arrayDoc['etat'] == 1){ // non facturer dans version 2

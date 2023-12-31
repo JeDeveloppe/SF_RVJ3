@@ -59,7 +59,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
         }else{
             $disabled = false;
             $required = true;
-            $occasionField = AssociationField::new('occasion')->setLabel('Occasion')
+            $occasionField = AssociationField::new('occasion')->setLabel('Occasion (uniquement en ligne)')
                                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                                 ->setQueryBuilder(
                                     fn(QueryBuilder $queryBuilder) => 

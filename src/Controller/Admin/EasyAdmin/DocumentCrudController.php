@@ -4,19 +4,20 @@ namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\Document;
 use App\Repository\DocumentRepository;
-use App\Repository\DocumentStatusRepository;
 use phpDocumentor\Reflection\Types\Integer;
+use App\Repository\DocumentStatusRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use Symfony\Component\HttpFoundation\RequestStack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class DocumentCrudController extends AbstractCrudController
 {
@@ -50,93 +51,109 @@ class DocumentCrudController extends AbstractCrudController
         }
 
         return [
-            TextField::new('token')->setLabel('Token')->onlyOnForms()->setDisabled(true),
-            TextField::new('quoteNumber')->setLabel('Num. devis')->setDisabled(true),
-            TextField::new('BillNumber')->setLabel('Num. facture')->setDisabled(true),
+            FormField::addTab('Général'),
+            TextField::new('token')->setLabel('Token')->hideOnIndex()->setDisabled(true)->setColumns(12),
+            TextField::new('quoteNumber')->setLabel('Num. devis')->setDisabled(true)->setColumns(6),
+            TextField::new('BillNumber')->setLabel('Num. facture')->setDisabled(true)->setColumns(6),
+            AssociationField::new('taxRate')
+            ->setLabel('Taux de tva')
+            ->setDisabled(true)
+            ->hideOnIndex()
+            ->renderAsEmbeddedForm()->setColumns(6),
+            MoneyField::new('cost')
+                ->setLabel('Préparation/abonnement HT')
+                ->setDisabled(true)
+                ->setCurrency('EUR')
+                ->setStoredAsCents()
+                ->hideOnIndex()->setColumns(6),
             MoneyField::new('totalExcludingTax')
                 ->setLabel('Total HT')
                 ->setDisabled(true)
                 ->setCurrency('EUR')
                 ->setStoredAsCents()
-                ->onlyOnDetail(),
-            MoneyField::new('totalWithTax')
-                ->setLabel('Total TTC')
-                ->setDisabled(true)
-                ->setCurrency('EUR')
-                ->setStoredAsCents(),
+                ->hideOnIndex()->setColumns(6),
             MoneyField::new('deliveryPriceExcludingTax')
                 ->setLabel('Frais de port HT')
                 ->setCurrency('EUR')
                 ->setStoredAsCents()
-                ->setDisabled(true),
+                ->setDisabled(true)->setColumns(6),
+            MoneyField::new('totalWithTax')
+                ->setLabel('Total TTC')
+                ->setDisabled(true)
+                ->setCurrency('EUR')
+                ->setStoredAsCents()->setColumns(6),
+
+            FormField::addTab('Suivi / Communication'),
+            DateTimeField::new('goodsSendAt')
+            ->setLabel('Marchandise envoyée le:')
+            ->setDisabled(true)
+            ->hideOnIndex()
+            ->setFormat('dd.MM.yyyy à HH:mm:ss')->setColumns(6),
+            DateTimeField::new('createdAt')
+            ->setLabel('Devis créé le')
+            ->setDisabled(true)
+            ->hideOnIndex()
+            ->setFormat('dd.MM.yyyy à HH:mm:ss')->setColumns(6),
+            DateTimeField::new('timeOfSendingQuote')
+            ->setLabel('Email le')
+            ->setDisabled(true)
+            ->hideOnIndex()
+            ->setFormat('dd.MM.yyyy à HH:mm:ss')->setColumns(6),
+            DateTimeField::new('endOfQuoteValidation')
+            ->setLabel('Fin de validation du devis')
+            ->setDisabled(true)
+            ->hideOnIndex()
+            ->setFormat('dd.MM.yyyy à HH:mm:ss')->setColumns(6),
             BooleanField::new('isQuoteReminder')
                 ->setLabel('Devis relancer')
                 ->setDisabled(true)
-                ->onlyOnDetail(),
-            DateTimeField::new('createdAt')
-                ->setLabel('Devis créé le')
-                ->setDisabled(true)
-                ->onlyOnDetail()
-                ->setFormat('dd.MM.yyyy à HH:mm:ss'),
-            DateTimeField::new('timeOfSendingQuote')
-                ->setLabel('Email le')
-                ->setDisabled(true)
-                ->onlyOnDetail()
-                ->setFormat('dd.MM.yyyy à HH:mm:ss'),
-            DateTimeField::new('endOfQuoteValidation')
-                ->setLabel('Fin de validation du devis')
-                ->setDisabled(true)
-                ->onlyOnDetail()
-                ->setFormat('dd.MM.yyyy à HH:mm:ss'),
+                ->hideOnIndex()->setColumns(6),
             BooleanField::new('isDeleteByUser')
                 ->setLabel('Supprimer par l\'utilisateur')
                 ->setDisabled(true)
-                ->onlyOnDetail(),
+                ->hideOnIndex()->setColumns(6),
             TextField::new('message')
                 ->setLabel('Message')
                 ->setDisabled(true)
-                ->onlyOnDetail(),
-            AssociationField::new('taxRate')
-                ->setLabel('Taux de tva')
-                ->setDisabled(true)
-                ->onlyOnDetail()
-                ->renderAsEmbeddedForm(),
-            MoneyField::new('cost')
-                ->setLabel('Autre coût HT <br/>(préparation/abonnement)')
-                ->setDisabled(true)
-                ->setCurrency('EUR')
-                ->setStoredAsCents()
-                ->onlyOnDetail(),
+                ->hideOnIndex()->setColumns(12),
+
+
+            FormField::addTab('Adresses / Envoi ou retrait'),
             TextField::new('deliveryAddress')
                 ->setLabel('Adresse de livraison')
                 ->setDisabled(true)
-                ->onlyOnDetail(),
+                ->hideOnIndex(),
             TextField::new('billingAddress')
                 ->setLabel('Adresse de facturation')
                 ->setDisabled(true)
-                ->onlyOnDetail(),
+                ->hideOnIndex(),
+                
             TextField::new('sendingBy')
                 ->setLabel('Envoi / retrait:')
-                ->onlyOnDetail(),
+                ->hideOnIndex()->setDisabled(true),
             AssociationField::new('documentStatus')
                 ->setLabel('Status du document')
                 ->renderAsEmbeddedForm()->onlyOnIndex(),
             AssociationField::new('documentStatus')
                 ->setLabel('Status du document')
                 ->renderAsEmbeddedForm()->onlyOnDetail(),
+
+            FormField::addTab('Détails de la vente / Status du document'),
             AssociationField::new('documentStatus')
-                ->setLabel('Status du document')->onlyOnForms(),
+            ->setLabel('Status du document')->hideOnIndex(),
+            CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twig')->setDisabled(true)->hideOnIndex(),
+
+            FormField::addTab('Paiement'),
             AssociationField::new('payment')
                 ->setLabel('Paiement')
-                ->setDisabled(true),
+                ->setDisabled(true)->hideOnIndex(),
             TextField::new('payment.tokenPayment')
                 ->setLabel('Token du paiement')
                 ->setDisabled(true)
-                ->onlyOnForms(),
+                ->hideOnIndex(),
             AssociationField::new('user')
                 ->setLabel('Client')
-                ->setDisabled(true),
-            CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twig')->setDisabled(true)->onlyOnDetail(),
+                ->setDisabled(true)->hideOnIndex(),
         ];
     }
 
@@ -156,7 +173,6 @@ class DocumentCrudController extends AbstractCrudController
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->remove(Crud::PAGE_INDEX, Action::NEW)
             ->remove(Crud::PAGE_DETAIL, Action::DELETE)
-            ->remove(Crud::PAGE_DETAIL, Action::EDIT)
             ->add(Crud::PAGE_INDEX, Action::DETAIL);        
     }
 }

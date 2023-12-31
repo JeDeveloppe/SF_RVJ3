@@ -374,6 +374,8 @@ class DocumentService
                 ->setMeansOfPayment($entityInstance->getMeansOfPaiement())
                 ->setTokenPayment('AUCUN')
                 ->setCreatedAt(new DateTimeImmutable('now'))
+                ->setTimeOfTransaction($entityInstance->getMovementTime())
+                ->setDetails('AUCUN DETAILS')
                 ->setTimeOfTransaction($entityInstance->getMovementTime());
         //on sauvegarde le paiement
         $this->em->persist($paiement);
@@ -382,9 +384,7 @@ class DocumentService
         //il faut creer le numero de facture
         $newNumero = $this->generateNewNumberOf('billNumber', 'getBillNumber');
 
-        //on renseigne le paiement
-        $paiement->setDetails('AUCUN DETAILS')
-                ->setTimeOfTransaction($entityInstance->getMovementTime());
+
         //on sauvegarde le paiement
         $this->em->persist($paiement);
         $this->em->flush();

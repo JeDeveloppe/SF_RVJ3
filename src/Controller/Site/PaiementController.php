@@ -10,6 +10,7 @@ use App\Service\UtilitiesService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Response;
 
 #[Route('v3', name: '')]
 class PaiementController extends AbstractController
@@ -93,11 +94,15 @@ class PaiementController extends AbstractController
         if($_ENV["PAIEMENT_MODULE"] == "STRIPE")
         {
             $this->paiementService->notificationUrlWithStripe($tokenDocument);
+
         }else if($_ENV["PAIEMENT_MODULE"] == "PAYPLUG")
         {
-            $this->paiementService->notificationUrlWithPayplug($tokenDocument);
+            $resource = $this->paiementService->notificationUrlWithPayplug($tokenDocument);
+
         }else{
             throw new Exception('PAIEMENT_MODULE IN .ENV FILE NOT INFORM');
         }
+
+        return new Response();
     }
 }
