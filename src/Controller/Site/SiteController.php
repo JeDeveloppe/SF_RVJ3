@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-#[Route('v3', name: '')]
+
 class SiteController extends AbstractController
 {
     public function __construct(

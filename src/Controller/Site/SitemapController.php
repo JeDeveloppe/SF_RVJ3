@@ -13,7 +13,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('v3', name: '')]
+
 class SitemapController extends AbstractController
 {
     public function __construct(

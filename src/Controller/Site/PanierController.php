@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('v3', name: '')]
+
 class PanierController extends AbstractController
 {
     public function __construct(

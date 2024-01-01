@@ -15,7 +15,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
-#[Route('v3', name: '')]
+
 class RegistrationController extends AbstractController
 {
     #[Route('/inscription', name: 'app_register')]
