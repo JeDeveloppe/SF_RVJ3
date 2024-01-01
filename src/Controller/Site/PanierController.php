@@ -59,7 +59,14 @@ class PanierController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $shippingForm = $this->createForm(ShippingType::class);
+        $occasionInPanier = 0;
+        foreach($paniers as $panier){
+            if($panier->getOccasion() != NULL){
+                $occasionInPanier += 1;
+            }
+        }
+
+        $shippingForm = $this->createForm(ShippingType::class, null, ['occasionInPanier' => $occasionInPanier]);
         $shippingForm->handleRequest($request);
 
         $reponses = $this->panierService->calculateAllCart($user,$shippingForm->get('shipping')->getData());

@@ -82,7 +82,7 @@ class InitForProd2 extends Command
         // $this->importPiecesService->importPieces($io);
 
         // //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
-        // $this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
+        $this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
 
         // //on cree les conditions des occasions
         // $this->creationConditionOccasionService->addConditions($io);
@@ -108,7 +108,7 @@ class InitForProd2 extends Command
         // //on importe les documents et les paiements
         // $this->importDocumentsService->importDocuments($io);
         // $this->importPaiementService->importPaiements($io);
-        $this->importDocumentsService->creationDocumentSending($io);
+        // $this->importDocumentsService->creationDocumentSending($io);
 
         // //on importe les lignes de chaque document
         // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);

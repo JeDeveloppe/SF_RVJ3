@@ -30,6 +30,9 @@ class ShippingMethod
     #[ORM\OneToMany(mappedBy: 'shippingMethod', targetEntity: Documentsending::class)]
     private Collection $documentsendings;
 
+    #[ORM\Column]
+    private ?bool $forOccasionOnly = null;
+
     public function __construct()
     {
         $this->deliveries = new ArrayCollection();
@@ -138,6 +141,18 @@ class ShippingMethod
                 $documentsending->setShippingMethod(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isForOccasionOnly(): ?bool
+    {
+        return $this->forOccasionOnly;
+    }
+
+    public function setForOccasionOnly(bool $forOccasionOnly): static
+    {
+        $this->forOccasionOnly = $forOccasionOnly;
 
         return $this;
     }
