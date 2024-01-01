@@ -36,6 +36,7 @@ use App\Entity\NumbersOfPlayers;
 use App\Service\DocumentService;
 use App\Entity\ConditionOccasion;
 use App\Entity\DocumentParametre;
+use App\Entity\Documentsending;
 use App\Repository\ItemRepository;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Returndetailstostock;
@@ -242,6 +243,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Paiements', 'fas fa-list', Payment::class);
         yield MenuItem::linkToCrud('Status des documents', 'fas fa-list', DocumentStatus::class);
         yield MenuItem::linkToCrud('Paramètres', 'fas fa-list', DocumentParametre::class);
+        yield MenuItem::linkToCrud('Liste des envois', 'fas fa-list', Documentsending::class);
 
         yield MenuItem::section('Gestion des occasions:');
         yield MenuItem::linkToCrud('Liste des occasions', 'fas fa-list', Occasion::class);

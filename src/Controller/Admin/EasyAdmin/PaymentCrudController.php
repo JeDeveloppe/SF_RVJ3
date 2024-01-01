@@ -54,7 +54,7 @@ class PaymentCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des paiements')
             ->setPageTitle('new', 'Nouveau paiement')
             ->setPageTitle('edit', 'Édition d\'un paiement')
-            ->setDefaultSort(['id' => 'DESC'])
+            ->setDefaultSort(['createdAt' => 'DESC'])
         ;
     }
 

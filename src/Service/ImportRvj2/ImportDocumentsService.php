@@ -4,7 +4,9 @@ namespace App\Service\ImportRvj2;
 
 use League\Csv\Reader;
 use App\Entity\Document;
+use App\Entity\Documentsending;
 use App\Repository\DocumentRepository;
+use App\Repository\DocumentsendingRepository;
 use App\Repository\DocumentStatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ShippingMethodRepository;
@@ -21,6 +23,7 @@ class ImportDocumentsService
         private ShippingMethodRepository $shippingMethodRepository,
         private DocumentStatusRepository $documentStatusRepository,
         private UserRepository $userRepository,
+        private DocumentsendingRepository $documentsendingRepository,
         private DocumentRepository $documentRepository,
         private TaxRepository $taxRepository,
         private UtilitiesService $utilitiesService,
@@ -98,32 +101,18 @@ class ImportDocumentsService
             ->setTokenPayment($this->utilitiesService->stringToNull($arrayDoc['num_transaction']));
 
         //?ok version 3
-        if($arrayDoc['expedition'] == "poste"){
-            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'ENVOI PAR LA POSTE']);
-        }else if($arrayDoc['expedition'] == "mondialRelay"){
-            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'ENVOI PAR MONDIAL RELAY']);
-        }else if($arrayDoc['expedition'] == "retrait_caen1"){
-            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT DANS UN DEPOT RJV']);
-        }else if($arrayDoc['expedition'] == "colissimo"){
-            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'ENVOI PAR COLISSIMO']);
-        }else{
-            $expedition = $this->shippingMethodRepository->findOneBy(['name' => 'INDEFINI']);
-        }
-        $document->setSendingMethod($expedition)->setSendingBy($expedition->getName());
-
-        //?ok version 3
         $envoyer = explode('|',$arrayDoc['envoyer']);
 
         if($arrayDoc['etat'] == 2 && count($envoyer) > 1){
-            $etat = $this->documentStatusRepository->findOneBy(['name' => 'EXPÉDIÉE / TERMINÉE']);
+            $etat = $this->documentStatusRepository->findOneBy(['name' => $_ENV['DOCUMENT_STATUS_END']]);
         }else if($arrayDoc['etat'] == 3){ // 3 = envoyé dans la version 2
-            $etat = $this->documentStatusRepository->findOneBy(['name' => 'EXPÉDIÉE / TERMINÉE']); 
+            $etat = $this->documentStatusRepository->findOneBy(['name' => $_ENV['DOCUMENT_STATUS_END']]); 
         }else if($arrayDoc['etat'] == 2 && $arrayDoc['envoyer'] == 0){
-            $etat = $this->documentStatusRepository->findOneBy(['name' => 'PAYÉE / A PRÉPARER']); 
+            $etat = $this->documentStatusRepository->findOneBy(['name' => $_ENV['DOCUMENT_STATUS_PAID_TO_PREPARE']]); 
         }else if($arrayDoc['etat'] == 1){ // non facturer dans version 2
-            $etat = $this->documentStatusRepository->findOneBy(['name' => 'NON PAYÉE']);
+            $etat = $this->documentStatusRepository->findOneBy(['name' => $_ENV['DOCUMENT_STATUS_NO_PAID']]);
         }else{
-            $etat = $this->documentStatusRepository->findOneBy(['name' => 'INDÉFINIE']);
+            $etat = $this->documentStatusRepository->findOneBy(['name' => $_ENV['DOCUMENT_STATUS_INDEFINED']]);
         }
         $document->setDocumentStatus($etat);
 
@@ -136,5 +125,82 @@ class ImportDocumentsService
         }
 
         return $document;
+    }
+
+    public function creationDocumentSending(SymfonyStyle $io): void
+    {
+        $io->title('Création des envois');
+
+        $docs = $this->readCsvFileDocuments();
+        
+        $io->progressStart(count($docs));
+
+        foreach($docs as $arrayDoc){
+            $io->progressAdvance();
+            $sending= $this->createOrUpdateDocumentSending($arrayDoc);
+
+            $this->em->persist($sending);
+        }
+
+        $this->em->flush();
+
+        $io->progressFinish();
+        unset($docs);
+        $io->success('Création terminée');
+    }
+
+    private function createOrUpdateDocumentSending(array $arrayDoc): Documentsending
+    {
+        $document = $this->documentRepository->findOneBy(['rvj2id' => $arrayDoc['idDocument']]);
+
+        $sending = $this->documentsendingRepository->findOneBy(['document' => $document]);
+
+        if(!$sending){
+            $sending = new Documentsending();
+        }
+
+        //?ok version 3
+        if($arrayDoc['expedition'] == "poste"){
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => $_ENV['SHIPPING_METHOD_BY_POSTE_NAME']]);
+        }else if($arrayDoc['expedition'] == "mondialRelay"){
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => $_ENV['SHIPPING_METHOD_BY_MONDIAL_RELAY_NAME']]);
+        }else if($arrayDoc['expedition'] == "retrait_caen1"){
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => $_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']]);
+        }else if($arrayDoc['expedition'] == "colissimo"){
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => $_ENV['SHIPPING_METHOD_BY_COLISSIMO_NAME']]);
+        }else{
+            $expedition = $this->shippingMethodRepository->findOneBy(['name' => $_ENV['SHIPPING_METHOD_BY_INDEFINED']]);
+        }
+
+        $envoyer = explode('|',$arrayDoc['envoyer']);
+
+        if(count($envoyer) > 1){
+            
+            $timeSending = $this->utilitiesService->getDateTimeImmutableFromTimestamp($envoyer[0]);
+            
+        }else{
+            
+            $timeSending = NULL;
+        }
+
+        if(count($envoyer) > 1){
+
+            if($envoyer[1] == "SANS"){
+
+                $sendingNumber = NULL;
+
+            }else{
+
+                $sendingNumber = $envoyer[1];
+            }
+
+        }else{
+
+            $sendingNumber = NULL;
+        }
+
+        $sending->setDocument($document)->setShippingMethod($expedition)->setSendingAt($timeSending)->setSendingNumber($sendingNumber);
+
+        return $sending;
     }
 }

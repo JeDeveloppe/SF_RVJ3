@@ -23,8 +23,17 @@
                                     <div class="col-3">
                                         <p>Payée le: {{ document.payment.timeOfTransaction | date('d-m-Y') }}<br/>
                                             {{ document.payment.details }}</p>
-                                        <b>Envoi / retrait:</b>
-                                        <p>{{ document.sendingMethod }}</p>
+                                        <b>Envoi / retrait:<br/></b>
+                                        {% if document.documentsending.sendingAt is not null %}
+                                            Envoi le: {{ document.documentsending.sendingAt | date('d-m-Y') }}<br/>
+                                                {% if document.documentsending.sendingNumber is not null %}
+                                                    Numéro de suivi: {{ document.documentsending.sendingNumber }}
+                                                {% else %}
+                                                    Pas de numéro de suivi.
+                                                {% endif %}
+                                            {% else %}
+                                            Pas encore envoyé...
+                                        {% endif %}
                                     </div>
                                     <div class="col-3">
                                         <b>Adresse de facturation:</b>

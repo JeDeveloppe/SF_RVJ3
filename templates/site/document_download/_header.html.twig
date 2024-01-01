@@ -21,7 +21,7 @@
             <div class="p-2" style="font-size:12px;border:1px solid black;">
                 {% set deliveries = document.deliveryAddress|split('<br/>') %}
                 Livraison / Retrait:<br/>
-                {{ document.sendingBy }}<br/>
+                {{ document.documentsending.shippingMethod.name }}<br/>
                 {% for delivery in deliveries %}
                     {{ delivery }}<br/>
                 {% endfor %}
@@ -31,7 +31,7 @@
             <div class="p-2" style="font-size:12px;border:1px solid black;">
             Numéro: {{ document.billNumber }}<br/>
             Payé le: {{ document.payment.timeOfTransaction | date('d-m-Y') }}<br/>
-                {% if document.payment.details is not NULL %}
+                {% if document.payment.details is not null %}
                     {{ document.payment.details }} 
                 {% endif %}
             </div>

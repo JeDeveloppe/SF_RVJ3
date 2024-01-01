@@ -25,7 +25,6 @@ class ShippingMethodCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name'),
-            AssociationField::new('documents')->setLabel('Documents')->setDisabled(true)->onlyOnIndex(),
             ChoiceField::new('price')->setLabel('Payant ou gratuit ?')->setChoices(['GRATUIT' => 'GRATUIT', 'PAYANT' => 'PAYANT']),
             BooleanField::new('isActivedInCart')->setLabel('Actif dans le panier')
         ];

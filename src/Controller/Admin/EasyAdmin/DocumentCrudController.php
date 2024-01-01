@@ -84,11 +84,6 @@ class DocumentCrudController extends AbstractCrudController
                 ->setStoredAsCents()->setColumns(6),
 
             FormField::addTab('Suivi / Communication'),
-            DateTimeField::new('goodsSendAt')
-            ->setLabel('Marchandise envoyée le:')
-            ->setDisabled(true)
-            ->hideOnIndex()
-            ->setFormat('dd.MM.yyyy à HH:mm:ss')->setColumns(6),
             DateTimeField::new('createdAt')
             ->setLabel('Devis créé le')
             ->setDisabled(true)
@@ -128,15 +123,19 @@ class DocumentCrudController extends AbstractCrudController
                 ->setDisabled(true)
                 ->hideOnIndex(),
                 
-            TextField::new('sendingBy')
+            TextField::new('documentsending.shippingMethod')
                 ->setLabel('Envoi / retrait:')
                 ->hideOnIndex()->setDisabled(true),
-            AssociationField::new('documentStatus')
-                ->setLabel('Status du document')
-                ->renderAsEmbeddedForm()->onlyOnIndex(),
-            AssociationField::new('documentStatus')
-                ->setLabel('Status du document')
-                ->renderAsEmbeddedForm()->onlyOnDetail(),
+            DateTimeField::new('documentsending.sendingAt')
+                ->setLabel('Marchandise envoyée le:')
+                ->setDisabled(true)
+                ->setFormat('dd.MM.yyyy à HH:mm:ss'),
+            // AssociationField::new('documentsending.sendingAt')
+            //     ->setLabel('Status du document')
+            //     ->renderAsEmbeddedForm()->onlyOnIndex(),
+            // AssociationField::new('documentsending.sendingAt')
+            //     ->setLabel('Status du document')
+            //     ->renderAsEmbeddedForm()->onlyOnDetail(),
 
             FormField::addTab('Détails de la vente / Status du document'),
             AssociationField::new('documentStatus')
@@ -162,7 +161,7 @@ class DocumentCrudController extends AbstractCrudController
         return $crud
             ->showEntityActionsInlined()
             ->setPageTitle('index', 'Liste des documents')
-            ->setDefaultSort(['billNumber' => 'DESC'])
+            ->setDefaultSort(['id' => 'DESC'])
             ->setSearchFields(['quoteNumber', 'billNumber', 'user.email', 'token'])
         ;
     }

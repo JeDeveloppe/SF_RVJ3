@@ -10,6 +10,7 @@ use App\Repository\DocumentStatusRepository;
 use App\Repository\LegalInformationRepository;
 use App\Repository\PaymentRepository;
 use App\Repository\SiteSettingRepository;
+use App\Service\DocumentService;
 use App\Service\MailService;
 use App\Service\PaiementService;
 use DateTimeImmutable;
@@ -24,6 +25,7 @@ class AdminController extends AbstractController
     public function __construct(
         private DocumentRepository $documentRepository,
         private DocumentStatusRepository $documentStatusRepository,
+        private DocumentService $documentService,
         private EntityManagerInterface $em,
         private PaymentRepository $paymentRepository,
         private LegalInformationRepository $legalInformationRepository,
@@ -48,28 +50,7 @@ class AdminController extends AbstractController
 
         }else{
 
-            $legales = $this->legalInformationRepository->findOneBy([]);
-
-            if($status == 'END'){
-                $now = new DateTimeImmutable('now');
-
-                $document->setGoodsSendAt($now);
-            }
-            
-            $document->setDocumentStatus($status);
-            $this->em->persist($document);
-            $this->em->flush();
-
-            $this->mailService->sendMail(
-                $document->getUser()->getEmail(),
-                'Suivi de votre document '.$document->getBillNumber(),
-                'changement_statut',
-                [
-                    'document' => $document,
-                    'legales' => $legales
-                ],
-                true
-            );
+            $this->documentService->statusChange($document,$status);
 
             $this->addFlash('success', 'Status mis à jour !');
             return $this->redirectToRoute('admin_traited_daily_commands');

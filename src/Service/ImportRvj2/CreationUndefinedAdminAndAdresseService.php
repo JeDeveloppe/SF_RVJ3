@@ -47,32 +47,32 @@ class CreationUndefinedAdminAndAdresseService
 
         $shippingMethods = [];
         $shippingMethods[] = [
-            'name' => 'ENVOI PAR MONDIAL RELAY',
+            'name' => $_ENV['SHIPPING_METHOD_BY_MONDIAL_RELAY_NAME'],
             'price' => 'PAYANT',
             'actifInCart' => false
         ];
         $shippingMethods[] = [
-            'name' => 'ENVOI PAR LA POSTE',
+            'name' => $_ENV['SHIPPING_METHOD_BY_POSTE_NAME'],
             'price' => 'PAYANT',
             'actifInCart' => true
         ];
         $shippingMethods[] = [
-            'name' => 'ENVOI PAR COLISSIMO',
+            'name' => $_ENV['SHIPPING_METHOD_BY_COLISSIMO_NAME'],
             'price' => 'PAYANT',
             'actifInCart' => false
         ];
         $shippingMethods[] = [
-            'name' => 'INDEFINI',
+            'name' => $_ENV['SHIPPING_METHOD_BY_INDEFINED'],
             'price' => 'PAYANT',
             'actifInCart' => false
         ];
         $shippingMethods[] = [
-            'name' => 'RETRAIT DANS UN DEPOT RJV',
+            'name' => $_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME'],
             'price' => 'GRATUIT',
             'actifInCart' => true
         ];
         $shippingMethods[] = [
-            'name' => 'RETRAIT PENDANT UNE FOIRE', //TODO non a modifier
+            'name' => $_ENV['SHIPPING_METHOD_BY_IN_FAIR_NAME'],
             'price' => 'GRATUIT',
             'actifInCart' => false
         ];

@@ -70,10 +70,6 @@ class Document
 
     #[ORM\ManyToOne(inversedBy: 'documents')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?ShippingMethod $sendingMethod = null;
-
-    #[ORM\ManyToOne(inversedBy: 'documents')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?DocumentStatus $documentStatus = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -89,9 +85,6 @@ class Document
     #[ORM\OneToOne(mappedBy: 'document', cascade: ['persist', 'remove'])]
     private ?Payment $payment = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $sendingBy = null;
-
     #[ORM\Column]
     private ?int $taxRateValue = null;
 
@@ -101,8 +94,8 @@ class Document
     #[ORM\Column(nullable: true)]
     private ?bool $isLastQuoteCantBeDeleted = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $goodsSendAt = null;
+    #[ORM\OneToOne(mappedBy: 'document', cascade: ['persist', 'remove'])]
+    private ?Documentsending $documentsending = null;
 
     public function __construct()
     {
@@ -318,18 +311,6 @@ class Document
         return $this;
     }
 
-    public function getSendingMethod(): ?ShippingMethod
-    {
-        return $this->sendingMethod;
-    }
-
-    public function setSendingMethod(?ShippingMethod $sendingMethod): static
-    {
-        $this->sendingMethod = $sendingMethod;
-
-        return $this;
-    }
-
     public function getDocumentStatus(): ?DocumentStatus
     {
         return $this->documentStatus;
@@ -418,18 +399,6 @@ class Document
         return $this;
     }
 
-    public function getSendingBy(): ?string
-    {
-        return $this->sendingBy;
-    }
-
-    public function setSendingBy(string $sendingBy): static
-    {
-        $this->sendingBy = $sendingBy;
-
-        return $this;
-    }
-
     public function getTaxRateValue(): ?int
     {
         return $this->taxRateValue;
@@ -476,14 +445,19 @@ class Document
         return $this;
     }
 
-    public function getGoodsSendAt(): ?\DateTimeImmutable
+    public function getDocumentsending(): ?Documentsending
     {
-        return $this->goodsSendAt;
+        return $this->documentsending;
     }
 
-    public function setGoodsSendAt(?\DateTimeImmutable $goodsSendAt): static
+    public function setDocumentsending(Documentsending $documentsending): static
     {
-        $this->goodsSendAt = $goodsSendAt;
+        // set the owning side of the relation if necessary
+        if ($documentsending->getDocument() !== $this) {
+            $documentsending->setDocument($this);
+        }
+
+        $this->documentsending = $documentsending;
 
         return $this;
     }

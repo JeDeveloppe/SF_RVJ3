@@ -23,32 +23,32 @@ class CreationDocumentStatusService
 
         //! BIEN GARDER CETTE ORDER CAUSE BESOIN/ LOGIQUE DANS COMPONENTS/ADMIN_GROUP_BUTTON 
         $statusDocuments[] = [
-            'name' => 'PAYÉE / A PRÉPARER', 
+            'name' => $_ENV['DOCUMENT_STATUS_PAID_TO_PREPARE'], 
             'action' => 'TO_PREPARE',
             'isTreatedDaily' => true
         ];
         $statusDocuments[] = [
-            'name' => 'PAYÉE / MISE DE CÔTÉ', 
+            'name' => $_ENV['DOCUMENT_STATUS_PAID_TO_SET_ASIDE'], 
             'action' => 'SET_ASIDE',
             'isTreatedDaily' => true
         ];
         $statusDocuments[] = [
-            'name' => 'EXPÉDIÉE / TERMINÉE', 
+            'name' => $_ENV['DOCUMENT_STATUS_END'], 
             'action' => 'END',
             'isTreatedDaily' => false
         ];
         $statusDocuments[] = [
-            'name' => 'INDÉFINIE', 
+            'name' => $_ENV['DOCUMENT_STATUS_INDEFINED'], 
             'action' => 'UNKNOWN',
             'isTreatedDaily' => true
         ];
         $statusDocuments[] = [
-            'name' => 'NON PAYÉE', 
+            'name' => $_ENV['DOCUMENT_STATUS_NO_PAID'], 
             'action' => 'NO_PAID',
             'isTreatedDaily' => false
         ];
         $statusDocuments[] = [
-            'name' => 'DEVIS EN ATTENTE DE PRIX', 
+            'name' => $_ENV['DOCUMENT_STATUS_QUOTE_WAITING_FOR_PRICE'], 
             'action' => 'DEVIS_WITHOUT_PRICE',
             'isTreatedDaily' => false
         ];

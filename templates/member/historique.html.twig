@@ -49,8 +49,20 @@
                            </div>
                         {% endif %}
                   </div>
-                  <div class="card-footer text-center">
-                     {{ document.documentStatus.name }}
+                  <div class="card-footer d-flex justify-content-between align-items-center">
+                     <div class="col-5 text-center">{{ document.documentStatus.name }}</div>
+                     <div class="col-5 text-center">
+                        {% if document.documentsending.sendingAt is not null %}
+                           {{ document.documentsending.shippingMethod.name }} le: {{ document.documentsending.sendingAt | date('d-m-Y') }}<br/>
+                           {% if document.documentsending.sendingNumber is not null %}
+                              Numéro de suivi: {{ document.documentsending.sendingNumber }}
+                           {% else %}
+                              Pas de numéro de suivi.
+                           {% endif %}
+                        {% else %}
+                           Pas encore envoyé...
+                        {% endif %}
+                     </div>
                   </div>
                </div>
             {% endif %}

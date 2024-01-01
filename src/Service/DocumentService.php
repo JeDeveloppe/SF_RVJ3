@@ -13,6 +13,8 @@ use App\Entity\Document;
 use App\Entity\DocumentLine;
 use App\Service\UtilitiesService;
 use App\Entity\DocumentLineTotals;
+use App\Entity\Documentsending;
+use App\Entity\DocumentStatus;
 use App\Repository\ItemRepository;
 use App\Repository\UserRepository;
 use App\Entity\Returndetailstostock;
@@ -44,7 +46,8 @@ class DocumentService
         private PaymentRepository $paymentRepository,
         private Environment $twig,
         private UserRepository $userRepository,
-        private ParameterBagInterface $parameter
+        private ParameterBagInterface $parameter,
+        private MailService $mailService
         ){
     }
 
@@ -140,13 +143,16 @@ class DocumentService
                 ->setTaxRate($panierParams['tax'])
                 ->setTaxRateValue($panierParams['tax']->getValue())
                 ->setCost($panierParams['preparationHt'])
-                ->setSendingMethod($panierParams['shipping'])
-                ->setSendingBy($panierParams['shipping']->getName())
                 ->setIsDeleteByUser(false)
                 ->setTimeOfSendingQuote(new DateTimeImmutable('now'))
                 ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => $actionToSearch]));
 
         $this->em->persist($document);
+        $this->em->flush();
+
+        $sending = new Documentsending();
+        $sending->setDocument($document)->setShippingMethod($panierParams['shipping']);
+        $this->em->persist($sending);
         $this->em->flush();
 
 
@@ -268,7 +274,7 @@ class DocumentService
         return $results;
     }
 
-    public function generatePdf($document,$request)
+    public function generatePdf(Document $document,$request)
     {
 
         $results = $this->generateValuesForDocument($document);
@@ -439,5 +445,32 @@ class DocumentService
         $mpdf->WriteHTML($html);
         $mpdf->SetHTMLFooter($footer);
         $mpdf->Output();
+    }
+
+    public function statusChange(Document $document, DocumentStatus $status)
+    {
+        $legales = $this->legalInformationRepository->findOneBy([]);
+
+        if($status->getAction() == 'END'){
+            $now = new DateTimeImmutable('now');
+
+            $document->getDocumentsending()->setSendingAt($now)->setSendingNumber(null);
+        }
+
+        $document->setDocumentStatus($status);
+        $this->em->persist($document);
+        $this->em->flush();
+
+        $this->mailService->sendMail(
+            $document->getUser()->getEmail(),
+            'Suivi de votre document '.$document->getBillNumber(),
+            'changement_statut',
+            [
+                'document' => $document,
+                'legales' => $legales
+            ],
+            null,
+            true
+        );
     }
 }

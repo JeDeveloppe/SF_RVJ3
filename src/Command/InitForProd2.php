@@ -106,8 +106,9 @@ class InitForProd2 extends Command
         // $this->creationDocumentStatusService->creationStatus($io);
 
         // //on importe les documents et les paiements
-        $this->importDocumentsService->importDocuments($io);
+        // $this->importDocumentsService->importDocuments($io);
         // $this->importPaiementService->importPaiements($io);
+        $this->importDocumentsService->creationDocumentSending($io);
 
         // //on importe les lignes de chaque document
         // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);

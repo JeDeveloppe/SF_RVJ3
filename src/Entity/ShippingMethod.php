@@ -18,9 +18,6 @@ class ShippingMethod
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'sendingMethod', targetEntity: Document::class)]
-    private Collection $documents;
-
     #[ORM\OneToMany(mappedBy: 'shippingMethod', targetEntity: Delivery::class)]
     private Collection $deliveries;
 
@@ -30,10 +27,13 @@ class ShippingMethod
     #[ORM\Column(length: 255)]
     private ?string $price = null;
 
+    #[ORM\OneToMany(mappedBy: 'shippingMethod', targetEntity: Documentsending::class)]
+    private Collection $documentsendings;
+
     public function __construct()
     {
-        $this->documents = new ArrayCollection();
         $this->deliveries = new ArrayCollection();
+        $this->documentsendings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,36 +49,6 @@ class ShippingMethod
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Document>
-     */
-    public function getDocuments(): Collection
-    {
-        return $this->documents;
-    }
-
-    public function addDocument(Document $document): static
-    {
-        if (!$this->documents->contains($document)) {
-            $this->documents->add($document);
-            $document->setSendingMethod($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDocument(Document $document): static
-    {
-        if ($this->documents->removeElement($document)) {
-            // set the owning side to null (unless already changed)
-            if ($document->getSendingMethod() === $this) {
-                $document->setSendingMethod(null);
-            }
-        }
 
         return $this;
     }
@@ -138,6 +108,36 @@ class ShippingMethod
     public function setPrice(string $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Documentsending>
+     */
+    public function getDocumentsendings(): Collection
+    {
+        return $this->documentsendings;
+    }
+
+    public function addDocumentsending(Documentsending $documentsending): static
+    {
+        if (!$this->documentsendings->contains($documentsending)) {
+            $this->documentsendings->add($documentsending);
+            $documentsending->setShippingMethod($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentsending(Documentsending $documentsending): static
+    {
+        if ($this->documentsendings->removeElement($documentsending)) {
+            // set the owning side to null (unless already changed)
+            if ($documentsending->getShippingMethod() === $this) {
+                $documentsending->setShippingMethod(null);
+            }
+        }
 
         return $this;
     }

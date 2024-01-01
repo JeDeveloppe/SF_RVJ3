@@ -42,7 +42,7 @@ class MailService
             $mail = (new TemplatedEmail())
                 ->from(new Address($legales->getEmailCompany(), $legales->getCompanyName()))
                 ->to($recipient)
-                ->replyTo($replyTo ? $replyTo : 'no_reply@refaitesvosjeux.fr')
+                ->replyTo($replyTo ? $replyTo : 'noreply@refaitesvosjeux.fr')
                 ->subject($subject)
                 ->htmlTemplate('email/templates/'.$template.'.html.twig')
                 ->context($donnees);
