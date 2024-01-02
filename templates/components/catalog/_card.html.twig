@@ -12,21 +12,19 @@
         {% set entityNameController = 'Boite' %}
     {% endif %}
 
-    <div class="col-9 col-sm-6 mx-auto col-md-4 mx-md-0 col-lg-3 my-2">
-        <div class="card card_catalog">
-                <div class="side front">
-                    <div class="col-12 d-flex justify-content-center align-items-center h-100 p-1">
-                        <img class="img_full-width" src="{{ vich_uploader_asset(boite, 'imageFile') }}"/>
-                    </div>
+    {# <div class="col-9 col-sm-6 mx-auto col-md-4 mx-md-0 col-lg-3 my-2"> #}
+        <div id="{{ setEntityId }}" class="card card_catalog m-2 p-0 shadow-lg rounded">
+                <div class="side front d-flex justify-content-center align-items-center">
+                    <img class="card_catalog_img" src="{{ vich_uploader_asset(boite, 'imageFile') }}"/>
                 </div>
                 <div class="side back d-flex flex-column justify-content-around">
                     <div class="text-center p-2" data-toggle="tooltip" data-placement="top" title="{{ boite.name | raw }}">
-                        <span class="fs-3">{{ boite.name | raw }} </span><br/>
+                        <span class="fs-4">{{ boite.name | raw }} </span><br/>
                         <span class="fs-5">{{ boite.editor | raw }}</span><br/>
                         {% if boite.year is not null %}
-                            {{ boite.year }}
+                            <span class="fs-6">{{ boite.year }}</span>
                         {% else %}
-                            Année inconnue
+                            <span class="fs-6">Année inconnue</span>
                         {% endif %}
                     </div>
                     <div class="d-flex flex-row justify-content-around align-items-center">
@@ -35,5 +33,5 @@
                     </div>
                 </div>
         </div>
-    </div>
+    {# </div> #}
 {% endfor %}
