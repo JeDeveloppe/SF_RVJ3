@@ -22,7 +22,7 @@ class DiscountCrudController extends AbstractCrudController
         return [
             IntegerField::new('start')->setLabel('De (nombre de pièces achetées)'),
             IntegerField::new('end')->setLabel('A (nombre de pièces achetées)'),
-            IntegerField::new('value')->setLabel('Valeur de remise (ex: 10)'),
+            IntegerField::new('value')->setLabel('Valeur de remise % (ex: 10)'),
             BooleanField::new('isOnline')->setLabel('Actif')
         ];
     }

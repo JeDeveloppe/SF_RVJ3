@@ -18,8 +18,9 @@
     </thead>
     <tbody>
         <tr>
+            <td style="border:1px solid black">Pièces dét.</td>
+            <td style="border:1px solid black">Remise sur<br/>pièces dét.</td>
             <td style="border:1px solid black">Occasions</td>
-            <td style="border:1px solid black">Pièces détachées</td>
             <td style="border:1px solid black">Livraison</td>
             <td style="border:1px solid black">{{ tdText }}</td>
             <td style="border:1px solid black">HT</td>
@@ -27,8 +28,9 @@
             <td>TTC</td>
         </tr>
         <tr>
-            <td style="border:1px solid black">{{ (document.documentLineTotals.occasionsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100)) | number_format(2, '.', ',') }}</td>
             <td style="border:1px solid black">{{ ((document.documentLineTotals.boitesPriceWithoutTax + document.documentLineTotals.itemsPriceWithoutTax) / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black">{{ document.documentLineTotals.discountonpurchaseinpurcentage ? document.documentLineTotals.discountonpurchaseinpurcentage : 0 }}% soit {{ document.documentLineTotals.discountonpurchase / 100 | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black">{{ (document.documentLineTotals.occasionsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100)) | number_format(2, '.', ',') }}</td>
             <td style="border:1px solid black">{{ (document.deliveryPriceExcludingTax / 100 * tva) | number_format(2, '.', ',') }}</td>
             <td style="border:1px solid black">{{ (document.cost / 100 * tva) | number_format(2, '.', ',') }}</td>
             <td style="border:1px solid black">{{ (document.totalExcludingTax / 100) | number_format(2, '.', ',') }}</td>

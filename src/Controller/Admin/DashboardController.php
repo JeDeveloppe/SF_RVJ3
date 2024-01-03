@@ -35,6 +35,7 @@ use App\Entity\MovementOccasion;
 use App\Entity\NumbersOfPlayers;
 use App\Service\DocumentService;
 use App\Entity\ConditionOccasion;
+use App\Entity\DocumentLineTotals;
 use App\Entity\DocumentParametre;
 use App\Entity\Documentsending;
 use App\Repository\ItemRepository;
@@ -227,6 +228,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Status des documents', 'fas fa-list', DocumentStatus::class);
         yield MenuItem::linkToCrud('Paramètres', 'fas fa-list', DocumentParametre::class);
         yield MenuItem::linkToCrud('Liste des envois', 'fas fa-list', Documentsending::class);
+        yield MenuItem::linkToCrud('Liste des totaux', 'fas fa-list', DocumentLineTotals::class);
 
         yield MenuItem::section('Gestion des utilisateurs:');
         yield MenuItem::linkToCrud('Liste des clients', 'fas fa-list', User::class);

@@ -74,40 +74,48 @@
                 {% if document.documentLineTotals.occasionsPriceWithoutTax > 0 %}
                     <tr>
                         <td>Occasions:</td>
-                        <td>{{ (document.documentLineTotals.occasionsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100)) | number_format(2, '.', ',') }}</td>
+                        <td>{{ (document.documentLineTotals.occasionsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100)) | number_format(2, '.', ',') }} € TTC</td>
                     </tr>
                 {% endif %}
                 {% if document.documentLineTotals.boitesPriceWithoutTax > 0 %}
                     <tr>
                         <td>Pièces détachées (devis):</td>
-                        <td>{{ (document.documentLineTotals.boitesPriceWithoutTax / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }}</td>
+                        <td>{{ (document.documentLineTotals.boitesPriceWithoutTax / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }} € TTC</td>
                     </tr>
                 {% endif %}
                 {% if document.documentLineTotals.itemsPriceWithoutTax > 0 %}
                     <tr>
                         <td>Articles:</td>
-                        <td>{{ (document.documentLineTotals.itemsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }}</td>
+                        <td>{{ (document.documentLineTotals.itemsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }} € TTC</td>
                     </tr>
+                    {% if document.documentLineTotals.discountonpurchase < 0 %}
+                    <tr>
+                        <td>
+                            Remise sur les articles (- {{document.documentLineTotals.discountonpurchaseinpurcentage }}%):<br/>
+                        </td>
+                        <td>{{ (document.documentLineTotals.discountonpurchase / 100) | number_format(2, '.', ',') }} € TTC</td>
+                    </tr>
+                    {% endif %}
                 {% endif %}
                 <tr>
                     <td>Livraison / Retrait:</td>
-                    <td>{{ (document.deliveryPriceExcludingTax / 100 * tva) | number_format(2, '.', ',') }}</td>
+                    <td>{{ (document.deliveryPriceExcludingTax / 100 * tva) | number_format(2, '.', ',') }} € TTC</td>
                 </tr>
                 <tr>
                     <td>{{ tdText }}</td>
-                    <td>{{ (document.cost / 100 * tva) | number_format(2, '.', ',') }}</td>
+                    <td>{{ (document.cost / 100 * tva) | number_format(2, '.', ',') }} € TTC</td>
                 </tr>
                 <tr>
                     <td>Total HT:</td>
-                    <td>{{ (document.totalExcludingTax / 100) | number_format(2, '.', ',') }}</td>
+                    <td>{{ (document.totalExcludingTax / 100) | number_format(2, '.', ',') }} €</td>
                 </tr>
                 <tr>
                     <td>TVA:</td>
-                    <td>{{ ((document.totalWithTax - document.totalExcludingTax) / 100) | number_format(2, '.', ',') }}</td>
+                    <td>{{ ((document.totalWithTax - document.totalExcludingTax) / 100) | number_format(2, '.', ',') }} €</td>
                 </tr>
                 <tr>
                     <td>Total TTC:</td>
-                    <td>{{ (document.totalWithTax / 100) | number_format(2, '.', ',')}}</td>
+                    <td>{{ (document.totalWithTax / 100) | number_format(2, '.', ',')}} €</td>
                 </tr>
             </table>
         </div>

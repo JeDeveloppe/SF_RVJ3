@@ -223,7 +223,7 @@ class PanierService
         }
 
         //? calcule de la remise sur les articles
-        $responses['remises']['remiseDeQte'] = $responses['totauxItems']['price'] * $responses['remises']['value'] / 100;
+        $responses['remises']['remiseDeQte'] = round($responses['totauxItems']['price'] * $responses['remises']['value'] / 100);
 
         $responses['totalPanier'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']->getPriceExcludingTax()) - $responses['remises']['remiseDeQte'];
 

@@ -77,6 +77,7 @@ class DocumentCrudController extends AbstractCrudController
                 ->setCurrency('EUR')
                 ->setStoredAsCents()
                 ->setDisabled(true)->setColumns(6),
+            // AssociationField::new('documentLineTotals.discountonpurchase'),
             MoneyField::new('totalWithTax')
                 ->setLabel('Total TTC')
                 ->setDisabled(true)

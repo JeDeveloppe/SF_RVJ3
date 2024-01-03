@@ -155,20 +155,6 @@ class MemberController extends AbstractController
             $this->documentService->generateFpdf($document, $request);
 
             return new Response();
-
-            // $results = $this->documentService->generateValuesForDocument($document);
-            // $legales = $this->legalInformationRepository->findOneBy([]);
-
-            // return $this->render('site/document_download/_document_download.html.twig', [
-            //     'document' => $document,
-            //     'legales' => $legales,
-            //     'css' => file_get_contents('https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'),
-            //     "docLines" => $document->getDocumentLines(),
-            //     "tva" => $results['tauxTva'],
-            //     "docLine_items" => $results['docLine_items'],
-            //     "docLine_occasions" => $results['docLine_occasions'],
-            //     "docLine_boites" => $results['docLine_boites']
-            // ]);
         }
     }
 }

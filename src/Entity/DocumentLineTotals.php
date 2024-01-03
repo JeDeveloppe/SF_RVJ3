@@ -34,6 +34,12 @@ class DocumentLineTotals
     #[ORM\OneToOne(inversedBy: 'documentLineTotals', cascade: ['persist', 'remove'])]
     private ?Document $document = null;
 
+    #[ORM\Column]
+    private ?int $discountonpurchase = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $discountonpurchaseinpurcentage = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +125,30 @@ class DocumentLineTotals
     public function setDocument(?Document $document): static
     {
         $this->document = $document;
+
+        return $this;
+    }
+
+    public function getDiscountonpurchase(): ?int
+    {
+        return $this->discountonpurchase;
+    }
+
+    public function setDiscountonpurchase(int $discountonpurchase): static
+    {
+        $this->discountonpurchase = $discountonpurchase;
+
+        return $this;
+    }
+
+    public function getDiscountonpurchaseinpurcentage(): ?int
+    {
+        return $this->discountonpurchaseinpurcentage;
+    }
+
+    public function setDiscountonpurchaseinpurcentage(?int $discountonpurchaseinpurcentage): static
+    {
+        $this->discountonpurchaseinpurcentage = $discountonpurchaseinpurcentage;
 
         return $this;
     }

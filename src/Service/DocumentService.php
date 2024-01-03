@@ -161,7 +161,8 @@ class DocumentService
             ->setDocument($document)
             ->setBoitesWeigth($panierParams['totauxBoites']['weigth'])->setBoitesPriceWithoutTax($panierParams['totauxBoites']['price'])
             ->setItemsWeigth($panierParams['totauxItems']['weigth'])->setItemsPriceWithoutTax($panierParams['totauxItems']['price'])
-            ->setOccasionsWeigth($panierParams['totauxOccasions']['weigth'])->setOccasionsPriceWithoutTax($panierParams['totauxOccasions']['price']);
+            ->setOccasionsWeigth($panierParams['totauxOccasions']['weigth'])->setOccasionsPriceWithoutTax($panierParams['totauxOccasions']['price'])
+            ->setDiscountonpurchase(-1 * $panierParams['remises']['remiseDeQte'])->setDiscountonpurchaseinpurcentage($panierParams['remises']['value']);
         $this->em->persist($docLineTotals);
         $this->em->flush();
         // "panier_occasions" => array:1 [▶]
@@ -274,41 +275,6 @@ class DocumentService
         return $results;
     }
 
-    public function generatePdf(Document $document,$request)
-    {
-
-        $results = $this->generateValuesForDocument($document);
-        $legales = $this->legalInformationRepository->findOneBy([]);
-
-        $options = new Options();
-        $options->set('isRemoteEnabled', true);
-
-        $pathToBootstrapCss = $this->parameter->get('kernel.project_dir').'/assets/styles/template_bootstrap.css';
-
-        $dompdf = new Dompdf($options);
-        $html = $this->twig->render('site/document_download/_document_download.html.twig', [
-            'document' => $document,
-            'css' => file_get_contents('https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'),
-            'legales' => $legales,
-            "docLines" => $document->getDocumentLines(),
-            "tva" => $results['tauxTva'],
-            "docLine_items" => $results['docLine_items'],
-            "docLine_occasions" => $results['docLine_occasions'],
-            "docLine_boites" => $results['docLine_boites']
-        ]);
-
-        $dompdf->setBasePath($pathToBootstrapCss);
-        $dompdf->loadHtml($html);
-
-        // (Optional) Setup the paper size and orientation
-        $dompdf->setPaper('A4', 'portrait');
-        // Render the HTML as PDF
-        $dompdf->render();
-        // Output the generated PDF to Browser
-        $dompdf->stream($document->getBillNumber().".pdf");
-
-    }
-
     public function generateDocumentInDatabaseFromSaleDuringAfair($panierParams,$billingAddress,$deliveryAddress,$entityInstance)
     {
 
@@ -338,8 +304,6 @@ class DocumentService
                 ->setTaxRate($panierParams['tax'])
                 ->setTaxRateValue($panierParams['tax']->getValue())
                 ->setCost($panierParams['preparationHt'])
-                ->setSendingMethod($panierParams['shipping'])
-                ->setSendingBy($panierParams['shipping']->getName())
                 ->setIsDeleteByUser(false)
                 ->setTimeOfSendingQuote(new DateTimeImmutable('now'))
                 ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => 'END']));
@@ -347,6 +311,10 @@ class DocumentService
         $this->em->persist($document);
         $this->em->flush();
  
+        $sending = new Documentsending();
+        $sending->setDocument($document)->setShippingMethod($panierParams['shipping']);
+        $this->em->persist($sending);
+        $this->em->flush();
  
         $docLineTotals = new DocumentLineTotals();
         $docLineTotals
@@ -410,29 +378,33 @@ class DocumentService
         $results = $this->generateValuesForDocument($document);
         $legales = $this->legalInformationRepository->findOneBy([]);
 
-        $header = $this->twig->render('site/document_download/_header.html.twig', [
-            'legales' => $legales,
-            'document' => $document,
-
-        ]);
-        $html = $this->twig->render('site/document_download/_document_download.html.twig', [
-            'document' => $document,
-            'legales' => $legales,
-            "docLines" => $document->getDocumentLines(),
-            "tva" => $results['tauxTva'],
-            "docLine_items" => $results['docLine_items'],
-            "docLine_occasions" => $results['docLine_occasions'],
-            "docLine_boites" => $results['docLine_boites']
-        ]);
-        $footer = $this->twig->render('site/document_download/_totalsTable.html.twig', [
-            'document' => $document,
-            "tva" => $results['tauxTva'],
-            "docLine_items" => $results['docLine_items'],
-            "docLine_occasions" => $results['docLine_occasions'],
-            "docLine_boites" => $results['docLine_boites']
-        ]);
-
-
+        if($document->getCreatedAt()->format('Y') > 2023){
+            $header = $this->twig->render('site/document_download/2024/_header.html.twig', [
+                'legales' => $legales,
+                'document' => $document,
+    
+            ]);
+            $html = $this->twig->render('site/document_download/2024/_document_download.html.twig', [
+                'document' => $document,
+                'legales' => $legales,
+                "docLines" => $document->getDocumentLines(),
+                "tva" => $results['tauxTva'],
+                "docLine_items" => $results['docLine_items'],
+                "docLine_occasions" => $results['docLine_occasions'],
+                "docLine_boites" => $results['docLine_boites']
+            ]);
+            $footer = $this->twig->render('site/document_download/2024/_totalsTable.html.twig', [
+                'document' => $document,
+                "tva" => $results['tauxTva'],
+                "docLine_items" => $results['docLine_items'],
+                "docLine_occasions" => $results['docLine_occasions'],
+                "docLine_boites" => $results['docLine_boites']
+            ]);
+        }else{
+            //TODO
+            dd('TODO');
+        }
+        
         $mpdf = new Mpdf([
             'mode' => 'utf-8',
             'format' => 'A4',

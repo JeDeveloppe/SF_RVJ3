@@ -25,6 +25,9 @@ class Discount
     #[ORM\Column]
     private ?bool $isOnline = null;
 
+    #[ORM\Column]
+    private ?int $valueUsed = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class Discount
     public function setIsOnline(bool $isOnline): static
     {
         $this->isOnline = $isOnline;
+
+        return $this;
+    }
+
+    public function getValueUsed(): ?int
+    {
+        return $this->valueUsed;
+    }
+
+    public function setValueUsed(int $valueUsed): static
+    {
+        $this->valueUsed = $valueUsed;
 
         return $this;
     }
