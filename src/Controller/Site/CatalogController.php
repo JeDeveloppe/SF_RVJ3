@@ -59,12 +59,20 @@ class CatalogController extends AbstractController
             24 /*limit per page*/
         );
 
+        //? effet rotation X ou Y aléatoire sur les cards
+        $class_transforms = [['transformX','backX'],['transformY','backY']];
+        for($i=0;$i<count($boites);$i++){
+            shuffle($class_transforms);
+            $transforms[] = $class_transforms[0];
+        }
+
         return $this->render('site/catalog/pieces_detachees/les_pieces_detachees.html.twig', [
             'boites' => $boites,
             'boites_totales' => $donnees,
             'form' => $form,
             'search' => $search ?? null,
             'partenaires' => $partenaires ?? null,
+            'transforms' => $transforms
         ]);
     }
 
@@ -95,9 +103,17 @@ class CatalogController extends AbstractController
             24 /*limit per page*/
         );
 
+        //? effet rotation X ou Y aléatoire sur les cards
+        $class_transforms = [['transformX','backX'],['transformY','backY']];
+        for($i=0;$i<count($occasions);$i++){
+            shuffle($class_transforms);
+            $transforms[] = $class_transforms[0];
+        }
+
         return $this->render('site/catalog/occasions/les_occasions.html.twig', [
             'occasions' => $occasions,
             'occasions_totales' => $donnees,
+            'transforms' => $transforms
         ]);
     }
 
