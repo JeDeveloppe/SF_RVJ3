@@ -235,8 +235,73 @@
   } 
 
   #logoTop{
-    margin-top: 1%;
-    width: 7%;
+    margin-top: 0.2%;
+    width: 130px;
+    margin-left: 85%;
     z-index: 100;
+    transform: translateX(-50%);
+    transform-origin: left;
     position: absolute;
+    transition: ease-in-out 400ms;
   }
+  #logoTop img{
+    width: 100%;
+  }
+
+  // X-Small devices (portrait phones, less than 576px)
+// No media query for `xs` since this is the default in Bootstrap
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+body{
+  border-left: 5px solid green;
+}
+#logoTop{
+  margin-top: 0.8%;
+  width: 135px;
+  margin-left: 87%;
+}
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+  body{
+    border-left: 5px solid red;
+  }
+  #logoTop{
+    margin-top: 0.8%;
+    width: 140px;
+    margin-left: 89%;
+  }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+  body{
+    border-left: 5px solid black;
+  }
+  #logoTop{
+    margin-left: 50%;
+  }
+}
+
+// X-Large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+  body{
+    border-left: 5px solid yellow;
+  }
+}
+
+// XX-Large devices (larger desktops, 1400px and up)
+@media (min-width: 1400px) {
+  #logoTop{
+    margin-top: 1%;
+    width: 10%;
+    z-index: 100;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    transform-origin: left;
+    position: absolute;
+    transition: ease-in-out 400ms;
+  }
+}
