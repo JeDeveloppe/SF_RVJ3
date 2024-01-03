@@ -248,6 +248,15 @@
     width: 100%;
   }
 
+  .cover-container {
+    background-image: url("https://random.imagecdn.app/1500/800");
+    // background-image: url("../../public/build/images/design/jumbotron1.png");
+    object-fit: cover;
+    background-repeat: no-repeat;
+    height: 400px;
+    width: 100%;
+  }
+
   // X-Small devices (portrait phones, less than 576px)
 // No media query for `xs` since this is the default in Bootstrap
 

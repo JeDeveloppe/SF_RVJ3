@@ -41,7 +41,8 @@ class SiteController extends AbstractController
         private DocumentRepository $documentRepository,
         private UserService $userService,
         private ResetPasswordRepository $resetPasswordRepository,
-        private PartnerService $partnerService
+        private PartnerService $partnerService,
+        private PartnerRepository $partnerRepository
     )
     {
     }
@@ -50,7 +51,7 @@ class SiteController extends AbstractController
     public function index(): Response
     {
         return $this->render('site/index.html.twig', [
-            'controller_name' => 'SiteController',
+            'partners' => $this->partnerRepository->findAll()
         ]);
     }
 
