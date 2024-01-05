@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        {% include "site/googleAnalytics/googleAnalytics.html.twig" %}
         <meta charset="UTF-8">
+        <title>REFAITES VOS JEUX | {% block title %}{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="msapplication-TileColor" content="#da532c">
         <meta name="theme-color" content="#ffffff">
+        {% include "site/googleAnalytics/googleAnalytics.html.twig" %}
+        {% include "components/sharing/facebook/meta_facebook.html.twig" %}
+        <meta name="description" content="">
         {% block meta %}
         {% endblock %}
         <link rel="icon" href="/build/images/favicon/favicon.ico">
@@ -13,7 +16,6 @@
         <link rel="icon" type="image/png" sizes="32x32" href="/build/images/favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/build/images/favicon/favicon-16x16.png">
         <link rel="manifest" href="/build/images/favicon/site.webmanifest">
-        <title>REFAITES VOS JEUX | {% block title %}{% endblock %}</title>
 
         {{ encore_entry_link_tags('site') }}
         
@@ -24,7 +26,10 @@
         
     </head>
     <body>
+        {% include "components/sharing/facebook/fb_root.html.twig" %}
+            
         <script type="module" src="{{ asset('cookieconsent/cookieconsent-config.js') }}"></script>
+
         {% include "site/_navbar.html.twig" %}
 
 

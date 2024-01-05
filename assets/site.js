@@ -27,3 +27,6 @@ function scrollFunction() {
     document.getElementById("logoTop").style.scale = 1;
   }
 }
+
+document.querySelector('meta[property~="og:title"]').setAttribute("content",document.title);
+document.querySelector('meta[name="description"]').setAttribute("content",document.querySelector('meta[property~="og:description"]').content);

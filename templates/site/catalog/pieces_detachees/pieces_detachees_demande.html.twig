@@ -28,8 +28,7 @@
 				</h1>
 				<!-- BLOC PARTAGE RESEAUX SOCIAUX  -->
 				<div class="col-12 d-flex justify-content-center">
-					{% set url = path('catalogue_pieces_detachees_demande', { id: boite.id, slug: boite.slug, editorSlug: boite.editor.slug }) %}
-					{% include "components/catalog/_share_buttons.html.twig" with {'url': url} %}
+					{% include "components/catalog/_share_buttons.html.twig" %}
 				</div>
 				<div class="card-body d-flex flex-wrap">
 					<!-- IMAGE DE LA BOITE -->

@@ -2,14 +2,9 @@
 
 namespace App\Controller\Member;
 
-
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use App\Form\UserType;
-use DateTimeImmutable;
 use App\Service\DocumentService;
 use App\Service\UtilitiesService;
-use App\Repository\UserRepository;
 use App\Repository\PanierRepository;
 use App\Repository\AddressRepository;
 use App\Repository\DocumentRepository;
@@ -22,8 +17,6 @@ use App\Repository\DocumentParametreRepository;
 use App\Repository\LegalInformationRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
 class MemberController extends AbstractController

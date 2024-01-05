@@ -50,8 +50,10 @@ class SiteController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
+        $metas['description'] = 'Vous avez un jeu de société incomplet ? Refaites vos jeux vous propose un service pour donner une seconde vie à votre jeu, nous avons plein de pièces détachées en stock.';
+
         return $this->render('site/index.html.twig', [
-            'partners' => $this->partnerRepository->findAll()
+            'metas' => $metas
         ]);
     }
 
@@ -59,9 +61,11 @@ class SiteController extends AbstractController
     public function mentionsLegales(): Response
     {
         $legales = $this->legalInformationRepository->findOneBy(['isOnline' => true], ['id' => 'ASC']);
+        $metas['description'] = 'Vous avez un jeu de société incomplet ? Refaites vos jeux vous propose un service pour donner une seconde vie à votre jeu, nous avons plein de pièces détachées en stock.';
 
         return $this->render('site/legale/mentions_legales.html.twig', [
             'legales' => $legales,
+            'metas' => $metas
         ]);
     }
 
@@ -69,9 +73,11 @@ class SiteController extends AbstractController
     public function cgv(): Response
     {
         $legales = $this->legalInformationRepository->findOneBy(['isOnline' => true], ['id' => 'ASC']);
+        $metas['description'] = 'Nos conditions générales de ventes concernant le site.';
 
         return $this->render('site/legale/cgv.html.twig', [
             'legales' => $legales,
+            'metas' => $metas
         ]);
     }
 
@@ -84,9 +90,12 @@ class SiteController extends AbstractController
 
         $donnees = $this->partnerService->constructionMapOfFranceWithPartners($baseUrl);
 
+        $metas['description'] = 'Cette page répertorie tous les partenaires français du service. Il s’agit de personnes, d’organismes ou d’entreprises qui s’inscrivent dans la même démarche autour du jeu, du développement durable, du réemploi et de la réduction des déchets. Auprès de ces partenaires vous pouvez acheter, louer ou donner des jeux d’occasion !';
+
         return $this->render('site/partner/partners.html.twig', [
             'donnees' => $donnees,
-            'partners' => $partenaires
+            'partners' => $partenaires,
+            'metas' => $metas
         ]);
     }
 
@@ -95,6 +104,7 @@ class SiteController extends AbstractController
     {
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
+        $metas['description'] = 'Si vous avez la moindre question sur le site, une demande de partenariat ou autre, n\'hésitez pas !';
     
         if($form->isSubmitted() && $form->isValid()) {
     
@@ -119,17 +129,20 @@ class SiteController extends AbstractController
     
         return $this->render('site/contact/contact.html.twig', [
             'form' => $form->createView(),
+            'metas' => $metas
         ]);
     }
 
     #[Route('/merci', name: 'app_thanks')]
     public function tanks(Request $request): Response
     {
+        $metas['description'] = 'Merci à vous qui soutiennent le projet depuis le début.';
         
         $donnees = $this->userService->constructionMapOfFranceWithUserWhoHaveCommanded();
 
         return $this->render('site/thanks/thanks.html.twig', [
-            'donnees' => $donnees
+            'donnees' => $donnees,
+            'metas' => $metas
         ]);
 
     }
@@ -214,7 +227,8 @@ class SiteController extends AbstractController
         $form = $this->createForm(ResetPasswordType::class, null);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if($form->isSubmitted() && $form->isValid())
+        {
 
             if($form->get('password')->getData() !== $form->get('passwordVerify')->getData()){
 

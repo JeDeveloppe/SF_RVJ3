@@ -34,8 +34,7 @@
 				</h1>
 				<!-- BLOC PARTAGE RESEAUX SOCIAUX  -->
 			    <div class="col-12 d-flex justify-content-center">
-					{% set url = path('occasion', { 'reference_occasion': occasion.reference, 'editor_slug': occasion.boite.editor.slug, 'boite_slug': occasion.boite.slug }) %}
-					{% include "components/catalog/_share_buttons.html.twig" with {'url': url } %}
+					{% include "components/catalog/_share_buttons.html.twig" %}
 				</div>
 				<div class="card-body d-flex flex-wrap">
 					<!-- image de la boite -->

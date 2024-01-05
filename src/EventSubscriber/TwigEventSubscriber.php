@@ -4,7 +4,6 @@ namespace App\EventSubscriber;
 
 use Twig\Environment;
 use App\Repository\SiteSettingRepository;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

@@ -66,13 +66,16 @@ class CatalogController extends AbstractController
             $transforms[] = $class_transforms[0];
         }
 
+        $metas['description'] = 'Catalogue complet de toutes les boites dont le service dispose de pièces détachées.';
+
         return $this->render('site/catalog/pieces_detachees/les_pieces_detachees.html.twig', [
             'boites' => $boites,
             'boites_totales' => $donnees,
             'form' => $form,
             'search' => $search ?? null,
             'partenaires' => $partenaires ?? null,
-            'transforms' => $transforms
+            'transforms' => $transforms,
+            'metas' => $metas
         ]);
     }
 
@@ -80,6 +83,7 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-pieces-detachees/{editorSlug}/{id}/{slug}', name: 'catalogue_pieces_detachees_demande')]
     public function cataloguePiecesDetacheesDemande($id, $slug, $editorSlug, Request $request): Response
     {
+
         $boite = $this->boiteRepository->findOneBy(['id' => $id, 'slug' => $slug, 'editor' => $this->editorRepository->findOneBy(['slug' => $editorSlug]), 'isOnline' => true]);
 
         if(!$boite){
@@ -87,8 +91,11 @@ class CatalogController extends AbstractController
             return $this->redirectToRoute('app_catalogue_pieces_detachees');
         }
 
+        $metas['description'] = 'Les pièces détachées que le service a en stock concernant le jeu: '.$boite->getName().' - '.$boite->getEditor()->getName();
+
         return $this->render('site/catalog/pieces_detachees/pieces_detachees_demande.html.twig', [
-            'boite' => $boite
+            'boite' => $boite,
+            'metas' => $metas
         ]);
     }
 
@@ -110,10 +117,13 @@ class CatalogController extends AbstractController
             $transforms[] = $class_transforms[0];
         }
 
+        $metas['description'] = 'Catalogue complet des jeux d\'occasion disponible à la vente en retrait sur Caen.';
+
         return $this->render('site/catalog/occasions/les_occasions.html.twig', [
             'occasions' => $occasions,
             'occasions_totales' => $donnees,
-            'transforms' => $transforms
+            'transforms' => $transforms,
+            'metas' => $metas
         ]);
     }
 
@@ -133,9 +143,12 @@ class CatalogController extends AbstractController
             return $this->redirectToRoute('app_catalogue_occasions');
         }
 
+        $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.$occasion->getBoite()->getName().' - '.$occasion->getBoite()->getEditor()->getName();
+
         return $this->render('site/catalog/occasions/occasion.html.twig', [
             'occasion' => $occasion,
-            'tax' => $this->taxRepository->findOneBy([])
+            'tax' => $this->taxRepository->findOneBy([]),
+            'metas' => $metas
         ]);
     }
 }
