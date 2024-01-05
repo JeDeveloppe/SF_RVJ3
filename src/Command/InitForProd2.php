@@ -59,7 +59,8 @@ class InitForProd2 extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        ini_set('memory_limit', '2048M');
+        // ini_set('memory_limit', '2048M');
+        ini_set("memory_limit", -1);
 
         $io = new SymfonyStyle($input,$output);
 
@@ -81,8 +82,8 @@ class InitForProd2 extends Command
         // //on importe le detail des boites
         // $this->importPiecesService->importPieces($io);
 
-        // //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
-        $this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
+        // // //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
+        // $this->creationUndefinedAdminAndAdresseService->creationAdminAdresseAndShippingMethod($io);
 
         // //on cree les conditions des occasions
         // $this->creationConditionOccasionService->addConditions($io);
@@ -113,16 +114,16 @@ class InitForProd2 extends Command
         // //on importe les lignes de chaque document
         // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
         // $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
-        // $this->importDocumentsLignesService->generateDocumentsTotals($io);
+        $this->importDocumentsLignesService->generateDocumentsTotals($io);
 
-        // //on cree les enveloppes et les couleurs pour les articles, les enveloppes, les joueurs, les livraisons
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
+        //on cree les enveloppes et les couleurs pour les articles, les enveloppes, les joueurs, les livraisons
+        $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
+        $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
+        $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
+        $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
 
         //on cree les settings du site
-        // $this->siteSettingsService->addSettings($io);
+        $this->siteSettingsService->addSettings($io);
 
         return Command::SUCCESS;
     }

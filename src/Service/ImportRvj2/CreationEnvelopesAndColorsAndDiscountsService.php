@@ -29,7 +29,7 @@ class CreationEnvelopesAndColorsAndDiscountsService
     public function addDelivery(){
         $deliveries = [];
         $deliveries[] = [
-            'shippingMethod' => $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT DANS UN DEPOT RJV']),
+            'shippingMethod' => $this->shippingMethodRepository->findOneBy(['name' => $_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']]),
             'start' => 1,
             'end' => 9999,
             'price' => 0
@@ -123,31 +123,36 @@ class CreationEnvelopesAndColorsAndDiscountsService
             'start' => 1,
             'end' => 4,
             'value' => 0,
-            'actif' => true
+            'actif' => true,
+            'valueUsed' => 0
         ];
         $discounts[] = [
             'start' => 5,
             'end' => 9,
             'value' => 5,
-            'actif' => true
+            'actif' => true,
+            'valueUsed' => 0
         ];
         $discounts[] = [
             'start' => 10,
             'end' => 14,
             'value' => 10,
-            'actif' => true
+            'actif' => true,
+            'valueUsed' => 0
         ];
         $discounts[] = [
             'start' => 15,
             'end' => 19,
             'value' => 15,
-            'actif' => true
+            'actif' => true,
+            'valueUsed' => 0
         ];
         $discounts[] = [
             'start' => 20,
             'end' => 9999,
             'value' => 20,
-            'actif' => true
+            'actif' => true,
+            'valueUsed' => 0
         ];
         
 
@@ -165,7 +170,8 @@ class CreationEnvelopesAndColorsAndDiscountsService
             $discount->setStart($discountsArray['start'])
                 ->setEnd($discountsArray['end'])
                 ->setValue($discountsArray['value'])
-                ->setIsOnline($discountsArray['actif']);
+                ->setIsOnline($discountsArray['actif'])
+                ->setValueUsed($discountsArray['valueUsed']);
             $this->em->persist($discount);
 
         }

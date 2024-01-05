@@ -186,7 +186,8 @@ class ImportDocumentsLignesService
                 ->setDocument($document)
                 ->setBoitesWeigth($boitesTotals['weigth'])->setBoitesPriceWithoutTax($boitesTotals['price'])
                 ->setItemsPriceWithoutTax($itemsTotals['price'])->setItemsWeigth($itemsTotals['weigth'])
-                ->setOccasionsPriceWithoutTax($occasionsTotals['price'])->setOccasionsWeigth($occasionsTotals['weigth']);
+                ->setOccasionsPriceWithoutTax($occasionsTotals['price'])->setOccasionsWeigth($occasionsTotals['weigth'])
+                ->setDiscountonpurchase(0)->setDiscountonpurchaseinpurcentage(0);
             $this->em->persist($docLineTotals);
 
             $io->progressAdvance();

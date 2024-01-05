@@ -33,7 +33,8 @@ class InitForProd1 extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        ini_set('memory_limit', '2048M');
+        // ini_set('memory_limit', '2048M');
+        ini_set("memory_limit", -1);
 
         $io = new SymfonyStyle($input,$output);
         
