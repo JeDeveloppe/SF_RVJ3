@@ -6,6 +6,7 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
+import './styles/cookieconsent.css';
 import './styles/template_bootstrap.scss';
 import './styles/site.scss';
 import './toast';

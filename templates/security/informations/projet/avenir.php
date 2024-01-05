@@ -35,7 +35,7 @@ include_once("../../commun/alertMessage.php");
                 Vous souhaitez devenir partenaire du service ?
                 </p>
                 <p class="py-2">
-                Vous pouvez m' écrire via le <a href="/contact/" class="text-info">formulaire de contact</a> disponible sur le site.
+                Vous pouvez m' écrire via le <a href="{{ path('app_contact') }}" class="text-info">formulaire de contact</a> disponible sur le site.
                 </p>
                 <p class="py-2 text-right">
                 Longue vie à ce projet et longue vie aux vieux jeux de société !
