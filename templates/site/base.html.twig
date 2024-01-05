@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        {% include "site/googleAnalytics/googleAnalytics.html.twig" %}
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="msapplication-TileColor" content="#da532c">
@@ -23,6 +24,7 @@
         
     </head>
     <body>
+        <script type="module" src="{{ asset('cookieconsent/cookieconsent-config.js') }}"></script>
         {% include "site/_navbar.html.twig" %}
 
 

@@ -1,11 +1,12 @@
 {% extends "site/base.html.twig" %}
-
+        {% block meta %}
+            <meta name="description" content="Les extensions Liens annexes (Sitelink) peuvent vous aider à maximiser l'espace de votre annonce et sa pertinence pour l'utilisateur.">
+        {% endblock %}
 {% block title %}Catalogue des pièces détachées{% endblock %}
 
 {% block body %}
 
-    <div class="col-12 text-center h2 my-5">Catalogue des pièces détachées</div>
-
+    <h1 class="col-12 text-center my-5">Catalogue des pièces détachées</h1>
 
     {% include "components/catalog/_search_boite.html.twig" %}
 

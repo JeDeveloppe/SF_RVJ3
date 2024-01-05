@@ -6,7 +6,7 @@
         </div>
         <div class="card-body d-flex flex-wrap">
             <div class="col-6 col-sm-4 mx-auto col-md-3 col-lg-2 d-flex justify-content-center align-items-center">
-                <img class="img-thumbnail" src="{{ vich_uploader_asset(partner, 'imageFile') }}"/>
+                <img class="img-thumbnail" src="{{ vich_uploader_asset(partner, 'imageFile') }}" alt="Image du partenaire {{ partner.name }}"/>
             </div>
             <div class="col-12 col-md-9 col-lg-10 d-flex justify-content-start align-items-center p-4">
                 {{ partner.description | raw }}
