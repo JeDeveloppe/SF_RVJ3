@@ -147,6 +147,30 @@ class SiteController extends AbstractController
 
     }
 
+    #[Route('/projet/qui-sommes-nous', name: 'app_who_are_we')]
+    public function whoAreWe(): Response
+    {
+        $metas['description'] = 'Une petite description de ce qu\'est le service de Refaites vos jeux';
+        
+        return $this->render('site/project/qui_sommes_nous.html.twig', [
+            'metas' => $metas
+        ]);
+
+    }
+
+    #[Route('/nous-soutenir', name: 'app_support_us')]
+    public function supportUs(): Response
+    {
+        $metas['description'] = 'Pour soutenir notre service, vous pouvez faire un don de jeu(x) ou acheter nos jeux complets à petits prix.';
+        $legales = $this->legalInformationRepository->findOneBy([]);
+
+        return $this->render('site/project/nous_soutenir.html.twig', [
+            'metas' => $metas,
+            'legales' => $legales
+        ]);
+
+    }
+
     #[Route('/document/{tokenDocument}', name: 'document_view')]
     public function lectureDevis(
         $tokenDocument,

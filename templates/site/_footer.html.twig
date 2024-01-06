@@ -3,6 +3,7 @@
     <ul class="mt-2 col-12 mx-auto d-flex flex-column flex-md-row justify-content-around align-items-center list-unstyled">
         <li><a class="text-white text-decoration-none" href="{{ path('app_mentions_legales') }}">Mentions / CGU</a></li>
         <li><a class="text-white text-decoration-none" href="{{ path('app_conditions_generale_de_vente') }}">CGV</a></li>
+        <li><a class="text-white text-decoration-none" href="{{ path('app_who_are_we') }}">Qui sommes nous ?</a></li>
         <li><a class="text-white text-decoration-none" href="{{ path('app_contact') }}">Contact</a></li>
         <li><a class="text-white text-decoration-none" href="{{ path('app_thanks') }}">Merci</a></li>
         <li>
@@ -12,7 +13,7 @@
         </li>
     </ul>
     <div class="col-12 text-center small">
-        <a class="text-warning text-decoration-none" href="https://www.je-developpe.fr/" target="_blank">Site créé par: Je-Développe</a><br/>
+        <a class="text-warning text-decoration-none cursor-alias" href="https://www.je-developpe.fr/" target="_blank">Site créé par: Je-Développe</a><br/>
         Version {{ app.request.server.get('VERSION_SITE') }} - Copyright {{ "now" | date("Y") }}
     </div>
 </footer>
