@@ -118,11 +118,11 @@ class DocumentCrudController extends AbstractCrudController
             TextField::new('deliveryAddress')
                 ->setLabel('Adresse de livraison')
                 ->setDisabled(true)
-                ->hideOnIndex(),
+                ->hideOnIndex()->setColumns(12),
             TextField::new('billingAddress')
                 ->setLabel('Adresse de facturation')
                 ->setDisabled(true)
-                ->hideOnIndex(),
+                ->hideOnIndex()->setColumns(12),
                 
             TextField::new('documentsending.shippingMethod')
                 ->setLabel('Envoi / retrait:')

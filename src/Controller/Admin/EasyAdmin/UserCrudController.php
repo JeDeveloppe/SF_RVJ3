@@ -40,8 +40,8 @@ class UserCrudController extends AbstractCrudController
             DateTimeField::new('membership')->setLabel('Abonnement jusqu\'au')->setFormat('dd.MM.yyyy')->onlyOnForms()->setDisabled(true),
 
             FormField::addTab('Adresses'),
-            AssociationField::new('addresses')->setLabel('Adresses')->onlyOnIndex(),
-            CollectionField::new('addresses')->setLabel('Adresses')->onlyOnDetail(),
+            AssociationField::new('addresses')->setLabel('Adresses')->onlyOnIndex()->setColumns(12),
+            CollectionField::new('addresses')->setLabel('Adresses')->onlyOnDetail()->setColumns(12),
             ArrayField::new('addresses')->setLabel('Adresses')->onlyOnForms()->setDisabled(true),
             
             FormField::addTab('Documents'),

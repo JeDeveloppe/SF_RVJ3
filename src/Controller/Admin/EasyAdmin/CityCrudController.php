@@ -22,12 +22,12 @@ class CityCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            AssociationField::new('country')
-                ->setLabel('Pays')
-                ->renderAsEmbeddedForm(),
+            // AssociationField::new('country')
+            //     ->setLabel('voir')
+            //     ->renderAsEmbeddedForm(),
             AssociationField::new('department')
                 ->setLabel('Département')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner un département...'])
+                // ->setFormTypeOptions(['placeholder' => 'Sélectionner un département...'])
                 ->renderAsEmbeddedForm(),
             TextField::new('name')->setLabel('Nom'),
             IntegerField::new('postalcode')->setLabel('Code postal'),
@@ -42,6 +42,7 @@ class CityCrudController extends AbstractCrudController
     {
         return $crud
             ->showEntityActionsInlined()
+            ->setPaginatorPageSize(50)
             ->setPageTitle('index', 'Liste des villes')
             ->setPageTitle('new', 'Nouvelle ville')
             ->setPageTitle('edit', 'Édition de la ville')
