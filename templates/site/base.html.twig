@@ -26,10 +26,10 @@
         
     </head>
     <body>
+        {% include "site/_cookies_alert.html.twig" %}
+
         {% include "components/sharing/facebook/fb_root.html.twig" %}
             
-        <script type="module" src="{{ asset('cookieconsent/cookieconsent-config.js') }}"></script>
-
         {% include "site/_navbar.html.twig" %}
 
 
