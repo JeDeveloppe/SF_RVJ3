@@ -8,12 +8,14 @@ use App\Service\ItemService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -38,6 +40,17 @@ class ItemCrudController extends AbstractCrudController
     {
         return [
             FormField::addTab('Général'),
+            ImageField::new('image')->setBasePath($this->getParameter('app.path.item_images'))->onlyOnIndex(),
+            TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
+                'required' => false,
+                'allow_delete' => false,
+                'delete_label' => 'Supprimer du serveur ?',
+                'download_label' => '...',
+                'download_uri' => true,
+                'image_uri' => true,
+                // 'imagine_pattern' => '...',
+                'asset_helper' => true,
+            ])->setLabel('Image')->onlyOnForms()->setColumns(12)->setRequired(true),
             TextField::new('reference')->setLabel('Référence: (construite à partir de la première boite)')->setDisabled(true)->setColumns(6),
             IdField::new('id')->setLabel('Id')->setDisabled(true)->onlyOnForms()->setColumns(6),
             TextField::new('name')
@@ -53,7 +66,7 @@ class ItemCrudController extends AbstractCrudController
             IntegerField::new('priceExcludingTax')
                 ->setLabel('Prix unitaire HT (en cents):')->onlyOnForms()->setColumns(6),
             IntegerField::new('weigth')
-                ->setLabel('Poid (en gramme):')->onlyOnForms()->setColumns(6),
+                ->setLabel('Poid (en gramme) => arrondir au-dessus:')->onlyOnForms()->setColumns(6),
             AssociationField::new('Envelope')->setLabel('Enveloppe:')
             ->setFormTypeOptions(['placeholder' => 'Sélectionner une enveloppe...'])->onlyOnForms()->setColumns(6),
             ArrayField::new('BoiteOrigine')

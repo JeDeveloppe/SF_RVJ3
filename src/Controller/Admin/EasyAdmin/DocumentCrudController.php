@@ -140,7 +140,7 @@ class DocumentCrudController extends AbstractCrudController
 
             FormField::addTab('Détails de la vente / Status du document'),
             AssociationField::new('documentStatus')
-            ->setLabel('Status du document')->hideOnIndex(),
+            ->setLabel('Status du document')->renderAsEmbeddedForm()->hideOnIndex(),
             CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twig')->setDisabled(true)->hideOnIndex(),
 
             FormField::addTab('Paiement'),
@@ -169,6 +169,7 @@ class DocumentCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+
         return $actions
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->remove(Crud::PAGE_INDEX, Action::NEW)

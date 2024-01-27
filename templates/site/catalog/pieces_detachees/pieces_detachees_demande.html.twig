@@ -9,7 +9,7 @@
 
 {% block body %}
 
-
+		{% set currentPath = app.request.getSchemeAndHttpHost() %}
 
 		<!-- BLOC BUTTON RETOUR  -->
 		{% include "components/catalog/_retour-button.html.twig" %}
@@ -30,24 +30,9 @@
 				<div class="col-12 d-flex justify-content-center">
 					{% include "components/catalog/_share_buttons.html.twig" %}
 				</div>
-				<div class="card-body d-flex flex-wrap">
+				<div class="card-body d-flex flex-wrap align-items-center mb-3">
 					<!-- IMAGE DE LA BOITE -->
-					<div class="col-12 col-lg-6 text-center p-0">
-						<div class="divImgPresentation">
-							<div class="zoom">
-								<div class="zoom__top zoom__left"></div>
-								<div class="zoom__top zoom__centre"></div>
-								<div class="zoom__top zoom__right"></div>
-								<div class="zoom__middle zoom__left"></div>
-								<div class="zoom__middle zoom__centre"></div>
-								<div class="zoom__middle zoom__right"></div>
-								<div class="zoom__bottom zoom__left"></div>
-								<div class="zoom__bottom zoom__centre"></div>
-								<div class="zoom__bottom zoom__right"></div>
-                        		<img class="zoom__image" src="{{ vich_uploader_asset(boite, 'imageFile') }}" alt="Image de {{ boite.name }} - {{ boite.editor }}"/>
-							</div>
-						</div>
-					</div>
+					{% include "components/catalog/_boite_image.html.twig" %}
 
 					<!-- CONTENUS DE LA BOITE -->
 					{% include "components/catalog/_boite_content.html.twig" %}
@@ -99,12 +84,10 @@
 						</div>
 					</form> #}
 				</div>
-			</div>
 
-			{% for group in boite.itemGroups %}
+				{% for group in boite.itemGroups %}
 
-				<div class="col-12 col-sm-11 mb-3">
-					<div class="card shadow h-100">
+					<div class="card col-11 mx-auto mb-3">
 						<div class="card-header">{{ group.name }}</div>
 						<div class="card-body d-flex justify-content-around flex-wrap">
 							<div class="col-11 col-md-5 d-flex justify-content-center align-items-center mb-3 mb-md-0">
@@ -119,21 +102,23 @@
 										<div class="zoom__bottom zoom__left"></div>
 										<div class="zoom__bottom zoom__centre"></div>
 										<div class="zoom__bottom zoom__right"></div>
-										<img class="zoom__image" src="{{ vich_uploader_asset(group, 'imageFile') }}"/>
+										<img class="zoom__image zoom_image_placeholder" src="{{ asset('build/images/design/default.png') }}"/>
+										<img class="zoom__image zoom_image_item d-none" src=""/>
+										{# <img class="zoom__image" src="{{ vich_uploader_asset(group.items, 'imageFile') }}"/> #}
 									</div>
 								</div>
 							</div>
 							<div class="col-11 col-md-5 d-flex flex-wrap justify-content-center align-items-center p-0">
 								<form action="{{ path('panier_add_article') }}" method="POST" class="col-12">
 									<div class="form-group mb-3">
-										<select name="itemId" class="form-control text-center" required>
+										<select name="select-item" class="form-control text-center select-item" required>
 											<option value="">-- Choisir un article --</option>
 												<optgroup label="Pièces originales">
 													{% if boite.itemsOrigine | length > 0 %}
-														{% for item in boite.itemsOrigine %}
+														{% for item in boite.itemsOrigine|sort %}
 																{% if item in group.items %}
 																	{% if  item.stockForSale > 0 %}
-																		<option value="{{ item.id }}">{{ item.name }} (Qté: {{ item.stockForSale }})</option>
+																		<option value="{{ item.image }}">{{ item.name }} (Qté: {{ item.stockForSale }})</option>
 																	{% endif %}
 																{% endif %}
 														{% endfor %}
@@ -143,10 +128,10 @@
 												</optgroup>
 												<optgroup label="Pièces similaires">
 													{% if boite.itemsSecondaire | length > 0 %}
-														{% for item in boite.itemsSecondaire %}
+														{% for item in boite.itemsSecondaire|sort %}
 																{% if item in group.items %}
 																	{% if  item.stockForSale > 0 %}
-																		<option value="{{ item.id }}">{{ item.name }} (Qté: {{ item.stockForSale }})</option>
+																		<option value="{{ item.image }}">{{ item.name }} (Qté: {{ item.stockForSale }})</option>
 																	{% endif %}
 																{% endif %}
 														{% endfor %}
@@ -169,61 +154,31 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				
-			{% endfor %}
-
+					
+				{% endfor %}
+			</div>
 		</div>
 
 		<!-- BLOC BUTTON RETOUR  -->
 		{% include "components/catalog/_retour-button.html.twig" %}
 
 
-
-
 	<script>
-		function limiteur() {
-			maximum = 300;
-			champ = document.getElementById("message");
-			indic = document.getElementById("message").indicateur;
+		let currentPath = '{{ currentPath }}';
+		let upload_item_image_path = '{{ upload_item_image_path }}';
+		let selects = document.getElementsByClassName('select-item');
+		const ArraySelects = Array.from(selects);
 
-			if (champ.value.length > maximum) {
-				champ.value = champ.value.substring(0, maximum);
-			} else {
-				document.getElementById("caracteresRestantFormulaireContenuJeu").innerHTML = maximum - champ.value.length + " caractères restant...";
-				document.getElementById("precision").style.display = "block";
-			}
-			if (champ.value.length == 0) {
-				document.getElementById("precision").style.display = "none";
-			} else { // Init a timeout variable to be used below
-				let timeout = null;
-				// Listen for keystroke events
-				champ.addEventListener('keyup', function (e) {
-					// Clear the timeout if it has already been set.
-					// This will prevent the previous task from executing
-					// if it has been less than <MILLISECONDS>
-					clearTimeout(timeout);
-					// Make a new timeout set to go off in 1000ms (1 second)
-					timeout = setTimeout(function () {
-						document.getElementById("precision").style.display = "none";
-					}, 4000);
-				});
-			}
-		}
-
-		var resultatInput = document.getElementById('resultatInput');
-		resultatInput.innerHTML = "Aucune image !";
-
-		function getFileInfo() {
-			var countFiles = document.getElementById('file-input').files.length;
-
-			if (countFiles > 1) {
-			resultatInput.innerHTML = "2 images séléctionnées";
-			} else {
-			var name = document.getElementById('file-input').files[0].name;
-			resultatInput.innerHTML = "Image séléctionnée:<br/>" + name;
-			}
-		}
+		ArraySelects.forEach(element => {
+			element.addEventListener('change', () => {
+				let imageName = element.options[element.selectedIndex].value;
+				let imageDivPlaceholder = document.getElementsByClassName('zoom_image_placeholder');
+				let imageDiv = document.getElementsByClassName('zoom_image_item');
+				imageDivPlaceholder[1].classList.add("d-none");
+				imageDiv[1].classList.remove("d-none");
+				imageDiv[1].src=currentPath+upload_item_image_path+'/'+imageName;
+			})
+		});
 	</script>
 
 {% endblock %}

@@ -19,6 +19,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 
 class PaiementService
 {
@@ -34,7 +35,8 @@ class PaiementService
         private RouterInterface $router,
         private MeansOfPayementRepository $meansOfPayementRepository,
         private PaymentRepository $paymentRepository,
-        private DocumentStatusRepository $documentStatusRepository
+        private DocumentStatusRepository $documentStatusRepository,
+        private UrlMatcherInterface $urlMatcherInterface
         ){
     }
 
@@ -227,6 +229,7 @@ class PaiementService
             }else{
 
                 //document non payé
+                //TODO
                 return $this->urlMatcherInterface->redirectToRoute('paiement_canceled');
 
             }
@@ -236,32 +239,29 @@ class PaiementService
     public function notificationUrlWithPayplug($token)
     {
         //TODO
-        
-        
+                
         $docParams = $this->documentParametreRepository->findOneBy([]);
         
         //on s'identifie
         $this->payplugAuth();
         
         $input = file_get_contents('php://input');
-        $resource = \Payplug\Notification::treat($input);
 
-dump($input);
-        try {
+
+        try{
             $resource = \Payplug\Notification::treat($input);
-        dd($resource);
-            if($resource->is_paid) {
-            // if($resource instanceof \Payplug\Resource\Payment && $resource->is_paid) {
-                // Process a paid payment.
 
-            }else if ($resource instanceof \Payplug\Resource\Refund) {
-                // Process the refund.
-            }
+                if($resource instanceof \Payplug\Resource\Payment && $resource->is_paid) {
+                    // Process a paid payment.
+
+                } else if ($resource instanceof \Payplug\Resource\Refund) {
+                    // Process the refund.
+                }
         }
         catch (\Payplug\Exception\PayplugException $exception) {
             echo htmlentities($exception);
         }
-dump('END');
+dd('END');
 
 return $resource;
             // $resource = \Payplug\Notification::treat($input);

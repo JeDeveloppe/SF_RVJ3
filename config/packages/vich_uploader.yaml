@@ -31,3 +31,12 @@ vich_uploader:
             inject_on_load: false
             delete_on_update: true
             delete_on_remove: true
+        
+        item:
+            uri_prefix: '%app.path.item_images%'
+            upload_destination: '%kernel.project_dir%/public%app.path.item_images%'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true

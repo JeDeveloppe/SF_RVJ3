@@ -7,6 +7,7 @@ parameters:
     app.path.boites_images: /uploads/images/boites
     app.path.partners_images: /uploads/images/partners
     app.path.itemGroup_images: /uploads/images/itemGroup
+    app.path.item_images: /uploads/images/item
 
 services:
     # default configuration for services in *this* file

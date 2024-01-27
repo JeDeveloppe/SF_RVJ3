@@ -97,7 +97,7 @@ class PaiementController extends AbstractController
 
         }else if($_ENV["PAIEMENT_MODULE"] == "PAYPLUG")
         {
-            $resource = $this->paiementService->notificationUrlWithPayplug($tokenDocument);
+            $this->paiementService->notificationUrlWithPayplug($tokenDocument);
 
         }else{
             throw new Exception('PAIEMENT_MODULE IN .ENV FILE NOT INFORM');
