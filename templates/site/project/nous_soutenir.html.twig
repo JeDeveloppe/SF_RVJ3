@@ -7,94 +7,54 @@
     <h1 class="col-12 mt-5 text-center">Nous soutenir</h1>
 
 
-    <div class="row">
-        <div class="col-11 col-lg-9 mx-auto">
-        
-            <p class="text-center mt-5 mb-4">
+    <div class="row my-5">
+        <div class="col-11 mx-auto">
+            <p class="text-justify text-xl-center">
                 Que vous soyez un particulier, un professionnel du monde du jeu ou du réemploi, ce projet a besoin de vous pour se pérenniser et se développer.
             </p> 
-            
-                        <article class="my-5">
-                <h4 class="text-info">Donner des jeux :</h4>
-
-                <ul>
-                    <li>Le service récupère les jeux complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…).
-                        <ol><span class="text-danger">Nous ne récupérons pas les puzzles ni les jouets.</span></ol>
-                    </li>
-                    <li class="pt-3">Si vous êtes sur Caen, vous pouvez les déposer à la Coop 5 pour 100 – 33 route de Trouville – Caen.</li>
-                    <li class="pt-3">Si vous êtes d’une autre région vous pouvez les envoyer par voie postale ou colissimo à l’adresse suivante :
-                        <ol>{{ legales.publicationManagerFirstName }} {{ legales.publicationManagerLastName }}, {{ legales.streetCompany }} {{ legales.postalCodeCompany }} {{ legales.cityCompany }}</ol>
-                        <ol><span class="text-danger">Le service ne peut pas prendre en charge les frais de port.</span></ol>
-                    </li>
-                    <li class="pt-3">Vous pouvez aussi les expédier via Mondial Relay:
-                        <ol> -> point relais CORA CAEN à Rots.</ol>
-                        <ol> Email: {{ legales.emailCompany }}</ol>
-                    </li>
-                </ul>
-
-                <p class="mt-2 mb-5 text-justify">
-                    Si vous habitez près de Rots vous pouvez aussi déposer vos jeux à mon domicile (24 rue froide).<br/>
-                    En mon absence il est possible de les déposer devant la porte, elle est abritée.<br/>
-                    Nous vous remercions par avance pour vos dons ! Nous nous ferons un plaisir de les ajouter aux catalogues !
-                </p>
-
-                <p class="col-12 figure-caption text-center">Exemple de dons / collectes.</p>
-                <div class="row justify-content-around mb-5">
-                    <div class="col-10 col-sm-9 col-md-6 col-lg-4 mt-3 mt-md-0">
-                        <div class="card border-0 shadow-lg h-100">
-                            <div class="card-body d-flex flex-column align-items-center justify-content-center py-4">
-                                <img src="{{ asset('build/images/design/collecte-en-entreprise-1.jpeg') }}" alt="Image d'une collecte en entreprise" style="border-radius:10%;max-width:100%;">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-10 col-sm-9 col-md-6 col-lg-4 mt-3 mt-md-0">
-                        <div class="card border-0 shadow-lg h-100">
-                            <div class="card-body d-flex flex-column align-items-center justify-content-center py-2">
-                                <img src="{{ asset('build/images/design/collecte-en-entreprise-2.jpeg') }}" alt="Image d'une collecte en entreprise" style="border-radius:10%;max-width:100%;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </article>
-            
-            <article class="my-4">
-                <h4 class="text-info">Acheter des jeux :</h4>
-
-                <p class="mt-2 text-justify">
-                    Le service propose aux particuliers et aux professionnels du bassin caennais  d’acquérir des jeux complets d’occasion à petits prix ! 
-                    En achetant des jeux sur le site vous contribuez à une démarche citoyenne de réduction des déchets !
-                </p>
-
-                <p class="col-12 text-center mt-4">Nous sommes présent à de nombreuses foires au tour de Caen.</p>
-                <div class="row justify-content-around mb-5">
-                    <div class="col-10 col-sm-9 col-md-7 col-lg-5 mt-3 mt-md-0">
-                        <div class="card border-0 shadow-lg h-100">
-                            <div class="card-body d-flex flex-column align-items-center justify-content-center py-4">
-                                <img src="{{ asset('build/images/design/participation.jpeg') }}" alt="Image d'un stand pendant une foire" style="border-radius:10%;max-width:100%;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </article>
-
-
-
-            <article class="my-5">
-                <h4 class="text-info">Agrandir le réseau:</h4>
-
-                <p class="mt-2 text-justify">
-                    Le service cherche à développer le réseau autour du réemploi du jouet: vendeurs de pièces détachées, de jeux complets ou points de collecte.<br/>
-                    Vous souhaitez devenir l'un de nos <a class="text-info" href="{{ path('app_partenaires') }}">partenaires</a> ? N'hésitez pas à nous contacter !
-                </p>
-            </article>
-
-            <p class="text-center my-5">
-            Pour toute question merci d'utiliser le <a href="{{ path('app_contact') }}" class="text-info">formulaire en ligne</a>. 
-            </p>
-
+        </div>
     </div>
+    <div class="row mb-5">
+        <div class="col-11 mx-auto d-flex flex-column flex-md-row align-items-start p-0">
+            <div class="col-12 col-md-2 nav flex-column nav-pills me-md-4 shadow" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Donnez ses jeux</button>
+                <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Acheter des jeux</button>
+                <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Devenir point de collecte</button>
+                <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-reseau" type="button" role="tab" aria-controls="v-pills-reseau" aria-selected="false">Agrandir le réseau du ré-emploi du jouet</button>
+                <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-don" type="button" role="tab" aria-controls="v-pills-don" aria-selected="false">Faire un don</button>
+            </div>
+            <div class="col-12 mt-2 col-md-9 mt-md-0 tab-content px-4 shadow" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                    {% include "site/project/components/_donner-ses-jeux.html.twig" %}
+                </div>
+                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                    {% include "site/project/components/_acheter-des-jeux.html.twig" %}
+                </div>
+                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                    {% include "site/project/components/_devenir-point-de-collecte.html.twig" %}
+                </div>
+                <div class="tab-pane fade" id="v-pills-reseau" role="tabpanel" aria-labelledby="v-pills-reseau-tab">
+                    {% include "site/project/components/_agrandir-reseau-reemploi-du-jouet.html.twig" %}
+                </div>
+                <div class="tab-pane fade" id="v-pills-don" role="tabpanel" aria-labelledby="v-pills-don-tab">
+                    {% include "site/project/components/_faire-un-don.html.twig" %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+            
+ 
+
+
+
+
+
+
+
+
 
 {% endblock %}

@@ -1,0 +1,41 @@
+<h4 class="col-12 text-center text-info my-4">Donner ses jeux</h4>
+
+<ul>
+    <li>Le service récupère les jeux complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…).
+        <ol><span class="text-danger">Nous ne récupérons pas les puzzles ni les jouets.</span></ol>
+    </li>
+    <li class="pt-3">Si vous êtes sur Caen, vous pouvez les déposer à la Coop 5 pour 100 – 33 route de Trouville – Caen.</li>
+    <li class="pt-3">Si vous êtes d’une autre région vous pouvez les envoyer par voie postale ou colissimo à l’adresse suivante :
+        <ol>{{ legales.publicationManagerFirstName }} {{ legales.publicationManagerLastName }}, {{ legales.streetCompany }} {{ legales.postalCodeCompany }} {{ legales.cityCompany }}</ol>
+        <ol><span class="text-danger">Le service ne peut pas prendre en charge les frais de port.</span></ol>
+    </li>
+    <li class="pt-3">Vous pouvez aussi les expédier via Mondial Relay:
+        <ol> -> point relais CORA CAEN à Rots.</ol>
+        <ol> Email: {{ legales.emailCompany }}</ol>
+    </li>
+</ul>
+
+<p class="mt-2 mb-5 text-justify">
+    Si vous habitez près de Rots vous pouvez aussi déposer vos jeux à mon domicile (24 rue froide).<br/>
+    En mon absence il est possible de les déposer devant la porte, elle est abritée.<br/>
+    Nous vous remercions par avance pour vos dons ! Nous nous ferons un plaisir de les ajouter aux catalogues !
+</p>
+
+<p class="col-12 figure-caption text-center">Exemple de dons / collectes.</p>
+<div class="row justify-content-around mb-5">
+    <div class="col-10 col-sm-9 col-md-6 col-lg-4 mt-3 mt-md-0">
+        <div class="card border-0 shadow-lg h-100">
+            <div class="card-body d-flex flex-column align-items-center justify-content-center py-4">
+                <img src="{{ asset('build/images/design/collecte-en-entreprise-1.jpeg') }}" alt="Image d'une collecte en entreprise" style="border-radius:10%;max-width:100%;">
+            </div>
+        </div>
+    </div>
+    <div class="col-10 col-sm-9 col-md-6 col-lg-4 mt-3 mt-md-0">
+        <div class="card border-0 shadow-lg h-100">
+            <div class="card-body d-flex flex-column align-items-center justify-content-center py-2">
+                <img src="{{ asset('build/images/design/collecte-en-entreprise-2.jpeg') }}" alt="Image d'une collecte en entreprise" style="border-radius:10%;max-width:100%;">
+            </div>
+        </div>
+    </div>
+</div>
+{% include "site/project/components/_link-to-formulaire.html.twig" %}
