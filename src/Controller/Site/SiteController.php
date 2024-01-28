@@ -18,6 +18,7 @@ use App\Form\EmailForSendResetPasswordType;
 use App\Repository\ResetPasswordRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
+use App\Repository\MediaRepository;
 use App\Service\MailService;
 use App\Service\PartnerService;
 use App\Service\UserService;
@@ -133,16 +134,15 @@ class SiteController extends AbstractController
         ]);
     }
 
-    #[Route('/merci', name: 'app_thanks')]
-    public function tanks(Request $request): Response
+    #[Route('/coin-presse', name: 'app_press')]
+    public function press(MediaRepository $mediaRepository): Response
     {
-        $metas['description'] = 'Merci à vous qui soutiennent le projet depuis le début.';
+        $metas['description'] = 'Quelques chiffres et liens de notre présence sur internet.';
+        $medias = $mediaRepository->findBy(['isOnLine' => true],['publishedAt' => 'DESC']);
         
-        $donnees = $this->userService->constructionMapOfFranceWithUserWhoHaveCommanded();
-
-        return $this->render('site/thanks/thanks.html.twig', [
-            'donnees' => $donnees,
-            'metas' => $metas
+        return $this->render('site/press/press.html.twig', [
+            'metas' => $metas,
+            'medias' => $medias
         ]);
 
     }

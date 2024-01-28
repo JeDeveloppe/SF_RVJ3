@@ -13,6 +13,7 @@ use App\Entity\Level;
 use App\Entity\Editor;
 use DateTimeImmutable;
 use App\Entity\Address;
+use App\Entity\BadgeForMediaTimeline;
 use App\Entity\Country;
 use App\Entity\Partner;
 use App\Entity\Payment;
@@ -38,6 +39,7 @@ use App\Entity\ConditionOccasion;
 use App\Entity\DocumentLineTotals;
 use App\Entity\DocumentParametre;
 use App\Entity\Documentsending;
+use App\Entity\Media;
 use App\Repository\ItemRepository;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Returndetailstostock;
@@ -252,6 +254,10 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Gestion des partenaires');
         yield MenuItem::linkToCrud('Liste des partenaires', 'fas fa-list', Partner::class);
+
+        yield MenuItem::section('Gestion des médias');
+        yield MenuItem::linkToCrud('Liste des médias', 'fas fa-list', Media::class);
+        yield MenuItem::linkToCrud('Liste des badges', 'fas fa-list', BadgeForMediaTimeline::class);
 
         yield MenuItem::section('Légale:');
         yield MenuItem::linkToCrud('Informations', 'fas fa-list', LegalInformation::class);

@@ -25,6 +25,7 @@ use App\Service\ImportRvj2\CreationConditionOccasionService;
 use App\Service\ImportRvj2\CreationMouvementsOccasionService;
 use App\Service\ImportRvj2\CreationUndefinedAdminAndAdresseService;
 use App\Service\ImportRvj2\CreationEnvelopesAndColorsAndDiscountsService;
+use App\Service\ImportRvj2\ImportMediasService;
 use App\Service\ImportRvj2\SiteSettingsService;
 
 #[AsCommand(name: 'app:initforprod2')]
@@ -50,7 +51,8 @@ class InitForProd2 extends Command
             private ImportDocumentsLignesService $importDocumentsLignesService,
             private CreationEnvelopesAndColorsAndDiscountsService $creationEnvelopesAndColorsAndDiscountsService,
             private CreationNombreDeJoueursService $creationNombreDeJoueursService,
-            private SiteSettingsService $siteSettingsService
+            private SiteSettingsService $siteSettingsService,
+            private ImportMediasService $importMediasService
         )
     {
         parent::__construct();
@@ -114,16 +116,21 @@ class InitForProd2 extends Command
         // //on importe les lignes de chaque document
         // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
         // $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
-        $this->importDocumentsLignesService->generateDocumentsTotals($io);
+        // $this->importDocumentsLignesService->generateDocumentsTotals($io);
 
         //on cree les enveloppes et les couleurs pour les articles, les enveloppes, les joueurs, les livraisons
-        $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
-        $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
-        $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
-        $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
+        // $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
+        // $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
+        // $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
+        // $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
 
         //on cree les settings du site
-        $this->siteSettingsService->addSettings($io);
+        // $this->siteSettingsService->addSettings($io);
+
+        //on injecte les medias
+        $this->importMediasService->addBadgeForMedia();
+        $this->importMediasService->importMedias($io);
+
 
         return Command::SUCCESS;
     }

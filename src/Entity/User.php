@@ -90,6 +90,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'updatedBy', targetEntity: Item::class)]
     private Collection $itemsUpdated;
 
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Media::class)]
+    private Collection $media;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
@@ -103,6 +106,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->voucherDiscounts = new ArrayCollection();
         $this->items = new ArrayCollection();
         $this->itemsUpdated = new ArrayCollection();
+        $this->media = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -600,6 +604,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($itemsUpdated->getUpdatedBy() === $this) {
                 $itemsUpdated->setUpdatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Media>
+     */
+    public function getMedia(): Collection
+    {
+        return $this->media;
+    }
+
+    public function addMedium(Media $medium): static
+    {
+        if (!$this->media->contains($medium)) {
+            $this->media->add($medium);
+            $medium->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedium(Media $medium): static
+    {
+        if ($this->media->removeElement($medium)) {
+            // set the owning side to null (unless already changed)
+            if ($medium->getCreatedBy() === $this) {
+                $medium->setCreatedBy(null);
             }
         }
 

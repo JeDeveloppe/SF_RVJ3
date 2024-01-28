@@ -2,15 +2,11 @@
 
 namespace App\Service\ImportRvj2;
 
-use App\Entity\Partenaire;
 use App\Entity\Partner;
 use App\Repository\CityRepository;
 use App\Repository\CountryRepository;
 use League\Csv\Reader;
-use App\Repository\PartenaireRepository;
 use App\Repository\PartnerRepository;
-use App\Repository\PaysRepository;
-use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
