@@ -93,6 +93,7 @@
 							<div class="col-11 col-md-5 d-flex justify-content-center align-items-center mb-3 mb-md-0">
 								<div class="divImgPresentation">
 									<div class="zoom">
+										<img class="zoom__image zoom_image_placeholder" src="{{ asset('build/images/design/default.png') }}"/>
 										<div class="zoom__top zoom__left"></div>
 										<div class="zoom__top zoom__centre"></div>
 										<div class="zoom__top zoom__right"></div>
@@ -102,7 +103,6 @@
 										<div class="zoom__bottom zoom__left"></div>
 										<div class="zoom__bottom zoom__centre"></div>
 										<div class="zoom__bottom zoom__right"></div>
-										<img class="zoom__image zoom_image_placeholder" src="{{ asset('build/images/design/default.png') }}"/>
 										<img class="zoom__image zoom_image_item d-none" src=""/>
 										{# <img class="zoom__image" src="{{ vich_uploader_asset(group.items, 'imageFile') }}"/> #}
 									</div>
@@ -169,14 +169,14 @@
 		let selects = document.getElementsByClassName('select-item');
 		const ArraySelects = Array.from(selects);
 
-		ArraySelects.forEach(element => {
+		ArraySelects.forEach( function (element,index){
 			element.addEventListener('change', () => {
 				let imageName = element.options[element.selectedIndex].value;
 				let imageDivPlaceholder = document.getElementsByClassName('zoom_image_placeholder');
 				let imageDiv = document.getElementsByClassName('zoom_image_item');
-				imageDivPlaceholder[1].classList.add("d-none");
-				imageDiv[1].classList.remove("d-none");
-				imageDiv[1].src=currentPath+upload_item_image_path+'/'+imageName;
+				imageDivPlaceholder[index].classList.add("d-none");
+				imageDiv[index].classList.remove("d-none");
+				imageDiv[index].src=currentPath+upload_item_image_path+'/'+imageName;
 			})
 		});
 	</script>
