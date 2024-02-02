@@ -3,23 +3,24 @@
 namespace App\Service;
 
 use Exception;
-use DateInterval;
 use Stripe\Stripe;
 use DateTimeImmutable;
 use App\Entity\Payment;
-use App\Repository\DocumentParametreRepository;
-use App\Repository\DocumentRepository;
-use App\Repository\DocumentStatusRepository;
-use App\Repository\PaiementRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\MeansOfPayementRepository;
+use App\Entity\Document;
 use App\Repository\PaymentRepository;
+use App\Repository\DocumentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Repository\DocumentStatusRepository;
+use App\Repository\MeansOfPayementRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
+use App\Repository\DocumentParametreRepository;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PaiementService
 {
@@ -36,20 +37,15 @@ class PaiementService
         private MeansOfPayementRepository $meansOfPayementRepository,
         private PaymentRepository $paymentRepository,
         private DocumentStatusRepository $documentStatusRepository,
-        private UrlMatcherInterface $urlMatcherInterface
+        private UrlMatcherInterface $urlMatcherInterface,
+        private HttpClientInterface $client
         ){
     }
 
     public function creationPaiementWithStripe($token): Response
     {
 
-        $document = $this->documentRepository->findOneBy(['token' => $token, 'numeroFacture' => NULL, 'paiement' => NULL]);
-
-        if(!$document){
-            //pas de devis
-            $this->addFlash('warning', 'Devis inconnu!');
-            return $this->Router->redirectToRoute('accueil');
-        }
+        $document = $this->checkIfDocumentExistInDatabase($token);
 
         //on s'identifie
         $this->stripeAuth();
@@ -91,14 +87,8 @@ class PaiementService
     public function creationPaiementWithPayplug($token)
     {
 
-        $document = $this->documentRepository->findOneBy(['token' => $token, 'billNumber' => NULL, 'isDeleteByUser' => false]);
 
-        // if(!$document){
-        //     //pas de devis
-        //     $this->flashBagInterface->getFlashBag->add('warning', 'Devis inconnu!');
-        //     $this->flashBagInterface->add('warning', 'Devis inconnu!');
-        //     return $this->router->generate('accueil');
-        // }
+        $document = $this->checkIfDocumentExistInDatabase($token);
 
         //on s'identifie
         $this->payplugAuth();
@@ -165,6 +155,84 @@ class PaiementService
         $this->em->flush();
 
         return $payment_url;
+    }
+
+    
+    public function creationPaiementWithHelloAsso($token)
+    {
+
+        $document = $this->checkIfDocumentExistInDatabase($token);
+
+        //on s'identifie
+        $bearer = $this->helloAssoAuth();
+
+        $customer_id = $document->getToken();
+        
+        $arrayAdresseF = $this->explodeAdresse($document->getBillingAddress(),$document);
+        $arrayAdresseL = $this->explodeAdresse($document->getDeliveryAddress(),$document);
+
+        $countryIsoCode3 = $this->transformIsoCode2ToIsoCode3($arrayAdresseF['country']);
+
+        $body = 
+            [
+            "totalAmount" => $document->getTotalWithTax(),
+            "initialAmount" => $document->getTotalWithTax(),
+            "itemName" => "Achat Refaites vos jeux",
+            "backUrl" => $this->urlGeneratorInterface->generate('paiement_canceled', ['tokenDocument' => $customer_id], UrlGeneratorInterface::ABSOLUTE_URL),
+            "errorUrl" => $this->urlGeneratorInterface->generate('paiement_canceled', ['tokenDocument' => $customer_id], UrlGeneratorInterface::ABSOLUTE_URL),
+            "returnUrl" => $this->urlGeneratorInterface->generate('paiement_success', ['tokenDocument' => $customer_id], UrlGeneratorInterface::ABSOLUTE_URL),
+            "containsDonation" => false,
+            "payer" => [
+                "firstName" => $arrayAdresseF['first_name'],
+                "lastName" => $arrayAdresseF['last_name'],
+                "email" => $arrayAdresseF['email'],
+                "dateOfBirth" => "",
+                "address" => $arrayAdresseF['adresse1'],
+                "city" => $arrayAdresseF['city'],
+                "zipCode" => $arrayAdresseF['postCode'],
+                "country" => $countryIsoCode3,
+                "companyName" => $arrayAdresseF['title']
+            ],
+            "metadata" =>  [
+                "reference" => $document->getQuoteNumber(),
+                "libelle" => "Achat sur Refaites vos jeux",
+                "userId" => $document->getUser()->getId(),
+                ]
+            ];
+
+
+
+
+        $result = $this->client->request('POST', 'https://api.helloasso.com/v5/organizations/refaites-vos-jeux/checkout-intents',
+        [
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer '.$bearer
+            ],
+            'body' => json_encode($body),
+        ]);
+
+        $content = $result->toArray();
+
+
+        $paiement = $this->paymentRepository->findOneBy(['document' => $document]);
+
+        if(!$paiement){
+            $paiement = new Payment();
+        }
+
+        //on renseigne le paiement
+        $paiement->setDocument($document)
+                ->setMeansOfPayment($this->meansOfPayementRepository->findOneBy(['name' => 'CB']))
+                ->setTokenPayment($content['id'])
+                ->setCreatedAt(new DateTimeImmutable('now'));
+        //on sauvegarde le paiement
+        $this->em->persist($paiement);
+        $this->em->flush();
+
+
+        return $content['redirectUrl'];
     }
 
     public function paiementSuccessWithStripe($token)
@@ -347,5 +415,57 @@ return $resource;
     {
         $stripe = new Stripe();
         $stripe->setApiKey($_ENV["STRIPE_SECRET"]);
+    }
+
+    public function helloAssoAuth()
+    {
+
+        $response = $this->client->request('POST', 'https://api.helloasso.com/oauth2/token', [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded'
+            ],
+            'body' => [
+                'client_id' => $_ENV['HELLO_ASSO_CLIENT_ID'],
+                'grant_type' => 'client_credentials',
+                'client_secret' => $_ENV['HELLO_ASSO_CLIENT_SECRET']
+            ],
+        ]);
+
+        $content = $response->toArray();
+
+        return $content['access_token'];
+    }
+
+    public function checkIfDocumentExistInDatabase(string $token):Document
+    {
+
+        $document = $this->documentRepository->findOneBy(['token' => $token, 'billNumber' => NULL, 'isDeleteByUser' => false]);
+
+        //TODO
+        // if(!$document){
+        //     //pas de devis
+        //     $this->addFlash('warning', 'Devis inconnu!');
+        //     return $this->Router->redirectToRoute('accueil');
+        // }
+
+        return $document;
+    }
+
+    public function transformIsoCode2ToIsoCode3($isoCode2)
+    {
+        if(strlen($isoCode2) == 2){
+            switch ($isoCode2) {
+                case "FR":
+                    $isoCode3 = "FRA";
+                    break;
+                case "BE":
+                    $isoCode3 = "BEL";
+                    break;
+                default:
+                    $isoCode3 = "N/A";
+            }
+        }
+
+        return $isoCode3;
     }
 }

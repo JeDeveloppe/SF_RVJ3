@@ -2,14 +2,20 @@
 
 namespace App\Controller\Site;
 
+use DateTimeImmutable;
 use App\Form\ContactType;
+use App\Service\MailService;
+use App\Service\UserService;
 use App\Entity\ResetPassword;
 use App\Service\PanierService;
 use App\Form\ResetPasswordType;
+use App\Service\PartnerService;
 use App\Service\DocumentService;
 use App\Service\PasswordService;
 use App\Service\UtilitiesService;
 use App\Repository\UserRepository;
+use App\Repository\MediaRepository;
+use App\Form\AddressForDonationType;
 use App\Repository\PartnerRepository;
 use Symfony\Component\Form\FormError;
 use App\Repository\DocumentRepository;
@@ -18,11 +24,6 @@ use App\Form\EmailForSendResetPasswordType;
 use App\Repository\ResetPasswordRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
-use App\Repository\MediaRepository;
-use App\Service\MailService;
-use App\Service\PartnerService;
-use App\Service\UserService;
-use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -159,14 +160,22 @@ class SiteController extends AbstractController
     }
 
     #[Route('/nous-soutenir', name: 'app_support_us')]
-    public function supportUs(): Response
+    public function supportUs(Request $request): Response
     {
+        $form = $this->createForm(AddressForDonationType::class);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+        }
+        
         $metas['description'] = 'Pour soutenir notre service, vous pouvez faire un don de jeu(x) ou acheter nos jeux complets à petits prix.';
         $legales = $this->legalInformationRepository->findOneBy([]);
 
         return $this->render('site/project/nous_soutenir.html.twig', [
             'metas' => $metas,
-            'legales' => $legales
+            'legales' => $legales,
+            'form' => $form
         ]);
 
     }

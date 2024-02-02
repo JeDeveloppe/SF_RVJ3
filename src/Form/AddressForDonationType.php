@@ -8,41 +8,25 @@ use App\Form\AdressesVilleAutocompleteField;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class AddressType extends AbstractType
+class AddressForDonationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $edit = $options['edit'];
 
         $builder
-            ->add('isFacturation', ChoiceType::class, [
-                'label' => 'Adresse de:',
-                'placeholder' => 'Faire un choix...',
-                'disabled' => $edit,
+            ->add('lastname', TextType::class, [
+                'label' => 'Nom:',
                 'attr' => [
                     'class' => 'form-control',
-                ],
-                'choices' => [
-                    'FACTURATION' => true,
-                    'LIVRAISON' => false
-                    ]
-                ])
-            ->add('organization', TextType::class, [
-                'label' => 'Organisation:',
-                'attr' => [
-                    'class' => 'form-control'
                 ],
             ])
             ->add('firstname', TextType::class, [
                 'label' => 'Prénom:',
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-            ])
-            ->add('lastname', TextType::class, [
-                'label' => 'Nom:',
                 'attr' => [
                     'class' => 'form-control'
                 ],
@@ -58,14 +42,29 @@ class AddressType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
+            ->add('email', EmailType::class, [
+                'label' => 'Email:',
+                'attr' => [
+                    'class' => 'form-control'
+                ]
+            ])
+            ->add('phone', TelType::class, [
+                'label' => 'Téléphone:',
+                'attr' => [
+                    'class' => 'form-control'
+                ]
+            ])
+            ->add('count', NumberType::class, [
+                'label' => 'Montant:',
+                'attr' => [
+                    'class' => 'form-control'
+                ]
+            ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => Address::class,
-            'edit' => null ?? false
-        ]);
+        $resolver->setDefaults([]);
     }
 }

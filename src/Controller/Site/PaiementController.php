@@ -38,6 +38,12 @@ class PaiementController extends AbstractController
             $payment_url = $this->paiementService->creationPaiementWithPayplug($tokenDocument);
             return $this->redirect($payment_url, 303);
 
+        }else if($_ENV["PAIEMENT_MODULE"] == "HELLOASSO")
+        {
+            $payment_url = $this->paiementService->creationPaiementWithHelloAsso($tokenDocument);
+
+            return $this->redirect($payment_url, 303);
+
         }else{
             throw new Exception('PAIEMENT_MODULE IN .ENV FILE NOT INFORM');
         }

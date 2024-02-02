@@ -189,7 +189,7 @@ class PanierController extends AbstractController
 
         $user = $this->checkUserIsConnected();
 
-        $reponse = $this->panierService->addArticleInCart($request->request->get('itemId'),$request->request->get('qte'),$user);
+        $reponse = $this->panierService->addArticleInCart($request->request->get('select-item'),$request->request->get('qte'),$user);
 
         $this->addFlash($reponse[0], $reponse[1]);
 

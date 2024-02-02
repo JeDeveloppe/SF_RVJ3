@@ -114,7 +114,6 @@ class PanierService
     public function addArticleInCart($article_id,$qte,$user)
     {
 
-    
         $item = $this->itemRepository->findOneBy(['id' => $article_id]);
 
         if($item->getStockForSale() - $qte < 0){
