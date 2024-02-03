@@ -164,7 +164,12 @@ class SiteController extends AbstractController
     {
         $form = $this->createForm(AddressForDonationType::class);
         $form->handleRequest($request);
+        
+        $baseUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
 
+        $donnees = $this->partnerService->constructionMapOfFranceWithPartners($baseUrl);
+
+        //TODO IF PAYPLUG FOR DONATION
         if($form->isSubmitted() && $form->isValid()) {
 
         }
@@ -174,6 +179,7 @@ class SiteController extends AbstractController
 
         return $this->render('site/project/nous_soutenir.html.twig', [
             'metas' => $metas,
+            'donnees' => $donnees,
             'legales' => $legales,
             'form' => $form
         ]);

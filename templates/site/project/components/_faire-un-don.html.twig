@@ -1,7 +1,16 @@
 <h4 class="col-12 text-center text-info my-4">Faire un don</h4>
 
 <p class="mt-2 text-justify">
-    {% include "site/project/components/_formForDonation.html.twig" %}
+
+    {% if app.request.server.get('PAIEMENT_MODULE') == 'PAYPLUG' %}
+
+        {% include "site/project/components/_formForDonationWithPayplug.html.twig" %}
+
+    {% else %}
+
+        {% include "site/project/components/_formForDonationWithHelloAsso.html.twig" %}
+
+    {% endif %}
 </p>
 
 
