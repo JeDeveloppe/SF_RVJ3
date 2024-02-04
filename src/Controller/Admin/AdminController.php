@@ -32,7 +32,7 @@ class AdminController extends AbstractController
         private MailService $mailService,
         private PaiementService $paiementService,
         private SiteSettingRepository $siteSettingRepository,
-        private UserRepository $userRepository
+        private UserRepository $userRepository,
     )
     {
     }
@@ -93,6 +93,23 @@ class AdminController extends AbstractController
         $this->em->flush();
 
         return $this->redirect($request->headers->get('referer'));
+
+    }
+
+    #[Route('/admin/verification-achats-helloAsso', name: 'admin_verification_achats_helloAsso')]
+    public function verificationAchatsHelloAsso(Request $request)
+    {
+
+        $bearer = $this->paiementService->helloAssoAuth();
+
+        //on met a jour les paiements
+        $payments = $this->paymentRepository->findBy(['timeOfTransaction' => NULL, 'details' => NULL]);
+        foreach($payments as $payment){
+
+            $this->paiementService->getHelloAssoPaiementStatus($bearer,$payment);
+        }
+
+        return new Response('TERMINER: tous les paiements sur HelloAsso ont été mis à jour ! (100% de réussite)');
 
     }
 }

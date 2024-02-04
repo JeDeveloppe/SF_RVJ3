@@ -55,6 +55,7 @@ class PaiementController extends AbstractController
         if($_ENV["PAIEMENT_MODULE"] == "STRIPE")
         {
             $this->paiementService->paiementSuccessWithStripe($tokenDocument);
+
         }else if($_ENV["PAIEMENT_MODULE"] == "PAYPLUG")
         {
             $response = $this->paiementService->paiementSuccessWithPayplug($tokenDocument);
@@ -70,7 +71,22 @@ class PaiementController extends AbstractController
             }
 
 
+        }else if($_ENV["PAIEMENT_MODULE"] == "HELLOASSO"){
+
+            $response = $this->paiementService->paiementSuccessWithHelloAsso($tokenDocument);
+            
+            //si on a bien vérifié le paiement
+            if(array_key_exists('paiement', $response)){
+                return $this->render('site/paiement/success.html.twig', [
+                    'token' => $tokenDocument,
+                ]);
+            }else{
+                $this->addFlash('warning', $response['messageFlash']);
+                return $this->redirectToRoute($response['route']);
+            }
+        
         }else{
+
             throw new Exception('PAIEMENT_MODULE IN .ENV FILE NOT INFORM');
         }
     }
@@ -93,8 +109,7 @@ class PaiementController extends AbstractController
         }
     }
 
-    //TODO
-    #[Route('/paiement/notificationUrl/{tokenDocument}', name: 'paiement_notificationUrl')]
+    #[Route('/paiement/notificationUrl/{tokenDocument?}', name: 'paiement_notificationUrl')]
     public function notificationUrl($tokenDocument)
     {
         if($_ENV["PAIEMENT_MODULE"] == "STRIPE")
@@ -104,6 +119,10 @@ class PaiementController extends AbstractController
         }else if($_ENV["PAIEMENT_MODULE"] == "PAYPLUG")
         {
             $this->paiementService->notificationUrlWithPayplug($tokenDocument);
+
+        }else if($_ENV["PAIEMENT_MODULE"] == "HELLOASSO")
+        {
+            $this->paiementService->notificationUrlWithHelloAsso($tokenDocument);
 
         }else{
             throw new Exception('PAIEMENT_MODULE IN .ENV FILE NOT INFORM');

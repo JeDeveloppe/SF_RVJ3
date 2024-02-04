@@ -118,7 +118,7 @@
 														{% for item in boite.itemsOrigine|sort %}
 																{% if item in group.items %}
 																	{% if  item.stockForSale > 0 %}
-																		<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }} (Qté: {{ item.stockForSale }})</option>
+																		<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }}: {{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC - (Disponible: {{ item.stockForSale }})</option>
 																	{% endif %}
 																{% endif %}
 														{% endfor %}
@@ -131,7 +131,7 @@
 														{% for item in boite.itemsSecondaire|sort %}
 																{% if item in group.items %}
 																	{% if  item.stockForSale > 0 %}
-																		<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }} (Qté: {{ item.stockForSale }})</option>
+																		<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }}: {{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC - (Disponible: {{ item.stockForSale }})</option>
 																	{% endif %}
 																{% endif %}
 														{% endfor %}

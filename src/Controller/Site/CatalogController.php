@@ -95,7 +95,8 @@ class CatalogController extends AbstractController
 
         return $this->render('site/catalog/pieces_detachees/pieces_detachees_demande.html.twig', [
             'boite' => $boite,
-            'metas' => $metas
+            'metas' => $metas,
+            'tax' => $this->taxRepository->findOneBy([]),
         ]);
     }
 

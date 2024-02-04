@@ -55,6 +55,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\OffSiteOccasionSaleRepository;
 use App\Repository\SiteSettingRepository;
 use App\Repository\UserRepository;
+use App\Service\PaiementService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -73,7 +74,8 @@ class DashboardController extends AbstractDashboardController
         private SiteSettingRepository $siteSettingRepository,
         private MailService $mailService,
         private EntityManagerInterface $em,
-        private UserRepository $userRepository
+        private UserRepository $userRepository,
+        private PaiementService $paiementService
     )
     {
         
@@ -85,7 +87,6 @@ class DashboardController extends AbstractDashboardController
         $now = new DateTimeImmutable('now');
 
         $documentsToReminder = $this->documentRepository->findByDevisToReminder($now);
-
         
         $this->mailService->reminderQuotes($documentsToReminder, $now);
 

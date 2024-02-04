@@ -4,6 +4,15 @@
 {% block content_title %}Accueil ADMINISTRATION{% endblock %}
 
 {% block main %}
+
+    {% if app.request.server.get('PAIEMENT_MODULE') == "HELLOASSO" %}
+        <div class="row mb-4">
+            <div class="col-4">
+                <a class="btn btn-warning" href="{{ path('admin_verification_achats_helloAsso') }}" target="_blank">Mettre les paiements HelloAsso à jour</a>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="row">
         {% for total in totals %}
             <div class="col-4 mb-3">
