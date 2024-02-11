@@ -1,4 +1,4 @@
-<div class="row my-5">
+<div class="row justify-content-center my-5">
         <div class="col-12 d-flex justify-content-center">
             {{ form_start(billingAndDeliveryForm) }}
                     <div class="input-group mb-4">
@@ -8,5 +8,11 @@
                         {{ form_widget(billingAndDeliveryForm.deliveryAddress) }}
                     </div>
             {{ form_end(billingAndDeliveryForm) }}
+        </div>
+        <div class="col-12 text-center mt-4">
+            Avec:
+        </div>
+        <div class="col-6 text-center">
+            {% include "components/_logo_paiement_with.html.twig" %}
         </div>
 </div>

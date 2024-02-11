@@ -1,0 +1,13 @@
+{% if app.request.server.get('PAIEMENT_MODULE') == 'HELLOASSO' %}
+
+    <a href="https://www.helloasso.com/comment-ca-marche" target="_blank">
+        <img class="img-thumbnail col-9 col-md-6 col-lg-4" src="{{ asset('build/images/design/'~ app.request.server.get('PAIEMENT_MODULE') ~'/logo-paiement.png') }}" alt="Paiement avec PAYPLUG"/>
+    </a>
+
+{% elseif app.request.server.get('PAIEMENT_MODULE') == 'PAYPLUG' %}
+
+    <img class="img-thumbnail col-9 col-md-6 col-lg-4" src="{{ asset('build/images/design/'~ app.request.server.get('PAIEMENT_MODULE') ~'/logo-paiement.png') }}" alt="Paiement avec PAYPLUG"/>
+
+{% else %}
+    
+{% endif %}

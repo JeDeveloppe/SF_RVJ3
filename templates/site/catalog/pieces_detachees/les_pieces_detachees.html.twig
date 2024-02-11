@@ -20,7 +20,11 @@
 
         <div class="row justify-content-around">
         
-            {% include "components/catalog/_card.html.twig" with { 'donnees': boites } %}
+            {% for key,boite in boites %}  
+
+                {% include "components/catalog/_card.html.twig" with { 'donnee': boite, 'key': key } %}
+
+            {% endfor %}
 
         </div>
         
@@ -44,18 +48,17 @@
 
     {% else %}
 
-        <div class="row my-5">
+        <div class="row justify-content-center my-5">
+
             <div class="col-11 text-center">
                 <p class="h2">Nous n'avons pas ce jeu en stock pour le moment.</p>
-                <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.refaitesvosjeux.fr" target="_blank">Facebook !</a></p>    
+                <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.facebook.com/refaitesvosjeux/" target="_blank">Facebook !</a></p>    
                 <p class="h5 mt-5">Ou tenter votre chance chez l'un de nos partenaires:</p>
             </div>
-        </div>
-        <div class="row justify-content-start mb-5">
 
             {% for partner in partenaires %}
 
-            {% include "components/partner/_card_partner.html.twig" %}
+                {% include "components/partner/_card_partner.html.twig" %}
                 
             {% endfor %}
         </div>

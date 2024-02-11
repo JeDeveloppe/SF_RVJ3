@@ -44,14 +44,23 @@ class CatalogController extends AbstractController
             $search = $form->get('search')->getData();
             $phrase = str_replace(" ","%",$search);
 
-            $donnees = $this->boiteRepository->findBoitesFromSearch($phrase);
+            $donneesFromDatabases = $this->boiteRepository->findBoitesFromSearch($phrase);
 
         }else{
 
-            $donnees = $this->boiteRepository->findBy(['isOnline' => true],['id' => 'DESC']);
+            $donneesFromDatabases = $this->boiteRepository->findBy(['isOnline' => true],['id' => 'DESC']);
         }
 
-        $partenaires = $this->partnerRepository->findBy(['isDisplayOnCatalogueWhenSearchIsNull' => true]);
+        //on tri uniquement les donnees avec articles
+        $donnees = [];
+
+        foreach($donneesFromDatabases as $donneesFromDatabase){
+            if(count($donneesFromDatabase->getItemsOrigine()) > 0 OR count($donneesFromDatabase->getItemsSecondaire()) > 0){
+
+                array_push($donnees,$donneesFromDatabase);
+
+            }
+        }
         
         $boites = $this->paginator->paginate(
             $donnees, /* query NOT result */
@@ -66,6 +75,9 @@ class CatalogController extends AbstractController
             $transforms[] = $class_transforms[0];
         }
 
+        $partenaires = $this->partnerRepository->findBy(['isDisplayOnCatalogueWhenSearchIsNull' => true]);
+
+
         $metas['description'] = 'Catalogue complet de toutes les boites dont le service dispose de pièces détachées.';
 
         return $this->render('site/catalog/pieces_detachees/les_pieces_detachees.html.twig', [
@@ -74,7 +86,7 @@ class CatalogController extends AbstractController
             'form' => $form,
             'search' => $search ?? null,
             'partenaires' => $partenaires ?? null,
-            'transforms' => $transforms,
+            'transforms' => $transforms ?? null,
             'metas' => $metas
         ]);
     }
@@ -123,7 +135,7 @@ class CatalogController extends AbstractController
         return $this->render('site/catalog/occasions/les_occasions.html.twig', [
             'occasions' => $occasions,
             'occasions_totales' => $donnees,
-            'transforms' => $transforms,
+            'transforms' => $transforms ?? null,
             'metas' => $metas
         ]);
     }

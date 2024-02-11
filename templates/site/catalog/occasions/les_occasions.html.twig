@@ -13,7 +13,11 @@
 
         <div class="row justify-content-around">
 
-            {% include "components/catalog/_card.html.twig" with { 'donnees': occasions } %}
+            {% for key,occasion in occasions %}  
+
+            {% include "components/catalog/_card.html.twig" with { 'donnee': occasion, 'key': key } %}
+
+            {% endfor %}
 
         </div>
         
