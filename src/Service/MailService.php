@@ -13,7 +13,6 @@ use App\Repository\SiteSettingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-//TODO montrer les differents email de l'application
 //email changement statut du document aussi
 class MailService
 {

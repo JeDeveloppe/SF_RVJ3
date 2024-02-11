@@ -1,0 +1,29 @@
+{% extends "site/base.html.twig" %}
+
+{% block title %}Faire un don{% endblock %}
+
+{% block body %}
+
+    <h1 class="col-12 text-center my-5">Faire un don</h1>
+
+    <div class="row justify-content-center">
+
+        <div class="col-11 text-center">
+            <p class="fs-4">{{ metas.description }}</p>
+        </div>
+
+        {% if app.request.server.get('PAIEMENT_MODULE') == 'PAYPLUG' %}
+
+            {% include "site/project/components/_formForDonationWithPayplug.html.twig" %}
+
+        {% else %}
+
+            {% include "site/project/components/_formForDonationWithHelloAsso.html.twig" %}
+
+        {% endif %}
+
+    {% include "site/project/components/_link-to-formulaire.html.twig" %}
+
+    </div>
+
+{% endblock %}

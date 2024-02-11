@@ -92,7 +92,6 @@ class UserService
         $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
         $now = new DateTimeImmutable('now');
         $year = $now->format('Y');
-        //TODO affichage / année en cours / année passée / ou total ?
         $year -= 1; //null
         
         $documents = $this->documentRepository->findByDocumentWithPaiementInYear($docParams->getBillingTag(), $year);

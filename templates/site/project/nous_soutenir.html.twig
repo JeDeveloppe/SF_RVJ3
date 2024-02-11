@@ -3,7 +3,6 @@
 {% block title %}Nous soutenir{% endblock %}
 
 {% block body %}
-<div class="js-locations" data-locations="{{ donnees }}"></div>
 
     <h1 class="col-12 mt-5 text-center">Nous soutenir</h1>
 
@@ -15,33 +14,16 @@
             </p> 
         </div>
     </div>
-    <div class="row mb-5">
-        <div class="col-11 mx-auto d-flex flex-column flex-md-row align-items-start p-0">
-            <div class="col-12 col-md-2 nav flex-column nav-pills me-md-4 shadow" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Donnez ses jeux</button>
-                <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Acheter des jeux</button>
-                <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Devenir point de collecte</button>
-                <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-reseau" type="button" role="tab" aria-controls="v-pills-reseau" aria-selected="false">Agrandir le réseau du ré-emploi du jouet</button>
-                <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-don" type="button" role="tab" aria-controls="v-pills-don" aria-selected="false">Faire un don</button>
+    <div class="row justify-content-around my-5">
+
+        {% for support in supports %}
+
+            <div class="col-8 col-md-5 my-3 px-md-5">
+                {% include "site/project/components/_card_links.html.twig" with {'card_support': support} %}
             </div>
-            <div class="col-12 mt-2 col-md-9 mt-md-0 tab-content px-4 shadow" id="v-pills-tabContent">
-                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                    {% include "site/project/components/_donner-ses-jeux.html.twig" %}
-                </div>
-                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                    {% include "site/project/components/_acheter-des-jeux.html.twig" %}
-                </div>
-                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                    {% include "site/project/components/_devenir-point-de-collecte.html.twig" %}
-                </div>
-                <div class="tab-pane fade" id="v-pills-reseau" role="tabpanel" aria-labelledby="v-pills-reseau-tab">
-                    {% include "site/project/components/_agrandir-reseau-reemploi-du-jouet.html.twig" %}
-                </div>
-                <div class="tab-pane fade" id="v-pills-don" role="tabpanel" aria-labelledby="v-pills-don-tab">
-                    {% include "site/project/components/_faire-un-don.html.twig" %}
-                </div>
-            </div>
-        </div>
+
+        {% endfor %}
+
     </div>
 
 

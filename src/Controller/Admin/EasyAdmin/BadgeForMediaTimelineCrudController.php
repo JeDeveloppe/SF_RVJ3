@@ -19,7 +19,7 @@ class BadgeForMediaTimelineCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name'),
-            TextField::new('text'),
+            TextField::new('text')->setFormTypeOptions(['attr' => ['placeholder' => 'Voir sur https://fontawesome.com/']]),
             ColorField::new('bgcolor'),
         ];
     }

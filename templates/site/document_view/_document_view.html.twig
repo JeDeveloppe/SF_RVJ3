@@ -11,7 +11,6 @@
     {# il s'agit d'une préparation #}
         {% set tdText = 'Préparation:' %}
     {% else %}
-        {# //TODO nom de la préparation sur les documents #}
         {% set tdText = 'Frais de gestion:' %}
     {% endif %}
 
@@ -125,8 +124,21 @@
     {% if document.billNumber is null %}
         <div class="row my-5">
             <div class="col-6 text-center">
-                <a href="{{ path('paiement', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-success" >Payer</a><br/>
-                <img class="img-thumbnail col-9 col-md-6 col-lg-4 mt-4" src="{{ asset('build/images/design/logo-PAYPLUG.png') }}" alt="Paiement avec PAYPLUG"/>
+                <a href="{{ path('paiement', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-success" >Payer avec {{ app.request.server.get('PAIEMENT_MODULE') }}</a><br/>
+                
+                {% if app.request.server.get('PAIEMENT_MODULE') == 'HELLOASSO' %}
+
+                    <a href="https://www.helloasso.com/comment-ca-marche" target="_blank">
+                        <img class="img-thumbnail col-9 col-md-6 col-lg-4 mt-4" src="{{ asset('build/images/design/'~ app.request.server.get('PAIEMENT_MODULE') ~'/logo-paiement.png') }}" alt="Paiement avec PAYPLUG"/>
+                    </a>
+
+                {% elseif app.request.server.get('PAIEMENT_MODULE') == 'PAYPLUG' %}
+
+                    <img class="img-thumbnail col-9 col-md-6 col-lg-4 mt-4" src="{{ asset('build/images/design/'~ app.request.server.get('PAIEMENT_MODULE') ~'/logo-paiement.png') }}" alt="Paiement avec PAYPLUG"/>
+                
+                {% else %}
+                    
+                {% endif %}
             </div>
 
             {% if app.user is not null and app.user.password == document.user.password %}

@@ -2,15 +2,7 @@
 
 namespace App\Service;
 
-use App\Entity\User;
-use App\Repository\AddressRepository;
-use App\Repository\CountryRepository;
-use App\Repository\DocumentRepository;
 use App\Repository\PartnerRepository;
-use DateTimeImmutable;
-use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class PartnerService
 {

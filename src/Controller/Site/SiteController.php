@@ -21,9 +21,11 @@ use Symfony\Component\Form\FormError;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\EmailForSendResetPasswordType;
+use App\Repository\AmbassadorRepository;
 use App\Repository\ResetPasswordRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
+use App\Service\AmbassadorService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,7 +46,8 @@ class SiteController extends AbstractController
         private UserService $userService,
         private ResetPasswordRepository $resetPasswordRepository,
         private PartnerService $partnerService,
-        private PartnerRepository $partnerRepository
+        private PartnerRepository $partnerRepository,
+        private AmbassadorService $ambassadorService
     )
     {
     }
@@ -159,29 +162,103 @@ class SiteController extends AbstractController
 
     }
 
-    #[Route('/nous-soutenir', name: 'app_support_us')]
-    public function supportUs(Request $request): Response
+    #[Route('/projet/nous-soutenir/devenir-ambassadeur-ambassadrice', name: 'app_became_ambassador')]
+    public function becameAmbassador(Request $request): Response
     {
-        $form = $this->createForm(AddressForDonationType::class);
-        $form->handleRequest($request);
         
         $baseUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
 
-        $donnees = $this->partnerService->constructionMapOfFranceWithPartners($baseUrl);
+        $donnees = $this->ambassadorService->constructionMapOfFranceWithAmbassadors($baseUrl);
+
+        //TODO
+        $metas['description'] = 'Description à faire';
+        
+        return $this->render('site/project/nous_soutenir/devenir-ambassadeur.html.twig', [
+            'metas' => $metas,
+            'donnees' => $donnees
+        ]);
+
+    }
+
+    #[Route('/projet/nous-soutenir/acheter-des-jeux', name: 'app_buy_games')]
+    public function buyGames(): Response
+    {
+        
+        //TODO
+        $metas['description'] = 'Description à faire';
+        
+        return $this->render('site/project/nous_soutenir/acheter-des-jeux.html.twig', [
+            'metas' => $metas,
+        ]);
+
+    }
+
+    #[Route('/projet/nous-soutenir/faire-un-don', name: 'app_make_donation')]
+    public function makeDonation(Request $request): Response
+    {
+        
+        $form = $this->createForm(AddressForDonationType::class);
+        $form->handleRequest($request);
 
         //TODO IF PAYPLUG FOR DONATION
         if($form->isSubmitted() && $form->isValid()) {
 
         }
+
+        //TODO
+        $metas['description'] = 'Description à faire';
         
-        $metas['description'] = 'Pour soutenir notre service, vous pouvez faire un don de jeu(x) ou acheter nos jeux complets à petits prix.';
-        $legales = $this->legalInformationRepository->findOneBy([]);
+        return $this->render('site/project/nous_soutenir/faire-un-don.html.twig', [
+            'metas' => $metas,            
+            'legales' => $this->legalInformationRepository->findOneBy([]),
+            'form' => $form
+        ]);
+
+    }
+
+    #[Route('/projet/nous-soutenir/donner-ses-jeux', name: 'app_give_your_games')]
+    public function giveYourGames(): Response
+    {
+        
+        //TODO
+        $metas['description'] = 'Description à faire';
+        
+        return $this->render('site/project/nous_soutenir/donner-ses-jeux.html.twig', [
+            'metas' => $metas,
+            'legales' => $this->legalInformationRepository->findOneBy([])
+        ]);
+
+    }
+
+    #[Route('/nous-soutenir', name: 'app_support_us')]
+    public function supportUs(Request $request): Response
+    {
+  
+        $metas['description'] = 'Description à faire';
+
+        $supports = [
+            [
+                'text' => 'Donner ses jeux',
+                'link' => 'app_give_your_games'
+            ],
+            [
+                'text' => 'Faire un don',
+                'link' => 'app_make_donation'
+            ],
+            [
+                'text' => 'Devenir ambassadeur / trice',
+                'link' => 'app_became_ambassador'
+            ],
+            [
+                'text' => 'Acheter des jeux',
+                'link' => 'app_buy_games'
+            ],
+        ];
+
 
         return $this->render('site/project/nous_soutenir.html.twig', [
             'metas' => $metas,
-            'donnees' => $donnees,
-            'legales' => $legales,
-            'form' => $form
+            'supports' => $supports,
         ]);
 
     }

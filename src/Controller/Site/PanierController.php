@@ -92,7 +92,7 @@ class PanierController extends AbstractController
                 $deliveryAddress = $this->addressRepository->findOneBy(['id' => $allValues['deliveryAddress'], 'user' => $user]);
 
             }else{
-
+                //TODO SÉPARER RECHERCHE DANS LES DEPOTS RVJ ET FOIRES
                 $deliveryAddress = $this->collectionPointRepository->findOneBy(['id' => $allValues['deliveryAddress']]);
             }
 

@@ -19,11 +19,18 @@
                 <a class="dropdown-item" href="#">Articles</a>
             </div>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ path('app_partenaires') }}">Partenaires</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Nous soutenir</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
+            <a class="dropdown-item" href="{{ path('app_buy_games') }}">Acheter des jeux</a>
+            <a class="dropdown-item" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur / ambassadrice</a>
+            <a class="dropdown-item" href="#">Agrandir le réseau du ré-emploi du jouet</a>
+            <a class="dropdown-item" href="{{ path('app_make_donation') }}">Faire un don</a>
+          </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ path('app_support_us') }}">Nous soutenir</a>
+          <a class="nav-link" href="{{ path('app_partenaires') }}">Partenaires</a>
         </li>
       </ul>
       <ul class="navbar-nav">

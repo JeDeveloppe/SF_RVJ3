@@ -209,7 +209,7 @@ class PanierService
         $responses['totauxBoites'] = $this->utilitiesService->totauxItems($responses['panier_boites']);
 
         $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
-
+        
         if(is_null($shipping)){
 
             $responses['deliveryCostWithoutTax'] = new Delivery();

@@ -13,6 +13,7 @@ use App\Entity\Level;
 use App\Entity\Editor;
 use DateTimeImmutable;
 use App\Entity\Address;
+use App\Entity\Ambassador;
 use App\Entity\BadgeForMediaTimeline;
 use App\Entity\Country;
 use App\Entity\Partner;
@@ -252,6 +253,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Remises', 'fas fa-list', Discount::class);
         yield MenuItem::linkToCrud('Bon d\'achat', 'fas fa-list', VoucherDiscount::class);
         yield MenuItem::linkToCrud('Prix des livraisons', 'fas fa-list', Delivery::class);
+
+        yield MenuItem::section('Gestion des ambassadeurs');
+        yield MenuItem::linkToCrud('Liste des ambassadeurs', 'fas fa-list', Ambassador::class);
 
         yield MenuItem::section('Gestion des partenaires');
         yield MenuItem::linkToCrud('Liste des partenaires', 'fas fa-list', Partner::class);

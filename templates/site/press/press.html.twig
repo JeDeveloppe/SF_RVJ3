@@ -6,7 +6,8 @@
 
     <h1 class="col-12 mt-5 text-center">Le coin presse</h1>
 
-    <div class="col-11 col-md-10 mx-auto my-4">
+<div class="row justify-content-center">
+    <div class="col-11 col-md-10 my-4">
         <ul class="timeline">
             {% for key,media in medias %}
                 {% if key is divisible by(2) %}
@@ -36,5 +37,10 @@
             {% endfor %}
         </ul>
     </div>
+    <div class="col-11 text-center">
+        //TODO
+        Création du service le ... 
+    </div>
+</div>
 
 {% endblock %}

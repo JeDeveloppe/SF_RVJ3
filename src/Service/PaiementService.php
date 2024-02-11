@@ -504,7 +504,7 @@ class PaiementService
             //paiement accepter
             if($order['payments']['state'] == "Authorized"){
                 $response['paiement'] = true;
-                $payment->setTimeOfTransaction($order['payments']['date'])->setDetails('Paiement par CB');
+                $payment->setTimeOfTransaction($order['payments']['date'])->setDetails('CB');
                 $this->em->persist($payment);
                 $this->em->flush();
     
