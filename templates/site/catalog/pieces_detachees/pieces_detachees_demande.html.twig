@@ -123,7 +123,7 @@
 																{% endif %}
 														{% endfor %}
 													{% else %}
-														<option value="">Victime de son succès...</option>
+														<option value="" data-image="{{ asset('build/images/design/default.png') }}">Victime de son succès...</option>
 													{% endif %}
 												</optgroup>
 												<optgroup label="Pièces similaires">
@@ -171,12 +171,23 @@
 
 		ArraySelects.forEach( function (element,index){
 			element.addEventListener('change', () => {
-				let imageName = element.options[element.selectedIndex].getAttribute('data-image');
+				let imageName = '';
 				let imageDivPlaceholder = document.getElementsByClassName('zoom_image_placeholder');
 				let imageDiv = document.getElementsByClassName('zoom_image_item');
+				
+				if(element.options[element.selectedIndex].getAttribute('data-image'))
+				{
+
+					imageDiv[index].src=currentPath+upload_item_image_path+'/'+element.options[element.selectedIndex].getAttribute('data-image');
+
+				}else{
+
+					imageDiv[index].src=currentPath+'/build/images/design/default.png';
+
+				}
+			
 				imageDivPlaceholder[index].classList.add("d-none");
 				imageDiv[index].classList.remove("d-none");
-				imageDiv[index].src=currentPath+upload_item_image_path+'/'+imageName;
 			})
 		});
 	</script>
