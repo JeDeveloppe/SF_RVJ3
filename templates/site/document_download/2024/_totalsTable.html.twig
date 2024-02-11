@@ -17,25 +17,25 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td style="border:1px solid black">Pièces dét.</td>
-            <td style="border:1px solid black">Remise sur<br/>pièces dét.</td>
-            <td style="border:1px solid black">Occasions</td>
-            <td style="border:1px solid black">Livraison</td>
-            <td style="border:1px solid black">{{ tdText }}</td>
-            <td style="border:1px solid black">HT</td>
-            <td style="border:1px solid black">TVA ({{ document.taxRateValue }}%)</td>
-            <td>TTC</td>
+        <tr style="border:1px solid black;">
+            <td style="border:1px solid black; width:10%;">Pièces dét.</td>
+            <td style="border:1px solid black; width:10%;">{{ ((document.documentLineTotals.boitesPriceWithoutTax + document.documentLineTotals.itemsPriceWithoutTax) / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black; width:15%;">Remise sur<br/>pièces dét.</td>
+            <td style="border:1px solid black; width:15%;">{{ document.documentLineTotals.discountonpurchaseinpurcentage ? document.documentLineTotals.discountonpurchaseinpurcentage : 0 }}% soit <br/>{{ document.documentLineTotals.discountonpurchase / 100 | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black; width:15%;">Occasions</td>
+            <td style="border:1px solid black; width:10%;">{{ (document.documentLineTotals.occasionsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100)) | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black; width:20%;">Livraison</td>
+            <td style="border:1px solid black; width:10%;">{{ (document.deliveryPriceExcludingTax / 100 * tva) | number_format(2, '.', ',') }}</td>
         </tr>
-        <tr>
-            <td style="border:1px solid black">{{ ((document.documentLineTotals.boitesPriceWithoutTax + document.documentLineTotals.itemsPriceWithoutTax) / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }}</td>
-            <td style="border:1px solid black">{{ document.documentLineTotals.discountonpurchaseinpurcentage ? document.documentLineTotals.discountonpurchaseinpurcentage : 0 }}% soit {{ document.documentLineTotals.discountonpurchase / 100 | number_format(2, '.', ',') }}</td>
-            <td style="border:1px solid black">{{ (document.documentLineTotals.occasionsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100)) | number_format(2, '.', ',') }}</td>
-            <td style="border:1px solid black">{{ (document.deliveryPriceExcludingTax / 100 * tva) | number_format(2, '.', ',') }}</td>
-            <td style="border:1px solid black">{{ (document.cost / 100 * tva) | number_format(2, '.', ',') }}</td>
-            <td style="border:1px solid black">{{ (document.totalExcludingTax / 100) | number_format(2, '.', ',') }}</td>
-            <td style="border:1px solid black">{{ ((document.totalWithTax - document.totalExcludingTax) / 100) | number_format(2, '.', ',') }}</td>
-            <td style="border:1px solid black">{{ (document.totalWithTax / 100) | number_format(2, '.', ',')}}</td>
+        <tr style="border:1px solid black;">
+            <td style="border:1px solid black; width:10%;">{{ tdText }}</td>
+            <td style="border:1px solid black; width:10%;">{{ (document.cost / 100 * tva) | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black; width:15%;">Total HT</td>
+            <td style="border:1px solid black; width:15%;">{{ (document.totalExcludingTax / 100) | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black; width:10%;">TVA ({{ document.taxRateValue }}%)</td>
+            <td style="border:1px solid black; width:10%;">{{ ((document.totalWithTax - document.totalExcludingTax) / 100) | number_format(2, '.', ',') }}</td>
+            <td style="border:1px solid black; width:20%;">Total TTC</td>
+            <td style="border:1px solid black; width:10%;">{{ (document.totalWithTax / 100) | number_format(2, '.', ',')}}</td>
         </tr>
     </tbody>
 </table>

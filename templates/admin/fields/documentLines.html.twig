@@ -27,7 +27,7 @@
                         </ul>
                     {% else %}
                         Article:<br/>
-                        {{ value.item.name }} - Référence: {{ value.item.reference }}
+                        {{ value.item.name }} - Référence: {{ value.item.reference }} - Qté: {{ value.quantity }}
                     {% endif %}
                 </td>
                 <td class="text-center">{{ (value.priceExcludingTax) / 100 |number_format(2, '.', ',') }} €</td>

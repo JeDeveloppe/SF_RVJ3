@@ -1,13 +1,16 @@
 {% if command == 'TO_PREPARE' %}  
-        <div class="btn-group" role="group">
-            <a class="btn btn-info" href="">Détails</a>
-            <a class="btn btn-info" href="{{ ea_url()
+        <div class="btn-group-vertical" role="group">
+                <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ document.id }}">
+            Détails de la commande
+            </button>
+            {# <a class="btn btn-info" href="{{ ea_url()
                                     .setController('App\\Controller\\Admin\\EasyAdmin\\DocumentCrudController')
                                     .setAction('detail')
                                     .setEntityId(id)
                                 }}">
-                                Voir
-            </a>
+                                Voir le document
+            </a> #}
             <a href="{{ path('admin_change_status_document', {'document': token,'status': status.SET_ASIDE }) }}" class="btn btn-warning">Mettre de côté</a>
             <a href="{{ path('admin_change_status_document', {'document': token,'status': status.END }) }}" class="btn btn-success">Ok expédier</a>
         </div>
