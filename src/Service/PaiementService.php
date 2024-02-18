@@ -14,9 +14,10 @@ use Symfony\Component\BrowserKit\Response;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DocumentStatusRepository;
 use App\Repository\MeansOfPayementRepository;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use App\Repository\DocumentParametreRepository;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
@@ -38,7 +39,7 @@ class PaiementService
         private PaymentRepository $paymentRepository,
         private DocumentStatusRepository $documentStatusRepository,
         private UrlMatcherInterface $urlMatcherInterface,
-        private HttpClientInterface $client,
+        private HttpClientInterface $client
         ){
     }
 
@@ -254,13 +255,13 @@ class PaiementService
 
             return $response;
 
-        }else if(!is_null($document->getBillNumber())){
+        }else if(!empty($document->getBillNumber())){
             //document deja facturé
             $response['paiement'] = 'Document déjà payé!';
 
             return $response;
 
-        }else if(is_null($document->getBillNumber())){
+        }else if(is_null($document->getBillNumber()) OR empty($document->getBillNumber())){
 
             //on s'identifie
             $this->payplugAuth();
@@ -269,27 +270,7 @@ class PaiementService
 
             if($payment->is_paid){
 
-                $payment_id = $payment->id;
-                $payment_date = $this->utilities->getDateTimeImmutableFromTimestamp($payment->hosted_payment->paid_at);
-                $card = $payment->card->brand.'(***** '.$payment->card->last4.' - '.$payment->card->exp_month.'/'.$payment->card->exp_year.')';
-
-                //on retrouve le paiement deja lier
-                $paiement = $document->getPayment();
-                //il faut creer le numero de facture
-                $newNumero = $this->documentService->generateNewNumberOf('billNumber', 'getBillNumber');
-
-                //on renseigne le paiement
-                $paiement->setDetails($card)
-                        ->setTimeOfTransaction($payment_date);
-                //on sauvegarde le paiement
-                $this->em->persist($paiement);
-                $this->em->flush();
-                
-                //on met a jour le document en BDD
-                $etat = $this->documentStatusRepository->findOneBy(['action' => 'TO_PREPARE']);
-                $document->setDocumentStatus($etat)->setBillNumber($docParams->getBillingTag().$newNumero);
-                $this->em->persist($document);
-                $this->em->flush();
+                $this->updatePaiementAndUpdateDocumentToBePrepared($payment, $document, $docParams);
 
                 $response['paiement'] = true;
                 return $response;
@@ -297,14 +278,14 @@ class PaiementService
             }else{
 
                 //document non payé
-                //TODO
-                return $this->urlMatcherInterface->redirectToRoute('paiement_canceled');
+                return new RedirectResponse($this->router->generate('paiement_canceled'));
 
             }
         }
     }
 
-    public function notificationUrlWithHelloAsso($token){
+    public function notificationUrlWithHelloAsso($token)
+    {
         //TODO ?
         $docParams = $this->documentParametreRepository->findOneBy([]);
         
@@ -318,8 +299,6 @@ class PaiementService
 
     public function notificationUrlWithPayplug($token)
     {
-        //TODO
-                
         $docParams = $this->documentParametreRepository->findOneBy([]);
         
         //on s'identifie
@@ -334,47 +313,19 @@ class PaiementService
                 if($resource instanceof \Payplug\Resource\Payment && $resource->is_paid) {
                     // Process a paid payment.
 
-                } else if ($resource instanceof \Payplug\Resource\Refund) {
-                    // Process the refund.
+                    $payment_id = $resource->id;
+
+                    //on retrouve le paiement et le document
+                    $paiement = $this->paymentRepository->findOneBy(['tokenPayment' => $payment_id]);
+                    $document = $paiement->getDocument();
+
+                    $this->updatePaiementAndUpdateDocumentToBePrepared($resource, $document, $docParams);
+
                 }
         }
         catch (\Payplug\Exception\PayplugException $exception) {
             echo htmlentities($exception);
         }
-        dd('END');
-
-        return $resource;
-            // $resource = \Payplug\Notification::treat($input);
-
-            // if ($resource instanceof \Payplug\Resource\Payment
-            //     && $resource->is_paid) {
-
-            //     //id de paiement payplug
-            //     $payment_id = $resource->id;
-            //     //on retrouve le paiement et le document
-            //     $paiement = $this->paymentRepository->findOneBy(['tokenPayment' => $payment_id]);
-            //     $document = $paiement->getDocument();
-
-            //     $payment_date = $this->utilities->getDateTimeImmutableFromTimestamp($resource->hosted_payment->paid_at);
-            //     $card = $resource->card->brand.'(***** '.$resource->card->last4.' - '.$resource->card->exp_month.'/'.$resource->card->exp_year.')';
-
-            //     //on retrouve le paiement deja lier
-            //     $paiement = $document->getPayment();
-            //     //il faut creer le numero de facture
-            //     $newNumero = $this->documentService->generateNewNumberOf('billNumber', 'getBillNumber');
-            //    //on renseigne le paiement
-            //     $paiement->setDetails($card)
-            //         ->setTimeOfTransaction($payment_date);
-            //     //on sauvegarde le paiement
-            //     $this->em->persist($paiement);
-            //     $this->em->flush();
-                
-            //     //on met a jour le document en BDD
-            //     $etat = $this->documentStatusRepository->findOneBy(['action' => 'TO_PREPARE']);
-            //     $document->setDocumentStatus($etat)->setBillNumber($docParams->getBillingTag().$newNumero);
-            //     $this->em->persist($document);
-            //     $this->em->flush();
-            // }
     }
 
     public function notificationUrlWithStripe($token)
@@ -454,11 +405,18 @@ class PaiementService
         $document = $this->documentRepository->findOneBy(['token' => $token, 'billNumber' => NULL, 'isDeleteByUser' => false]);
 
         //TODO
-        // if(!$document){
-        //     //pas de devis
-        //     $this->addFlash('warning', 'Devis inconnu!');
-        //     return $this->Router->redirectToRoute('accueil');
-        // }
+        if(!$document){
+
+            $tableau = [
+                'h1' => 'Document non trouvé !',
+                'p1' => 'La consultation de ce document est impossible!',
+                'p2' => 'Document inconnu ou supprimé !'
+            ];
+
+            return new RedirectResponse($this->router->generate('site/document_view/_end_view.html.twig', [
+                'tableau' => $tableau
+            ]));
+        }
 
         return $document;
     }
@@ -580,5 +538,31 @@ class PaiementService
 
         }
         return $response;
+    }
+
+    public function updatePaiementAndUpdateDocumentToBePrepared($payment, $document, $docParams)
+    {
+
+        $payment_date = $this->utilities->getDateTimeImmutableFromTimestamp($payment->hosted_payment->paid_at);
+        $card = $payment->card->brand.'(***** '.$payment->card->last4.' - '.$payment->card->exp_month.'/'.$payment->card->exp_year.')';
+
+        //on retrouve le paiement deja lier
+        $paiement = $document->getPayment();
+
+        //il faut creer le numero de facture
+        $newNumero = $this->documentService->generateNewNumberOf('billNumber', 'getBillNumber');
+
+        //on renseigne le paiement
+        $paiement->setDetails($card)->setTimeOfTransaction($payment_date);
+        //on sauvegarde le paiement
+        $this->em->persist($paiement);
+        $this->em->flush();
+        
+        //on met a jour le document en BDD
+        $etat = $this->documentStatusRepository->findOneBy(['action' => 'TO_PREPARE']);
+        $document->setDocumentStatus($etat)->setBillNumber($docParams->getBillingTag().$newNumero);
+        $this->em->persist($document);
+        $this->em->flush();
+
     }
 }

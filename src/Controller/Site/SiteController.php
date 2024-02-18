@@ -29,6 +29,7 @@ use App\Service\AmbassadorService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
@@ -273,15 +274,7 @@ class SiteController extends AbstractController
 
         if(!$document){
 
-            $tableau = [
-                'h1' => 'Document non trouvé !',
-                'p1' => 'La consultation de ce document est impossible!',
-                'p2' => 'Document inconnu ou supprimé !'
-            ];
-
-            return $this->render('site/document_view/_end_view.html.twig', [
-                'tableau' => $tableau
-            ]);
+            return $this->documentService->renderIfDocumentNoExist();
 
         }else{
 
@@ -379,4 +372,5 @@ class SiteController extends AbstractController
             'resetPasswordForm' => $form->createView()
         ]);
     }
+
 }

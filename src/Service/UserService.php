@@ -107,7 +107,7 @@ class UserService
             if(!is_null($user->getaddresses())){
 
                 $adress = $this->addressRepository->findOneBy(['user' => $user, 'isFacturation' => false]);
-                //TODO all countries ?
+                
                 $countries = ['FR','BE'];
                 if(!is_null($adress) AND in_array($adress->getCity()->getCountry()->getIsocode(), $countries)){
                     $count += 1;

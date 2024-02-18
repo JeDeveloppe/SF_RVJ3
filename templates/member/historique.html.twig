@@ -28,7 +28,7 @@
                   <div class="card-body d-flex align-items-center">
                         {% if document.billNumber is not null %}
                            <div class="col-8">
-                              Payé le {{ document.payment.timeOfTransaction|date('d-m-Y') }} <br/>par {{ document.payment.details }}
+                              Payé le {{ document.payment.timeOfTransaction|date('d-m-Y') }} <br/>{{ document.payment.details }}
                            </div>
                            <div class="col-4 text-center">
                               <a href="{{ path('member_facture_download', {'tokenDocument': document.token }) }}" data-toggle="tooltip" data-html="true" title="Facture en pdf"><i class="fas fa-print fa-2x"></i></a>

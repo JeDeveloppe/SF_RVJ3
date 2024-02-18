@@ -213,7 +213,6 @@ class PanierController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        //TODO
         return $this->render('site/panier/panier_success.html.twig', ['document' => $document]);
     }
 }

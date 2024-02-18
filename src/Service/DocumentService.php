@@ -28,6 +28,8 @@ use App\Repository\DocumentStatusRepository;
 use App\Repository\LegalInformationRepository;
 use App\Repository\DocumentParametreRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 
 class DocumentService
 {
@@ -47,7 +49,8 @@ class DocumentService
         private Environment $twig,
         private UserRepository $userRepository,
         private ParameterBagInterface $parameter,
-        private MailService $mailService
+        private MailService $mailService,
+        private RouterInterface $router,
         ){
     }
 
@@ -444,5 +447,18 @@ class DocumentService
             null,
             true
         );
+    }
+
+    public function renderIfDocumentNoExist()
+    {
+        $tableau = [
+            'h1' => 'Document non trouvé !',
+            'p1' => 'La consultation/ modification de ce document est impossible!',
+            'p2' => 'Document inconnu ou supprimé !'
+        ];
+
+        return new Response($this->twig->render('site/document_view/_end_view.html.twig', [
+            'tableau' => $tableau
+        ]));
     }
 }

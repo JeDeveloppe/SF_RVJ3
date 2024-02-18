@@ -99,11 +99,7 @@ class MemberController extends AbstractController
         
         if(!$document){
 
-            $tableau = [
-                'h1' => 'Document non trouvé !',
-                'p1' => 'La modification de ce document est impossible!',
-                'p2' => 'Document inconnu ou supprimé !'
-            ];
+            return $this->documentService->renderIfDocumentNoExist();
 
         }else{
             
@@ -117,11 +113,11 @@ class MemberController extends AbstractController
                 'p2' => 'Vous ne pouvez plus le consulter !'
             ];
 
+            return $this->render('site/document_view/_end_view.html.twig', [
+                'tableau' => $tableau
+            ]);
         }
 
-        return $this->render('site/document_view/_end_view.html.twig', [
-            'tableau' => $tableau
-        ]);
     }
 
     #[Route('/membre/download/facture/{tokenDocument}', name: 'member_facture_download')]
@@ -133,15 +129,7 @@ class MemberController extends AbstractController
 
         if(!$document){
 
-            $tableau = [
-                'h1' => 'Document non trouvé !',
-                'p1' => 'La consultation de ce document est impossible!',
-                'p2' => 'Document inconnu, supprimé ou ne vous appartenant pas!'
-            ];
-
-            return $this->render('site/document_view/_end_view.html.twig', [
-                'tableau' => $tableau
-            ]);
+            return $this->documentService->renderIfDocumentNoExist();
 
         }else{
 
