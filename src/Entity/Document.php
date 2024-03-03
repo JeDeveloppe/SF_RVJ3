@@ -97,6 +97,9 @@ class Document
     #[ORM\OneToOne(mappedBy: 'document', cascade: ['persist', 'remove'])]
     private ?Documentsending $documentsending = null;
 
+    #[ORM\ManyToOne(inversedBy: 'documents')]
+    private ?VoucherDiscount $voucherDiscount = null;
+
     public function __construct()
     {
         $this->documentLines = new ArrayCollection();
@@ -458,6 +461,18 @@ class Document
         }
 
         $this->documentsending = $documentsending;
+
+        return $this;
+    }
+
+    public function getVoucherDiscount(): ?VoucherDiscount
+    {
+        return $this->voucherDiscount;
+    }
+
+    public function setVoucherDiscount(?VoucherDiscount $voucherDiscount): static
+    {
+        $this->voucherDiscount = $voucherDiscount;
 
         return $this;
     }

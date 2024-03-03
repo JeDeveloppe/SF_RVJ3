@@ -2,28 +2,28 @@
 
 namespace App\Controller\Site;
 
-use App\Entity\Address;
-use App\Entity\Delivery;
-use App\Form\ShippingType;
+use App\Entity\VoucherDiscount;
+use App\Form\AcceptCartType;
 use App\Service\PanierService;
+use Symfony\Component\Uid\Uuid;
 use App\Service\DocumentService;
-use App\Repository\TaxRepository;
 use App\Repository\ItemRepository;
 use App\Repository\BoiteRepository;
+use App\Form\ShippingAndVoucherType;
 use App\Repository\PanierRepository;
 use App\Repository\AddressRepository;
 use App\Repository\DeliveryRepository;
+use App\Repository\DocumentRepository;
 use App\Form\BillingAndDeliveryAddressType;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\ShippingMethodRepository;
 use App\Repository\CollectionPointRepository;
-use App\Repository\DocumentRepository;
+use App\Repository\VoucherDiscountRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
 
 class PanierController extends AbstractController
 {
@@ -39,7 +39,8 @@ class PanierController extends AbstractController
         private BoiteRepository $boiteRepository,
         private DocumentService $documentService,
         private ItemRepository $itemRepository,
-        private DocumentRepository $documentRepository
+        private DocumentRepository $documentRepository,
+        private VoucherDiscountRepository $voucherDiscountRepository
     )
     {
         
@@ -66,61 +67,155 @@ class PanierController extends AbstractController
             }
         }
 
-        $shippingForm = $this->createForm(ShippingType::class, null, ['occasionInPanier' => $occasionInPanier]);
-        $shippingForm->handleRequest($request);
+        $shippingAndVoucherForm = $this->createForm(ShippingAndVoucherType::class, null, ['occasionInPanier' => $occasionInPanier]);
+        $shippingAndVoucherForm->handleRequest($request);
 
-        $reponses = $this->panierService->calculateAllCart($user,$shippingForm->get('shipping')->getData());
+        if($shippingAndVoucherForm->isSubmitted() && $shippingAndVoucherForm->isValid()){
+            
+            $voucherDiscountCode = $shippingAndVoucherForm['voucherDiscount']->getData();
+            $shippingMethodeId = $shippingAndVoucherForm['shipping']->getData();
 
-        $billingAndDeliveryForm = $this->createForm(BillingAndDeliveryAddressType::class, null, [
-            'user' => $this->security->getUser(),
-            'shipping' => $shippingForm->get('shipping')->getData(),
-            'redirectAfterSubmitPanierForPaiement' => $reponses['redirectAfterSubmitPanierForPaiement']
-        ]);
-        $billingAndDeliveryForm->handleRequest($request);
+            //on recupere le code saisie et on le met en session
+            $session = $request->getSession();
 
-        if($billingAndDeliveryForm->isSubmitted())
-        {
-            unset($reponses);
+            if(!is_null($voucherDiscountCode)){
+                //on enlève les espaces au cas ou
+                $voucherDiscountCode = str_replace(' ','', $voucherDiscountCode);
+                $voucherDiscount = $this->voucherDiscountRepository->findOneVoucherIsActive($voucherDiscountCode);
 
-            $allValues = $request->request->all($billingAndDeliveryForm->getName());
-
-            $billingAddress = $this->addressRepository->findOneBy(['id' => $allValues['billingAddress']]);
-            $shippingMethod = $this->shippingMethodRepository->findOneBy(['id' => $allValues['shipping']]);
-
-            if($shippingMethod->getPrice() == 'PAYANT'){
-                
-                $deliveryAddress = $this->addressRepository->findOneBy(['id' => $allValues['deliveryAddress'], 'user' => $user]);
+                if(is_null($voucherDiscount)){
+                    $voucherDiscount = new VoucherDiscount();
+                    $voucherDiscount->setRemainingValueToUseExcludingTax(0);
+                }
 
             }else{
-                //TODO SÉPARER RECHERCHE DANS LES DEPOTS RVJ ET FOIRES
-                $deliveryAddress = $this->collectionPointRepository->findOneBy(['id' => $allValues['deliveryAddress']]);
-            }
 
-            if(!$billingAddress or !$deliveryAddress){
-                $this->addFlash('warning','Less adresses ne vous appartiennent pas !');
-
-                $this->redirectToRoute('app_home');
-            }
-
-            //? on recupere toutes les infos du panier
-            $panierParams = $this->panierService->calculateAllCart($user,$allValues['shipping']);
-
-            //? sauvegarde document dans BDD avec articles, boites, etc... en fonction du Type DEVIS ou COMMANDE
-            $document = $this->documentService->saveDocumentInDataBase($panierParams,$billingAddress,$deliveryAddress);
-
-            if($panierParams['redirectAfterSubmitPanierForPaiement'] == true){
-                //paiement direct donc on redirige vers la page de paiement avec le numero de document
-                return $this->redirectToRoute('paiement', ['tokenDocument' => $document->getToken()]);
-
-            }else{
-    
-                return $this->redirectToRoute('panier_success', ['tokenDocument' => $document->getToken()]);
+                $voucherDiscount = new VoucherDiscount();
+                $voucherDiscount->setRemainingValueToUseExcludingTax(0);
 
             }
+            $session->set('voucherDiscount', $voucherDiscount);
+            $session->set('shippingMethodeId', $shippingMethodeId);
+
+            //on redirige var la page suivante
+            return $this->redirectToRoute('panier_addresses');
 
         }
 
         return $this->render('site/panier/panier.html.twig', [
+            'shippingAndVoucherForm' => $shippingAndVoucherForm,
+        ]);
+    }
+
+    #[Route('/panier/choix-des-adresses', name: 'panier_addresses')]
+    public function cartAddresses(Request $request): Response
+    {
+        $user = $this->security->getUser();
+        $user = $this->checkUserIsConnected();
+
+        $paniers = $this->panierRepository->findBy(['user' => $user]);
+        if(count($paniers) < 1){
+
+            $this->addFlash('warning', 'Votre panier est vide !');
+            
+            return $this->redirectToRoute('app_home');
+        }
+
+        $session = $request->getSession();
+        $billingAndDeliveryForm = $this->createForm(BillingAndDeliveryAddressType::class, null, [
+            'user' => $this->security->getUser(),
+            'shipping' => $session->get('shippingMethodeId'),
+        ]);
+        $billingAndDeliveryForm->handleRequest($request);
+
+        if($billingAndDeliveryForm->isSubmitted() && $billingAndDeliveryForm->isValid()){
+            
+            $billingAddress = $billingAndDeliveryForm['billingAddress']->getData();
+            $deliveryAddress = $billingAndDeliveryForm['deliveryAddress']->getData();
+
+            //on recupere le code saisie et on le met en session
+            $session = $request->getSession();
+            
+            $session->set('billingAddress', $billingAddress);
+            $session->set('deliveryAddress', $deliveryAddress);
+
+            //on redirige var la page suivante
+            return $this->redirectToRoute('panier_before_paiement');
+
+        }
+
+        return $this->render('site/panier/panier_addresses.html.twig', [
+            'user' => $user,
+            'billingAndDeliveryForm' => $billingAndDeliveryForm,
+            'voucherDiscount' => $session->get('voucherDiscount')
+        ]);
+    }
+
+    #[Route('/panier/verification-avant-paiement', name: 'panier_before_paiement')]
+    public function cartEnd(Request $request): Response
+    {
+        $user = $this->security->getUser();
+        $user = $this->checkUserIsConnected();
+
+        $paniers = $this->panierRepository->findBy(['user' => $user]);
+        if(count($paniers) < 1){
+
+            $this->addFlash('warning', 'Votre panier est vide !');
+            
+            return $this->redirectToRoute('app_home');
+        }
+
+        //on recupere lla session
+        $session = $request->getSession();
+        $reponses = $this->panierService->calculateAllCart($user);
+
+        $acceptCartForm = $this->createForm(AcceptCartType::class);
+        $acceptCartForm->handleRequest($request);
+
+        // if($acceptCartForm->isSubmitted() && $acceptCartForm->isValid())
+        // {
+        //     unset($reponses);
+
+        //     $allValues = $request->request->all($billingAndDeliveryForm->getName());
+
+        //     $billingAddress = $this->addressRepository->findOneBy(['id' => $allValues['billingAddress']]);
+        //     $shippingMethod = $this->shippingMethodRepository->findOneBy(['id' => $allValues['shipping']]);
+
+        //     if($shippingMethod->getPrice() == 'PAYANT'){
+                
+        //         $deliveryAddress = $this->addressRepository->findOneBy(['id' => $allValues['deliveryAddress'], 'user' => $user]);
+
+        //     }else{
+        //         //TODO SÉPARER RECHERCHE DANS LES DEPOTS RVJ ET FOIRES
+        //         $deliveryAddress = $this->collectionPointRepository->findOneBy(['id' => $allValues['deliveryAddress']]);
+        //     }
+
+        //     if(!$billingAddress or !$deliveryAddress){
+        //         $this->addFlash('warning','Less adresses ne vous appartiennent pas !');
+
+        //         $this->redirectToRoute('app_home');
+        //     }
+
+        //     //? on recupere toutes les infos du panier
+        //     $panierParams = $this->panierService->calculateAllCart($user,$allValues['shipping']);
+
+        //     //? sauvegarde document dans BDD avec articles, boites, etc... en fonction du Type DEVIS ou COMMANDE
+        //     $document = $this->documentService->saveDocumentInDataBase($panierParams,$billingAddress,$deliveryAddress);
+
+        //     if($panierParams['redirectAfterSubmitPanierForPaiement'] == true){
+        //         //paiement direct donc on redirige vers la page de paiement avec le numero de document
+        //         return $this->redirectToRoute('paiement', ['tokenDocument' => $document->getToken()]);
+
+        //     }else{
+    
+        //         return $this->redirectToRoute('panier_success', ['tokenDocument' => $document->getToken()]);
+
+        //     }
+
+        // }
+
+
+        return $this->render('site/panier/panier_before_paiement.html.twig', [
             'occasions' => $reponses['panier_occasions'],
             'boites' => $reponses['panier_boites'],
             'items' => $reponses['panier_items'],
@@ -133,8 +228,7 @@ class PanierController extends AbstractController
             'tax' => $reponses['tax'],
             'preparationHt' => $reponses['preparationHt'],
             'deliveryCostWithoutTax' => $reponses['deliveryCostWithoutTax'],
-            'shippingForm' => $shippingForm,
-            'billingAndDeliveryForm' => $billingAndDeliveryForm,
+            'acceptCartForm' => $acceptCartForm
         ]);
     }
 

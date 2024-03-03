@@ -239,21 +239,25 @@ class SiteController extends AbstractController
 
         $supports = [
             [
-                'text' => 'Donner ses jeux',
-                'link' => 'app_give_your_games'
+                'text' => 'Acheter des jeux',
+                'link' => 'app_buy_games'
             ],
             [
-                'text' => 'Faire un don',
-                'link' => 'app_make_donation'
+                'text' => 'Donner ses jeux',
+                'link' => 'app_give_your_games'
             ],
             [
                 'text' => 'Devenir ambassadeur / trice',
                 'link' => 'app_became_ambassador'
             ],
             [
-                'text' => 'Acheter des jeux',
-                'link' => 'app_buy_games'
+                'text' => 'Faire un don',
+                'link' => 'app_make_donation'
             ],
+            [
+                'text' => 'A faire',
+                'link' => 'app_buy_games'
+            ]
         ];
 
 

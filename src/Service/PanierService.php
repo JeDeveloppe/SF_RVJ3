@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Entity\Address;
+use App\Entity\CollectionPoint;
 use App\Entity\Panier;
 use DateTimeImmutable;
 use App\Entity\Delivery;
@@ -16,6 +18,9 @@ use App\Repository\SiteSettingRepository;
 use App\Repository\TaxRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class PanierService
 {
@@ -31,7 +36,8 @@ class PanierService
         private UtilitiesService $utilitiesService,
         private TaxRepository $taxRepository,
         private DocumentParametreRepository $documentParametreRepository,
-        private Security $security
+        private Security $security,
+        private RequestStack $request
         ){
     }
 
@@ -165,23 +171,28 @@ class PanierService
         return $reponse;
     }
 
-    public function calculateAllCart($user, $shippingIdOfEntity)
+    public function calculateAllCart($user)
     {
-
+        $session = $this->request->getSession();
+        $shipping = $session->get('shippingMethodeId');
         $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
-        $shipping = $this->shippingMethodRepository->findOneBy(['id' => $shippingIdOfEntity]);
 
         $responses = [];
         //? calcul de la remise sur les articles
-        $responses['remises'] = $this->calculateRemise($this->panierRepository->findBy(['user' => $user]));
+        $responses['remises']['volume'] = $this->calculateRemise($this->panierRepository->findBy(['user' => $user]));
         
         $responses['shipping'] = $shipping;
         $responses['panier_occasions'] = $this->panierRepository->findOccasionsByUser($user);
         $responses['panier_boites'] = $this->panierRepository->findBoitesByUser($user);
         $responses['panier_items'] = $this->panierRepository->findItemsByUser($user);
         $responses['tax'] = $this->taxRepository->findOneBy([]);
-
-
+        $responses['remises']['voucher']['voucherMax'] = $session->get('voucherDiscount')->getRemainingValueToUseExcludingTax();
+        $responses['remises']['voucher']['token'] = $session->get('voucherDiscount')->getToken();
+        if($responses['remises']['voucher']['voucherMax'] > 0){
+            $responses['remises']['voucher']['actif'] = true;
+        }else{
+            $responses['remises']['voucher']['actif'] = false;
+        }
         $now = new DateTimeImmutable('now');
 
         //gestion membership au niveau du panier
@@ -209,7 +220,7 @@ class PanierService
         $responses['totauxBoites'] = $this->utilitiesService->totauxItems($responses['panier_boites']);
 
         $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
-        
+
         if(is_null($shipping)){
 
             $responses['deliveryCostWithoutTax'] = new Delivery();
@@ -217,15 +228,28 @@ class PanierService
 
         }else{
                 
-            $responses['deliveryCostWithoutTax'] = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingIdOfEntity, $responses['weigthPanier']);
+            $responses['deliveryCostWithoutTax'] = $this->deliveryRepository->findCostByDeliveryShippingMethod($shipping, $responses['weigthPanier']);
 
         }
 
+        $responses['remises']['volume']['remiseDeQte'] = round($responses['totauxItems']['price'] * $responses['remises']['volume']['value'] / 100);
+        
+        $sousTotalItemHTAfterRemiseVolume = $responses['totauxItems']['price'] - $responses['remises']['volume']['remiseDeQte'];
+
         //? calcule de la remise sur les articles
-        $responses['remises']['remiseDeQte'] = round($responses['totauxItems']['price'] * $responses['remises']['value'] / 100);
+        $diff = $sousTotalItemHTAfterRemiseVolume - $responses['remises']['voucher']['voucherMax'];
 
-        $responses['totalPanier'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']->getPriceExcludingTax()) - $responses['remises']['remiseDeQte'];
+        if($diff >= 0){
+            $responses['remises']['voucher']['used'] = $sousTotalItemHTAfterRemiseVolume - $diff;
+            $responses['remises']['voucher']['voucherRemaining'] = 0; // reste à utilisé du bon
+        }else{
+            $responses['remises']['voucher']['used'] = $sousTotalItemHTAfterRemiseVolume;
+            $responses['remises']['voucher']['voucherRemaining'] = $diff * -1; // reste à utilisé du bon
+        }
 
+
+        $responses['totalPanier'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']->getPriceExcludingTax()) - $responses['remises']['volume']['remiseDeQte'] - $responses['remises']['voucher']['used'];
+dump($responses);
         return $responses;
     }
 
@@ -271,4 +295,5 @@ class PanierService
 
         return $remises;
     }
+
 }

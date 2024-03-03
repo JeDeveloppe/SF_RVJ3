@@ -1,18 +1,28 @@
 <div class="row justify-content-center my-5">
+        <div class="col-12 text-center mb-2">
+            <a href="{{ path('member_adresses') }}">Votre adresse n'existe pas ?</a>
+        </div>
         <div class="col-12 d-flex justify-content-center">
             {{ form_start(billingAndDeliveryForm) }}
-                    <div class="input-group mb-4">
-                        {{ form_widget(billingAndDeliveryForm.billingAddress) }}
+            {% for address in billingAndDeliveryForm.billingAddress %}
+                
+                    <div class="input-group mb-2">
+                        {{ form_widget(address) }}
                     </div>
-                    <div class="input-group bg-danger">
+            {% endfor %}
+                    <div class="input-group mt-4 mb-2">
                         {{ form_widget(billingAndDeliveryForm.deliveryAddress) }}
                     </div>
+            <div class="input-group">
+                <a href="{{ path('panier') }}" class="btn btn-outline-primary mx-auto"><i class="fa-solid fa-backward-step"></i> Précédant</a>
+                <button type="submit" class="btn btn-outline-primary mx-auto">Suivant <i class="fa-solid fa-forward-step"></i></button>
+            </div>
             {{ form_end(billingAndDeliveryForm) }}
         </div>
-        <div class="col-12 text-center mt-4">
+        {# <div class="col-12 text-center mt-4">
             Avec:
         </div>
         <div class="col-6 text-center">
             {% include "components/_logo_paiement_with.html.twig" %}
-        </div>
+        </div> #}
 </div>

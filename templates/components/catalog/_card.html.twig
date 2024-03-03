@@ -18,8 +18,8 @@
                 </div>
                 <div class="side {{ transforms[key][1] }} d-flex flex-column justify-content-around">
                     <div class="text-center p-2" data-toggle="tooltip" data-placement="top" title="{{ boite.name | raw }}">
-                        <span class="fs-4">{{ boite.name | raw }} </span><br/>
-                        <span class="fs-5">{{ boite.editor | raw }}</span><br/>
+                        <span class="fs-5">{{ boite.name | raw }} </span><br/>
+                        <span class="fs-6">{{ boite.editor | raw }}</span><br/>
                         {% if boite.year is not null %}
                             <span class="fs-6">{{ boite.year }}</span>
                         {% else %}

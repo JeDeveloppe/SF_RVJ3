@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\VoucherDiscountRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
@@ -16,9 +18,6 @@ class VoucherDiscount
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
-
-    #[ORM\Column(type: 'uuid')]
-    private ?Uuid $uuid = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -42,6 +41,20 @@ class VoucherDiscount
     #[ORM\Column]
     private ?\DateTimeImmutable $endOfTheCollect = null;
 
+    #[ORM\Column(length: 15)]
+    private ?string $token = null;
+
+    #[ORM\Column]
+    private ?int $remainingValueToUseExcludingTax = null;
+
+    #[ORM\OneToMany(mappedBy: 'voucherDiscount', targetEntity: Document::class)]
+    private Collection $documents;
+
+    public function __construct()
+    {
+        $this->documents = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -55,18 +68,6 @@ class VoucherDiscount
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getUuid(): ?Uuid
-    {
-        return $this->uuid;
-    }
-
-    public function setUuid(Uuid $uuid): static
-    {
-        $this->uuid = $uuid;
 
         return $this;
     }
@@ -151,6 +152,60 @@ class VoucherDiscount
     public function setEndOfTheCollect(\DateTimeImmutable $endOfTheCollect): static
     {
         $this->endOfTheCollect = $endOfTheCollect;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(string $token): static
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function getRemainingValueToUseExcludingTax(): ?int
+    {
+        return $this->remainingValueToUseExcludingTax;
+    }
+
+    public function setRemainingValueToUseExcludingTax(int $remainingValueToUseExcludingTax): static
+    {
+        $this->remainingValueToUseExcludingTax = $remainingValueToUseExcludingTax;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Document>
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    public function addDocument(Document $document): static
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+            $document->setVoucherDiscount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(Document $document): static
+    {
+        if ($this->documents->removeElement($document)) {
+            // set the owning side to null (unless already changed)
+            if ($document->getVoucherDiscount() === $this) {
+                $document->setVoucherDiscount(null);
+            }
+        }
 
         return $this;
     }

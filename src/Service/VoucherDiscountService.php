@@ -23,14 +23,18 @@ class VoucherDiscountService
 
         $user = $this->security->getUser();
         $date = $voucherDiscount->getValidUntil();
+        $remainingValueToUseExcludingTax = $voucherDiscount->getDiscountValueExcludingTax();
         $validUntil = $date->setTime(23, 59, 59);
+        $now = new DateTimeImmutable('now');
+        $token = $now->format('my').'-'.$now->getTimestamp();
+
         $voucherDiscount
             ->setCreatedAt(new DateTimeImmutable('now'))
-            ->setUuid(Uuid::v4())
+            ->setRemainingValueToUseExcludingTax($remainingValueToUseExcludingTax)
+            ->setToken($token)
             ->setUsed(false)
             ->setCreatedBy($user)
             ->setValidUntil($validUntil);
-
         $legales = $this->legalInformationRepository->findOneBy([]);
 
         $donnees = [

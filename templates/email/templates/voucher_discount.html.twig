@@ -9,7 +9,7 @@
             font-family: sans-serif;" class="paragraph">
             <p>Bonjour,</p>
             <p>Grâce à la collecte effectuéé en date du {{ donnees.endOfTheCollect | date('d-m-Y') }} où vous avez pu récupérer {{ donnees.numberOfKilosCollected }} kilos de jeux, nous avons le plaisir de vous offrir un bon d'achat d'une valeur de:</p>
-            <p>{{ donnees.discountValueExcludingTax }} euros HT</p>
+            <p>{{ donnees.discountValueExcludingTax / 100 }} euros HT</p>
         </td>
     </tr>
     <tr>
@@ -21,7 +21,7 @@
             {# //TODO Cumulable avec les remises sur pièce ? #}
             <p>Bon d'achat uniquement valable sur l'achat d'articles.</p>
             <p>Code à saisir:</p>
-            <p> {{ donnees.uuid }}</p>
+            <p> {{ donnees.token }}</p>
         </td>
     </tr>
     <tr>

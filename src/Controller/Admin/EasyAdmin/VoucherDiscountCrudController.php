@@ -15,6 +15,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class VoucherDiscountCrudController extends AbstractCrudController
@@ -37,14 +39,16 @@ class VoucherDiscountCrudController extends AbstractCrudController
             TextField::new('email')->setLabel('Destinataire:')->onlyOnIndex(),
             TextField::new('email')->setLabel('Destinataire:')->onlyOnDetail(),
             DateTimeField::new('endOfTheCollect')->setLabel('Date de la collecte:'),
-            TextField::new('uuid')->onlyOnDetail()->setLabel('Token:')->setDisabled(true),
+            TextField::new('token')->onlyOnDetail()->setLabel('Token:')->setDisabled(true),
             IntegerField::new('numberOfKilosCollected')->setLabel('Nombre de kilos collectés (arrondi):')->onlyOnForms(),
             IntegerField::new('numberOfKilosCollected')->setLabel('Nombre de kilos collectés (arrondi):')->onlyOnDetail(),
-            IntegerField::new('discountValueExcludingTax')->setLabel('Montant de la remise (en cents HT):'),
+            IntegerField::new('discountValueExcludingTax')->setLabel('Montant de la remise<br/> (en cents HT):'),
+            IntegerField::new('remainingValueToUseExcludingTax')->setLabel('Montant restant à utiliser<br/> (en cents HT):')->hideOnForm(),
             DateTimeField::new('validUntil')->setLabel('Valide jusqu\'au:'),
             DateTimeField::new('createdAt')->setFormat('dd.MM.yyyy à HH:mm')->setLabel('Créé / envoyé:')->onlyOnDetail()->setDisabled(true),
             BooleanField::new('isUsed')->hideWhenCreating()->setLabel('Utilisé:')->setDisabled(true),
-            TextField::new('createdBy')->onlyOnDetail()->setDisabled(true)
+            TextField::new('createdBy')->onlyOnDetail()->setDisabled(true),
+            CollectionField::new('documents')->onlyOnDetail()
         ];
     }
 
@@ -65,6 +69,7 @@ class VoucherDiscountCrudController extends AbstractCrudController
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->remove(Crud::PAGE_INDEX, Action::EDIT)
             ->remove(Crud::PAGE_DETAIL, Action::EDIT)
+            ->remove(Crud::PAGE_DETAIL, Action::DELETE)
             ->add(Crud::PAGE_INDEX, Action::DETAIL);
         
     }

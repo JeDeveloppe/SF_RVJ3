@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use DateTimeImmutable;
 use App\Entity\VoucherDiscount;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<VoucherDiscount>
@@ -19,6 +20,21 @@ class VoucherDiscountRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, VoucherDiscount::class);
+    }
+
+    public function findOneVoucherIsActive($token): ?VoucherDiscount
+    {
+        $now = new DateTimeImmutable('now');
+
+        return $this->createQueryBuilder('v')
+            ->where('v.token = :token')
+            ->andWhere('v.remainingValueToUseExcludingTax > 0')
+            ->andWhere('v.validUntil > :date')
+            ->setParameter('token', $token)
+            ->setParameter('date', $now)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 
 //    /**

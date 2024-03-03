@@ -19,12 +19,6 @@ class BillingAndDeliveryAddressType extends AbstractType
     {
         $user = $options['user'];
         $shipping = $options['shipping'];
-
-        if($options['redirectAfterSubmitPanierForPaiement'] == false){
-            $labelButtonPanier = 'Demander un devis';
-        }else{
-            $labelButtonPanier = 'Payer';
-        }
         
         $builder
             ->add('billingAddress', EntityType::class, [
@@ -33,8 +27,9 @@ class BillingAndDeliveryAddressType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                 ],
+                'multiple' => false,
+                'expanded' => true,
                 'mapped' => false,
-                'placeholder' => '-- Choisir une adresse de facturation --',
                 'query_builder' => function (EntityRepository $er) use ($user) {
                     return $er->createQueryBuilder('a')
                         ->where('a.isFacturation = :value')
@@ -43,19 +38,8 @@ class BillingAndDeliveryAddressType extends AbstractType
                         ->setParameter('value', true)
                         ->orderBy('a.id', 'ASC');
                 },
-            ])
-            ->add('shipping', EntityType::class, [
-                'class' => ShippingMethod::class,
-                'data' => $shipping,
-                'mapped' => false,
-                'label' => false,
-                'attr' => [
-                    'class' => 'd-none'
-                ]
-
             ]);
         
-        if(!is_null($shipping)){
             if($shipping->getPrice() == 'GRATUIT'){
 
                 $builder
@@ -65,8 +49,9 @@ class BillingAndDeliveryAddressType extends AbstractType
                         'attr' => [
                             'class' => 'form-control',
                         ],
+                        'multiple' => false,
+                        'expanded' => true,
                         'mapped' => false,
-                        'placeholder' => '-- Choisir un lieu de retrait --',
                         'query_builder' => function (EntityRepository $er) {
                             return $er->createQueryBuilder('c')
                                 ->where('c.isActivedInCart = :value')
@@ -85,7 +70,8 @@ class BillingAndDeliveryAddressType extends AbstractType
                             'class' => 'form-control',
                         ],
                         'mapped' => false,
-                        'placeholder' => '-- Choisir une adresse de livraison --',
+                        'multiple' => false,
+                        'expanded' => true,
                         'query_builder' => function (EntityRepository $er) use ($user) {
                             return $er->createQueryBuilder('a')
                                 ->where('a.isFacturation = :value')
@@ -96,15 +82,6 @@ class BillingAndDeliveryAddressType extends AbstractType
                         },
                     ]);
             }
-        }
-
-        $builder
-            ->add('submit', SubmitType::class, [
-                'attr' => [
-                    'class' => 'btn btn-outline-success mt-3 text-center col-12'
-                ],
-                'label' => $labelButtonPanier
-            ]);
 
     }
 
@@ -114,7 +91,6 @@ class BillingAndDeliveryAddressType extends AbstractType
             'data_class' => Address::class,
             'user' =>  null,
             'shipping' => null,
-            'redirectAfterSubmitPanierForPaiement' => null
         ]);
     }
 }
