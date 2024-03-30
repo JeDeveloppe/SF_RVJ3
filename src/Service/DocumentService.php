@@ -18,6 +18,9 @@ use App\Entity\DocumentStatus;
 use App\Repository\ItemRepository;
 use App\Repository\UserRepository;
 use App\Entity\Returndetailstostock;
+use App\Entity\VoucherDiscount;
+use App\Repository\AddressRepository;
+use App\Repository\CollectionPointRepository;
 use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
 use App\Repository\OccasionRepository;
@@ -27,8 +30,11 @@ use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DocumentStatusRepository;
 use App\Repository\LegalInformationRepository;
 use App\Repository\DocumentParametreRepository;
+use App\Repository\ShippingMethodRepository;
+use App\Repository\VoucherDiscountRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\RouterInterface;
 
 class DocumentService
@@ -40,6 +46,7 @@ class DocumentService
         private DocumentLineRepository $documentLineRepository,
         private Security $security,
         private AdresseService $adresseService,
+        private AddressRepository $addressRepository,
         private UtilitiesService $utilitiesService,
         private ItemRepository $itemRepository,
         private LegalInformationRepository $legalInformationRepository,
@@ -51,6 +58,9 @@ class DocumentService
         private ParameterBagInterface $parameter,
         private MailService $mailService,
         private RouterInterface $router,
+        private ShippingMethodRepository $shippingMethodRepository,
+        private CollectionPointRepository $collectionPointRepository,
+        private VoucherDiscountRepository $voucherDiscountRepository
         ){
     }
 
@@ -101,11 +111,21 @@ class DocumentService
         }
     }
 
-    public function saveDocumentInDataBase($panierParams,$billingAddress,$deliveryAddress)
+    public function saveDocumentInDataBase(array $panierParams, Session $session):Document
     {
+        $billingAddress = $this->addressRepository->find($session->get('billingAddressId'));
+
+        if($panierParams['shipping']->getPrice() == "PAYANT"){
+
+            $deliveryAddress = $this->addressRepository->find($session->get('deliveryAddressId'));
+
+        }else{
+
+            $deliveryAddress = $this->collectionPointRepository->find($session->get('deliveryAddressId'));
+        }
+        
         //ON genere un nouveau numero
         $newNumero = $this->generateNewNumberOf("quoteNumber", "getQuoteNumber");
-
         //on cherche les parametres des documents
         $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
 
@@ -115,47 +135,46 @@ class DocumentService
         $endDevis = $now->add(new DateInterval('P'.$docParams->getDelayBeforeDeleteDevis().'D'));
 
         if(count($panierParams['panier_boites']) > 0){
+
             $actionToSearch = 'DEVIS_WITHOUT_PRICE'; //? doit etre comme Service / importV2 / CreationDocumentStatusService
+
         }else{
+
             $actionToSearch = 'NO_PAID'; //? doit etre comme Service / importV2 / CreationDocumentStatusService
         }
 
         $document
-                ->setToken($this->utilitiesService->generateRandomString())
-                ->setQuoteNumber($docParams->getQuoteTag().$newNumero)
-                ->setTotalExcludingTax($panierParams['totalPanier']);
+            ->setToken($this->utilitiesService->generateRandomString())
+            ->setQuoteNumber($docParams->getQuoteTag().$newNumero)
+            ->setTotalExcludingTax($panierParams['totalPanier']);
 
-                if(is_string($deliveryAddress)){ //? vente direct d'un occasion
-                    $document
-                        ->setDeliveryAddress($deliveryAddress)
-                        ->setUser($this->userRepository->findOneBy(['email' => 'client_de_passage@refaitesvosjeux.fr']))
-                        ->setBillingAddress($billingAddress);
-                }else{
-                    $document
-                        ->setUser($this->security->getUser())
-                        ->setDeliveryAddress($this->adresseService->constructAdresseForSaveInDatabase($deliveryAddress))
-                        ->setBillingAddress($this->adresseService->constructAdresseForSaveInDatabase($billingAddress));
-                }
+            if(is_string($deliveryAddress)){ //? vente direct d'un occasion
+                $document
+                    ->setDeliveryAddress($deliveryAddress)
+                    ->setUser($this->userRepository->findOneBy(['email' => 'client_de_passage@refaitesvosjeux.fr']))
+                    ->setBillingAddress($billingAddress);
+            }else{
+                $document
+                    ->setUser($this->security->getUser())
+                    ->setDeliveryAddress($this->adresseService->constructAdresseForSaveInDatabase($deliveryAddress))
+                    ->setBillingAddress($this->adresseService->constructAdresseForSaveInDatabase($billingAddress));
+            }
 
         $document
-                ->setTotalWithTax($this->utilitiesService->htToTTC($panierParams['totalPanier'],$panierParams['tax']->getValue()))
-                ->setDeliveryPriceExcludingTax($panierParams['deliveryCostWithoutTax']->getPriceExcludingTax())
-                ->setIsQuoteReminder(false)
-                ->setEndOfQuoteValidation($endDevis)
-                ->setCreatedAt($now)
-                ->setTaxRate($panierParams['tax'])
-                ->setTaxRateValue($panierParams['tax']->getValue())
-                ->setCost($panierParams['preparationHt'])
-                ->setIsDeleteByUser(false)
-                ->setTimeOfSendingQuote(new DateTimeImmutable('now'))
-                ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => $actionToSearch]));
+            ->setTotalWithTax($this->utilitiesService->htToTTC($panierParams['totalPanier'],$panierParams['tax']->getValue()))
+            ->setDeliveryPriceExcludingTax($panierParams['deliveryCostWithoutTax']->getPriceExcludingTax())
+            ->setIsQuoteReminder(false)
+            ->setEndOfQuoteValidation($endDevis)
+            ->setCreatedAt($now)
+            ->setTaxRate($panierParams['tax'])
+            ->setTaxRateValue($panierParams['tax']->getValue())
+            ->setCost($panierParams['preparationHt'])
+            ->setIsDeleteByUser(false)
+            ->setTimeOfSendingQuote(new DateTimeImmutable('now'))
+            ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => $actionToSearch]))
+            ->setShippingMethod($panierParams['shipping']);
 
         $this->em->persist($document);
-        $this->em->flush();
-
-        $sending = new Documentsending();
-        $sending->setDocument($document)->setShippingMethod($panierParams['shipping']);
-        $this->em->persist($sending);
         $this->em->flush();
 
 
@@ -165,14 +184,25 @@ class DocumentService
             ->setBoitesWeigth($panierParams['totauxBoites']['weigth'])->setBoitesPriceWithoutTax($panierParams['totauxBoites']['price'])
             ->setItemsWeigth($panierParams['totauxItems']['weigth'])->setItemsPriceWithoutTax($panierParams['totauxItems']['price'])
             ->setOccasionsWeigth($panierParams['totauxOccasions']['weigth'])->setOccasionsPriceWithoutTax($panierParams['totauxOccasions']['price'])
-            ->setDiscountonpurchase(-1 * $panierParams['remises']['remiseDeQte'])->setDiscountonpurchaseinpurcentage($panierParams['remises']['value']);
+            ->setDiscountonpurchase(-1 * $panierParams['remises']['volume']['remiseDeQte'])->setDiscountonpurchaseinpurcentage($panierParams['remises']['volume']['value'])
+            ->setVoucherDiscountValueUsed(-1 * $panierParams['remises']['voucher']['used']);
         $this->em->persist($docLineTotals);
         $this->em->flush();
-        // "panier_occasions" => array:1 [▶]
-        // "panier_boites" => []
-        // "panier_items" => array:2 [▶]
+
+        //on traite le bon de reduction s'il y en a un
+        $voucherDiscountId = $session->get('voucherDiscountId');
+
+        $voucherDiscount = $this->voucherDiscountRepository->find($voucherDiscountId);
+        if(!is_null($voucherDiscount->getId())){
+            $voucherDiscount->setRemainingValueToUseExcludingTax($panierParams['remises']['voucher']['voucherRemaining'])
+            ->addDocumentLineTotal($docLineTotals);
+            $this->em->persist($voucherDiscount);
+            $this->em->flush();
+        }
+
         $paniers = array_merge($panierParams['panier_occasions'],$panierParams['panier_boites'],$panierParams['panier_items']);
 
+        //TODO
         if(is_string($deliveryAddress)){ //? vente direct d'un occasion
             $documentLine = new DocumentLine();
             $documentLine
@@ -182,7 +212,7 @@ class DocumentService
                 ->setPriceExcludingTax($panierParams['totauxItems']['price']);
             
                 $this->em->persist($documentLine);
-                $this->em->flush();
+                // $this->em->flush();
 
         }else{
             foreach($paniers as $panier){
@@ -197,7 +227,7 @@ class DocumentService
                     ->setPriceExcludingTax($panier->getPriceWithoutTax());
                 
                     $this->em->persist($documentLine);
-                    $this->em->remove($panier);
+                    // $this->em->remove($panier);
             }
             //on met en BDD les differentes lignes
             $this->em->flush();
@@ -309,16 +339,12 @@ class DocumentService
                 ->setCost($panierParams['preparationHt'])
                 ->setIsDeleteByUser(false)
                 ->setTimeOfSendingQuote(new DateTimeImmutable('now'))
-                ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => 'END']));
+                ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => 'END']))
+                ->setShippingMethod($panierParams['shipping']);
 
         $this->em->persist($document);
         $this->em->flush();
- 
-        $sending = new Documentsending();
-        $sending->setDocument($document)->setShippingMethod($panierParams['shipping']);
-        $this->em->persist($sending);
-        $this->em->flush();
- 
+
         $docLineTotals = new DocumentLineTotals();
         $docLineTotals
             ->setDocument($document)

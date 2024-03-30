@@ -25,10 +25,11 @@ class BillingAndDeliveryAddressType extends AbstractType
                 'class' => Address::class,
                 'label' => false,
                 'attr' => [
-                    'class' => 'form-control',
+                    'class' => 'form-control text-center',
                 ],
+                'placeholder' => '-- Choisir une adresse de facturation --',
                 'multiple' => false,
-                'expanded' => true,
+                'expanded' => false,
                 'mapped' => false,
                 'query_builder' => function (EntityRepository $er) use ($user) {
                     return $er->createQueryBuilder('a')
@@ -47,16 +48,17 @@ class BillingAndDeliveryAddressType extends AbstractType
                         'class' => CollectionPoint::class,
                         'label' => false,
                         'attr' => [
-                            'class' => 'form-control',
+                            'class' => 'form-control text-center',
                         ],
+                        'placeholder' => '-- Choisir une adresse de retrait --',
                         'multiple' => false,
-                        'expanded' => true,
+                        'expanded' => false,
                         'mapped' => false,
                         'query_builder' => function (EntityRepository $er) {
                             return $er->createQueryBuilder('c')
                                 ->where('c.isActivedInCart = :value')
                                 ->setParameter('value', true)
-                                ->orderBy('c.name', 'ASC');
+                                ->orderBy('c.firstname', 'ASC');
                         },
                     ]);
 
@@ -67,11 +69,12 @@ class BillingAndDeliveryAddressType extends AbstractType
                         'class' => Address::class,
                         'label' => false,
                         'attr' => [
-                            'class' => 'form-control',
+                            'class' => 'form-control text-center',
                         ],
+                        'placeholder' => '-- Choisir une adresse de livraison --',
                         'mapped' => false,
                         'multiple' => false,
-                        'expanded' => true,
+                        'expanded' => false,
                         'query_builder' => function (EntityRepository $er) use ($user) {
                             return $er->createQueryBuilder('a')
                                 ->where('a.isFacturation = :value')

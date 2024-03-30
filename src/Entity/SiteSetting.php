@@ -20,6 +20,9 @@ class SiteSetting
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $Marquee = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $fairday = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,18 @@ class SiteSetting
     public function setMarquee(?string $Marquee): static
     {
         $this->Marquee = $Marquee;
+
+        return $this;
+    }
+
+    public function getFairday(): ?string
+    {
+        return $this->fairday;
+    }
+
+    public function setFairday(?string $fairday): static
+    {
+        $this->fairday = $fairday;
 
         return $this;
     }

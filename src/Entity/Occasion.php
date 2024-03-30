@@ -70,6 +70,9 @@ class Occasion
     #[ORM\Column]
     private ?int $discountedPriceWithoutTax = null;
 
+    #[ORM\ManyToOne(inversedBy: 'occasions')]
+    private ?Reserve $reserve = null;
+
     public function __construct()
     {
         $this->documentLines = new ArrayCollection();
@@ -323,6 +326,18 @@ class Occasion
     public function setDiscountedPriceWithoutTax(int $discountedPriceWithoutTax): static
     {
         $this->discountedPriceWithoutTax = $discountedPriceWithoutTax;
+
+        return $this;
+    }
+
+    public function getReserve(): ?Reserve
+    {
+        return $this->reserve;
+    }
+
+    public function setReserve(?Reserve $reserve): static
+    {
+        $this->reserve = $reserve;
 
         return $this;
     }

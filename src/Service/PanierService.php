@@ -16,6 +16,7 @@ use App\Repository\OccasionRepository;
 use App\Repository\ShippingMethodRepository;
 use App\Repository\SiteSettingRepository;
 use App\Repository\TaxRepository;
+use App\Repository\VoucherDiscountRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +38,8 @@ class PanierService
         private TaxRepository $taxRepository,
         private DocumentParametreRepository $documentParametreRepository,
         private Security $security,
-        private RequestStack $request
+        private RequestStack $request,
+        private VoucherDiscountRepository $voucherDiscountRepository
         ){
     }
 
@@ -176,7 +178,6 @@ class PanierService
         $session = $this->request->getSession();
         $shipping = $session->get('shippingMethodeId');
         $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
-
         $responses = [];
         //? calcul de la remise sur les articles
         $responses['remises']['volume'] = $this->calculateRemise($this->panierRepository->findBy(['user' => $user]));
@@ -186,13 +187,16 @@ class PanierService
         $responses['panier_boites'] = $this->panierRepository->findBoitesByUser($user);
         $responses['panier_items'] = $this->panierRepository->findItemsByUser($user);
         $responses['tax'] = $this->taxRepository->findOneBy([]);
-        $responses['remises']['voucher']['voucherMax'] = $session->get('voucherDiscount')->getRemainingValueToUseExcludingTax();
-        $responses['remises']['voucher']['token'] = $session->get('voucherDiscount')->getToken();
-        if($responses['remises']['voucher']['voucherMax'] > 0){
+        $responses['remises']['voucher']['voucherMax'] = 0;
+        $responses['remises']['voucher']['actif'] = false;
+
+        if(!is_null($session->get('voucherDiscountId'))){
+            $voucherDiscount = $this->voucherDiscountRepository->find($session->get('voucherDiscountId'));
+            $responses['remises']['voucher']['voucherMax'] = $voucherDiscount->getRemainingValueToUseExcludingTax();
+            $responses['remises']['voucher']['token'] = $voucherDiscount->getToken();
             $responses['remises']['voucher']['actif'] = true;
-        }else{
-            $responses['remises']['voucher']['actif'] = false;
         }
+
         $now = new DateTimeImmutable('now');
 
         //gestion membership au niveau du panier
@@ -249,7 +253,7 @@ class PanierService
 
 
         $responses['totalPanier'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']->getPriceExcludingTax()) - $responses['remises']['volume']['remiseDeQte'] - $responses['remises']['voucher']['used'];
-dump($responses);
+
         return $responses;
     }
 

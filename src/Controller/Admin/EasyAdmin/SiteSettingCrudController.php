@@ -18,7 +18,12 @@ class SiteSettingCrudController extends AbstractCrudController
     {
         return [
             BooleanField::new('BlockEmailSending')->setLabel('Envoi des emails bloqué:'),
-            TextareaField::new('marquee')->setLabel('Texte d\'absence: (laisser vide pour désactiver'),
+            TextareaField::new('marquee')
+                ->setLabel('Texte de vacances:')
+                ->setFormTypeOptions(['attr' => ['placeholder' => '(laisser vide pour désactiver)']]),
+            TextareaField::new('fairday')
+                ->setLabel('Texte pour les foires:')
+                ->setFormTypeOptions(['attr' => ['placeholder' => '(laisser vide pour désactiver)']]),
         ];
     }
 }

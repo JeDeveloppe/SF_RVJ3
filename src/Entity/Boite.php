@@ -106,6 +106,9 @@ class Boite
     #[ORM\ManyToMany(targetEntity: Item::class, inversedBy: 'BoiteSecondaire')]
     private Collection $itemsSecondaire;
 
+    #[ORM\Column(length: 400, nullable: true)]
+    private ?string $linktopresentationvideo = null;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
@@ -556,6 +559,18 @@ class Boite
         if ($this->itemsSecondaire->removeElement($itemsSecondaire)) {
             $itemsSecondaire->removeBoiteSecondaire($this);
         }
+
+        return $this;
+    }
+
+    public function getLinktopresentationvideo(): ?string
+    {
+        return $this->linktopresentationvideo;
+    }
+
+    public function setLinktopresentationvideo(?string $linktopresentationvideo): static
+    {
+        $this->linktopresentationvideo = $linktopresentationvideo;
 
         return $this;
     }

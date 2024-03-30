@@ -5,8 +5,10 @@
 
 {% block main %}
 
+    {% include "admin/components/_options_page.html.twig" %}
+
     {% if app.request.server.get('PAIEMENT_MODULE') == "HELLOASSO" %}
-        <div class="row mb-4">
+        <div class="row my-4">
             <div class="col-4">
                 <a class="btn btn-warning" href="{{ path('admin_verification_achats_helloAsso') }}" target="_blank">Mettre les paiements HelloAsso à jour</a>
             </div>

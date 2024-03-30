@@ -44,7 +44,7 @@ class CatalogController extends AbstractController
             $search = $form->get('search')->getData();
             $phrase = str_replace(" ","%",$search);
 
-            $donneesFromDatabases = $this->boiteRepository->findBoitesFromSearch($phrase);
+            $donneesFromDatabases = $this->boiteRepository->findItemsFromBoitesFromSearch($phrase);
 
         }else{
 
@@ -115,10 +115,25 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-jeux-occasion', name: 'app_catalogue_occasions')]
     public function catalogueOccasions(Request $request): Response
     {
-        $donnees = $this->occasionRepository->findBy(['isOnline' => true],['id' => 'DESC']);
+        $form = $this->createForm(SearchBoiteInCatalogueType::class);
+        $form->handleRequest($request);
+
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $search = $form->get('search')->getData();
+            $phrase = str_replace(" ","%",$search);
+
+            $donneesFromDatabases = $this->occasionRepository->findBoitesFromSearch($phrase);
+
+        }else{
+
+            $donneesFromDatabases = $this->occasionRepository->findBy(['isOnline' => true],['id' => 'DESC']);
+
+        }
+
 
         $occasions = $this->paginator->paginate(
-            $donnees, /* query NOT result */
+            $donneesFromDatabases, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
             24 /*limit per page*/
         );
@@ -134,9 +149,10 @@ class CatalogController extends AbstractController
 
         return $this->render('site/catalog/occasions/les_occasions.html.twig', [
             'occasions' => $occasions,
-            'occasions_totales' => $donnees,
+            'occasions_totales' => $donneesFromDatabases,
             'transforms' => $transforms ?? null,
-            'metas' => $metas
+            'metas' => $metas,
+            'form' => $form
         ]);
     }
 

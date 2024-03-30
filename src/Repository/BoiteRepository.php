@@ -31,7 +31,7 @@ class BoiteRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findBoitesFromSearch($phrase): array
+    public function findItemsFromBoitesFromSearch($phrase): array
     {
         return $this->createQueryBuilder('b')
             ->join('b.editor','e')

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DocumentLineTotalsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DocumentLineTotalsRepository::class)]
@@ -39,6 +41,17 @@ class DocumentLineTotals
 
     #[ORM\Column(nullable: true)]
     private ?int $discountonpurchaseinpurcentage = null;
+
+    #[ORM\Column]
+    private ?int $voucherDiscountValueUsed = null;
+
+    #[ORM\ManyToMany(targetEntity: VoucherDiscount::class, mappedBy: 'documentLineTotals')]
+    private Collection $voucherDiscounts;
+
+    public function __construct()
+    {
+        $this->voucherDiscounts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -149,6 +162,45 @@ class DocumentLineTotals
     public function setDiscountonpurchaseinpurcentage(?int $discountonpurchaseinpurcentage): static
     {
         $this->discountonpurchaseinpurcentage = $discountonpurchaseinpurcentage;
+
+        return $this;
+    }
+
+    public function getVoucherDiscountValueUsed(): ?int
+    {
+        return $this->voucherDiscountValueUsed;
+    }
+
+    public function setVoucherDiscountValueUsed(int $voucherDiscountValueUsed): static
+    {
+        $this->voucherDiscountValueUsed = $voucherDiscountValueUsed;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, VoucherDiscount>
+     */
+    public function getVoucherDiscounts(): Collection
+    {
+        return $this->voucherDiscounts;
+    }
+
+    public function addVoucherDiscount(VoucherDiscount $voucherDiscount): static
+    {
+        if (!$this->voucherDiscounts->contains($voucherDiscount)) {
+            $this->voucherDiscounts->add($voucherDiscount);
+            $voucherDiscount->addDocumentLineTotal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoucherDiscount(VoucherDiscount $voucherDiscount): static
+    {
+        if ($this->voucherDiscounts->removeElement($voucherDiscount)) {
+            $voucherDiscount->removeDocumentLineTotal($this);
+        }
 
         return $this;
     }

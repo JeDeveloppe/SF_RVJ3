@@ -63,6 +63,11 @@
 						<p class="col-12 small">
 					    	{% include "components/catalog/players&age.html.twig" with {'item': occasion.boite }%}
 						</p>
+						{% if occasion.boite.linktopresentationvideo is not null %}
+							<p class="col-12 small">
+								<a class="text-decoration-none" href="{{ occasion.boite.linktopresentationvideo }}" target="_blank"><i class="fa-solid fa-video"></i> Voir la vidéo de présentation.</a>
+							</p>
+						{% endif %}
 						<p>État de la boite: {{ occasion.boxCondition }}</p>
 						<p>État du matériel: {{ occasion.equipmentCondition }}</p>
 						<p>Règle du jeu: {{ occasion.gameRule }}</p>

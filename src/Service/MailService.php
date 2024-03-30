@@ -74,7 +74,8 @@ class MailService
             $this->sendMail(
                 $document->getUser()->getEmail(),
                 'Devis '.$document->getQuoteNumber().' en attente...',
-                'reminder_quote', [
+                'reminder_quote',
+                [
                     'document' => $document,
                     'endDevis' => $document->getEndOfQuoteValidation(),
                     'docParams' => $docParams,

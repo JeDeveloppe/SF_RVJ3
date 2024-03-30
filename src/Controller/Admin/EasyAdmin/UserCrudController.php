@@ -59,7 +59,7 @@ class UserCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des clients')
             ->setPageTitle('new', 'Nouveau client')
             ->setPageTitle('edit', 'Édition du client')
-            ->setSearchFields(['level.name', 'email']);
+            ->setSearchFields(['level.name', 'email','id']);
     }
 
     public function configureActions(Actions $actions): Actions

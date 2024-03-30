@@ -93,6 +93,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Media::class)]
     private Collection $media;
 
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Reserve::class)]
+    private Collection $reserves;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
@@ -107,6 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->items = new ArrayCollection();
         $this->itemsUpdated = new ArrayCollection();
         $this->media = new ArrayCollection();
+        $this->reserves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -634,6 +638,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($medium->getCreatedBy() === $this) {
                 $medium->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reserve>
+     */
+    public function getReserves(): Collection
+    {
+        return $this->reserves;
+    }
+
+    public function addReserf(Reserve $reserf): static
+    {
+        if (!$this->reserves->contains($reserf)) {
+            $this->reserves->add($reserf);
+            $reserf->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReserf(Reserve $reserf): static
+    {
+        if ($this->reserves->removeElement($reserf)) {
+            // set the owning side to null (unless already changed)
+            if ($reserf->getCreatedBy() === $this) {
+                $reserf->setCreatedBy(null);
             }
         }
 

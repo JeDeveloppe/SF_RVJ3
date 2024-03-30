@@ -53,14 +53,14 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
         if($this->requestStack->getCurrentRequest()->get('entityId')){
             $disabled = true;
             $occasionField = AssociationField::new('occasion')->setLabel('Occasion')
-            ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+            ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
             ->setDisabled($disabled);
             $required = false;
         }else{
             $disabled = false;
             $required = true;
             $occasionField = AssociationField::new('occasion')->setLabel('Occasion (uniquement en ligne)')
-                                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
                                 ->setQueryBuilder(
                                     fn(QueryBuilder $queryBuilder) => 
                                     $queryBuilder->where('entity.isOnline = :true')
@@ -68,7 +68,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
                                         ->orderBy('entity.reference', 'ASC')
                                 )->setDisabled($disabled);
         }
-       
+
         return [
             DateTimeField::new('movementTime')
                 ->setLabel('Date de mouvement')
@@ -80,10 +80,10 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
                 ->setTextAlign('center')->setDisabled($disabled),
             AssociationField::new('movement')
                 ->setLabel('Mouvement:')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])->renderAsEmbeddedForm(),
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])->renderAsEmbeddedForm(),
             AssociationField::new('meansOfPaiement')
                 ->setLabel('Moyen de paiement')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])->renderAsEmbeddedForm(),
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])->renderAsEmbeddedForm(),
             DateTimeField::new('createdAt')->setLabel('Saisie le')->setFormat('dd-MM-yyyy')->onlyOnForms()->setDisabled(true),
             AssociationField::new('createdBy')->setLabel('Saisie par')->onlyOnForms()->setDisabled(true),
         ];

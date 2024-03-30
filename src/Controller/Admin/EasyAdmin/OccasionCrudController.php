@@ -53,8 +53,8 @@ class OccasionCrudController extends AbstractCrudController
 
         return [
             AssociationField::new('boite')
-                ->setLabel('Boite (uniquement en ligne)')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->setLabel('Boite (active en occasion)')
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
                 ->setQueryBuilder(
                     fn(QueryBuilder $queryBuilder) => 
                     $queryBuilder
@@ -62,9 +62,12 @@ class OccasionCrudController extends AbstractCrudController
                     ->setParameter('value', true)
                     ->orderBy('entity.name', 'ASC')
                 )
-                ->setDisabled($disabled),
+                ->setDisabled($disabled)
+                ->renderAsNativeWidget(),
             TextField::new('reference')->setLabel('Référence')->setDisabled(true),
-            TextField::new('information')->setLabel('Information sur l\'occasion'),
+            TextField::new('information')
+                ->setLabel('Information sur l\'occasion')
+                ->onlyOnForms(),
             AssociationField::new('boxCondition')
                 ->setLabel('État de la boite')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
@@ -93,17 +96,26 @@ class OccasionCrudController extends AbstractCrudController
                 ->setLabel('Prix HT en cents d\'une boite comme neuve:')
                 ->setDisabled(true)
                 ->onlyOnForms(),
-            NumberField::new('priceWithoutTax')->setLabel('Prix de vente HT en cents')->onlyOnForms(),
+            NumberField::new('priceWithoutTax')
+                ->setLabel('Prix de vente HT en cents')
+                ->onlyOnForms()
+                ->setDisabled($disabledAfterBilling),
             NumberField::new('discountedPriceWithoutTax')
                 ->setLabel('Prix de vente HT remiser en cents')
                 ->onlyOnForms()
+                ->setDisabled($disabledAfterBilling)
                 ->setFormTypeOptions(['attr' => ['placeholder' => 'Mettre 0 pour aucune remise...']]),
-            BooleanField::new('isOnline')->setLabel('En ligne'),
+            BooleanField::new('isOnline')
+                ->setLabel('En ligne')
+                ->setDisabled($disabledAfterBilling),
             AssociationField::new('offSiteOccasionSale')
                 ->setLabel('Vendu / donner')
                 ->setDisabled(true)
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
-            BooleanField::new('isNew')->setLabel('Neuf')->onlyOnForms()->onlyOnForms()
+            BooleanField::new('isNew')
+                ->setLabel('Neuf')
+                ->onlyOnForms()
+                ->setDisabled($disabledAfterBilling)
         ];
     }
 

@@ -116,18 +116,20 @@ class DocumentCrudController extends AbstractCrudController
 
             FormField::addTab('Adresses / Envoi ou retrait'),
             TextField::new('deliveryAddress')
+                ->renderAsHtml()
                 ->setLabel('Adresse de livraison')
                 ->setDisabled(true)
                 ->hideOnIndex()->setColumns(12),
             TextField::new('billingAddress')
                 ->setLabel('Adresse de facturation')
+                ->renderAsHtml()
                 ->setDisabled(true)
                 ->hideOnIndex()->setColumns(12),
                 
-            TextField::new('documentsending.shippingMethod')
+            TextField::new('shippingMethod')
                 ->setLabel('Envoi / retrait:')
                 ->hideOnIndex()->setDisabled(true),
-            DateTimeField::new('documentsending.sendingAt')
+            DateTimeField::new('sendingAt')
                 ->setLabel('Marchandise envoyée le:')
                 ->setDisabled(true)
                 ->setFormat('dd.MM.yyyy à HH:mm:ss'),
@@ -147,6 +149,7 @@ class DocumentCrudController extends AbstractCrudController
             AssociationField::new('payment')
                 ->setLabel('Paiement')
                 ->setDisabled(true)->hideOnIndex(),
+            DateTimeField::new('payment.timeOfTransaction')->setLabel('Date de paiement:')->setDisabled(true)->hideOnIndex(),
             TextField::new('payment.tokenPayment')
                 ->setLabel('Token du paiement')
                 ->setDisabled(true)
@@ -174,6 +177,7 @@ class DocumentCrudController extends AbstractCrudController
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->remove(Crud::PAGE_INDEX, Action::NEW)
             ->remove(Crud::PAGE_DETAIL, Action::DELETE)
+            ->remove(Crud::PAGE_INDEX, Action::EDIT)
             ->add(Crud::PAGE_INDEX, Action::DETAIL);        
     }
 }

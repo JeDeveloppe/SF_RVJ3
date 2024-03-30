@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240302193333 extends AbstractMigration
+final class Version20240320193454 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20240302193333 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE voucher_discount ADD token VARCHAR(15) NOT NULL, DROP uuid');
+        $this->addSql('ALTER TABLE collection_point ADD organization VARCHAR(255) DEFAULT NULL, CHANGE firstname firstname VARCHAR(255) DEFAULT NULL, CHANGE lastname lastname VARCHAR(255) DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE voucher_discount ADD uuid BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', DROP token');
+        $this->addSql('ALTER TABLE collection_point DROP organization, CHANGE firstname firstname VARCHAR(255) NOT NULL, CHANGE lastname lastname VARCHAR(255) NOT NULL');
     }
 }

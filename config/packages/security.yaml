@@ -42,9 +42,9 @@ security:
         - { path: ^/ambassador, roles: ROLE_AMBASSADOR }
 
     role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
-        ROLE_AMBASSADOR: ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_AMBASSADOR]
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_ADMIN: ROLE_BENEVOL
+        ROLE_BENEVOL: ROLE_USER
 
 when@test:
     security:

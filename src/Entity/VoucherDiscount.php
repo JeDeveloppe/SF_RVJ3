@@ -47,12 +47,12 @@ class VoucherDiscount
     #[ORM\Column]
     private ?int $remainingValueToUseExcludingTax = null;
 
-    #[ORM\OneToMany(mappedBy: 'voucherDiscount', targetEntity: Document::class)]
-    private Collection $documents;
+    #[ORM\ManyToMany(targetEntity: DocumentLineTotals::class, inversedBy: 'voucherDiscounts')]
+    private Collection $documentLineTotals;
 
     public function __construct()
     {
-        $this->documents = new ArrayCollection();
+        $this->documentLineTotals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -181,31 +181,25 @@ class VoucherDiscount
     }
 
     /**
-     * @return Collection<int, Document>
+     * @return Collection<int, DocumentLineTotals>
      */
-    public function getDocuments(): Collection
+    public function getDocumentLineTotals(): Collection
     {
-        return $this->documents;
+        return $this->documentLineTotals;
     }
 
-    public function addDocument(Document $document): static
+    public function addDocumentLineTotal(DocumentLineTotals $documentLineTotal): static
     {
-        if (!$this->documents->contains($document)) {
-            $this->documents->add($document);
-            $document->setVoucherDiscount($this);
+        if (!$this->documentLineTotals->contains($documentLineTotal)) {
+            $this->documentLineTotals->add($documentLineTotal);
         }
 
         return $this;
     }
 
-    public function removeDocument(Document $document): static
+    public function removeDocumentLineTotal(DocumentLineTotals $documentLineTotal): static
     {
-        if ($this->documents->removeElement($document)) {
-            // set the owning side to null (unless already changed)
-            if ($document->getVoucherDiscount() === $this) {
-                $document->setVoucherDiscount(null);
-            }
-        }
+        $this->documentLineTotals->removeElement($documentLineTotal);
 
         return $this;
     }

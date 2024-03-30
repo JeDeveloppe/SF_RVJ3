@@ -137,9 +137,9 @@ class ImportDocumentsService
 
         foreach($docs as $arrayDoc){
             $io->progressAdvance();
-            $sending= $this->createOrUpdateDocumentSending($arrayDoc);
+            $document = $this->createOrUpdateDocumentSending($arrayDoc);
 
-            $this->em->persist($sending);
+            $this->em->persist($document);
         }
 
         $this->em->flush();
@@ -149,15 +149,9 @@ class ImportDocumentsService
         $io->success('Création terminée');
     }
 
-    private function createOrUpdateDocumentSending(array $arrayDoc): Documentsending
+    private function createOrUpdateDocumentSending(array $arrayDoc):Document
     {
         $document = $this->documentRepository->findOneBy(['rvj2id' => $arrayDoc['idDocument']]);
-
-        $sending = $this->documentsendingRepository->findOneBy(['document' => $document]);
-
-        if(!$sending){
-            $sending = new Documentsending();
-        }
 
         //?ok version 3
         if($arrayDoc['expedition'] == "poste"){
@@ -199,8 +193,8 @@ class ImportDocumentsService
             $sendingNumber = NULL;
         }
 
-        $sending->setDocument($document)->setShippingMethod($expedition)->setSendingAt($timeSending)->setSendingNumber($sendingNumber);
+        $document->setShippingMethod($expedition)->setSendingAt($timeSending)->setSendingNumber($sendingNumber);
 
-        return $sending;
+        return $document;
     }
 }

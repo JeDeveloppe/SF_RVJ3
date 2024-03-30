@@ -404,7 +404,6 @@ class PaiementService
 
         $document = $this->documentRepository->findOneBy(['token' => $token, 'billNumber' => NULL, 'isDeleteByUser' => false]);
 
-        //TODO
         if(!$document){
 
             $tableau = [
@@ -443,8 +442,6 @@ class PaiementService
     public function getHelloAssoPaiementStatus($bearer, Payment $payment)
     {
 
-        $docParams = $this->documentParametreRepository->findOneBy([]);
-
         $result = $this->client->request('GET', 'https://api.helloasso.com/v5/organizations/refaites-vos-jeux/checkout-intents/'.$payment->getTokenPayment(),
         [
             'headers' => [
@@ -454,29 +451,38 @@ class PaiementService
             ]
         ]);
 
+        return $result;
+    }
+
+    public function updateDocumentsWithHelloAssoStatus($result, Payment $payment)
+    {
+
+        $docParams = $this->documentParametreRepository->findOneBy([]);
+
         $content = $result->toArray();
 
-        //s'il y a eu enregistrement chez HelloAsso
-        if(isset($content['order'])){
-            $order = $content['order'];
-            //paiement accepter
-            if($order['payments']['state'] == "Authorized"){
-                $response['paiement'] = true;
-                $payment->setTimeOfTransaction($order['payments']['date'])->setDetails('CB');
-                $this->em->persist($payment);
-                $this->em->flush();
+            //s'il y a eu enregistrement chez HelloAsso
+            if(isset($content['order'])){
+                $order = $content['order'];
+                //paiement accepter
+                if($order['payments']['state'] == "Authorized"){
+                    $response['paiement'] = true;
+                    $payment->setTimeOfTransaction($order['payments']['date'])->setDetails('CB');
+                    $this->em->persist($payment);
+                    $this->em->flush();
+        
+                    $newNumero = $this->documentService->generateNewNumberOf('billNumber', 'getBillNumber');
+                    //on met a jour le document en BDD
+                    $etat = $this->documentStatusRepository->findOneBy(['action' => 'TO_PREPARE']);
+                    $document = $payment->getDocument();
+                    $document->setDocumentStatus($etat)->setBillNumber($docParams->getBillingTag().$newNumero);
+                    $this->em->persist($document);
+                    $this->em->flush();
     
-                $newNumero = $this->documentService->generateNewNumberOf('billNumber', 'getBillNumber');
-                //on met a jour le document en BDD
-                $etat = $this->documentStatusRepository->findOneBy(['action' => 'TO_PREPARE']);
-                $document = $payment->getDocument();
-                $document->setDocumentStatus($etat)->setBillNumber($docParams->getBillingTag().$newNumero);
-                $this->em->persist($document);
-                $this->em->flush();
-
+                }
             }
-        }
     }
+
 
     public function paiementSuccessWithHelloAsso($tokenDocument)
     {

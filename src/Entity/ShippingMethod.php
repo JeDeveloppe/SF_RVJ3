@@ -27,16 +27,16 @@ class ShippingMethod
     #[ORM\Column(length: 255)]
     private ?string $price = null;
 
-    #[ORM\OneToMany(mappedBy: 'shippingMethod', targetEntity: Documentsending::class)]
-    private Collection $documentsendings;
-
     #[ORM\Column]
     private ?bool $forOccasionOnly = null;
+
+    #[ORM\OneToMany(mappedBy: 'shippingMethod', targetEntity: Document::class)]
+    private Collection $documents;
 
     public function __construct()
     {
         $this->deliveries = new ArrayCollection();
-        $this->documentsendings = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,36 +115,6 @@ class ShippingMethod
         return $this;
     }
 
-    /**
-     * @return Collection<int, Documentsending>
-     */
-    public function getDocumentsendings(): Collection
-    {
-        return $this->documentsendings;
-    }
-
-    public function addDocumentsending(Documentsending $documentsending): static
-    {
-        if (!$this->documentsendings->contains($documentsending)) {
-            $this->documentsendings->add($documentsending);
-            $documentsending->setShippingMethod($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDocumentsending(Documentsending $documentsending): static
-    {
-        if ($this->documentsendings->removeElement($documentsending)) {
-            // set the owning side to null (unless already changed)
-            if ($documentsending->getShippingMethod() === $this) {
-                $documentsending->setShippingMethod(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function isForOccasionOnly(): ?bool
     {
         return $this->forOccasionOnly;
@@ -156,4 +126,35 @@ class ShippingMethod
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Document>
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    public function addDocument(Document $document): static
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+            $document->setShippingMethod($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(Document $document): static
+    {
+        if ($this->documents->removeElement($document)) {
+            // set the owning side to null (unless already changed)
+            if ($document->getShippingMethod() === $this) {
+                $document->setShippingMethod(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

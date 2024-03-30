@@ -6,48 +6,58 @@
 
     <h1 class="col-12 text-center my-5">Les jeux d'occasion</h1>
 
+    {% if fairDay is not null %}
 
-    <div class="col-12 text-center h4 text-danger">Uniquement disponible en retrait sur Caen !</div>
-
-    {% if occasions | length > 0 %}
-
-        <div class="row justify-content-around">
-
-            {% for key,occasion in occasions %}  
-
-            {% include "components/catalog/_card.html.twig" with { 'donnee': occasion, 'key': key } %}
-
-            {% endfor %}
-
-        </div>
-        
-        <div class="row mt-5">
-            <div class="col-12 d-flex justify-content-center">
-                {{ knp_pagination_render(occasions, 'components/pagination.html.twig') }}
-            </div>
-        </div>
-
-
-        <div class="row mb-5 justify-content-start">
-            <div class="col-12 text-center">{{ occasions_totales | length }} occasions en ligne.</div>
-        </div>
+        {% include "components/catalog/_fairDay.html.twig" %}
 
     {% else %}
+        
+        {% include "components/catalog/_search_boite.html.twig" %}
 
-        <div class="row">
-            <div class="col-12 text-center">
-                <p class="h2">Nous n'avons pas ce jeu en stock pour le moment.</p>
-                <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.refaitesvosjeux.fr" target="_blank">Facebook !</a></p>    
-                <p class="h5 mt-5">Ou tenter votre chance chez l'un de nos partenaires:</p>
+        <div class="col-12 text-center h4 text-danger">Uniquement disponible en retrait sur Caen !</div>
+
+        {% if occasions | length > 0 %}
+
+            <div class="row justify-content-around">
+
+                {% for key,occasion in occasions %}  
+
+                {% include "components/catalog/_card.html.twig" with { 'donnee': occasion, 'key': key } %}
+
+                {% endfor %}
+
             </div>
-        </div>
-        <div class="row justify-content-start mb-5">
+            
+            <div class="row mt-5">
+                <div class="col-12 d-flex justify-content-center">
+                    {{ knp_pagination_render(occasions, 'components/pagination.html.twig') }}
+                </div>
+            </div>
 
-            {% for partenaire in partenaires %}
 
-            {% include "site/components/catalogues/card-partenaire.html.twig" %}
-                
-            {% endfor %}
-        </div>
+            <div class="row mb-5 justify-content-start">
+                <div class="col-12 text-center">{{ occasions_totales | length }} occasions en ligne.</div>
+            </div>
+
+        {% else %}
+
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="h2">Nous n'avons pas ce jeu en stock pour le moment.</p>
+                    <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.refaitesvosjeux.fr" target="_blank">Facebook !</a></p>    
+                    <p class="h5 mt-5">Ou tenter votre chance chez l'un de nos partenaires:</p>
+                </div>
+            </div>
+            <div class="row justify-content-start mb-5">
+
+                {% for partenaire in partenaires %}
+
+                {% include "site/components/catalogues/card-partenaire.html.twig" %}
+                    
+                {% endfor %}
+            </div>
+        {% endif %}
+
     {% endif %}
+
 {% endblock %}

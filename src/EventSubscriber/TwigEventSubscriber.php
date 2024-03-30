@@ -23,6 +23,7 @@ class TwigEventSubscriber implements EventSubscriberInterface
         $siteSetting = $this->siteSettingRepository->findOneBy([]);
 
         $this->twig->addGlobal('marquee', $siteSetting->getMarquee());
+        $this->twig->addGlobal('fairDay', $siteSetting->getFairday());
     }
 
     public static function getSubscribedEvents(): array

@@ -1,8 +1,12 @@
-<div class="row my-5">
+<div class="row mt-5">
     <div class="col-12 d-flex justify-content-center">
         {{ form_start(acceptCartForm) }}
-            <div class="input-group mb-3">
+            <div class="form-group mb-4">
+                <label for="exampleInputEmail1">{{ form_label(acceptCartForm.accept) }}</label>
                 {{ form_widget(acceptCartForm.accept) }}
+            </div>
+            <div class="text-center">
+                <button class="btn btn-lg btn-outline-success" type="submit">Payer</button>
             </div>
         {{ form_end(acceptCartForm) }}
     </div>

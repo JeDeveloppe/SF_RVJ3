@@ -194,6 +194,34 @@ class SiteController extends AbstractController
 
     }
 
+    #[Route('/projet/nous-soutenir/adherer-a-l-association', name: 'app_adherer')]
+    public function adherer(Request $request): Response
+    {
+
+        //TODO
+        $metas['description'] = 'Description à faire';
+        
+        return $this->render('site/project/nous_soutenir/adherer.html.twig', [
+            'metas' => $metas,            
+            'legales' => $this->legalInformationRepository->findOneBy([])
+        ]);
+
+    }
+
+    #[Route('/projet/nous-soutenir/nos-prestations', name: 'app_prestations')]
+    public function prestations(Request $request): Response
+    {
+
+        //TODO
+        $metas['description'] = 'Description à faire';
+        
+        return $this->render('site/project/prestations.html.twig', [
+            'metas' => $metas,            
+            'legales' => $this->legalInformationRepository->findOneBy([])
+        ]);
+
+    }
+
     #[Route('/projet/nous-soutenir/faire-un-don', name: 'app_make_donation')]
     public function makeDonation(Request $request): Response
     {

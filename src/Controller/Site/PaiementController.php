@@ -45,7 +45,9 @@ class PaiementController extends AbstractController
             return $this->redirect($payment_url, 303);
 
         }else{
+
             throw new Exception('PAIEMENT_MODULE IN .ENV FILE NOT INFORM');
+            
         }
     }
 

@@ -5,11 +5,11 @@
 {% block body %}
 
     <div class="row justify-content-center my-5 py-4">
-        <div class="jumbotron col-11 col-md-6 my-5 h-100">
+        <div class="col-12 col-md-9 my-5">
             <h1 class="display-4">PAIEMENT ANNULÉ</h1>
             <p class="lead">Quelque chose ne s'est pas déroulé correctement ou vous avez annulé la transaction!</p>
             <hr class="my-4">
-            <div class="col-12 d-flex flex-row flex-wrap my-5">
+            <div class="row justify-content-around my-5">
                 <div class="col-4 text-center">
                     <a href="{{ path('paiement', {'tokenDocument': token}) }}" class="btn btn-lg btn-success" >Relancer le paiement !</a>
                 </div>

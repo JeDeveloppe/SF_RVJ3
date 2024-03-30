@@ -13,8 +13,14 @@ class CollectionPoint
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $firstname = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $lastname = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $organization = null;
 
     #[ORM\Column(length: 255)]
     private ?string $street = null;
@@ -31,14 +37,38 @@ class CollectionPoint
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getFirstname(): ?string
     {
-        return $this->name;
+        return $this->firstname;
     }
 
-    public function setName(string $name): static
+    public function setFirstname(?string $firstname): static
     {
-        $this->name = $name;
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(?string $lastname): static
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getOrganization(): ?string
+    {
+        return $this->organization;
+    }
+
+    public function setOrganization(?string $organization): static
+    {
+        $this->organization = $organization;
 
         return $this;
     }
@@ -81,6 +111,6 @@ class CollectionPoint
 
     public function __toString()
     {
-        return $this->name.' '.$this->street.' '.$this->city;
+        return $this->organization.' '.$this->firstname.' '.$this->lastname.' '.$this->street.' '.$this->city;
     }
 }

@@ -4,12 +4,12 @@
 
 {% block body %}
 
-    <div class="col-12 text-center h2 my-5">Panier<br/>[choix des adresses]</div>
-
+    <h1 class="col-12 text-center h2 mt-5">Panier</h1>
+    <div class="col-12 text-center h4 mb-5">[choix des adresses]</div>
 
     <div class="col-12 col-md-6 mx-auto my-5">
 
-        {% if voucherDiscount.id is not null %}
+        {% if voucherDiscountId is not null %}
             <div class="alert alert-success text-center" role="alert">
                 Code de réduction reconnu, il sera utilisé à la prochaine étape.
             </div>          

@@ -58,22 +58,6 @@ class AdminController extends AbstractController
         }
     }
 
-    #[Route('/admin/details-payment/{token}', name: 'admin_invoice_details')]
-    public function paymentDetails($token)
-    {
-
-        $payment = $this->paymentRepository->findOneBy(['tokenPayment' => $token]);
-
-        $this->paiementService->payplugAuth();
-
-        $result = \Payplug\Payment::retrieve($token);
-
-        return $this->render('admin/details_payment.html.twig', [
-            'payment' => $payment,
-            'result' => $result
-        ]);
-    }
-
     #[Route('/admin/change-status-of-option/{option}/{value}', name: 'admin_change_status_option')]
     public function changeStatusOption($option,$value, Request $request): Response
     {
@@ -104,9 +88,13 @@ class AdminController extends AbstractController
 
         //on met a jour les paiements
         $payments = $this->paymentRepository->findBy(['timeOfTransaction' => NULL, 'details' => NULL]);
+
         foreach($payments as $payment){
 
-            $this->paiementService->getHelloAssoPaiementStatus($bearer,$payment);
+            $result = $this->paiementService->getHelloAssoPaiementStatus($bearer,$payment);
+
+            $this->paiementService->updateDocumentsWithHelloAssoStatus($result, $payment);
+
         }
 
         return new Response('TERMINER: tous les paiements sur HelloAsso ont été mis à jour ! (100% de réussite)');

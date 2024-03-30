@@ -94,11 +94,14 @@ class Document
     #[ORM\Column(nullable: true)]
     private ?bool $isLastQuoteCantBeDeleted = null;
 
-    #[ORM\OneToOne(mappedBy: 'document', cascade: ['persist', 'remove'])]
-    private ?Documentsending $documentsending = null;
+    #[ORM\ManyToOne(inversedBy: 'documents', cascade: ['persist'])]
+    private ?ShippingMethod $shippingMethod = null;
 
-    #[ORM\ManyToOne(inversedBy: 'documents')]
-    private ?VoucherDiscount $voucherDiscount = null;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $sendingAt = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $sendingNumber = null;
 
     public function __construct()
     {
@@ -448,31 +451,38 @@ class Document
         return $this;
     }
 
-    public function getDocumentsending(): ?Documentsending
+    public function getShippingMethod(): ?ShippingMethod
     {
-        return $this->documentsending;
+        return $this->shippingMethod;
     }
 
-    public function setDocumentsending(Documentsending $documentsending): static
+    public function setShippingMethod(?ShippingMethod $shippingMethod): static
     {
-        // set the owning side of the relation if necessary
-        if ($documentsending->getDocument() !== $this) {
-            $documentsending->setDocument($this);
-        }
-
-        $this->documentsending = $documentsending;
+        $this->shippingMethod = $shippingMethod;
 
         return $this;
     }
 
-    public function getVoucherDiscount(): ?VoucherDiscount
+    public function getSendingAt(): ?\DateTimeImmutable
     {
-        return $this->voucherDiscount;
+        return $this->sendingAt;
     }
 
-    public function setVoucherDiscount(?VoucherDiscount $voucherDiscount): static
+    public function setSendingAt(?\DateTimeImmutable $sendingAt): static
     {
-        $this->voucherDiscount = $voucherDiscount;
+        $this->sendingAt = $sendingAt;
+
+        return $this;
+    }
+
+    public function getSendingNumber(): ?string
+    {
+        return $this->sendingNumber;
+    }
+
+    public function setSendingNumber(?string $sendingNumber): static
+    {
+        $this->sendingNumber = $sendingNumber;
 
         return $this;
     }

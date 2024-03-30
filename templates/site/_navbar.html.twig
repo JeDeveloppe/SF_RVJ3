@@ -24,13 +24,14 @@
           <div class="dropdown-menu">
             <a class="dropdown-item" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
             <a class="dropdown-item" href="{{ path('app_buy_games') }}">Acheter des jeux</a>
+            <a class="dropdown-item" href="#">Organiser une collecte de jeux</a>
             <a class="dropdown-item" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur / ambassadrice</a>
-            <a class="dropdown-item" href="#">Agrandir le réseau du ré-emploi du jouet</a>
+            <a class="dropdown-item" href="{{ path('app_adherer') }}">Adhérer à l'association</a>
             <a class="dropdown-item" href="{{ path('app_make_donation') }}">Faire un don</a>
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ path('app_partenaires') }}">Partenaires</a>
+          <a class="nav-link" href="{{ path('app_prestations') }}">Prestations</a>
         </li>
       </ul>
       <ul class="navbar-nav">
@@ -69,7 +70,7 @@
         <li class="nav-item">
           {% if is_granted('ROLE_USER') %}
             {% if app.user.paniers | length > 0 %}
-              <a class="nav-link" href="{{ path('panier') }}">Panier ({{ app.user.paniers | length }})</a>
+              <a class="nav-link" href="{{ path('panier_start') }}">Panier ({{ app.user.paniers | length }})</a>
             {% else %}
               <a class="nav-link">Panier (0)</a>
             {% endif %}

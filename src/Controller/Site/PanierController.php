@@ -43,10 +43,9 @@ class PanierController extends AbstractController
         private VoucherDiscountRepository $voucherDiscountRepository
     )
     {
-        
     }
     
-    #[Route('/panier', name: 'panier')]
+    #[Route('/panier', name: 'panier_start')]
     public function index(Request $request): Response
     {
         $user = $this->security->getUser();
@@ -78,25 +77,28 @@ class PanierController extends AbstractController
             //on recupere le code saisie et on le met en session
             $session = $request->getSession();
 
-            if(!is_null($voucherDiscountCode)){
+            if(is_null($voucherDiscountCode)){
+
+                $voucherDiscountId = null;
+
+            }else{
+                
                 //on enlève les espaces au cas ou
                 $voucherDiscountCode = str_replace(' ','', $voucherDiscountCode);
                 $voucherDiscount = $this->voucherDiscountRepository->findOneVoucherIsActive($voucherDiscountCode);
 
                 if(is_null($voucherDiscount)){
-                    $voucherDiscount = new VoucherDiscount();
-                    $voucherDiscount->setRemainingValueToUseExcludingTax(0);
+
+                    $voucherDiscountId = null;
+
+                }else{
+
+                    $voucherDiscountId = $voucherDiscount->getId();
                 }
-
-            }else{
-
-                $voucherDiscount = new VoucherDiscount();
-                $voucherDiscount->setRemainingValueToUseExcludingTax(0);
-
             }
-            $session->set('voucherDiscount', $voucherDiscount);
-            $session->set('shippingMethodeId', $shippingMethodeId);
 
+            $session->set('voucherDiscountId', $voucherDiscountId);
+            $session->set('shippingMethodeId', $shippingMethodeId);
             //on redirige var la page suivante
             return $this->redirectToRoute('panier_addresses');
 
@@ -121,33 +123,38 @@ class PanierController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
+        $voucherDiscoundId = null;
         $session = $request->getSession();
+        if(!is_null($session->get('voucherDiscountId'))){
+            $voucherDiscoundId = $session->get('voucherDiscountId');
+        }
+
         $billingAndDeliveryForm = $this->createForm(BillingAndDeliveryAddressType::class, null, [
             'user' => $this->security->getUser(),
             'shipping' => $session->get('shippingMethodeId'),
         ]);
         $billingAndDeliveryForm->handleRequest($request);
 
-        if($billingAndDeliveryForm->isSubmitted() && $billingAndDeliveryForm->isValid()){
-            
-            $billingAddress = $billingAndDeliveryForm['billingAddress']->getData();
-            $deliveryAddress = $billingAndDeliveryForm['deliveryAddress']->getData();
+            if($billingAndDeliveryForm->isSubmitted() && $billingAndDeliveryForm->isValid()){
+                
+                $billingAddress = $billingAndDeliveryForm['billingAddress']->getData();
+                $deliveryAddress = $billingAndDeliveryForm['deliveryAddress']->getData();
 
-            //on recupere le code saisie et on le met en session
-            $session = $request->getSession();
-            
-            $session->set('billingAddress', $billingAddress);
-            $session->set('deliveryAddress', $deliveryAddress);
+                //on recupere le code saisie et on le met en session
+                $session = $request->getSession();
+                
+                $session->set('billingAddressId', $billingAddress->getId());
+                $session->set('deliveryAddressId', $deliveryAddress->getId());
 
-            //on redirige var la page suivante
-            return $this->redirectToRoute('panier_before_paiement');
+                //on redirige var la page suivante
+                return $this->redirectToRoute('panier_before_paiement');
 
-        }
+            }
 
         return $this->render('site/panier/panier_addresses.html.twig', [
             'user' => $user,
             'billingAndDeliveryForm' => $billingAndDeliveryForm,
-            'voucherDiscount' => $session->get('voucherDiscount')
+            'voucherDiscountId' => $voucherDiscoundId
         ]);
     }
 
@@ -165,55 +172,47 @@ class PanierController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        //on recupere lla session
+        //on recupere la session
         $session = $request->getSession();
+
+
+        $billingAddress = $this->addressRepository->find($session->get('billingAddressId'));
+
+        if($session->get('shippingMethodeId')->getPrice() == "PAYANT"){
+
+            $deliveryAddress = $this->addressRepository->find($session->get('deliveryAddressId'));
+
+        }else{
+
+            $deliveryAddress = $this->collectionPointRepository->find($session->get('deliveryAddressId'));
+        }
+
+        //toutes les infos du panier sont là
         $reponses = $this->panierService->calculateAllCart($user);
 
         $acceptCartForm = $this->createForm(AcceptCartType::class);
         $acceptCartForm->handleRequest($request);
 
-        // if($acceptCartForm->isSubmitted() && $acceptCartForm->isValid())
-        // {
-        //     unset($reponses);
+        if($acceptCartForm->isSubmitted() && $acceptCartForm->isValid())
+        {
 
-        //     $allValues = $request->request->all($billingAndDeliveryForm->getName());
+            //? on recupere toutes les infos du panier
+            $panierParams = $reponses;
 
-        //     $billingAddress = $this->addressRepository->findOneBy(['id' => $allValues['billingAddress']]);
-        //     $shippingMethod = $this->shippingMethodRepository->findOneBy(['id' => $allValues['shipping']]);
+            //? sauvegarde document dans BDD avec articles, boites, etc... en fonction du Type DEVIS ou COMMANDE
+            $document = $this->documentService->saveDocumentInDataBase($panierParams,$session);
 
-        //     if($shippingMethod->getPrice() == 'PAYANT'){
-                
-        //         $deliveryAddress = $this->addressRepository->findOneBy(['id' => $allValues['deliveryAddress'], 'user' => $user]);
+            if($panierParams['redirectAfterSubmitPanierForPaiement'] == true){
+                //paiement direct donc on redirige vers la page de paiement avec le numero de document
+                return $this->redirectToRoute('paiement', ['tokenDocument' => $document->getToken()]);
 
-        //     }else{
-        //         //TODO SÉPARER RECHERCHE DANS LES DEPOTS RVJ ET FOIRES
-        //         $deliveryAddress = $this->collectionPointRepository->findOneBy(['id' => $allValues['deliveryAddress']]);
-        //     }
-
-        //     if(!$billingAddress or !$deliveryAddress){
-        //         $this->addFlash('warning','Less adresses ne vous appartiennent pas !');
-
-        //         $this->redirectToRoute('app_home');
-        //     }
-
-        //     //? on recupere toutes les infos du panier
-        //     $panierParams = $this->panierService->calculateAllCart($user,$allValues['shipping']);
-
-        //     //? sauvegarde document dans BDD avec articles, boites, etc... en fonction du Type DEVIS ou COMMANDE
-        //     $document = $this->documentService->saveDocumentInDataBase($panierParams,$billingAddress,$deliveryAddress);
-
-        //     if($panierParams['redirectAfterSubmitPanierForPaiement'] == true){
-        //         //paiement direct donc on redirige vers la page de paiement avec le numero de document
-        //         return $this->redirectToRoute('paiement', ['tokenDocument' => $document->getToken()]);
-
-        //     }else{
+            }else{
     
-        //         return $this->redirectToRoute('panier_success', ['tokenDocument' => $document->getToken()]);
+                return $this->redirectToRoute('panier_success', ['tokenDocument' => $document->getToken()]);
 
-        //     }
+            }
 
-        // }
-
+        }
 
         return $this->render('site/panier/panier_before_paiement.html.twig', [
             'occasions' => $reponses['panier_occasions'],
@@ -228,7 +227,9 @@ class PanierController extends AbstractController
             'tax' => $reponses['tax'],
             'preparationHt' => $reponses['preparationHt'],
             'deliveryCostWithoutTax' => $reponses['deliveryCostWithoutTax'],
-            'acceptCartForm' => $acceptCartForm
+            'acceptCartForm' => $acceptCartForm,
+            'billingAddress' => $billingAddress,
+            'deliveryAddress' => $deliveryAddress
         ]);
     }
 
@@ -274,7 +275,7 @@ class PanierController extends AbstractController
 
         $this->addFlash($reponse[0], $reponse[1]);
 
-        return $this->redirectToRoute('panier');
+        return $this->redirectToRoute('panier_before_paiement');
     }
 
     #[Route('/panier/ajout-article/', name: 'panier_add_article')]

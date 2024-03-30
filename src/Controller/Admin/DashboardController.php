@@ -10,11 +10,10 @@ use App\Entity\User;
 use App\Entity\Boite;
 use App\Entity\Color;
 use App\Entity\Level;
+use App\Entity\Media;
 use App\Entity\Editor;
 use DateTimeImmutable;
 use App\Entity\Address;
-use App\Entity\Ambassador;
-use App\Entity\BadgeForMediaTimeline;
 use App\Entity\Country;
 use App\Entity\Partner;
 use App\Entity\Payment;
@@ -24,39 +23,42 @@ use App\Entity\Document;
 use App\Entity\Envelope;
 use App\Entity\Occasion;
 use App\Entity\ItemGroup;
+use App\Entity\Ambassador;
 use App\Entity\Department;
+use App\Entity\SiteSetting;
 use App\Entity\DocumentLine;
 use App\Service\MailService;
 use App\Entity\ResetPassword;
 use App\Entity\DocumentStatus;
 use App\Entity\ShippingMethod;
 use App\Entity\CollectionPoint;
+use App\Entity\Documentsending;
 use App\Entity\MeansOfPayement;
+use App\Entity\VoucherDiscount;
 use App\Entity\LegalInformation;
 use App\Entity\MovementOccasion;
 use App\Entity\NumbersOfPlayers;
 use App\Service\DocumentService;
+use App\Service\PaiementService;
 use App\Entity\ConditionOccasion;
-use App\Entity\DocumentLineTotals;
 use App\Entity\DocumentParametre;
-use App\Entity\Documentsending;
-use App\Entity\Media;
+use App\Entity\DocumentLineTotals;
 use App\Repository\ItemRepository;
+use App\Repository\UserRepository;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Returndetailstostock;
-use App\Entity\SiteSetting;
-use App\Entity\VoucherDiscount;
+use App\Entity\BadgeForMediaTimeline;
+use App\Entity\Reserve;
 use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\SiteSettingRepository;
 use App\Repository\ResetPasswordRepository;
 use App\Repository\DocumentStatusRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\OffSiteOccasionSaleRepository;
-use App\Repository\SiteSettingRepository;
-use App\Repository\UserRepository;
-use App\Service\PaiementService;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -88,6 +90,7 @@ class DashboardController extends AbstractDashboardController
         $now = new DateTimeImmutable('now');
 
         $documentsToReminder = $this->documentRepository->findByDevisToReminder($now);
+        $setting = $this->siteSettingRepository->findOneBy([]);
         
         $this->mailService->reminderQuotes($documentsToReminder, $now);
 
@@ -142,7 +145,8 @@ class DashboardController extends AbstractDashboardController
 
         return $this->render('admin/dashboard.html.twig', [
             'totals' => $totals,
-            'itemsWithStockIsNull' => $itemsWithStockIsNull
+            'itemsWithStockIsNull' => $itemsWithStockIsNull,
+            'setting' => $setting
         ]);
     }
 
@@ -211,13 +215,14 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('DEVIS','fa-solid fa-money-bill','admin_traited_daily_devis');
         yield MenuItem::linkToRoute('COMMANDES','fa-solid fa-money-bill','admin_traited_daily_commands');
         yield MenuItem::linkToRoute('GRAPHIQUES','fa-solid fa-chart-simple','jpgraph');
+        yield MenuItem::linkToCrud('RESERVER DES OCCASIONS','fa-solid fa-hand', Reserve::class);
 
         
 
         yield MenuItem::section('Gestion des boites:');
-        yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class);
-        yield MenuItem::linkToCrud('Éditeurs', 'fas fa-list', Editor::class);
-        yield MenuItem::linkToCrud('Joueurs', 'fas fa-list', NumbersOfPlayers::class);
+        yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class)->setPermission('ROLE_BENEVOL');
+        yield MenuItem::linkToCrud('Éditeurs', 'fas fa-list', Editor::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Joueurs', 'fas fa-list', NumbersOfPlayers::class)->setPermission('ROLE_ADMIN');
         
         yield MenuItem::section('Gestion des articles:');
         yield MenuItem::linkToCrud('Groupe d\'articles', 'fas fa-list', ItemGroup::class);
@@ -226,12 +231,11 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Enveloppes', 'fas fa-list', Envelope::class);
 
         yield MenuItem::section('Gestion des documents:');
-        yield MenuItem::linkToCrud('Documents', 'fas fa-list', Document::class);
+        yield MenuItem::linkToCrud('Liste des documents', 'fas fa-list', Document::class);
         // yield MenuItem::linkToCrud('Lignes documents', 'fas fa-list', DocumentLine::class);
-        yield MenuItem::linkToCrud('Paiements', 'fas fa-list', Payment::class);
+        yield MenuItem::linkToCrud('Liste des paiements', 'fas fa-list', Payment::class);
         yield MenuItem::linkToCrud('Status des documents', 'fas fa-list', DocumentStatus::class);
         yield MenuItem::linkToCrud('Paramètres', 'fas fa-list', DocumentParametre::class);
-        yield MenuItem::linkToCrud('Liste des envois', 'fas fa-list', Documentsending::class);
         yield MenuItem::linkToCrud('Liste des totaux', 'fas fa-list', DocumentLineTotals::class);
 
         yield MenuItem::section('Gestion des utilisateurs:');

@@ -116,16 +116,16 @@ class InitForProd2 extends Command
         // //on importe les lignes de chaque document
         // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
         // $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
-        // $this->importDocumentsLignesService->generateDocumentsTotals($io);
+        $this->importDocumentsLignesService->generateDocumentsTotals($io);
 
         //on cree les enveloppes et les couleurs pour les articles, les enveloppes, les joueurs, les livraisons
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
-        // $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
+        $this->creationEnvelopesAndColorsAndDiscountsService->addDelivery();
+        $this->creationEnvelopesAndColorsAndDiscountsService->addEnvelopes($io);
+        $this->creationEnvelopesAndColorsAndDiscountsService->addColors($io);
+        $this->creationEnvelopesAndColorsAndDiscountsService->addDiscounts($io);
 
         //on cree les settings du site
-        // $this->siteSettingsService->addSettings($io);
+        $this->siteSettingsService->addSettings($io);
 
         //on injecte les medias
         $this->importMediasService->addBadgeForMedia();

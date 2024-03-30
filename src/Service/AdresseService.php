@@ -10,8 +10,6 @@ class AdresseService
     {
         $completeAdresse = '';
 
-        if($adresse instanceof Address){
-
             if(!is_null($adresse->getOrganization())){
                 $completeAdresse .= $adresse->getOrganization().'<br/>';
             }
@@ -20,15 +18,6 @@ class AdresseService
             .$adresse->getStreet().'<br/>'
             .$adresse->getCity().'<br/>'
             .$adresse->getCity()->getCountry()->getIsocode();
-
-        }else{
-
-            return $completeAdresse.$adresse->getName().'<br/>'
-            .$adresse->getStreet().'<br/>'
-            .$adresse->getCity().'<br/>'
-            .$adresse->getCity()->getCountry()->getIsocode();
-    
-        }
         
     }
 }

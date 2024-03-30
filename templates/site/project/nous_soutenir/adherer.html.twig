@@ -1,0 +1,21 @@
+{% extends "site/base.html.twig" %}
+
+{% block title %}Adhérer à l'association{% endblock %}
+
+{% block body %}
+
+    <h1 class="col-12 text-center my-5">Adhérer à l'association</h1>
+
+    <div class="row justify-content-center">
+
+        <div class="col-11 text-center">
+            <p class="fs-4">{{ metas.description }}</p>
+        </div>
+
+<a href="https://www.helloasso.com/associations/refaites-vos-jeux/adhesions/formulaire-d-adhesion-a-l-association-refaites-vos-jeux"></a>
+
+    {% include "site/project/components/_link-to-formulaire.html.twig" %}
+
+    </div>
+
+{% endblock %}

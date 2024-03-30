@@ -19,9 +19,11 @@ class CollectionPointCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('name')->setLabel('Nom:'),
+            TextField::new('organization')->setLabel('Organisation:'),
+            TextField::new('firstname')->setLabel('Nom:'),
+            TextField::new('lastname')->setLabel('Prénom:'),
             TextField::new('street')->setLabel('Adresse:'),
-            AssociationField::new('city')->setLabel('Ville:'),
+            AssociationField::new('city')->setLabel('Ville:')->autocomplete(),
             BooleanField::new('isActivedInCart')->setLabel('Actif dans le panier:')
         ];
     }

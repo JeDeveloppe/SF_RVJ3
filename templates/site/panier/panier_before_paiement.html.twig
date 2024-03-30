@@ -4,17 +4,19 @@
 
 {% block body %}
 
-    <div class="col-12 text-center h2 my-5">Panier</div>
+    <h1 class="col-12 text-center h2 mt-5">Panier</h1>
 
     <div class="col-11 mx-auto">
-        <a href="{{ path('panier') }}" class="btn btn-outline-primary mx-auto"><i class="fa-solid fa-backward-fast"></i> Recommencer</a>
+        <a href="{{ path('panier_start') }}" class="btn btn-outline-primary mx-auto"><i class="fa-solid fa-backward-fast"></i> Recommencer</a>
     </div>
+
+    {% include "components/panier/_address.html.twig" with {'billingAddress': billingAddress, 'deliveryAddress': deliveryAddress }%}
 
     <div class="col-12 col-md-10 mx-auto">
 
-        {% include "components/panier/_table_items.html.twig" with {'donnees': items }%}
+        {% include "components/panier/_table_items.html.twig" with {'donnees': items } %}
 
-        {% include "components/panier/_table_occasions.html.twig" with {'donnees': occasions }%}
+        {% include "components/panier/_table_occasions.html.twig" with {'donnees': occasions } %}
 
     </div>
 
@@ -40,7 +42,7 @@
                 <tr>
                     <td>Code de réduction ({{ remises.voucher.token }}):<br>
                     Reste à utilisé: {{ (remises.voucher.voucherRemaining * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
-                    <td>{{ (remises.voucher.used * ( 1 + (tax.value / 100)) / 100) * -1 | number_format(2, '.', ',') }} € TTC</td>
+                    <td>- {{ (remises.voucher.used * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
                 </tr>
             {% endif %}
             <tr>
@@ -55,7 +57,7 @@
                     {% if deliveryCostWithoutTax.priceExcludingTax == 0 %}
                         Retrait
                     {% else %}
-                        {{ deliveryCostWithoutTax.priceExcludingTax / 100 | number_format(2, '.', ',') }} € TTC
+                        {{ (deliveryCostWithoutTax.priceExcludingTax / 100) | number_format(2, '.', ',') }} € TTC
                     {% endif %}
                 </td>
             </tr>

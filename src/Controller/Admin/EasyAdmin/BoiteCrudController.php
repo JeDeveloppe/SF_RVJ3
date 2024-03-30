@@ -24,6 +24,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 
 class BoiteCrudController extends AbstractCrudController
 {
@@ -42,46 +43,93 @@ class BoiteCrudController extends AbstractCrudController
     {
         return [
             FormField::addTab('Général'),
-            ImageField::new('image')->setBasePath($this->getParameter('app.path.boites_images'))->onlyOnIndex(),
-            TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
-                'required' => false,
-                'allow_delete' => false,
-                'delete_label' => 'Supprimer du serveur ?',
-                'download_label' => '...',
-                'download_uri' => true,
-                'image_uri' => true,
-                // 'imagine_pattern' => '...',
-                'asset_helper' => true,
-            ])->setLabel('Image')->onlyOnForms()->setColumns(6),
-            BooleanField::new('isOnline')->setLabel('En ligne')->setColumns(6),
-            TextField::new('name')->setLabel('Nom')->setColumns(6),
-            SlugField::new('slug')->setTargetFieldName('name')->setLabel('Slug')->onlyOnForms()->setColumns(6),
-            IntegerField::new('year')->setLabel('Année')->setColumns(6),
+            ImageField::new('image')
+                ->setBasePath($this->getParameter('app.path.boites_images'))
+                ->onlyOnIndex()
+                ->setPermission('ROLE_ADMIN'),
+            TextField::new('imageFile')
+                ->setFormType(VichImageType::class)
+                ->setFormTypeOptions([
+                    'required' => false,
+                    'allow_delete' => false,
+                    'delete_label' => 'Supprimer du serveur ?',
+                    'download_label' => '...',
+                    'download_uri' => true,
+                    'image_uri' => true,
+                    // 'imagine_pattern' => '...',
+                    'asset_helper' => true,
+                ])
+                ->setLabel('Image')
+                ->onlyOnForms()
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
+            BooleanField::new('isOnline')
+                ->setLabel('En ligne')
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
+            TextField::new('name')  
+                ->setLabel('Nom')
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
+            SlugField::new('slug')
+                ->setTargetFieldName('name')
+                ->setLabel('Slug')
+                ->onlyOnForms()
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
+            IntegerField::new('year')
+                ->setLabel('Année')
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
             AssociationField::new('editor')
                 ->setLabel('Éditeur')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner un éditeur...'])
-                ->onlyOnForms()->setColumns(6),
+                ->onlyOnForms()
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
             AssociationField::new('editor')
                 ->setLabel('Éditeur')
-                ->renderAsEmbeddedForm()->onlyOnIndex(),
-            TextareaField::new('content')->setLabel('Contenu d\'une boite entière')->onlyOnForms()->setColumns(6),
-            TextField::new('contentMessage')->setLabel('Message d\'alerte sur le contenu de la boite')->onlyOnForms()->setColumns(6),
-            IntegerField::new('age')->setLabel('A partir de (âge)')->onlyOnForms()->setColumns(6),
-            AssociationField::new('players')->setLabel('A partir de (joueurs)')->onlyOnForms()->setColumns(6),
+                ->renderAsEmbeddedForm()
+                ->setPermission('ROLE_ADMIN')
+                ->onlyOnIndex(),
+            TextareaField::new('content')
+                ->setLabel('Contenu d\'une boite entière')
+                ->onlyOnForms()
+                ->setColumns(6),
+            TextField::new('contentMessage')
+                ->setLabel('Message d\'alerte sur le contenu de la boite')
+                ->onlyOnForms()
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
+            UrlField::new('linktopresentationvideo')
+                ->setLabel('Lien vers la vidéo de présentation du jeu:')
+                ->onlyOnForms()
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
+            IntegerField::new('age')
+                ->setLabel('A partir de (âge)')
+                ->onlyOnForms()
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
+            AssociationField::new('players')
+                ->setLabel('A partir de (joueurs)')
+                ->onlyOnForms()
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
 
-            FormField::addTab('Occasion / Articles'),
+            FormField::addTab('Occasion / Articles')->setPermission('ROLE_ADMIN'),
             BooleanField::new('isOccasion')->setLabel('Disponilbe en occasion'),
             IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms(),
             IntegerField::new('htPrice')->setLabel('Prix HT (en cents) d\'une boite complête en bon état')->onlyOnForms(),
             AssociationField::new('itemsSecondaire')->setLabel('Articles:'),
 
             
-            FormField::addTab('Paramètres'),
+            FormField::addTab('Paramètres')->setPermission('ROLE_ADMIN'),
             BooleanField::new('isDeliverable')->setLabel('Livrable')->onlyOnForms(),
             BooleanField::new('isDeee')->setLabel('Deee'),
 
             
-            FormField::addTab('Ventes'),
+            FormField::addTab('Ventes')->setPermission('ROLE_ADMIN'),
             AssociationField::new('documentLines')->onlyOnIndex(),
             CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twig')->setDisabled(true)->onlyOnForms(),
 
@@ -110,14 +158,14 @@ class BoiteCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Nouvelle boite')
             ->setPageTitle('edit', 'Édition d\'une boite')
             ->setDefaultSort(['id' => 'DESC'])
-            ->setSearchFields(['name', 'editor.name','id'])
-        ;
+            ->setSearchFields(['name', 'editor.name','id']);
     }
 
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->remove(Crud::PAGE_INDEX, Action::DELETE);
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->remove(Crud::PAGE_DETAIL, Action::DELETE);
         
     }
 

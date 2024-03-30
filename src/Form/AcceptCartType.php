@@ -14,14 +14,9 @@ class AcceptCartType extends AbstractType
     {
         $builder
             ->add('accept', CheckboxType::class, [
-                'label' => 'Ok',
+                'label' => 'J\'accepte les conditions générale de vente: ',
                 'required' => true
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Payer',
-                'attr' => ['class' => 'btn btn-lg btn-outline-success'],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
