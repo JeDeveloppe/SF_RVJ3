@@ -37,14 +37,14 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_BENEVOLE] }
         - { path: ^/member, roles: ROLE_USER }
         - { path: ^/ambassador, roles: ROLE_AMBASSADOR }
 
     role_hierarchy:
         ROLE_SUPER_ADMIN: ROLE_ADMIN
-        ROLE_ADMIN: ROLE_BENEVOL
-        ROLE_BENEVOL: ROLE_USER
+        ROLE_ADMIN: ROLE_BENEVOLE
+        ROLE_BENEVOLE: ROLE_USER
 
 when@test:
     security:

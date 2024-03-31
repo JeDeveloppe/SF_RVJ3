@@ -3,14 +3,15 @@
 namespace App\Service;
 
 use App\Entity\User;
-use App\Repository\AddressRepository;
-use App\Repository\CountryRepository;
-use App\Repository\DocumentParametreRepository;
-use App\Repository\DocumentRepository;
-use App\Repository\PartnerRepository;
 use DateTimeImmutable;
 use App\Repository\UserRepository;
+use App\Repository\AddressRepository;
+use App\Repository\CountryRepository;
+use App\Repository\PartnerRepository;
+use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use App\Repository\DocumentParametreRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserService
@@ -24,7 +25,8 @@ class UserService
         private DocumentRepository $documentRepository,
         private AddressRepository $addressRepository,
         private PartnerRepository $partnerRepository,
-        private DocumentParametreRepository $documentParametreRepository
+        private DocumentParametreRepository $documentParametreRepository,
+        private Security $security
         ){
     }
 
@@ -131,5 +133,19 @@ class UserService
         $donnees['year'] = $year;
 
         return $donnees;
+    }
+
+    public function disabledFieldWhenBenevole(){
+
+        $user = $this->security->getUser();
+
+        //?gestion possibilité d'afficher ou pas en function du role
+        $roles = $user->getRoles();
+        $disabledWhenBenevole = true;
+        if(in_array("ROLE_ADMIN", $roles)){
+            $disabledWhenBenevole = false;
+        }
+
+        return $disabledWhenBenevole;
     }
 }

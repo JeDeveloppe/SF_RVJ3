@@ -5,49 +5,51 @@
 
 {% block main %}
 
-    {% include "admin/components/_options_page.html.twig" %}
+    {% if is_granted('ROLE_ADMIN') %}
+    
+        {% include "admin/components/_options_page.html.twig" %}
 
-    {% if app.request.server.get('PAIEMENT_MODULE') == "HELLOASSO" %}
-        <div class="row my-4">
-            <div class="col-4">
-                <a class="btn btn-warning" href="{{ path('admin_verification_achats_helloAsso') }}" target="_blank">Mettre les paiements HelloAsso à jour</a>
-            </div>
-        </div>
-    {% endif %}
-
-    <div class="row">
-        {% for total in totals %}
-            <div class="col-4 mb-3">
-                <div class="card">
-                    <div class="card-header">{{ total.name }}</div>
-                    <div class="card-body">
-                        {% if total.isMoney == true %}
-                            {{ (total.total) / 100 |number_format(2, '.', ',') }}
-                        {% else %}
-                            {{ total.total }}
-                        {% endif %}
-                    </div>
+        {% if app.request.server.get('PAIEMENT_MODULE') == "HELLOASSO" %}
+            <div class="row my-4">
+                <div class="col-4">
+                    <a class="btn btn-warning" href="{{ path('admin_verification_achats_helloAsso') }}" target="_blank">Mettre les paiements HelloAsso à jour</a>
                 </div>
             </div>
-        {% endfor %}
-    </div>
+        {% endif %}
 
-    <div class="row mt-5">
-        <h3 class="col-12 text-danger">Les articles avec un stock à 0:</h3>
-        {% if itemsWithStockIsNull | length > 0 %}
-            {% for item in itemsWithStockIsNull %}
-                {% set setEntityId = item.id %}
-                <div class="col-3 card p-0">
-                    <div class="card-body d-flex justify-content-around align-items-center">
-                        {{ item.name }}
-                        {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': 'Item'} %}
+        <div class="row">
+            {% for total in totals %}
+                <div class="col-4 mb-3">
+                    <div class="card">
+                        <div class="card-header">{{ total.name }}</div>
+                        <div class="card-body">
+                            {% if total.isMoney == true %}
+                                {{ (total.total) / 100 |number_format(2, '.', ',') }}
+                            {% else %}
+                                {{ total.total }}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             {% endfor %}
-        {% else %}
-            <div class="col-3 card bg-success p-2">Aucun</div>
-        {% endif %}
-    </div>
+        </div>
 
+        <div class="row mt-5">
+            <h3 class="col-12 text-danger">Les articles avec un stock à 0:</h3>
+            {% if itemsWithStockIsNull | length > 0 %}
+                {% for item in itemsWithStockIsNull %}
+                    {% set setEntityId = item.id %}
+                    <div class="col-3 card p-0">
+                        <div class="card-body d-flex justify-content-around align-items-center">
+                            {{ item.name }}
+                            {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': 'Item'} %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-3 card bg-success p-2">Aucun</div>
+            {% endif %}
+        </div>
+    {% endif %}
 
 {% endblock %}

@@ -6,6 +6,7 @@ use App\Entity\Boite;
 use DateTimeImmutable;
 use Doctrine\ORM\QueryBuilder;
 use App\Repository\BoiteRepository;
+use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -34,19 +35,24 @@ class BoiteCrudController extends AbstractCrudController
     }
 
     public function __construct(
-        private Security $security
+        private Security $security,
+        private UserService $userService
     )
     {
     }
 
     public function configureFields(string $pageName): iterable
     {
+
+        //?gestion possibilité d'afficher ou pas en function du role
+        $disabledWhenBenevole = $this->userService->disabledFieldWhenBenevole();
+
         return [
             FormField::addTab('Général'),
             ImageField::new('image')
                 ->setBasePath($this->getParameter('app.path.boites_images'))
                 ->onlyOnIndex()
-                ->setPermission('ROLE_ADMIN'),
+                ->setPermission('ROLE_BENEVOLE'),
             TextField::new('imageFile')
                 ->setFormType(VichImageType::class)
                 ->setFormTypeOptions([
@@ -69,7 +75,8 @@ class BoiteCrudController extends AbstractCrudController
                 ->setColumns(6),
             TextField::new('name')  
                 ->setLabel('Nom')
-                ->setPermission('ROLE_ADMIN')
+                ->setPermission('ROLE_BENEVOLE')
+                ->setDisabled($disabledWhenBenevole)
                 ->setColumns(6),
             SlugField::new('slug')
                 ->setTargetFieldName('name')
@@ -117,21 +124,25 @@ class BoiteCrudController extends AbstractCrudController
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
 
-            FormField::addTab('Occasion / Articles')->setPermission('ROLE_ADMIN'),
-            BooleanField::new('isOccasion')->setLabel('Disponilbe en occasion'),
+            FormField::addTab('Occasion / Articles')->setPermission('ROLE_BENEVOLE'),
+            BooleanField::new('isOccasion')->setLabel('Disponilbe en occasion')->setPermission('ROLE_ADMIN'),
             IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms(),
             IntegerField::new('htPrice')->setLabel('Prix HT (en cents) d\'une boite complête en bon état')->onlyOnForms(),
-            AssociationField::new('itemsSecondaire')->setLabel('Articles:'),
+            AssociationField::new('itemsSecondaire')->setLabel('Articles:')->setPermission('ROLE_ADMIN'),
 
             
             FormField::addTab('Paramètres')->setPermission('ROLE_ADMIN'),
-            BooleanField::new('isDeliverable')->setLabel('Livrable')->onlyOnForms(),
-            BooleanField::new('isDeee')->setLabel('Deee'),
+            BooleanField::new('isDeliverable')->setLabel('Livrable')->onlyOnForms()->setPermission('ROLE_ADMIN'),
+            BooleanField::new('isDeee')->setLabel('Deee')->setPermission('ROLE_ADMIN'),
 
             
             FormField::addTab('Ventes')->setPermission('ROLE_ADMIN'),
-            AssociationField::new('documentLines')->onlyOnIndex(),
-            CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twig')->setDisabled(true)->onlyOnForms(),
+            AssociationField::new('documentLines')->onlyOnIndex()->setPermission('ROLE_ADMIN'),
+            CollectionField::new('documentLines')
+                ->setTemplatePath('admin/fields/documentLines.html.twig')
+                ->setDisabled(true)
+                ->onlyOnForms()
+                ->setPermission('ROLE_ADMIN'),
 
             FormField::addTab('Création / Mise à jour'),
             DateTimeField::new('createdAt')->setLabel('Créé le')
@@ -146,6 +157,11 @@ class BoiteCrudController extends AbstractCrudController
             DateTimeField::new('updatedAt')->setLabel('Mise à jour le')
                 ->setFormat('dd-MM-yyyy')
                 ->setDisabled()
+                ->onlyOnForms(),
+            AssociationField::new('updatedBy')->setLabel('Mise à jour par')
+                ->setFormTypeOption('choice_label', 'nickname')
+                ->setDisabled(true)
+                ->setFormTypeOptions(['placeholder' => '...'])
                 ->onlyOnForms(),
         ];
     }
@@ -174,6 +190,17 @@ class BoiteCrudController extends AbstractCrudController
         if ($entityInstance instanceof Boite) {
             $user = $this->security->getUser();
             $entityInstance->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user);
+
+            $entityManager->persist($entityInstance);
+            $entityManager->flush();
+        }
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if ($entityInstance instanceof Boite) {
+            $user = $this->security->getUser();
+            $entityInstance->setUpdatedBy($user)->setUpdatedAt(new DateTimeImmutable ('now'));
 
             $entityManager->persist($entityInstance);
             $entityManager->flush();

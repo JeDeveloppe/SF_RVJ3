@@ -109,6 +109,9 @@ class Boite
     #[ORM\Column(length: 400, nullable: true)]
     private ?string $linktopresentationvideo = null;
 
+    #[ORM\ManyToOne(inversedBy: 'boitesUpdated')]
+    private ?User $updatedBy = null;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
@@ -571,6 +574,18 @@ class Boite
     public function setLinktopresentationvideo(?string $linktopresentationvideo): static
     {
         $this->linktopresentationvideo = $linktopresentationvideo;
+
+        return $this;
+    }
+
+    public function getUpdatedBy(): ?User
+    {
+        return $this->updatedBy;
+    }
+
+    public function setUpdatedBy(?User $updatedBy): static
+    {
+        $this->updatedBy = $updatedBy;
 
         return $this;
     }

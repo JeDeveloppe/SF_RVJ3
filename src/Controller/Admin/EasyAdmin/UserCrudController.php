@@ -31,7 +31,10 @@ class UserCrudController extends AbstractCrudController
 
             FormField::addTab('Infos générales'),
             IdField::new('rvj2id')->setLabel('Rvj2Id')->setDisabled(true)->onlyOnForms(),
-            AssociationField::new('level')->setLabel('Role'),
+            IdField::new('id')->setLabel('Identifiant RVJ3')->setDisabled(true)->onlyOnForms(),
+            AssociationField::new('level')
+                ->setLabel('Role')
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Choisir un rôle']]),
             TextField::new('email')->setLabel('Adresse email')->setDisabled(true),
             TextField::new('nickname')->setLabel('Pseudo (pour les admins)')->onlyOnForms()->setFormTypeOptions(['attr' => ['placeholder' => 'Uniquement pour un admin...']]),
             TelephoneField::new('phone')->setLabel('Téléphone')->onlyOnForms(),
@@ -59,7 +62,7 @@ class UserCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des clients')
             ->setPageTitle('new', 'Nouveau client')
             ->setPageTitle('edit', 'Édition du client')
-            ->setSearchFields(['level.name', 'email','id']);
+            ->setSearchFields(['level.name', 'email','id','nickname']);
     }
 
     public function configureActions(Actions $actions): Actions
@@ -75,9 +78,10 @@ class UserCrudController extends AbstractCrudController
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if ($entityInstance instanceof User) {
+            
             $roleMax = [];
             $roleMax[] = $entityInstance->getLevel()->getNameInDatabase();
-            $entityInstance->setRoles($roleMax);
+            $entityInstance->setRoles($roleMax)->setNickname($entityInstance->getLevel()->getName().'#'.$entityInstance->getId());
 
             $entityManager->persist($entityInstance);
             $entityManager->flush();

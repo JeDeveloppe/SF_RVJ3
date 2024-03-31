@@ -96,6 +96,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Reserve::class)]
     private Collection $reserves;
 
+    #[ORM\OneToMany(mappedBy: 'updatedBy', targetEntity: Boite::class)]
+    private Collection $boitesUpdated;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
@@ -111,6 +114,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->itemsUpdated = new ArrayCollection();
         $this->media = new ArrayCollection();
         $this->reserves = new ArrayCollection();
+        $this->boitesUpdated = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -668,6 +672,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($reserf->getCreatedBy() === $this) {
                 $reserf->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Boite>
+     */
+    public function getBoitesUpdated(): Collection
+    {
+        return $this->boitesUpdated;
+    }
+
+    public function addBoitesUpdated(Boite $boitesUpdated): static
+    {
+        if (!$this->boitesUpdated->contains($boitesUpdated)) {
+            $this->boitesUpdated->add($boitesUpdated);
+            $boitesUpdated->setUpdatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBoitesUpdated(Boite $boitesUpdated): static
+    {
+        if ($this->boitesUpdated->removeElement($boitesUpdated)) {
+            // set the owning side to null (unless already changed)
+            if ($boitesUpdated->getUpdatedBy() === $this) {
+                $boitesUpdated->setUpdatedBy(null);
             }
         }
 
