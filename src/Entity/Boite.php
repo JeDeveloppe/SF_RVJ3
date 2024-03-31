@@ -92,7 +92,7 @@ class Boite
 
     #[ORM\ManyToOne(inversedBy: 'boites')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?NumbersOfPlayers $players = null;
+    private ?NumbersOfPlayers $playersMin = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $rvj2id = null;
@@ -111,6 +111,9 @@ class Boite
 
     #[ORM\ManyToOne(inversedBy: 'boitesUpdated')]
     private ?User $updatedBy = null;
+
+    #[ORM\ManyToOne(inversedBy: 'boitesMax')]
+    private ?NumbersOfPlayers $playersMax = null;
 
     public function __construct()
     {
@@ -461,14 +464,14 @@ class Boite
         return $this;
     }
 
-    public function getPlayers(): ?NumbersOfPlayers
+    public function getPlayersMin(): ?NumbersOfPlayers
     {
-        return $this->players;
+        return $this->playersMin;
     }
 
-    public function setPlayers(?NumbersOfPlayers $players): static
+    public function setPlayersMin(?NumbersOfPlayers $playersMin): static
     {
-        $this->players = $players;
+        $this->playersMin = $playersMin;
 
         return $this;
     }
@@ -586,6 +589,18 @@ class Boite
     public function setUpdatedBy(?User $updatedBy): static
     {
         $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+
+    public function getPlayersMax(): ?NumbersOfPlayers
+    {
+        return $this->playersMax;
+    }
+
+    public function setPlayersMax(?NumbersOfPlayers $playersMax): static
+    {
+        $this->playersMax = $playersMax;
 
         return $this;
     }

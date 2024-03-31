@@ -69,10 +69,10 @@ class ReserveCrudController extends AbstractCrudController
             //? pour chaque occasions on met hors ligne
             $occasions = $entityInstance->getOccasions();
 
-            foreach($occasions as $occasion){
-                $occasion->setIsOnline(false);
-                $entityManager->persist($occasion);
-            }
+            // foreach($occasions as $occasion){
+            //     $occasion->setIsOnline(false);
+            //     $entityManager->persist($occasion);
+            // }
 
             $user = $this->security->getUser();
             $now = new DateTimeImmutable ('now');
@@ -82,38 +82,4 @@ class ReserveCrudController extends AbstractCrudController
             $entityManager->flush();
         }
     }
-
-    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {
-        if ($entityInstance instanceof Reserve) {
-            
-            //? pour chaque occasions on met hors ligne
-            $occasions = $entityInstance->getOccasions();
-
-            foreach($occasions as $occasion){
-                $occasion->setIsOnline(false);
-                $entityManager->persist($occasion);
-            }
-
-            $entityManager->persist($entityInstance);
-            $entityManager->flush();
-        }
-    }
-
-    // public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    // {
-    //     if ($entityInstance instanceof Reserve) {
-            
-    //         //? pour chaque occasions on remet en ligne
-    //         $occasions = $entityInstance->getOccasions();
-
-    //         foreach($occasions as $occasion){
-    //             $occasion->setIsOnline(true);
-    //             $entityManager->persist($occasion);
-    //         }
-
-    //         $entityManager->remove($entityInstance);
-    //         $entityManager->flush();
-    //     }
-    // }
 }

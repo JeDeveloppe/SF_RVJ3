@@ -108,18 +108,24 @@ class BoiteCrudController extends AbstractCrudController
                 ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
-            UrlField::new('linktopresentationvideo')
-                ->setLabel('Lien vers la vidéo de présentation du jeu:')
-                ->onlyOnForms()
-                ->setPermission('ROLE_ADMIN')
-                ->setColumns(6),
             IntegerField::new('age')
                 ->setLabel('A partir de (âge)')
                 ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN')
-                ->setColumns(6),
-            AssociationField::new('players')
+                ->setColumns(4),
+            AssociationField::new('playersMin')
                 ->setLabel('A partir de (joueurs)')
+                ->onlyOnForms()
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(4),
+            AssociationField::new('playersMax')
+                ->setLabel('Jusqu\'à (joueurs)')
+                ->onlyOnForms()
+                ->setRequired(false)
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(4),
+            UrlField::new('linktopresentationvideo')
+                ->setLabel('Lien vers la vidéo de présentation du jeu:')
                 ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),

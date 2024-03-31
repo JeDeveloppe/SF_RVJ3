@@ -45,6 +45,9 @@ class OffSiteOccasionSale
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $placeOfTransaction = null;
 
+    #[ORM\ManyToOne(inversedBy: 'offSiteOccasionSalesBuyer')]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
@@ -182,6 +185,18 @@ class OffSiteOccasionSale
     public function setPlaceOfTransaction(?string $placeOfTransaction): static
     {
         $this->placeOfTransaction = $placeOfTransaction;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

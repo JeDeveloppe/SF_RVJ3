@@ -90,7 +90,7 @@ class Reserve
     {
         if (!$this->occasions->contains($occasion)) {
             $this->occasions->add($occasion);
-            $occasion->setReserve($this);
+            $occasion->setReserve($this)->setIsOnline(false);
         }
 
         return $this;
@@ -101,7 +101,7 @@ class Reserve
         if ($this->occasions->removeElement($occasion)) {
             // set the owning side to null (unless already changed)
             if ($occasion->getReserve() === $this) {
-                $occasion->setReserve(null);
+                $occasion->setReserve(null)->setIsOnline(true);
             }
         }
 

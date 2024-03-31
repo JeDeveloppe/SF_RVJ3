@@ -59,7 +59,7 @@ class UserService
         $this->em->persist($user);
         $this->em->flush();
 
-        //on vérifié si on a déjà créé l'admin
+        //on vérifié si on a déjà créé le client de passage
         $user = $this->userRepository->findOneBy(['email' => 'client_de_passage@refaitesvosjeux.fr']);
 
         if(!$user){

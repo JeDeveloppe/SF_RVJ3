@@ -25,6 +25,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
 class OffSiteOccasionSaleCrudController extends AbstractCrudController
@@ -59,14 +60,15 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
         }else{
             $disabled = false;
             $required = true;
-            $occasionField = AssociationField::new('occasion')->setLabel('Occasion (uniquement en ligne)')
-                                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
-                                ->setQueryBuilder(
-                                    fn(QueryBuilder $queryBuilder) => 
-                                    $queryBuilder->where('entity.isOnline = :true')
-                                        ->setParameter('true', true)
-                                        ->orderBy('entity.reference', 'ASC')
-                                )->setDisabled($disabled);
+            // $occasionField = AssociationField::new('occasion')->setLabel('Occasion (uniquement en ligne)')
+            //                     ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
+            //                     ->setQueryBuilder(
+            //                         fn(QueryBuilder $queryBuilder) => 
+            //                         $queryBuilder->where('entity.isOnline = :true')
+            //                             ->setParameter('true', true)
+            //                             ->orderBy('entity.reference', 'ASC')
+            //                     )->setDisabled($disabled);
+            $occasionField = CollectionField::new('occasion')->setEntryIsComplex(OccasionCrudController::class, 'boite', 'priceWithoutTax');
         }
 
         return [
@@ -78,12 +80,20 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
             IntegerField::new('movementPrice')
                 ->setLabel('Prix du mouvement (HT)')
                 ->setTextAlign('center')->setDisabled($disabled),
+            AssociationField::new('user')
+                ->setLabel('Acheteur')
+                ->setQueryBuilder(
+                    fn(QueryBuilder $queryBuilder) => 
+                    $queryBuilder
+                    ->orderBy('entity.id', 'ASC')
+                )
+                ->onlyOnForms(),
             AssociationField::new('movement')
                 ->setLabel('Mouvement:')
-                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])->renderAsEmbeddedForm(),
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']]),
             AssociationField::new('meansOfPaiement')
                 ->setLabel('Moyen de paiement')
-                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])->renderAsEmbeddedForm(),
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']]),
             DateTimeField::new('createdAt')->setLabel('Saisie le')->setFormat('dd-MM-yyyy')->onlyOnForms()->setDisabled(true),
             AssociationField::new('createdBy')->setLabel('Saisie par')->onlyOnForms()->setDisabled(true),
         ];

@@ -18,15 +18,19 @@ class NumbersOfPlayers
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'players', targetEntity: Boite::class)]
-    private Collection $boites;
+    #[ORM\OneToMany(mappedBy: 'playersMin', targetEntity: Boite::class)]
+    private Collection $boitesMin;
 
     #[ORM\Column(length: 255, nullable:true)]
     private ?string $keyword = null;
 
+    #[ORM\OneToMany(mappedBy: 'playersMax', targetEntity: Boite::class)]
+    private Collection $boitesMax;
+
     public function __construct()
     {
-        $this->boites = new ArrayCollection();
+        $this->boitesMin = new ArrayCollection();
+        $this->boitesMax = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,27 +53,27 @@ class NumbersOfPlayers
     /**
      * @return Collection<int, Boite>
      */
-    public function getBoites(): Collection
+    public function getBoitesMin(): Collection
     {
-        return $this->boites;
+        return $this->boitesMin;
     }
 
-    public function addBoite(Boite $boite): static
+    public function addBoitesMin(Boite $boitesMin): static
     {
-        if (!$this->boites->contains($boite)) {
-            $this->boites->add($boite);
-            $boite->setPlayers($this);
+        if (!$this->boitesMin->contains($boitesMin)) {
+            $this->boitesMin->add($boitesMin);
+            $boitesMin->setPlayersMin($this);
         }
 
         return $this;
     }
 
-    public function removeBoite(Boite $boite): static
+    public function removeBoitesMin(Boite $boitesMin): static
     {
-        if ($this->boites->removeElement($boite)) {
+        if ($this->boitesMin->removeElement($boitesMin)) {
             // set the owning side to null (unless already changed)
-            if ($boite->getPlayers() === $this) {
-                $boite->setPlayers(null);
+            if ($boitesMin->getPlayersMin() === $this) {
+                $boitesMin->setPlayersMin(null);
             }
         }
 
@@ -91,5 +95,35 @@ class NumbersOfPlayers
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, Boite>
+     */
+    public function getBoitesMax(): Collection
+    {
+        return $this->boitesMax;
+    }
+
+    public function addBoitesMax(Boite $boitesMax): static
+    {
+        if (!$this->boitesMax->contains($boitesMax)) {
+            $this->boitesMax->add($boitesMax);
+            $boitesMax->setPlayersMax($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBoitesMax(Boite $boitesMax): static
+    {
+        if ($this->boitesMax->removeElement($boitesMax)) {
+            // set the owning side to null (unless already changed)
+            if ($boitesMax->getPlayersMax() === $this) {
+                $boitesMax->setPlayersMax(null);
+            }
+        }
+
+        return $this;
     }
 }

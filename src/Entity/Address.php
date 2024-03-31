@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AddressRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
@@ -38,6 +40,7 @@ class Address
 
     #[ORM\Column(nullable:true)]
     private ?int $rvj2id = null;
+
 
     public function getId(): ?int
     {

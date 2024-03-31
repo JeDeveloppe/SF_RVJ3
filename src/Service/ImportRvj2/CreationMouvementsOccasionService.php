@@ -10,6 +10,7 @@ use App\Repository\MeansOfPayementRepository;
 use App\Repository\MovementOccasionRepository;
 use App\Repository\OccasionRepository;
 use App\Repository\OffSiteOccasionSaleRepository;
+use App\Repository\UserRepository;
 use App\Service\UtilitiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -25,6 +26,7 @@ class CreationMouvementsOccasionService
         private ConditionOccasionRepository $conditionOccasionRepository,
         private UtilitiesService $utilitiesService,
         private OffSiteOccasionSaleRepository $offSiteOccasionSaleRepository,
+        private UserRepository $userRepository
         ){
     }
 
@@ -109,10 +111,11 @@ class CreationMouvementsOccasionService
                     $movementOfOccasion->setMovement($movement)
                         ->setMeansOfPaiement($meansOfPaiement)
                         ->setMovementPrice($movementPrice * 100)
+                        ->setUser($this->userRepository->findOneBy(['email' => 'client_de_passage@refaitesvosjeux.fr']))
                         ->setMovementTime($timeMovement)
                         ->setOccasion($occasion);
         
-                            $this->em->persist($movementOfOccasion);
+                        $this->em->persist($movementOfOccasion);
         
             }
         }

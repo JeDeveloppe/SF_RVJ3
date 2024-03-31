@@ -1,14 +1,26 @@
-{% if item.players.name matches '/^\\d+$/' %}
-    {% if item.players.name > 1 %}
-        {% set dataJoueur = 'joueurs' %}
+{% if item.playersMax is not null %}
+
+    {# item.playersMax.name matches '/^\\d+$/' %} #}
+    
+    {% if item.playersMin.name == item.playersMax.name %}
+
+        {% if item.playersMin.name > 1 %}
+            {% set dataJoueur = 'joueurs' %}
+        {% else %}
+            {% set dataJoueur = 'joueurs' %}
+        {% endif %}
+
+        <i class="fa-solid fa-person"></i> Uniquement {{ item.playersMin.name }} {{ dataJoueur }}
+
     {% else %}
-        {% set dataJoueur = 'joueurs' %}
+
+        <i class="fa-solid fa-person"></i> De {{ item.playersMin.name }} à {{ item.playersMax.name }} joueurs.
+        
     {% endif %}
     
-    A partir de {{ item.players.name }} {{ dataJoueur }}.
-    
 {% else %}
-    {{ item.players.name }}
-{% endif %}
 
+    <div class="col-12 text-danger">Joueurs non renseigné !!!!</div>
+
+{% endif %}
 

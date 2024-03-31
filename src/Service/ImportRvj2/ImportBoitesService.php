@@ -155,7 +155,7 @@ class ImportBoitesService
             ->setIsOccasion($arrayBoite['isComplet'])
             ->setWeigth($this->nullTo0($arrayBoite['poidBoite']))
             ->setAge((int) $arrayBoite['age'])
-            ->setPlayers($this->numbersOfPlayersRepository->findOneBy(['keyword' => $arrayBoite['nbrJoueurs']]) ?? $this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
+            ->setPlayersMin($this->numbersOfPlayersRepository->findOneBy(['keyword' => $arrayBoite['nbrJoueurs']]) ?? $this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
             ->setHtPrice($this->utilitiesService->stringToNull($arrayBoite['prix_HT']))
             ->setCreatedBy($this->userRepository->findOneBy(['nickname' => $arrayBoite['createur']]))
             ->setIsDeee($this->nullToBoolean($arrayBoite['deee']))
