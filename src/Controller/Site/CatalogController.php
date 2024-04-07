@@ -61,7 +61,7 @@ class CatalogController extends AbstractController
 
             }
         }
-        
+
         $boites = $this->paginator->paginate(
             $donnees, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/

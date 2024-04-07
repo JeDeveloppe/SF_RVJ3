@@ -165,7 +165,7 @@ class DocumentService
             ->setDeliveryAddress($this->adresseService->constructAdresseForSaveInDatabase($deliveryAddress))
             ->setBillingAddress($this->adresseService->constructAdresseForSaveInDatabase($billingAddress))
             ->setTotalWithTax($this->utilitiesService->htToTTC($panierParams['totalPanier'],$panierParams['tax']->getValue()))
-            ->setDeliveryPriceExcludingTax($panierParams['deliveryCostWithoutTax']->getPriceExcludingTax())
+            ->setDeliveryPriceExcludingTax($panierParams['deliveryCostWithoutTax'])
             ->setIsQuoteReminder(false)
             ->setEndOfQuoteValidation($endDevis)
             ->setCreatedAt($now)

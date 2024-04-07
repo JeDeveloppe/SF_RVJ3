@@ -70,10 +70,12 @@ class DocumentCrudController extends AbstractCrudController
             MoneyField::new('documentLineTotals.discountonpurchase')->setLabel('Remise de quantité')
                 ->setDisabled(true)
                 ->setCurrency('EUR')
+                ->hideOnIndex()
                 ->setStoredAsCents(),
             MoneyField::new('documentLineTotals.voucherDiscountValueUsed')->setLabel('Bon d\'achat')
                 ->setDisabled(true)
                 ->setCurrency('EUR')
+                ->hideOnIndex()
                 ->setStoredAsCents(),
             AssociationField::new('documentLineTotals')->setLabel('Voir les détails')->hideOnIndex(),
             AssociationField::new('taxRate')

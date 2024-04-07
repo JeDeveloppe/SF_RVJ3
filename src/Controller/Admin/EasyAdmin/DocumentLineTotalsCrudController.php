@@ -56,6 +56,7 @@ class DocumentLineTotalsCrudController extends AbstractCrudController
         return $crud
             ->showEntityActionsInlined()
             ->setPageTitle('index', 'Liste des totaux des documents')
+            ->setPageTitle('detail', 'Totaux d\'une vente')
             ->setDefaultSort(['id' => 'DESC'])
             ->setSearchFields([])
         ;

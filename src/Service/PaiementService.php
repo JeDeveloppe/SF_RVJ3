@@ -225,7 +225,8 @@ class PaiementService
 
         //on renseigne le paiement
         $paiement->setDocument($document)
-                ->setMeansOfPayment($this->meansOfPayementRepository->findOneBy(['name' => 'CB']))
+                // ->setMeansOfPayment($this->meansOfPayementRepository->findOneBy(['name' => 'CB']))
+                ->setMeansOfPayment(null)
                 ->setTokenPayment($content['id'])
                 ->setCreatedAt(new DateTimeImmutable('now'));
         //on sauvegarde le paiement

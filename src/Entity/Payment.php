@@ -22,7 +22,7 @@ class Payment
     private ?\DateTimeImmutable $timeOfTransaction = null;
 
     #[ORM\ManyToOne(inversedBy: 'payments')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?MeansOfPayement $meansOfPayment = null;
 
     #[ORM\Column(length: 255)]

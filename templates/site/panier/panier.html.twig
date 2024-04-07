@@ -50,10 +50,10 @@
                 <small>(poid total: {{ weigthPanier }}g)</small>
                 </td>
                 <td class="align-middle">
-                    {% if deliveryCostWithoutTax.priceExcludingTax == 0 %}
+                    {% if deliveryCostWithoutTax == 0 %}
                         Retrait
                     {% else %}
-                        {{ (deliveryCostWithoutTax.priceExcludingTax / 100) | number_format(2, '.', ',') }} € TTC
+                        {{ (deliveryCostWithoutTax / 100) | number_format(2, '.', ',') }} € TTC
                     {% endif %}
                 </td>
             </tr>

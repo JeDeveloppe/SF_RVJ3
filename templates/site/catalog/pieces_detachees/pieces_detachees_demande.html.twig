@@ -119,14 +119,16 @@
 																{% if item in group.items %}
 																	{% if  item.stockForSale > 0 %}
 																		<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }}: {{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC - (Disponible: {{ item.stockForSale }})</option>
-																	{% endif %}
+																	{% else %}
+																		<option data-image="{{ item.image }}">{{ item.name }}: Victime de son succès...</option>
+																	{% endif %}												
 																{% endif %}
 														{% endfor %}
 													{% else %}
 														<option value="" data-image="{{ asset('build/images/design/default.png') }}">Victime de son succès...</option>
 													{% endif %}
 												</optgroup>
-												<optgroup label="Pièces similaires">
+												{# <optgroup label="Pièces similaires">
 													{% if boite.itemsSecondaire | length > 0 %}
 														{% for item in boite.itemsSecondaire|sort %}
 																{% if item in group.items %}
@@ -138,7 +140,7 @@
 													{% else %}
 														<option value="">Victime de son succès...</option>
 													{% endif %}
-												</optgroup>
+												</optgroup> #}
 										</select>
 									</div>
 									<div class="form-group d-flex justify-content-around align-items-center">

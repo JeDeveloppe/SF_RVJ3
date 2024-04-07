@@ -50,7 +50,17 @@ class ItemCrudController extends AbstractCrudController
                 'image_uri' => true,
                 // 'imagine_pattern' => '...',
                 'asset_helper' => true,
-            ])->setLabel('Image')->onlyOnForms()->setColumns(12)->setRequired(true),
+            ])->setLabel('Image')->onlyWhenCreating()->setColumns(12)->setRequired(true),
+            TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
+                'required' => false,
+                'allow_delete' => false,
+                'delete_label' => 'Supprimer du serveur ?',
+                'download_label' => '...',
+                'download_uri' => true,
+                'image_uri' => true,
+                // 'imagine_pattern' => '...',
+                'asset_helper' => true,
+            ])->setLabel('Image')->onlyWhenUpdating()->setColumns(12)->setRequired(false),
             TextField::new('reference')->setLabel('Référence: (construite à partir de la première boite)')->setDisabled(true)->setColumns(6),
             IdField::new('id')->setLabel('Id')->setDisabled(true)->onlyOnForms()->setColumns(6),
             TextField::new('name')
@@ -58,7 +68,7 @@ class ItemCrudController extends AbstractCrudController
             AssociationField::new('itemGroup')
                 ->setLabel('Groupe d\'articles:')->onlyOnForms(),
             AssociationField::new('BoiteOrigine')
-                ->setLabel('Boites Originale:')->onlyOnForms()->setColumns(6),
+                ->setLabel('Boites Originale:')->onlyOnForms()->setColumns(6)->setRequired(true),
             AssociationField::new('BoiteSecondaire')
                 ->setLabel('Boites Secondaire:')->setDisabled(true)->onlyOnForms()->setColumns(6),
             IntegerField::new('stockForSale')

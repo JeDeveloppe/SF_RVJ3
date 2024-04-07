@@ -124,7 +124,7 @@ class PanierService
 
         $item = $this->itemRepository->findOneBy(['id' => $article_id]);
 
-        if($item->getStockForSale() - $qte < 0){
+        if(!$item OR $item->getStockForSale() - $qte < 0){
 
             $reponse = ['warning', 'Stock non disponible pour cette quantité: '.$qte];
 
@@ -228,12 +228,12 @@ class PanierService
 
         if(is_null($shipping)){
 
-            $responses['deliveryCostWithoutTax'] = new Delivery();
-            $responses['deliveryCostWithoutTax']->setPriceExcludingTax(0);
+            $responses['deliveryCostWithoutTax'] = 0;
 
         }else{
                 
-            $responses['deliveryCostWithoutTax'] = $this->deliveryRepository->findCostByDeliveryShippingMethod($shipping, $responses['weigthPanier']);
+            $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shipping, $responses['weigthPanier']);
+            $responses['deliveryCostWithoutTax'] = $delivery->getPriceExcludingTax();
 
         }
 
@@ -254,7 +254,7 @@ class PanierService
         }
 
 
-        $responses['totalPanier'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']->getPriceExcludingTax()) - $responses['remises']['volume']['remiseDeQte'] - $responses['remises']['voucher']['used'];
+        $responses['totalPanier'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']) - $responses['remises']['volume']['remiseDeQte'] - $responses['remises']['voucher']['used'];
 
         return $responses;
     }
@@ -302,7 +302,8 @@ class PanierService
         return $remises;
     }
 
-    public function checkSessionForSaveInDatabase($sessionObjet){
+    public function checkSessionForSaveInDatabase($sessionObjet)
+    {
 
         $sessionArray = json_decode(json_encode($sessionObjet->all()), true);
         $validation = false;
