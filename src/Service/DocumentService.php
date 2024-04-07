@@ -111,7 +111,21 @@ class DocumentService
         }
     }
 
-    public function saveDocumentInDataBase(array $panierParams, Session $session):Document
+    public function saveDocumentLogicInDataBase(array $panierParams, Session $session):Document
+    {
+
+        $document = $this->generateDocument($panierParams, $session);
+        $documentLineTotals = $this->generateDocumentLineTotals($panierParams, $document);
+        $this->addVoucherDiscoundInDocumentLineTotals($panierParams, $documentLineTotals, $session);
+        $this->generateAllLinesFromPanierIntoDocumentLines($panierParams, $document);
+
+        //remove all session variable
+        $session->clear();
+
+        return $document;
+    }
+
+    public function generateDocument(array $panierParams, Session $session):Document
     {
         $billingAddress = $this->addressRepository->find($session->get('billingAddressId'));
 
@@ -146,21 +160,10 @@ class DocumentService
         $document
             ->setToken($this->utilitiesService->generateRandomString())
             ->setQuoteNumber($docParams->getQuoteTag().$newNumero)
-            ->setTotalExcludingTax($panierParams['totalPanier']);
-
-            if(is_string($deliveryAddress)){ //? vente direct d'un occasion
-                $document
-                    ->setDeliveryAddress($deliveryAddress)
-                    ->setUser($this->userRepository->findOneBy(['email' => 'client_de_passage@refaitesvosjeux.fr']))
-                    ->setBillingAddress($billingAddress);
-            }else{
-                $document
-                    ->setUser($this->security->getUser())
-                    ->setDeliveryAddress($this->adresseService->constructAdresseForSaveInDatabase($deliveryAddress))
-                    ->setBillingAddress($this->adresseService->constructAdresseForSaveInDatabase($billingAddress));
-            }
-
-        $document
+            ->setTotalExcludingTax($panierParams['totalPanier'])
+            ->setUser($this->security->getUser())
+            ->setDeliveryAddress($this->adresseService->constructAdresseForSaveInDatabase($deliveryAddress))
+            ->setBillingAddress($this->adresseService->constructAdresseForSaveInDatabase($billingAddress))
             ->setTotalWithTax($this->utilitiesService->htToTTC($panierParams['totalPanier'],$panierParams['tax']->getValue()))
             ->setDeliveryPriceExcludingTax($panierParams['deliveryCostWithoutTax']->getPriceExcludingTax())
             ->setIsQuoteReminder(false)
@@ -177,7 +180,12 @@ class DocumentService
         $this->em->persist($document);
         $this->em->flush();
 
+        return $document;
 
+    }
+
+    public function generateDocumentLineTotals($panierParams, Document $document):DocumentLineTotals
+    {
         $docLineTotals = new DocumentLineTotals();
         $docLineTotals
             ->setDocument($document)
@@ -189,51 +197,45 @@ class DocumentService
         $this->em->persist($docLineTotals);
         $this->em->flush();
 
+        return $docLineTotals;
+    }
+
+    public function addVoucherDiscoundInDocumentLineTotals($panierParams,  $documentLineTotals, $session)
+    {
         //on traite le bon de reduction s'il y en a un
         $voucherDiscountId = $session->get('voucherDiscountId');
 
-        $voucherDiscount = $this->voucherDiscountRepository->find($voucherDiscountId);
-        if(!is_null($voucherDiscount->getId())){
+        if(!is_null($voucherDiscountId)){
+            $voucherDiscount = $this->voucherDiscountRepository->find($voucherDiscountId);
             $voucherDiscount->setRemainingValueToUseExcludingTax($panierParams['remises']['voucher']['voucherRemaining'])
-            ->addDocumentLineTotal($docLineTotals);
+            ->addDocumentLineTotal($documentLineTotals);
             $this->em->persist($voucherDiscount);
             $this->em->flush();
         }
+    }
+
+    public function generateAllLinesFromPanierIntoDocumentLines(array $panierParams, Document $document)
+    {
 
         $paniers = array_merge($panierParams['panier_occasions'],$panierParams['panier_boites'],$panierParams['panier_items']);
 
         //TODO
-        if(is_string($deliveryAddress)){ //? vente direct d'un occasion
+        foreach($paniers as $panier){
             $documentLine = new DocumentLine();
             $documentLine
-                ->setOccasion($panierParams['occasion'])
-                ->setQuantity(1)
+                ->setQuestion($panier->getQuestion() ?? NULL)
+                ->setQuantity($panier->getQte() ?? 1)
+                ->setBoite($panier->getBoite() ?? NULL)
+                ->setItem($panier->getItem() ?? NULL)
+                ->setOccasion($panier->getOccasion() ?? NULL)
                 ->setDocument($document)
-                ->setPriceExcludingTax($panierParams['totauxItems']['price']);
+                ->setPriceExcludingTax($panier->getPriceWithoutTax());
             
                 $this->em->persist($documentLine);
-                // $this->em->flush();
-
-        }else{
-            foreach($paniers as $panier){
-                $documentLine = new DocumentLine();
-                $documentLine
-                    ->setQuestion($panier->getQuestion() ?? NULL)
-                    ->setQuantity($panier->getQte() ?? 1)
-                    ->setBoite($panier->getBoite() ?? NULL)
-                    ->setItem($panier->getItem() ?? NULL)
-                    ->setOccasion($panier->getOccasion() ?? NULL)
-                    ->setDocument($document)
-                    ->setPriceExcludingTax($panier->getPriceWithoutTax());
-                
-                    $this->em->persist($documentLine);
-                    // $this->em->remove($panier);
-            }
-            //on met en BDD les differentes lignes
-            $this->em->flush();
+                $this->em->remove($panier);
         }
-
-        return $document;
+        //on met en BDD les differentes lignes
+        $this->em->flush();
     }
 
     public function deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock(array $documentsToDelete)

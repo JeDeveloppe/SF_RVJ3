@@ -60,31 +60,9 @@
 					</div>
 
 					<div class="col-12 col-md-6 mt-4 mt-md-0">
-						<p class="col-12 small">
-					    	{% include "components/catalog/players&age.html.twig" with {'item': occasion.boite }%}
-						</p>
-						{% if occasion.boite.linktopresentationvideo is not null %}
-							<p class="col-12 small">
-								<a class="text-decoration-none" href="{{ occasion.boite.linktopresentationvideo }}" target="_blank"><i class="fa-solid fa-video"></i> Voir la vidéo de présentation.</a>
-							</p>
-						{% endif %}
-						<p>État de la boite: {{ occasion.boxCondition }}</p>
-						<p>État du matériel: {{ occasion.equipmentCondition }}</p>
-						<p>Règle du jeu: {{ occasion.gameRule }}</p>
-						<p>Prix de vente TTC:
-							{% if occasion.discountedPriceWithoutTax > 0 %}
-								<strike class="text-danger"><b>{{ (occasion.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</b></strike>
-								<b>{{ (occasion.discountedPriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €</b>
-							{% else %}
-								{{ (occasion.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €
-							{% endif %}
 						
-						</p>
-						{% if (occasion.information is not null) %}
-							<p><i class="fa-solid fa-circle-info text-info"></i> Informations:<br/> {{ occasion.information }}</p>
-						{% endif %}
-
-						{# <p>Prix TTC: {{ (occasion.priceHt * tva / 100) | number_format(2, ',', '.') }} €</p> #}
+						{% include "components/catalog/_occasion_details.html.twig"  with { 'occasion': occasion } %}
+			
                         
 						{# on inclus le bouton ajout au panier #}
 						<p class="col-12 text-center">

@@ -1,0 +1,30 @@
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+
+<p class="col-12 small">
+    A partir de {{ occasion.boite.age }} ans.<br/>
+    <i class="fa-solid fa-clock"></i> Durée de la partie: {{ occasion.boite.durationOfTheGame }} min.<br/>
+    {% include "components/catalog/_players&age.html.twig" with {'item': occasion.boite }%}<br/>
+    {% if 'panier' not in currentPath %}
+        {% if occasion.boite.linktopresentationvideo is not null %}
+                <a class="text-decoration-none" href="{{ occasion.boite.linktopresentationvideo }}" target="_blank"><i class="fa-solid fa-video"></i> Voir la vidéo de présentation.</a>
+        {% endif %}
+    {% endif %}
+</p>
+<p>
+    État de la boite: {{ occasion.boxCondition }}<br/>
+    État du matériel: {{ occasion.equipmentCondition }}<br/>
+    Règle du jeu: {{ occasion.gameRule }}<br/>
+
+    {% if 'panier' not in currentPath %}
+        Prix de vente TTC:
+        {% if occasion.discountedPriceWithoutTax > 0 %}
+            <strike class="text-danger"><b>{{ (occasion.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</b></strike>
+            <b>{{ (occasion.discountedPriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €</b>
+        {% else %}
+            {{ (occasion.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €
+        {% endif %}
+    {% endif %}
+</p>
+{% if (occasion.information is not null) %}
+    <p><i class="fa-solid fa-circle-info text-info"></i> Informations:<br/> {{ occasion.information }}</p>
+{% endif %}

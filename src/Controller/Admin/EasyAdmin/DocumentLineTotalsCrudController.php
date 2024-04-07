@@ -8,6 +8,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 
 class DocumentLineTotalsCrudController extends AbstractCrudController
 {
@@ -20,14 +23,31 @@ class DocumentLineTotalsCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IntegerField::new('itemsWeigth')->setLabel('Poid des articles'),
-            IntegerField::new('itemsPriceWithoutTax')->setLabel('Prix HT articles'),
-            IntegerField::new('occasionsWeigth')->setLabel('Poid des occasions'),
-            IntegerField::new('occasionsPriceWithoutTax')->setLabel('Prix HT occasions'),
-            IntegerField::new('boitesWeigth')->setLabel('Boites des pièces dét.'),
-            IntegerField::new('boitesPriceWithoutTax')->setLabel('Prix HT pièces dét.'),
-            IntegerField::new('discountonpurchase')->setLabel('Remise de qté'),
-            IntegerField::new('discountonpurchaseinpurcentage')->setLabel('% de remise:'),
+            IntegerField::new('itemsWeigth')->setLabel('Poid des articles (en g)'),
+            MoneyField::new('itemsPriceWithoutTax')
+                ->setLabel('Prix HT articles')
+                ->setCurrency('EUR')
+                ->setStoredAsCents(),
+            IntegerField::new('occasionsWeigth')->setLabel('Poid des occasions (en g)'),
+            MoneyField::new('occasionsPriceWithoutTax')
+                ->setCurrency('EUR')
+                ->setStoredAsCents()
+                ->setLabel('Prix HT occasions'),
+            IntegerField::new('boitesWeigth')->setLabel('Boites des articles (en g)'),
+            MoneyField::new('boitesPriceWithoutTax')
+                ->setCurrency('EUR')
+                ->setStoredAsCents()
+                ->setLabel('Prix HT pièces dét.'),
+            MoneyField::new('discountonpurchase')
+                ->setLabel('Remise de qté:')
+                ->setCurrency('EUR')
+                ->setStoredAsCents(),
+            IntegerField::new('discountonpurchaseinpurcentage')->setLabel('% de remise (qté):'),
+            MoneyField::new('voucherDiscountValueUsed')->setLabel('Bon d\'achat')
+            ->setDisabled(true)
+            ->setCurrency('EUR')
+            ->setStoredAsCents(),
+            AssociationField::new('voucherDiscounts')->setLabel('Bon d\'achat en détail')
         ];
     }
 

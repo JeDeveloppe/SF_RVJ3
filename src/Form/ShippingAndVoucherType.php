@@ -19,7 +19,7 @@ class ShippingAndVoucherType extends AbstractType
     {
         $builder
             ->add('voucherDiscount', TextType::class, [
-                'label' => 'Un code de réduction ?',
+                'label' => 'Vous avez un bon d\'achat ?',
                 'help' => 'Exemple: 0124-1234567890',
                 'help_attr' => ['class' => 'small'],
                 'attr' => [
@@ -54,10 +54,11 @@ class ShippingAndVoucherType extends AbstractType
             $builder
                 ->add('shipping', EntityType::class, [
                     'class' => ShippingMethod::class,
+                    'label' => false,
                     'attr' => [
-                        'class' => 'form-control',
+                        'class' => 'form-control text-center',
                     ],
-                    'placeholder' => '-- RETRAIT OU ENVOI ? --',
+                    'placeholder' => '-- LIEU DE RETRAIT  --',
                     'query_builder' => function (EntityRepository $s) {
                         return $s->createQueryBuilder('s')
                             ->where('s.isActivedInCart = :value')

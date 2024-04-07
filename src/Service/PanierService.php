@@ -225,6 +225,7 @@ class PanierService
 
         $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
 
+
         if(is_null($shipping)){
 
             $responses['deliveryCostWithoutTax'] = new Delivery();
@@ -238,16 +239,17 @@ class PanierService
 
         $responses['remises']['volume']['remiseDeQte'] = round($responses['totauxItems']['price'] * $responses['remises']['volume']['value'] / 100);
         
-        $sousTotalItemHTAfterRemiseVolume = $responses['totauxItems']['price'] - $responses['remises']['volume']['remiseDeQte'];
+        // $sousTotalItemHTAfterRemiseVolume = $responses['totauxItems']['price'] - $responses['remises']['volume']['remiseDeQte'];
+        $totalHTItemsAndBoite = round(($responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price']) - $responses['remises']['volume']['remiseDeQte']);
 
         //? calcule de la remise sur les articles
-        $diff = $sousTotalItemHTAfterRemiseVolume - $responses['remises']['voucher']['voucherMax'];
+        $diff = $totalHTItemsAndBoite - $responses['remises']['voucher']['voucherMax'];
 
         if($diff >= 0){
-            $responses['remises']['voucher']['used'] = $sousTotalItemHTAfterRemiseVolume - $diff;
+            $responses['remises']['voucher']['used'] = $totalHTItemsAndBoite - $diff;
             $responses['remises']['voucher']['voucherRemaining'] = 0; // reste à utilisé du bon
         }else{
-            $responses['remises']['voucher']['used'] = $sousTotalItemHTAfterRemiseVolume;
+            $responses['remises']['voucher']['used'] = $totalHTItemsAndBoite;
             $responses['remises']['voucher']['voucherRemaining'] = $diff * -1; // reste à utilisé du bon
         }
 
@@ -300,4 +302,24 @@ class PanierService
         return $remises;
     }
 
+    public function checkSessionForSaveInDatabase($sessionObjet){
+
+        $sessionArray = json_decode(json_encode($sessionObjet->all()), true);
+        $validation = false;
+        $validationKO = [];
+
+        $stringVariablesToCheckIfThereExists = ['step_address','voucherDiscountId','billingAddressId','deliveryAddressId','shippingMethodeId'];
+
+        foreach($stringVariablesToCheckIfThereExists as $stringVariablesToCheckIfThereExist){
+            if(array_key_exists($stringVariablesToCheckIfThereExist, $sessionArray)){
+                $validation = true;
+            }else{
+                $validationKO[] = $stringVariablesToCheckIfThereExist;
+            }
+        }
+
+        if(count($validationKO) > 0){
+            dd('Variables manquantes dans la session pour valider le panier: '.$validationKO);
+        }
+    }
 }

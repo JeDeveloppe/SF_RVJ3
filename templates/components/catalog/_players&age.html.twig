@@ -1,6 +1,4 @@
 {% if item.playersMax is not null %}
-
-    {# item.playersMax.name matches '/^\\d+$/' %} #}
     
     {% if item.playersMin.name == item.playersMax.name %}
 
@@ -20,7 +18,7 @@
     
 {% else %}
 
-    <div class="col-12 text-danger">Joueurs non renseigné !!!!</div>
+    <i class="fa-solid fa-person text-danger"> Nbre de joueurs non renseigné !!!!</i>
 
 {% endif %}
 

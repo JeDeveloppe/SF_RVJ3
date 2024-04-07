@@ -115,6 +115,9 @@ class Boite
     #[ORM\ManyToOne(inversedBy: 'boitesMax')]
     private ?NumbersOfPlayers $playersMax = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $durationOfTheGame = null;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
@@ -601,6 +604,18 @@ class Boite
     public function setPlayersMax(?NumbersOfPlayers $playersMax): static
     {
         $this->playersMax = $playersMax;
+
+        return $this;
+    }
+
+    public function getDurationOfTheGame(): ?int
+    {
+        return $this->durationOfTheGame;
+    }
+
+    public function setDurationOfTheGame(?int $durationOfTheGame): static
+    {
+        $this->durationOfTheGame = $durationOfTheGame;
 
         return $this;
     }

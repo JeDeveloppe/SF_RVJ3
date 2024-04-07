@@ -32,7 +32,7 @@ class DeliveryCrudController extends AbstractCrudController
     {
         return $crud
             ->showEntityActionsInlined()
-            ->setPageTitle('index', 'Liste des livraisons')
+            ->setPageTitle('index', 'Liste des prix par livraison')
             ->setPageTitle('new', 'Nouvelle livraison')
             ->setPageTitle('edit', 'Édition livraison')
         ;

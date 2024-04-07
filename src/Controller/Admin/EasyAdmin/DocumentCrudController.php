@@ -18,6 +18,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
 class DocumentCrudController extends AbstractCrudController
 {
@@ -55,11 +56,31 @@ class DocumentCrudController extends AbstractCrudController
             TextField::new('token')->setLabel('Token')->hideOnIndex()->setDisabled(true)->setColumns(12),
             TextField::new('quoteNumber')->setLabel('Num. devis')->setDisabled(true)->setColumns(6),
             TextField::new('BillNumber')->setLabel('Num. facture')->setDisabled(true)->setColumns(6),
+            MoneyField::new('documentLineTotals.itemsPriceWithoutTax')
+                ->setLabel('Prix des articles')
+                ->setDisabled(true)
+                ->setCurrency('EUR')
+                ->setStoredAsCents()
+                ->hideOnIndex(),
+            MoneyField::new('documentLineTotals.occasionsPriceWithoutTax')
+                ->setLabel('Prix des occasions')
+                ->setDisabled(true)
+                ->setCurrency('EUR')
+                ->setStoredAsCents()->hideOnIndex(),
+            MoneyField::new('documentLineTotals.discountonpurchase')->setLabel('Remise de quantité')
+                ->setDisabled(true)
+                ->setCurrency('EUR')
+                ->setStoredAsCents(),
+            MoneyField::new('documentLineTotals.voucherDiscountValueUsed')->setLabel('Bon d\'achat')
+                ->setDisabled(true)
+                ->setCurrency('EUR')
+                ->setStoredAsCents(),
+            AssociationField::new('documentLineTotals')->setLabel('Voir les détails')->hideOnIndex(),
             AssociationField::new('taxRate')
-            ->setLabel('Taux de tva')
-            ->setDisabled(true)
-            ->hideOnIndex()
-            ->renderAsEmbeddedForm()->setColumns(6),
+                ->setLabel('Taux de tva')
+                ->setDisabled(true)
+                ->hideOnIndex()
+                ->renderAsEmbeddedForm()->setColumns(6),
             MoneyField::new('cost')
                 ->setLabel('Préparation/abonnement HT')
                 ->setDisabled(true)
@@ -77,12 +98,36 @@ class DocumentCrudController extends AbstractCrudController
                 ->setCurrency('EUR')
                 ->setStoredAsCents()
                 ->setDisabled(true)->setColumns(6),
-            // AssociationField::new('documentLineTotals.discountonpurchase'),
             MoneyField::new('totalWithTax')
                 ->setLabel('Total TTC')
                 ->setDisabled(true)
                 ->setCurrency('EUR')
                 ->setStoredAsCents()->setColumns(6),
+
+            FormField::addTab('Totaux / vente'),
+            // IntegerField::new('documentLineTotals.boitesWeigth')->setLabel('Poid des boites'),
+            // IntegerField::new('documentLineTotals.boitesPriceWithoutTax')->setLabel('Prix des boites'),
+            IntegerField::new('documentLineTotals.itemsWeigth')->setLabel('Poid des articles (en g)')->hideOnIndex(),
+            MoneyField::new('documentLineTotals.itemsPriceWithoutTax')
+                ->setLabel('Prix des articles')
+                ->setCurrency('EUR')
+                ->setStoredAsCents()
+                ->hideOnIndex(),
+            IntegerField::new('documentLineTotals.occasionsWeigth')->setLabel('Poid des occasions (en g)')->hideOnIndex(),
+            MoneyField::new('documentLineTotals.occasionsPriceWithoutTax')
+                ->setLabel('Prix des occasions')
+                ->setCurrency('EUR')
+                ->setStoredAsCents()
+                ->hideOnIndex(),
+            MoneyField::new('documentLineTotals.discountonpurchase')->setLabel('Remise de quantité')
+                ->setDisabled(true)
+                ->setCurrency('EUR')
+                ->setStoredAsCents(),
+            MoneyField::new('documentLineTotals.voucherDiscountValueUsed')->setLabel('Bon d\'achat')
+                ->setDisabled(true)
+                ->setCurrency('EUR')
+                ->setStoredAsCents(),
+
 
             FormField::addTab('Suivi / Communication'),
             DateTimeField::new('createdAt')

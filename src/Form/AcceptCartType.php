@@ -14,7 +14,6 @@ class AcceptCartType extends AbstractType
     {
         $builder
             ->add('accept', CheckboxType::class, [
-                'label' => 'J\'accepte les conditions générale de vente: ',
                 'required' => true
             ]);
     }

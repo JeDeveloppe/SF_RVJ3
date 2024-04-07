@@ -12,13 +12,9 @@
         {% for panier in donnees %}
             <tr>
                 <td class="text-center"><img class="img_full-width" src="{{ vich_uploader_asset(panier.occasion.boite, 'imageFile') }}"/></td>
-                <td>
-                    <p>
-                    {% include "components/catalog/players&age.html.twig" with {'item': panier.occasion.boite }%}<br/>
-                    État de la boite: {{ panier.occasion.boxCondition }}<br/>
-                    État du matériel: {{ panier.occasion.equipmentCondition }}<br/>
-                    Règle du jeu: {{ panier.occasion.gameRule }}
-                    </p>
+                <td class="align-middle">
+						{% include "components/catalog/_occasion_details.html.twig"  with { 'occasion': panier.occasion } %}
+
                 </td>
                 <td class="align-middle text-center">{{ (panier.priceWithoutTax  * (1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</td>
                 <td class="align-middle text-center"><a href="{{ path('panier_delete_item', {'item_id': panier.id }) }}"><i class="fa-solid fa-trash text-danger"></i></a></td>
