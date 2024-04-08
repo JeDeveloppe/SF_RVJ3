@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Delivery;
 use Mpdf\Mpdf;
 use DateInterval;
 use Dompdf\Dompdf;
@@ -18,6 +19,7 @@ use App\Entity\DocumentStatus;
 use App\Repository\ItemRepository;
 use App\Repository\UserRepository;
 use App\Entity\Returndetailstostock;
+use App\Entity\ShippingMethod;
 use App\Entity\VoucherDiscount;
 use App\Repository\AddressRepository;
 use App\Repository\CollectionPointRepository;
@@ -115,12 +117,12 @@ class DocumentService
     {
 
         $document = $this->generateDocument($panierParams, $session);
+        dd('STOP');
         $documentLineTotals = $this->generateDocumentLineTotals($panierParams, $document);
         $this->addVoucherDiscoundInDocumentLineTotals($panierParams, $documentLineTotals, $session);
         $this->generateAllLinesFromPanierIntoDocumentLines($panierParams, $document);
 
-        //remove all session variable
-        $session->clear();
+
 
         return $document;
     }
@@ -178,7 +180,7 @@ class DocumentService
             ->setShippingMethod($panierParams['shipping']);
 
         $this->em->persist($document);
-        $this->em->flush();
+        $this->em->flush($document);
 
         return $document;
 
@@ -210,7 +212,7 @@ class DocumentService
             $voucherDiscount->setRemainingValueToUseExcludingTax($panierParams['remises']['voucher']['voucherRemaining'])
             ->addDocumentLineTotal($documentLineTotals);
             $this->em->persist($voucherDiscount);
-            $this->em->flush();
+            $this->em->flush($voucherDiscount);
         }
     }
 

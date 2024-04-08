@@ -94,14 +94,14 @@ class Document
     #[ORM\Column(nullable: true)]
     private ?bool $isLastQuoteCantBeDeleted = null;
 
-    #[ORM\ManyToOne(inversedBy: 'documents', cascade: ['persist'])]
-    private ?ShippingMethod $shippingMethod = null;
-
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $sendingAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $sendingNumber = null;
+
+    #[ORM\ManyToOne(inversedBy: 'documents')]
+    private ?ShippingMethod $shippingmethod = null;
 
     public function __construct()
     {
@@ -451,18 +451,6 @@ class Document
         return $this;
     }
 
-    public function getShippingMethod(): ?ShippingMethod
-    {
-        return $this->shippingMethod;
-    }
-
-    public function setShippingMethod(?ShippingMethod $shippingMethod): static
-    {
-        $this->shippingMethod = $shippingMethod;
-
-        return $this;
-    }
-
     public function getSendingAt(): ?\DateTimeImmutable
     {
         return $this->sendingAt;
@@ -483,6 +471,18 @@ class Document
     public function setSendingNumber(?string $sendingNumber): static
     {
         $this->sendingNumber = $sendingNumber;
+
+        return $this;
+    }
+
+    public function getShippingmethod(): ?ShippingMethod
+    {
+        return $this->shippingmethod;
+    }
+
+    public function setShippingmethod(?ShippingMethod $shippingmethod): static
+    {
+        $this->shippingmethod = $shippingmethod;
 
         return $this;
     }

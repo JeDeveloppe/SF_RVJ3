@@ -205,7 +205,6 @@ class PanierController extends AbstractController
 
         if($acceptCartForm->isSubmitted() && $acceptCartForm->isValid())
         {
-
             //on vérifie si on a bien toutes les variables pour enregistrer le document
             $this->panierService->checkSessionForSaveInDatabase($session);
 

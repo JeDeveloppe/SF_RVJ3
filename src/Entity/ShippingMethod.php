@@ -30,8 +30,10 @@ class ShippingMethod
     #[ORM\Column]
     private ?bool $forOccasionOnly = null;
 
-    #[ORM\OneToMany(mappedBy: 'shippingMethod', targetEntity: Document::class)]
+    #[ORM\OneToMany(mappedBy: 'shippingmethod', targetEntity: Document::class)]
     private Collection $documents;
+
+
 
     public function __construct()
     {
@@ -139,7 +141,7 @@ class ShippingMethod
     {
         if (!$this->documents->contains($document)) {
             $this->documents->add($document);
-            $document->setShippingMethod($this);
+            $document->setShippingmethod($this);
         }
 
         return $this;
@@ -149,12 +151,11 @@ class ShippingMethod
     {
         if ($this->documents->removeElement($document)) {
             // set the owning side to null (unless already changed)
-            if ($document->getShippingMethod() === $this) {
-                $document->setShippingMethod(null);
+            if ($document->getShippingmethod() === $this) {
+                $document->setShippingmethod(null);
             }
         }
 
         return $this;
     }
-
 }
