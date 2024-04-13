@@ -120,7 +120,7 @@
 																	{% if  item.stockForSale > 0 %}
 																		<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }}: {{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC - (Disponible: {{ item.stockForSale }})</option>
 																	{% else %}
-																		<option data-image="{{ item.image }}">{{ item.name }}: Victime de son succès...</option>
+																		<option data-image="{{ item.image }}">{{ item.name }}: Réapprovisionnement en cours...</option>
 																	{% endif %}												
 																{% endif %}
 														{% endfor %}

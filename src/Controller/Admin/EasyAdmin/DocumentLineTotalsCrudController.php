@@ -23,6 +23,7 @@ class DocumentLineTotalsCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            AssociationField::new('document')->setLabel('Document'),
             IntegerField::new('itemsWeigth')->setLabel('Poid des articles (en g)'),
             MoneyField::new('itemsPriceWithoutTax')
                 ->setLabel('Prix HT articles')

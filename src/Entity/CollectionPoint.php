@@ -32,6 +32,10 @@ class CollectionPoint
     #[ORM\Column]
     private ?bool $isActivedInCart = null;
 
+    #[ORM\ManyToOne(inversedBy: 'collectionPoints')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ShippingMethod $shippingmethod = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -112,5 +116,17 @@ class CollectionPoint
     public function __toString()
     {
         return $this->organization.' '.$this->firstname.' '.$this->lastname.' '.$this->street.' '.$this->city;
+    }
+
+    public function getShippingmethod(): ?ShippingMethod
+    {
+        return $this->shippingmethod;
+    }
+
+    public function setShippingmethod(?ShippingMethod $shippingmethod): static
+    {
+        $this->shippingmethod = $shippingmethod;
+
+        return $this;
     }
 }

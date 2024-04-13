@@ -5,10 +5,8 @@ namespace App\Controller\Admin\EasyAdmin;
 use App\Entity\ShippingMethod;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -24,9 +22,10 @@ class ShippingMethodCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('name'),
+            TextField::new('name')->setLabel('Nom'),
             ChoiceField::new('price')->setLabel('Payant ou gratuit ?')->setChoices(['GRATUIT' => 'GRATUIT', 'PAYANT' => 'PAYANT']),
-            BooleanField::new('isActivedInCart')->setLabel('Actif dans le panier')
+            BooleanField::new('isActivedInCart')->setLabel('Actif dans le panier'),
+            AssociationField::new('documents')->setLabel('Nombre de doc')->onlyOnIndex(),
         ];
     }
 

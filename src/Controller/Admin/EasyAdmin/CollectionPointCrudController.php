@@ -4,6 +4,8 @@ namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\CollectionPoint;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -19,6 +21,7 @@ class CollectionPointCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            AssociationField::new('shippingmethod')->setLabel('Envoi / retrait')->setFormTypeOptions(['placeholder' => 'Sélectionner la méthode concernée...']),
             TextField::new('organization')->setLabel('Organisation:'),
             TextField::new('firstname')->setLabel('Nom:'),
             TextField::new('lastname')->setLabel('Prénom:'),
@@ -36,5 +39,13 @@ class CollectionPointCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Nouveau lieu de retrait')
             ->setPageTitle('edit', 'Édition lieu de retrait')
         ;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
+        
     }
 }

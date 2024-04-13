@@ -19,7 +19,7 @@ class BillingAndDeliveryAddressType extends AbstractType
     {
         $user = $options['user'];
         $shipping = $options['shipping'];
-        
+
         $builder
             ->add('billingAddress', EntityType::class, [
                 'class' => Address::class,
@@ -54,10 +54,12 @@ class BillingAndDeliveryAddressType extends AbstractType
                         'multiple' => false,
                         'expanded' => false,
                         'mapped' => false,
-                        'query_builder' => function (EntityRepository $er) {
+                        'query_builder' => function (EntityRepository $er) use ($shipping) {
                             return $er->createQueryBuilder('c')
                                 ->where('c.isActivedInCart = :value')
+                                ->andWhere('c.shippingmethod = :shippingmethod')
                                 ->setParameter('value', true)
+                                ->setParameter('shippingmethod', $shipping)
                                 ->orderBy('c.firstname', 'ASC');
                         },
                     ]);

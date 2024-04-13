@@ -2,11 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\Delivery;
 use Mpdf\Mpdf;
 use DateInterval;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use Twig\Environment;
 use DateTimeImmutable;
 use App\Entity\Payment;
@@ -14,13 +11,10 @@ use App\Entity\Document;
 use App\Entity\DocumentLine;
 use App\Service\UtilitiesService;
 use App\Entity\DocumentLineTotals;
-use App\Entity\Documentsending;
 use App\Entity\DocumentStatus;
 use App\Repository\ItemRepository;
 use App\Repository\UserRepository;
 use App\Entity\Returndetailstostock;
-use App\Entity\ShippingMethod;
-use App\Entity\VoucherDiscount;
 use App\Repository\AddressRepository;
 use App\Repository\CollectionPointRepository;
 use App\Repository\PaymentRepository;
@@ -76,7 +70,6 @@ class DocumentService
 
         //il faudra trouver le dernier document de la base et incrementer de 1 pour le document
         $lastDocumentByYear = $this->documentRepository->findLastEntryFromThisYear($column, $yearForSearchInDatabase);
-
         //si pas d'entree alors nouvelle annee
         if(count($lastDocumentByYear) == 0){
             
@@ -86,6 +79,12 @@ class DocumentService
         }else{
             //dernier entree on recupere le numero de devis DEV23090472
             $numero = substr($lastDocumentByYear[0]->getQuoteNumber(), -4) + 1; //2022010001 reste 0001 + 1
+
+            //on signal que le document precedent est supprimable
+            $lastDocumentByYear[0]->setIsLastQuoteCantBeDeleted(true);
+            $this->em->persist($lastDocumentByYear[0]);
+            $this->em->flush();
+
             return $this->numberConstruction($numero,$year,$month);
         }
 
@@ -180,7 +179,7 @@ class DocumentService
             ->setShippingMethod($panierParams['shipping']);
 
         $this->em->persist($document);
-        $this->em->flush($document);
+        $this->em->flush();
 
         return $document;
 

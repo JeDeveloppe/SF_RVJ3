@@ -33,12 +33,14 @@ class ShippingMethod
     #[ORM\OneToMany(mappedBy: 'shippingmethod', targetEntity: Document::class)]
     private Collection $documents;
 
-
+    #[ORM\OneToMany(mappedBy: 'shippingmethod', targetEntity: CollectionPoint::class)]
+    private Collection $collectionPoints;
 
     public function __construct()
     {
         $this->deliveries = new ArrayCollection();
         $this->documents = new ArrayCollection();
+        $this->collectionPoints = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -153,6 +155,36 @@ class ShippingMethod
             // set the owning side to null (unless already changed)
             if ($document->getShippingmethod() === $this) {
                 $document->setShippingmethod(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CollectionPoint>
+     */
+    public function getCollectionPoints(): Collection
+    {
+        return $this->collectionPoints;
+    }
+
+    public function addCollectionPoint(CollectionPoint $collectionPoint): static
+    {
+        if (!$this->collectionPoints->contains($collectionPoint)) {
+            $this->collectionPoints->add($collectionPoint);
+            $collectionPoint->setShippingmethod($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCollectionPoint(CollectionPoint $collectionPoint): static
+    {
+        if ($this->collectionPoints->removeElement($collectionPoint)) {
+            // set the owning side to null (unless already changed)
+            if ($collectionPoint->getShippingmethod() === $this) {
+                $collectionPoint->setShippingmethod(null);
             }
         }
 
