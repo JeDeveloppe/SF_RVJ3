@@ -55,10 +55,10 @@
                                         Valable jusqu'au {{ document.endOfQuoteValidation | date('d-m-Y') }}
                                     </div>
                                     <div class="col-4">
-                                        {% if document.isQuoteReminder is null %}
-                                            {% set color = 'red' %}
-                                        {% else %}
+                                        {% if document.isQuoteReminder == true %}
                                             {% set color = 'success' %}
+                                        {% else %}
+                                            {% set color = 'danger' %}
                                         {% endif %}
                                         Relancé par email: <i class="fa-solid fa-paper-plane text-{{ color }}"></i>
                                     </div>
