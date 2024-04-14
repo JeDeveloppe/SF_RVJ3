@@ -116,7 +116,6 @@ class DocumentService
     {
 
         $document = $this->generateDocument($panierParams, $session);
-        dd('STOP');
         $documentLineTotals = $this->generateDocumentLineTotals($panierParams, $document);
         $this->addVoucherDiscoundInDocumentLineTotals($panierParams, $documentLineTotals, $session);
         $this->generateAllLinesFromPanierIntoDocumentLines($panierParams, $document);
@@ -128,6 +127,7 @@ class DocumentService
 
     public function generateDocument(array $panierParams, Session $session):Document
     {
+
         $billingAddress = $this->addressRepository->find($session->get('billingAddressId'));
 
         if($panierParams['shipping']->getPrice() == "PAYANT"){

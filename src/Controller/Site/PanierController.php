@@ -77,7 +77,7 @@ class PanierController extends AbstractController
         if($shippingAndVoucherForm->isSubmitted() && $shippingAndVoucherForm->isValid()){
             
             $voucherDiscountCode = $shippingAndVoucherForm['voucherDiscount']->getData();
-            $shippingMethodeId = $shippingAndVoucherForm['shipping']->getData();
+            $shippingMethodeId = $shippingAndVoucherForm['shipping']->getData()->getId();
 
             if(is_null($voucherDiscountCode)){
 
@@ -151,9 +151,11 @@ class PanierController extends AbstractController
             $voucherDiscoundId = $session->get('voucherDiscountId');
         }
 
+        $shippingMethod = $this->shippingMethodRepository->findOneById($session->get('shippingMethodeId'));
+
         $billingAndDeliveryForm = $this->createForm(BillingAndDeliveryAddressType::class, null, [
             'user' => $this->security->getUser(),
-            'shipping' => $session->get('shippingMethodeId'),
+            'shipping' => $shippingMethod,
         ]);
         $billingAndDeliveryForm->handleRequest($request);
 

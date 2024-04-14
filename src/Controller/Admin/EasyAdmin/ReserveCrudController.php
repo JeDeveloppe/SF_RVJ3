@@ -82,4 +82,12 @@ class ReserveCrudController extends AbstractCrudController
             $entityManager->flush();
         }
     }
+
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if ($entityInstance instanceof Reserve) {
+
+        dd('STOP DELETE');
+        }
+    }
 }

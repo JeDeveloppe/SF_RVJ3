@@ -176,7 +176,7 @@ class PanierService
     public function calculateAllCart($user)
     {
         $session = $this->request->getSession();
-        $shipping = $session->get('shippingMethodeId');
+        $shipping = $this->shippingMethodRepository->findOneById($session->get('shippingMethodeId'));
         $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
         $responses = [];
         //? calcul de la remise sur les articles
