@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Boite;
+use App\Entity\Item;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -44,6 +45,37 @@ class BoiteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function findBoitesWhereThereIsItems()
+    {
+//         $query = $this->createQueryBuilder('b');
+//         $condition = $query->expr()->in('b.id',$this->itemsWithStockToSale());
+// dd($condition);
+//         $query->where($condition)->orderBy('b.id', 'DESC');
+
+//         return $query;
+
+        return $this->createQueryBuilder('b')
+            ->where('b.isOnline = :true')
+            ->join('b.itemsOrigine', 'i')
+            ->andWhere('i.stockForSale > :minimum')
+            ->setParameter('true', true)
+            ->setParameter('minimum', 0)
+            ->orderBy('b.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function itemsWithStockToSale(){
+
+        return $this->_em->createQueryBuilder('s')
+            ->select('i.BoiteOrigine')
+            ->from(Item::class, 'i')
+            ->where('i.stockForSale > 0 ')
+            ->groupBy('i.BoiteOrigine')
+            ->getDQL();
     }
 
 //    /**

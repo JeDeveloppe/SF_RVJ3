@@ -21,9 +21,6 @@ class Item
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToMany(targetEntity: ItemGroup::class, inversedBy: 'items')]
-    private Collection $itemGroup;
-
     #[ORM\Column]
     private ?int $stockForSale = null;
 
@@ -73,9 +70,12 @@ class Item
     #[Vich\UploadableField(mapping: 'item', fileNameProperty: 'image')]
     private ?File $imageFile = null;
 
+    #[ORM\ManyToOne(inversedBy: 'items')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ItemGroup $itemGroup = null;
+
     public function __construct()
     {
-        $this->itemGroup = new ArrayCollection();
         $this->paniers = new ArrayCollection();
         $this->documentLines = new ArrayCollection();
         $this->BoiteOrigine = new ArrayCollection();
@@ -95,30 +95,6 @@ class Item
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ItemGroup>
-     */
-    public function getItemGroup(): Collection
-    {
-        return $this->itemGroup;
-    }
-
-    public function addItemGroup(ItemGroup $itemGroup): static
-    {
-        if (!$this->itemGroup->contains($itemGroup)) {
-            $this->itemGroup->add($itemGroup);
-        }
-
-        return $this;
-    }
-
-    public function removeItemGroup(ItemGroup $itemGroup): static
-    {
-        $this->itemGroup->removeElement($itemGroup);
 
         return $this;
     }
@@ -377,5 +353,17 @@ class Item
     public function getImage(): ?string
     {
         return $this->image;
+    }
+
+    public function getItemGroup(): ?ItemGroup
+    {
+        return $this->itemGroup;
+    }
+
+    public function setItemGroup(?ItemGroup $itemGroup): static
+    {
+        $this->itemGroup = $itemGroup;
+
+        return $this;
     }
 }

@@ -97,9 +97,6 @@ class Boite
     #[ORM\Column(nullable: true)]
     private ?int $rvj2id = null;
 
-    #[ORM\ManyToMany(targetEntity: ItemGroup::class, mappedBy: 'boite')]
-    private Collection $itemGroups;
-
     #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'BoiteOrigine')]
     private Collection $itemsOrigine;
 
@@ -123,7 +120,6 @@ class Boite
         $this->occasions = new ArrayCollection();
         $this->documentLines = new ArrayCollection();
         $this->paniers = new ArrayCollection();
-        $this->itemGroups = new ArrayCollection();
         $this->itemsOrigine = new ArrayCollection();
         $this->itemsSecondaire = new ArrayCollection();
     }
@@ -487,33 +483,6 @@ class Boite
     public function setRvj2id(?int $rvj2id): static
     {
         $this->rvj2id = $rvj2id;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ItemGroup>
-     */
-    public function getItemGroups(): Collection
-    {
-        return $this->itemGroups;
-    }
-
-    public function addItemGroup(ItemGroup $itemGroup): static
-    {
-        if (!$this->itemGroups->contains($itemGroup)) {
-            $this->itemGroups->add($itemGroup);
-            $itemGroup->addBoite($this);
-        }
-
-        return $this;
-    }
-
-    public function removeItemGroup(ItemGroup $itemGroup): static
-    {
-        if ($this->itemGroups->removeElement($itemGroup)) {
-            $itemGroup->removeBoite($this);
-        }
 
         return $this;
     }

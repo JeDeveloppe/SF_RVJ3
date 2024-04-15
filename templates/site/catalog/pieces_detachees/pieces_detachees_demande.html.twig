@@ -84,11 +84,11 @@
 						</div>
 					</form> #}
 				</div>
-
-				{% for group in boite.itemGroups %}
+{% dump(groups) %}
+				{% for group in groups %}
 
 					<div class="card col-11 mx-auto mb-3">
-						<div class="card-header">{{ group.name }}</div>
+						<div class="card-header">{{ group.group.name }}</div>
 						<div class="card-body d-flex justify-content-around flex-wrap">
 							<div class="col-11 col-md-5 d-flex justify-content-center align-items-center mb-3 mb-md-0">
 								<div class="divImgPresentation">
@@ -114,19 +114,17 @@
 										<select name="select-item" class="form-control text-center select-item" required>
 											<option value="">-- Choisir un article --</option>
 												<optgroup label="Pièces originales">
-													{% if boite.itemsOrigine | length > 0 %}
-														{% for item in boite.itemsOrigine|sort %}
-																{% if item in group.items %}
-																	{% if  item.stockForSale > 0 %}
-																		<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }}: {{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC - (Disponible: {{ item.stockForSale }})</option>
-																	{% else %}
-																		<option data-image="{{ item.image }}">{{ item.name }}: Réapprovisionnement en cours...</option>
-																	{% endif %}												
-																{% endif %}
-														{% endfor %}
+													{% for item in group.items|sort %}
+														
+															{% if  item.stockForSale > 0 %}
+																<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }}: {{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC - (Disponible: {{ item.stockForSale }})</option>
+															{% else %}
+																<option data-image="{{ item.image }}" disabled>{{ item.name }}: Réapprovisionnement en cours...</option>
+															{% endif %}												
+														
 													{% else %}
-														<option value="" data-image="{{ asset('build/images/design/default.png') }}">Victime de son succès...</option>
-													{% endif %}
+														<option value="" data-image="{{ asset('build/images/design/default.png') }}" disabled>Victime de son succès...</option>
+													{% endfor %}
 												</optgroup>
 												{# <optgroup label="Pièces similaires">
 													{% if boite.itemsSecondaire | length > 0 %}

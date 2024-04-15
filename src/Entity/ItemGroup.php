@@ -32,19 +32,15 @@ class ItemGroup
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'itemGroup')]
-    private Collection $items;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToMany(targetEntity: Boite::class, inversedBy: 'itemGroups')]
-    private Collection $boite;
+    #[ORM\OneToMany(mappedBy: 'itemGroup', targetEntity: Item::class)]
+    private Collection $items;
 
     public function __construct()
     {
         $this->items = new ArrayCollection();
-        $this->boite = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,33 +73,6 @@ class ItemGroup
     public function setImage(?string $image): static
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Item>
-     */
-    public function getItems(): Collection
-    {
-        return $this->items;
-    }
-
-    public function addItem(Item $item): static
-    {
-        if (!$this->items->contains($item)) {
-            $this->items->add($item);
-            $item->addItemGroup($this);
-        }
-
-        return $this;
-    }
-
-    public function removeItem(Item $item): static
-    {
-        if ($this->items->removeElement($item)) {
-            $item->removeItemGroup($this);
-        }
 
         return $this;
     }
@@ -146,25 +115,31 @@ class ItemGroup
     }
 
     /**
-     * @return Collection<int, Boite>
+     * @return Collection<int, Item>
      */
-    public function getBoite(): Collection
+    public function getItems(): Collection
     {
-        return $this->boite;
+        return $this->items;
     }
 
-    public function addBoite(Boite $boite): static
+    public function addItem(Item $item): static
     {
-        if (!$this->boite->contains($boite)) {
-            $this->boite->add($boite);
+        if (!$this->items->contains($item)) {
+            $this->items->add($item);
+            $item->setItemGroup($this);
         }
 
         return $this;
     }
 
-    public function removeBoite(Boite $boite): static
+    public function removeItem(Item $item): static
     {
-        $this->boite->removeElement($boite);
+        if ($this->items->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getItemGroup() === $this) {
+                $item->setItemGroup(null);
+            }
+        }
 
         return $this;
     }

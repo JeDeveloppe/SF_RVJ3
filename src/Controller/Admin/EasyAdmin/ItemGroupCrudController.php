@@ -35,16 +35,6 @@ class ItemGroupCrudController extends AbstractCrudController
     {
 
         return [  
-            // AssociationField::new('boite')
-            //     ->setLabel('Boites principale:'),
-            AssociationField::new('boite')->setLabel('Boites principale: (uniquement celles en ligne)')
-            ->setQueryBuilder(
-                fn(QueryBuilder $queryBuilder) => 
-                $queryBuilder
-                ->where('entity.isOnline = :value')
-                ->setParameter('value', true)
-                ->orderBy('entity.id', 'ASC')
-            )->onlyOnForms(),
             ImageField::new('image')->setBasePath($this->getParameter('app.path.itemGroup_images'))->onlyOnIndex(),
             TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
                 'required' => false,

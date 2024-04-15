@@ -60,7 +60,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
         }else{
             $disabled = false;
             $required = true;
-            $occasionField = AssociationField::new('occasion')->setLabel('Occasion (tous)')
+            $occasionField = AssociationField::new('occasion')->setLabel('Occasion (toute la bdd)')
                                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                                 ->setQueryBuilder(
                                     fn(QueryBuilder $queryBuilder) => 
@@ -101,8 +101,8 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
             AssociationField::new('meansOfPaiement')
                 ->setLabel('Moyen de paiement')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
-            DateTimeField::new('createdAt')->setLabel('Saisie le')->setFormat('dd-MM-yyyy')->onlyOnForms()->setDisabled(true),
-            AssociationField::new('createdBy')->setLabel('Saisie par')->onlyOnForms()->setDisabled(true),
+            DateTimeField::new('createdAt')->setLabel('Saisie le')->setFormat('dd-MM-yyyy')->onlyWhenCreating()->setDisabled(true),
+            AssociationField::new('createdBy')->setLabel('Saisie par')->onlyWhenCreating()->setDisabled(true),
         ];
     }
 

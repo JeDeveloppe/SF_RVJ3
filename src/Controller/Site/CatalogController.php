@@ -48,7 +48,9 @@ class CatalogController extends AbstractController
 
         }else{
 
-            $donneesFromDatabases = $this->boiteRepository->findBy(['isOnline' => true],['id' => 'DESC']);
+            //$donneesFromDatabases = $this->boiteRepository->findBy(['isOnline' => true],['id' => 'DESC']);
+            $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems();
+
         }
 
         //on tri uniquement les donnees avec articles
@@ -105,9 +107,26 @@ class CatalogController extends AbstractController
 
         $metas['description'] = 'Les pièces détachées que le service a en stock concernant le jeu: '.$boite->getName().' - '.$boite->getEditor()->getName();
 
+        $items = $boite->getItemsOrigine();
+        $groups = [];
+
+        foreach($items as $item){
+            if(!array_key_exists($item->getItemGroup()->getId(),$groups)){
+                $groups[$item->getItemGroup()->getId()] = [
+                    'group' => $item->getItemGroup(),
+                    'items' => [
+                        $item
+                    ]
+                ];
+            } else {
+                $groups[$item->getItemGroup()->getId()]['items'][] = $item;
+            }
+        }
+
         return $this->render('site/catalog/pieces_detachees/pieces_detachees_demande.html.twig', [
             'boite' => $boite,
             'metas' => $metas,
+            'groups' => $groups,
             'tax' => $this->taxRepository->findOneBy([]),
         ]);
     }
