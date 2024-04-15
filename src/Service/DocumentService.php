@@ -120,7 +120,7 @@ class DocumentService
         $this->addVoucherDiscoundInDocumentLineTotals($panierParams, $documentLineTotals, $session);
         $this->generateAllLinesFromPanierIntoDocumentLines($panierParams, $document);
 
-
+        $session->remove('shippingMethodeId');
 
         return $document;
     }

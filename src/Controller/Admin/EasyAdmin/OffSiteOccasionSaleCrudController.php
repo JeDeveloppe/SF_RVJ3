@@ -60,15 +60,15 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
         }else{
             $disabled = false;
             $required = true;
-            // $occasionField = AssociationField::new('occasion')->setLabel('Occasion (uniquement en ligne)')
-            //                     ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
-            //                     ->setQueryBuilder(
-            //                         fn(QueryBuilder $queryBuilder) => 
-            //                         $queryBuilder->where('entity.isOnline = :true')
-            //                             ->setParameter('true', true)
-            //                             ->orderBy('entity.reference', 'ASC')
-            //                     )->setDisabled($disabled);
-            $occasionField = CollectionField::new('occasion')->setEntryIsComplex(OccasionCrudController::class, 'boite', 'priceWithoutTax');
+            $occasionField = AssociationField::new('occasion')->setLabel('Occasion (tous)')
+                                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                                ->setQueryBuilder(
+                                    fn(QueryBuilder $queryBuilder) => 
+                                    $queryBuilder
+                                        // ->where('entity.isOnline = :true')
+                                        // ->setParameter('true', true)
+                                        ->orderBy('entity.reference', 'ASC')
+                                )->setDisabled($disabled);
         }
 
         return [
@@ -82,18 +82,25 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
                 ->setTextAlign('center')->setDisabled($disabled),
             AssociationField::new('user')
                 ->setLabel('Acheteur')
+                // ->setFormTypeOption('choice_label', function($item) {
+                //     return $item->getEmail();
+                // })
                 ->setQueryBuilder(
                     fn(QueryBuilder $queryBuilder) => 
                     $queryBuilder
-                    ->orderBy('entity.id', 'ASC')
+                    ->orderBy('entity.email', 'ASC')
                 )
+                ->setFormTypeOption('choice_label', function($item) {
+                    return $item->getEmail();
+                })
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                 ->onlyOnForms(),
             AssociationField::new('movement')
                 ->setLabel('Mouvement:')
-                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']]),
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
             AssociationField::new('meansOfPaiement')
                 ->setLabel('Moyen de paiement')
-                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']]),
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
             DateTimeField::new('createdAt')->setLabel('Saisie le')->setFormat('dd-MM-yyyy')->onlyOnForms()->setDisabled(true),
             AssociationField::new('createdBy')->setLabel('Saisie par')->onlyOnForms()->setDisabled(true),
         ];
@@ -122,6 +129,8 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if($entityInstance instanceof OffSiteOccasionSale) {
+
+            dump($entityInstance);
 
             $docParams = $this->documentParametreRepository->findOneBy([]);
 

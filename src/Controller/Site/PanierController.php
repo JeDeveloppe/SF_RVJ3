@@ -74,7 +74,8 @@ class PanierController extends AbstractController
         $session = $request->getSession();
         $session->set('step_address', false);
 
-        if($shippingAndVoucherForm->isSubmitted() && $shippingAndVoucherForm->isValid()){
+        if($shippingAndVoucherForm->isSubmitted() && $shippingAndVoucherForm->isValid())
+        {
             
             $voucherDiscountCode = $shippingAndVoucherForm['voucherDiscount']->getData();
             $shippingMethodeId = $shippingAndVoucherForm['shipping']->getData()->getId();
@@ -108,7 +109,6 @@ class PanierController extends AbstractController
 
             //et on recalcul le tout
             $reponses = $this->panierService->calculateAllCart($user);
-
         }
 
         return $this->render('site/panier/panier.html.twig', [
@@ -124,10 +124,6 @@ class PanierController extends AbstractController
             'totalPanier' => $reponses['totalPanier'],
             'tax' => $reponses['tax'],
             'preparationHt' => $reponses['preparationHt'],
-            'deliveryCostWithoutTax' => $reponses['deliveryCostWithoutTax'],
-            // 'acceptCartForm' => $acceptCartForm,
-            // 'billingAddress' => $billingAddress,
-            // 'deliveryAddress' => $deliveryAddress
         ]);
     }
 

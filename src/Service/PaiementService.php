@@ -16,7 +16,6 @@ use App\Repository\DocumentStatusRepository;
 use App\Repository\MeansOfPayementRepository;
 use Symfony\Component\Routing\RouterInterface;
 use App\Repository\DocumentParametreRepository;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -178,7 +177,7 @@ class PaiementService
             [
             "totalAmount" => $document->getTotalWithTax(),
             "initialAmount" => $document->getTotalWithTax(),
-            "itemName" => "Achat Refaites vos jeux",
+            "itemName" => "Achat sur Refaites vos jeux",
             "backUrl" => $this->urlGeneratorInterface->generate('paiement_canceled', ['tokenDocument' => $customer_id], UrlGeneratorInterface::ABSOLUTE_URL),
             "errorUrl" => $this->urlGeneratorInterface->generate('paiement_canceled', ['tokenDocument' => $customer_id], UrlGeneratorInterface::ABSOLUTE_URL),
             "returnUrl" => $this->urlGeneratorInterface->generate('paiement_success', ['tokenDocument' => $customer_id], UrlGeneratorInterface::ABSOLUTE_URL),

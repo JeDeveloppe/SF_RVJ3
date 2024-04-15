@@ -225,6 +225,7 @@ class PanierService
 
         $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
 
+
         if(is_null($shipping)){
 
             $responses['deliveryCostWithoutTax'] = 0;
