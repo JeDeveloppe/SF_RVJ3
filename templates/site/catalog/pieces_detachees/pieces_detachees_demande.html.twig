@@ -84,10 +84,11 @@
 						</div>
 					</form> #}
 				</div>
-{% dump(groups) %}
+			</div>
+
 				{% for group in groups %}
 
-					<div class="card col-11 mx-auto mb-3">
+					<div class="card col-11 col-lg-10 mx-auto mb-3 p-0">
 						<div class="card-header">{{ group.group.name }}</div>
 						<div class="card-body d-flex justify-content-around flex-wrap">
 							<div class="col-11 col-md-5 d-flex justify-content-center align-items-center mb-3 mb-md-0">
@@ -156,11 +157,10 @@
 					</div>
 					
 				{% endfor %}
-			</div>
 		</div>
 
-		<!-- BLOC BUTTON RETOUR  -->
-		{% include "components/catalog/_retour-button.html.twig" %}
+	<!-- BLOC BUTTON RETOUR  -->
+	{% include "components/catalog/_retour-button.html.twig" %}
 
 
 	<script>

@@ -66,7 +66,7 @@ class ItemCrudController extends AbstractCrudController
             TextField::new('name')
                 ->setLabel('Nom:')->setColumns(6),
             AssociationField::new('itemGroup')
-                ->setLabel('Groupe d\'articles:')->onlyOnForms()->setRequired(true),
+                ->setLabel('Groupe d\'articles:')->onlyOnForms()->setRequired(true)->setFormTypeOptions(['placeholder' => 'Faire un choix...']),
             AssociationField::new('BoiteOrigine')
                 ->setLabel('Boites Originale:')->onlyOnForms()->setColumns(6)->setRequired(true),
             AssociationField::new('BoiteSecondaire')

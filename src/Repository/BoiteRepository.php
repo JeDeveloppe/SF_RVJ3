@@ -49,12 +49,6 @@ class BoiteRepository extends ServiceEntityRepository
 
     public function findBoitesWhereThereIsItems()
     {
-//         $query = $this->createQueryBuilder('b');
-//         $condition = $query->expr()->in('b.id',$this->itemsWithStockToSale());
-// dd($condition);
-//         $query->where($condition)->orderBy('b.id', 'DESC');
-
-//         return $query;
 
         return $this->createQueryBuilder('b')
             ->where('b.isOnline = :true')
@@ -68,15 +62,6 @@ class BoiteRepository extends ServiceEntityRepository
         ;
     }
 
-    public function itemsWithStockToSale(){
-
-        return $this->_em->createQueryBuilder('s')
-            ->select('i.BoiteOrigine')
-            ->from(Item::class, 'i')
-            ->where('i.stockForSale > 0 ')
-            ->groupBy('i.BoiteOrigine')
-            ->getDQL();
-    }
 
 //    /**
 //     * @return Boite[] Returns an array of Boite objects
