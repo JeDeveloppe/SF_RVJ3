@@ -49,11 +49,11 @@ class MemberController extends AbstractController
     }
 
     #[Route('/membre', name: 'member')]
-    public function membreHistorique(DocumentParametreRepository $documentParametreRepository, Request $request): Response
+    public function membreHistorique(DocumentParametreRepository $documentParametreRepository, DocumentRepository $documentRepository, Request $request): Response
     {
         $user = $this->security->getUser();
                 
-        $donnees = $user->getDocuments();
+        $donnees = $documentRepository->findBy(['user' => $user], ['id' => 'DESC']);
 
         $documents = $this->paginator->paginate(
             $donnees, /* query NOT result */

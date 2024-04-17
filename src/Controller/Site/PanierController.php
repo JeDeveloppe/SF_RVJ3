@@ -124,6 +124,8 @@ class PanierController extends AbstractController
             'totalPanier' => $reponses['totalPanier'],
             'tax' => $reponses['tax'],
             'preparationHt' => $reponses['preparationHt'],
+            'deliveryCostWithoutTax' => $reponses['deliveryCostWithoutTax'],
+
         ]);
     }
 

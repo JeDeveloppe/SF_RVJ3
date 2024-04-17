@@ -1,4 +1,6 @@
-{% if docLine_boites | length > 0 %}
+{% if attribute(docLines, 'docLines_boites') | length > 0 %}
+
+    {% set docLines_boites = attribute(docLines, 'docLines_boites') %}
 
     <div class="row justify-content-center mb-5">
         <h3 class="col-12 text-start">Pièces détachée(s):</h3>

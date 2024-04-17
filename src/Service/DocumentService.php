@@ -219,8 +219,7 @@ class DocumentService
     {
 
         $paniers = array_merge($panierParams['panier_occasions'],$panierParams['panier_boites'],$panierParams['panier_items']);
-
-        //TODO
+        //on met en BDD par ligne de document
         foreach($paniers as $panier){
             $documentLine = new DocumentLine();
             $documentLine
@@ -231,11 +230,16 @@ class DocumentService
                 ->setOccasion($panier->getOccasion() ?? NULL)
                 ->setDocument($document)
                 ->setPriceExcludingTax($panier->getPriceWithoutTax());
-            
                 $this->em->persist($documentLine);
-                $this->em->remove($panier);
         }
         //on met en BDD les differentes lignes
+        $this->em->flush();
+
+        //on supprimer chaque panier de la BDD
+        foreach($paniers as $panier){
+            $this->em->remove($panier);
+        }
+        //on supprim en BDD les differentes lignes
         $this->em->flush();
     }
 
@@ -294,20 +298,18 @@ class DocumentService
 
     public function generateValuesForDocument($document):array
     { 
-
         $results = [];
 
-        $results['docLines'] = $document->getDocumentLines();
+        $docLines = $document->getDocumentLines();
         $results['tauxTva'] = $this->utilitiesService->calculTauxTva($document->getTaxRateValue());
+        foreach($docLines as $docLine){
 
-        foreach($results['docLines'] as $docLine){
-
-            $results['docLine_items'] = $this->documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'occasion' => null, 'boite' => null ]);
-            $results['docLine_occasions'] = $this->documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'item' => null, 'boite' => null]);
-            $results['docLine_boites'] = $this->documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'occasion' => null, 'item' => null]);
+            $results['docLines_items'] = $this->documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'occasion' => null, 'boite' => null ]);
+            $results['docLines_occasions'] = $this->documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'item' => null, 'boite' => null]);
+            $results['docLines_boites'] = $this->documentLineRepository->findBy(['document' => $docLine->getDocument()->getId(), 'occasion' => null, 'item' => null]);
 
         }
-
+        
         return $results;
     }
 

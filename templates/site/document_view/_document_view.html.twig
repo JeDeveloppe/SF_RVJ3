@@ -14,6 +14,10 @@
         {% set tdText = 'Frais de gestion:' %}
     {% endif %}
 
+    <div class="col-12">
+        <a href="{{ path('member') }}" class="btn btn-outline-primary mx-auto"><i class="fa-solid fa-backward-step"></i> Précédent</a>
+    </div>
+
     <h3 class="col-12 text-center my-5">
         {% if document.billNumber is null %}
             Devis {{ document.quoteNumber }} <br>
@@ -124,7 +128,7 @@
     {% if document.billNumber is null %}
         <div class="row my-5">
             <div class="col-6 text-center">
-                <a href="{{ path('paiement', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-success" >Payer avec {{ app.request.server.get('PAIEMENT_MODULE') }}</a><br/>
+                <a href="{{ path('paiement', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-success" >Payer avec {{ app.request.server.get('PAIEMENT_MODULE') }}</a><br/><br/>
                 
                 {% include "components/_logo_paiement_with.html.twig" %}
 

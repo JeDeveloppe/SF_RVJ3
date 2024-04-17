@@ -311,12 +311,9 @@ class SiteController extends AbstractController
         }else{
 
             $results = $this->documentService->generateValuesForDocument($document);
-
             return $this->render('site/document_view/_document_view.html.twig', [
                 'document' => $document,
-                'docLine_items' => $results['docLine_items'],
-                'docLine_occasions' => $results['docLine_occasions'],
-                'docLine_boites' => $results['docLine_boites'],
+                'docLines' => $results,
                 'tva' => $results['tauxTva']
             ]);
         }

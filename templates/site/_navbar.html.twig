@@ -16,7 +16,6 @@
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="{{ path('app_catalogue_pieces_detachees') }}">Pièces détachées</a>
                 <a class="dropdown-item" href="{{ path('app_catalogue_occasions') }}">Jeux d'occasion</a>
-                <a class="dropdown-item" href="#">Articles</a>
             </div>
         </li>
         <li class="nav-item dropdown">
@@ -40,8 +39,6 @@
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Ambassadeur</a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{{ path('ambassador_home') }}">Espace ambassadeur</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
         {% endif %}
@@ -50,8 +47,6 @@
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Mon espace</a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{{ path('member') }}">Espace membre</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
               <div class="dropdown-divider"></div>
               {% if is_granted('ROLE_BENEVOLE') %}
                 <a class="dropdown-item" href="{{ path('admin') }}"><i class="fa-solid fa-lock text-info"></i> ADMINISTRATION</a>

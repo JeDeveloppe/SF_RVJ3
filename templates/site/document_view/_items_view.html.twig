@@ -1,4 +1,6 @@
-{% if docLine_items | length > 0 %}
+{% if attribute(docLines, 'docLines_items') | length > 0 %}
+
+    {% set docLines_items = attribute(docLines, 'docLines_items') %}
 
     <div class="row justify-content-center mb-4">
         <h3>Article(s):</h3> 
@@ -10,7 +12,7 @@
                     <th>Prix de vente TTC</th>
                 </thead>
                 <tbody>
-                    {% for docLine in docLine_items %}
+                    {% for docLine in docLines_items %}
                         <tr>
                             <td>{{ docLine.item.name }}</td>
                             <td>{{ docLine.quantity }}</td>

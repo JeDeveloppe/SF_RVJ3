@@ -12,8 +12,7 @@
 
    <div class="row mb-3 justify-content-center">
       {% if documents | length > 0 %}
-         {% for document in documents|reverse  %}
-            {% if document.IsLastQuoteCantBeDeleted is null %}
+         {% for document in documents %}
                <div class="card col-12 col-md-8 col-xl-7 p-0 mb-3">
                   <div class="card-header d-flex justify-content-between">
                      <div class="col-8">
@@ -65,7 +64,7 @@
                      </div>
                   </div>
                </div>
-            {% endif %}
+          
          {% endfor %}
       {% else %}
          <div class="col-12 text-center">PAS ENCORE DE DOCUMENTS</div>
