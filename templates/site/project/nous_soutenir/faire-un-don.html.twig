@@ -6,21 +6,66 @@
 
     <h1 class="col-12 text-center my-5">Faire un don</h1>
 
+    <p class="col-12 text-center lead">Vous souhaitez soutenir financièrement le projet ?</p>
     <div class="row justify-content-center">
 
-        <div class="col-11 text-center">
-            <p class="fs-4">{{ metas.description }}</p>
+
+        <div class="accordion my-5 col-11 mx-auto" id="accordionExample">
+
+                    {% if app.request.server.get('PAIEMENT_MODULE') == 'PAYPLUG' %}
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Par le formulaire en ligne de Payplug...
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                <div class="accordion-body lh-lg">
+                                    {% include "site/project/components/_formForDonationWithPayplug.html.twig" %}
+                                </div>
+                            </div>
+                            <p class="col-12 text-center">Merci par avance pour votre soutien !</p>
+                        </div>
+
+                    {% else %}
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Via le compte HelloAsso...
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                <div class="accordion-body lh-lg">
+                                    {% include "site/project/components/_formForDonationWithHelloAsso.html.twig" %}
+                                </div>
+                            </div>
+                            <p class="col-12 text-center">Merci par avance pour votre soutien !</p>
+                        </div>
+
+                    {% endif %}
+       
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    En nous envoyant un chèque...
+                </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body lh-lg text-center">
+                        Chèque à envoyer à l'adresse suivante:<br/><br/>
+                        {{ legales.companyName }}<br />
+                        {{ legales.streetCompany }}<br/>
+                        {{ legales.postalCodeCompany }} {{ legales.cityCompany }}<br />
+                    </div>
+                    <p class="col-12 text-center">Merci par avance pour votre soutien !</p>
+                </div>
+            </div>
         </div>
 
-        {% if app.request.server.get('PAIEMENT_MODULE') == 'PAYPLUG' %}
 
-            {% include "site/project/components/_formForDonationWithPayplug.html.twig" %}
-
-        {% else %}
-
-            {% include "site/project/components/_formForDonationWithHelloAsso.html.twig" %}
-
-        {% endif %}
 
     {% include "site/project/components/_link-to-formulaire.html.twig" %}
 

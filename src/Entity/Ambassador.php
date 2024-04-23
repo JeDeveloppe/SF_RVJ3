@@ -61,6 +61,12 @@ class Ambassador
     #[ORM\Column(length: 255)]
     private ?string $privateemail = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $facebookLink = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $instagramLink = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -242,6 +248,30 @@ class Ambassador
     public function setPrivateemail(string $privateemail): static
     {
         $this->privateemail = $privateemail;
+
+        return $this;
+    }
+
+    public function getFacebookLink(): ?string
+    {
+        return $this->facebookLink;
+    }
+
+    public function setFacebookLink(?string $facebookLink): static
+    {
+        $this->facebookLink = $facebookLink;
+
+        return $this;
+    }
+
+    public function getInstagramLink(): ?string
+    {
+        return $this->instagramLink;
+    }
+
+    public function setInstagramLink(?string $instagramLink): static
+    {
+        $this->instagramLink = $instagramLink;
 
         return $this;
     }

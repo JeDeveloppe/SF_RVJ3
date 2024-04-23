@@ -14,22 +14,23 @@ use App\Service\DocumentService;
 use App\Service\PasswordService;
 use App\Service\UtilitiesService;
 use App\Repository\UserRepository;
+use App\Service\AmbassadorService;
 use App\Repository\MediaRepository;
 use App\Form\AddressForDonationType;
 use App\Repository\PartnerRepository;
 use Symfony\Component\Form\FormError;
 use App\Repository\DocumentRepository;
+use App\Repository\AmbassadorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\EmailForSendResetPasswordType;
-use App\Repository\AmbassadorRepository;
 use App\Repository\ResetPasswordRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
-use App\Service\AmbassadorService;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
@@ -56,7 +57,7 @@ class SiteController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        $metas['description'] = 'Vous avez un jeu de société incomplet ? Refaites vos jeux vous propose un service pour donner une seconde vie à votre jeu, nous avons plein de pièces détachées en stock.';
+        $metas['description'] = 'L’association Refaites vos jeux œuvre pour le réemploi des jeux et le lien social.';
 
         return $this->render('site/index.html.twig', [
             'metas' => $metas
@@ -172,13 +173,36 @@ class SiteController extends AbstractController
         $donnees = $this->ambassadorService->constructionMapOfFranceWithAmbassadors($baseUrl);
 
         //TODO
-        $metas['description'] = 'Description à faire';
+        $metas['description'] = "Vous souhaitez contribuer activement au projet porté par l’association mais vous n’êtes pas sur Caen ?";
         
         return $this->render('site/project/nous_soutenir/devenir-ambassadeur.html.twig', [
             'metas' => $metas,
             'donnees' => $donnees
         ]);
 
+    }
+
+    #[Route('/projet/nous-soutenir/devenir-ambassadeur-ambassadrice/quide', name: 'app_download_ambassador_quide')]
+    public function downloadQuide()
+    {
+        // load the file from the filesystem
+        $file = new File('../public/download/quide_ambassadeur_ambassadrice_rvj.pdf');
+        if(!$file){
+
+            $this->addFlash('warning','Année du document non connue !!!');
+
+            return $this->redirectToRoute('app_site_home');
+
+        }else{
+
+            return $this->file($file);
+
+            // // rename the downloaded file
+            // return $this->file($file, 'custom_name.pdf');
+
+            // display the file contents in the browser instead of downloading it
+            // return $this->file('adhesion_'.$year.'.docx', 'my_invoice.pdf', ResponseHeaderBag::DISPOSITION_INLINE);
+        }
     }
 
     #[Route('/projet/nous-soutenir/acheter-des-jeux', name: 'app_buy_games')]
@@ -199,7 +223,7 @@ class SiteController extends AbstractController
     {
 
         //TODO
-        $metas['description'] = 'Description à faire';
+        $metas['description'] = 'Adhérer à l’association, c’est soutenir un projet à visée écologique et sociale.';
         
         return $this->render('site/project/nous_soutenir/adherer.html.twig', [
             'metas' => $metas,            

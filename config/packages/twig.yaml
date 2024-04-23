@@ -1,6 +1,6 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
-    strict_variables: true
+    strict_variables: false
     globals:
             upload_item_image_path: '%app.path.item_images%'
 

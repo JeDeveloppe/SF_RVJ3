@@ -35,6 +35,8 @@ class AmbassadorCrudController extends AbstractCrudController
             AssociationField::new('city')->setLabel('Ville:')->autocomplete()->onlyOnForms(),
             TextareaField::new('description')->setLabel('Description:')->onlyOnForms()->setColumns(6),
             UrlField::new('fullurl')->setLabel('Adresse url complète:')->onlyOnForms(),
+            UrlField::new('facebookLink')->setLabel('Url Facebook:')->onlyOnForms(),
+            UrlField::new('instagramLink')->setLabel('Url Instagram:')->onlyOnForms(),
             
             FormField::addTab('Informations privées'),
             TextField::new('privatelastname')->setLabel('Nom:')->setColumns(6),

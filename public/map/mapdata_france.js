@@ -8,7 +8,7 @@ var simplemaps_countrymap_mapdata={
     background_color: "#FFFFFF",
     background_transparent: "yes",
     border_color: "#ffffff",
-    pop_ups: "detect",
+    pop_ups: "on_click",
     
 		//State defaults
 		state_description: "",
@@ -69,7 +69,7 @@ var simplemaps_countrymap_mapdata={
     url_new_tab: "no",
     images_directory: "default",
     fade_time: 0.1,
-    link_text: "View Website"
+    link_text: "Voir le site web"
   },
   state_specific: {
     FRA5262: {

@@ -38,9 +38,19 @@ class ReserveCrudController extends AbstractCrudController
             ->setQueryBuilder(
                 fn(QueryBuilder $queryBuilder) => 
                 $queryBuilder
+                ->where('entity.isOnline = :true')
                 ->orderBy('entity.isOnline', 'ASC')
                 ->orderBy('entity.reference', 'ASC')
-            )->setFormTypeOption('by_reference', false)->onlyOnForms(),
+                ->setParameter('true', true)
+            )->setFormTypeOption('by_reference', false)->onlyWhenCreating(),
+            AssociationField::new('occasions')
+            ->setLabel('Occasions à mettre de côter:')
+            ->setQueryBuilder(
+                fn(QueryBuilder $queryBuilder) => 
+                $queryBuilder
+                ->orderBy('entity.isOnline', 'ASC')
+                ->orderBy('entity.reference', 'ASC')
+            )->setFormTypeOption('by_reference', false)->onlyWhenUpdating(),
             CollectionField::new('occasions')
                 ->setLabel('Occasions mis de côté:')
                 ->hideOnForm(),
@@ -87,7 +97,15 @@ class ReserveCrudController extends AbstractCrudController
     {
         if ($entityInstance instanceof Reserve) {
 
-        dd('STOP DELETE');
+            //? pour chaque occasions on met hors ligne
+            $occasions = $entityInstance->getOccasions();
+
+            foreach($occasions as $occasion){
+                $entityInstance->removeOccasion($occasion);
+            }
+
+            $entityManager->remove($entityInstance);
+            $entityManager->flush();
         }
     }
 }
