@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use DateTimeImmutable;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class UtilitiesService
 {
@@ -160,5 +162,25 @@ class UtilitiesService
         $totaux['weigth'] = $weigth;
 
         return $totaux;
+    }
+
+    public function easyAdminLogicWhenBilling(RequestStack $requestStack, $repository)
+    {
+        //?edition logic
+        $id = $requestStack->getCurrentRequest()->get('entityId');
+        if($id){
+            $entity = $repository->find($id);
+            if($entity->getIsOnline() == false){
+                $disabledAfterBilling = true;
+            }else{
+                $disabledAfterBilling = false;
+            }
+            $disabled = true;
+        }else{
+            $disabled = false;
+            $disabledAfterBilling = false;
+        }
+
+        return [$disabled,$disabledAfterBilling];
     }
 }

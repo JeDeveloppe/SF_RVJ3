@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use App\Entity\Occasion;
 use Doctrine\ORM\QueryBuilder;
 use App\Repository\OccasionRepository;
+use App\Service\UtilitiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -28,28 +29,15 @@ class OccasionCrudController extends AbstractCrudController
     public function __construct(
         private RequestStack $requestStack,
         private Security $security,
-        private OccasionRepository $occasionRepository
+        private OccasionRepository $occasionRepository,
+        private UtilitiesService $utilitiesService
     )
     { 
     }
 
     public function configureFields(string $pageName): iterable
     {
-        //?edition logic
-        $id = $this->requestStack->getCurrentRequest()->get('entityId');
-        if($id){
-            $occasion = $this->occasionRepository->find($id);
-            if($occasion->getIsOnline() == false){
-                $disabledAfterBilling = true;
-            }else{
-                $disabledAfterBilling = false;
-            }
-            $disabled = true;
-        }else{
-            $disabled = false;
-            $disabledAfterBilling = false;
-        }
-
+        [$disabled, $disabledAfterBilling] = $this->utilitiesService->easyAdminLogicWhenBilling($this->requestStack, $this->occasionRepository);
 
         return [
             AssociationField::new('boite')
@@ -63,10 +51,11 @@ class OccasionCrudController extends AbstractCrudController
                     ->orderBy('entity.name', 'ASC')
                 )
                 ->setDisabled($disabled)
-                ->renderAsNativeWidget(),
+                ->renderAsNativeWidget()->onlyWhenCreating(),
             TextField::new('reference')->setLabel('Référence')->setDisabled(true),
             TextField::new('information')
                 ->setLabel('Information sur l\'occasion')
+                ->setDisabled($disabledAfterBilling)
                 ->onlyOnForms(),
             AssociationField::new('boxCondition')
                 ->setLabel('État de la boite')
@@ -107,7 +96,10 @@ class OccasionCrudController extends AbstractCrudController
                 ->setFormTypeOptions(['attr' => ['placeholder' => 'Mettre 0 pour aucune remise...']]),
             BooleanField::new('isOnline')
                 ->setLabel('En ligne')
-                ->setDisabled($disabledAfterBilling),
+                ->setDisabled(true)->onlyOnIndex(),
+            BooleanField::new('isOnline')
+                ->setLabel('En ligne')
+                ->setDisabled($disabledAfterBilling)->onlyOnForms(),
             AssociationField::new('offSiteOccasionSale')
                 ->setLabel('Vendu / donner')
                 ->setDisabled(true)

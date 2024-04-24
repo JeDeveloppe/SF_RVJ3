@@ -258,8 +258,7 @@ class SiteController extends AbstractController
 
         }
 
-        //TODO
-        $metas['description'] = 'Description à faire';
+        $metas['description'] = 'Vous souhaitez soutenir financièrement le projet ?';
         
         return $this->render('site/project/nous_soutenir/faire-un-don.html.twig', [
             'metas' => $metas,            
@@ -273,10 +272,23 @@ class SiteController extends AbstractController
     public function giveYourGames(): Response
     {
         
-        //TODO
-        $metas['description'] = 'Description à faire';
+        $metas['description'] = "L’association récupère les jeux de société complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…).
+        Nous récupérons également les puzzles complets et les jeux éducatifs en boîte carton (pour apprendre à lire, compter…), qu’ils soient complets ou incomplets.";
         
         return $this->render('site/project/nous_soutenir/donner-ses-jeux.html.twig', [
+            'metas' => $metas,
+            'legales' => $this->legalInformationRepository->findOneBy([])
+        ]);
+
+    }
+
+    #[Route('/projet/nous-soutenir/organiser-une-collecte-de-jeux', name: 'app_organize_collection')]
+    public function organizeCollection(): Response
+    {
+        
+        $metas['description'] = "Vous souhaitez organiser une collecte de jeux ? L’association vous accompagne dans la mise en place de ce projet.";
+        
+        return $this->render('site/project/nous_soutenir/organiser-une-collecte.html.twig', [
             'metas' => $metas,
             'legales' => $this->legalInformationRepository->findOneBy([])
         ]);
@@ -286,8 +298,8 @@ class SiteController extends AbstractController
     #[Route('/nous-soutenir', name: 'app_support_us')]
     public function supportUs(Request $request): Response
     {
-  
-        $metas['description'] = 'Description à faire';
+
+        $metas['description'] = 'Que vous soyez un particulier, un professionnel du monde du jeu ou du réemploi, ce projet a besoin de vous pour se pérenniser et se développer.';
 
         $supports = [
             [

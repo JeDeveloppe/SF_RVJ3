@@ -2,9 +2,9 @@
 
     {% if occasions is defined or occasion is defined %}
     {# si on affiche des occasions #}
-        <a class="btn btn-sm btn-info " href="{{ path('occasion', {'reference_occasion': item.reference, 'boite_slug': item.boite.slug , 'editor_slug': item.boite.editor.slug }) }}">Voir les détails</a>
+        <a class="btn btn-sm btn-primary" href="{{ path('occasion', {'reference_occasion': item.reference, 'boite_slug': item.boite.slug , 'editor_slug': item.boite.editor.slug }) }}">Voir les détails</a>
     {% else %}
-        <a class="btn btn-sm btn-info " href="{{ path('catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.slug , 'editorSlug': boite.editor.slug  }) }}">Voir les pièces disponiblent</a>
+        <a class="btn btn-sm btn-primary" href="{{ path('catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.slug , 'editorSlug': boite.editor.slug  }) }}">Voir les pièces disponiblent</a>
     {% endif %}
 
 {% else %}

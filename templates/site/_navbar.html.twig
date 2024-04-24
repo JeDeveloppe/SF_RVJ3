@@ -12,25 +12,25 @@
     <div class="collapse navbar-collapse" id="navbarColor02">
       <ul class="navbar-nav me-auto">
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Catalogues</a>
+            <a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Catalogues</a>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="{{ path('app_catalogue_pieces_detachees') }}">Pièces détachées</a>
                 <a class="dropdown-item" href="{{ path('app_catalogue_occasions') }}">Jeux d'occasion</a>
             </div>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Nous soutenir</a>
+          <a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Nous soutenir</a>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
             <a class="dropdown-item" href="{{ path('app_buy_games') }}">Acheter des jeux</a>
-            <a class="dropdown-item" href="#">Organiser une collecte de jeux</a>
+            <a class="dropdown-item" href="{{ path('app_organize_collection') }}">Organiser une collecte de jeux</a>
             <a class="dropdown-item" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur / ambassadrice</a>
             <a class="dropdown-item" href="{{ path('app_adherer') }}">Adhérer à l'association</a>
             <a class="dropdown-item" href="{{ path('app_make_donation') }}">Faire un don</a>
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ path('app_prestations') }}">Prestations</a>
+          <a class="nav-link text-white" href="{{ path('app_prestations') }}">Prestations</a>
         </li>
       </ul>
       <ul class="navbar-nav">
@@ -44,7 +44,7 @@
         {% endif %}
         {% if is_granted('ROLE_USER') %}
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Mon espace</a>
+            <a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Mon espace</a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{{ path('member') }}">Espace membre</a>
               <div class="dropdown-divider"></div>
@@ -65,9 +65,9 @@
         <li class="nav-item">
           {% if is_granted('ROLE_USER') %}
             {% if app.user.paniers | length > 0 %}
-              <a class="nav-link" href="{{ path('panier_start') }}">Panier ({{ app.user.paniers | length }})</a>
+              <a class="nav-link text-white" href="{{ path('panier_start') }}">Panier ({{ app.user.paniers | length }})</a>
             {% else %}
-              <a class="nav-link">Panier (0)</a>
+              <a class="nav-link text-white">Panier (0)</a>
             {% endif %}
           {% endif %}
         </li>

@@ -94,13 +94,16 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
                     return $item->getEmail();
                 })
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->setDisabled($disabled)
                 ->onlyOnForms(),
             AssociationField::new('movement')
                 ->setLabel('Mouvement:')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->setDisabled($disabled),
             AssociationField::new('meansOfPaiement')
                 ->setLabel('Moyen de paiement')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->setDisabled($disabled),
             DateTimeField::new('createdAt')->setLabel('Saisie le')->setFormat('dd-MM-yyyy')->onlyWhenCreating()->setDisabled(true),
             AssociationField::new('createdBy')->setLabel('Saisie par')->onlyWhenCreating()->setDisabled(true),
         ];
