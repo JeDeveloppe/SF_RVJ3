@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BoiteRepository::class)]
 #[Vich\Uploadable]
@@ -92,6 +93,10 @@ class Boite
 
     #[ORM\ManyToOne(inversedBy: 'boites')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\LessThanOrEqual(
+        propertyPath:"playersMax",
+        message: "Cette valeur ne peut être supérieure au nombre de joueurs max !"
+        )]
     private ?NumbersOfPlayers $playersMin = null;
 
     #[ORM\Column(nullable: true)]
@@ -113,7 +118,14 @@ class Boite
     private ?NumbersOfPlayers $playersMax = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $durationOfTheGame = null;
+    #[Assert\LessThanOrEqual(
+        propertyPath:"durationMaxOfTheGame",
+        message: "Cette valeur ne peut être supérieure à la durée maximum de la partie !"
+        )]
+    private ?int $durationMinOfTheGame = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $durationMaxOfTheGame = null;
 
     public function __construct()
     {
@@ -577,14 +589,26 @@ class Boite
         return $this;
     }
 
-    public function getDurationOfTheGame(): ?int
+    public function getDurationMinOfTheGame(): ?int
     {
-        return $this->durationOfTheGame;
+        return $this->durationMinOfTheGame;
     }
 
-    public function setDurationOfTheGame(?int $durationOfTheGame): static
+    public function setDurationMinOfTheGame(?int $durationMinOfTheGame): static
     {
-        $this->durationOfTheGame = $durationOfTheGame;
+        $this->durationMinOfTheGame = $durationMinOfTheGame;
+
+        return $this;
+    }
+
+    public function getDurationMaxOfTheGame(): ?int
+    {
+        return $this->durationMaxOfTheGame;
+    }
+
+    public function setDurationMaxOfTheGame(?int $durationMaxOfTheGame): static
+    {
+        $this->durationMaxOfTheGame = $durationMaxOfTheGame;
 
         return $this;
     }

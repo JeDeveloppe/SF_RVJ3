@@ -3,8 +3,6 @@
 namespace App\Service\ImportRvj2;
 
 use App\Entity\Occasion;
-use App\Entity\OffSiteOccasionSale;
-use DateTimeImmutable;
 use League\Csv\Reader;
 use App\Repository\BoiteRepository;
 use App\Repository\ConditionOccasionRepository;

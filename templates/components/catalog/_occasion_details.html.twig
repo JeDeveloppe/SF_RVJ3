@@ -2,7 +2,7 @@
 
 <p class="col-12 small">
     A partir de {{ occasion.boite.age }} ans.<br/>
-    <i class="fa-solid fa-clock"></i> Durée de la partie: {{ occasion.boite.durationOfTheGame }} min.<br/>
+    {% include "components/catalog/_durationOfTheGame.html.twig" with {'item': occasion.boite }%}<br/>
     {% include "components/catalog/_players&age.html.twig" with {'item': occasion.boite }%}<br/>
     {% if 'panier' not in currentPath %}
         {% if occasion.boite.linktopresentationvideo is not null %}

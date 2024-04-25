@@ -13,13 +13,15 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use Symfony\Component\HttpFoundation\RequestStack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
 class OccasionCrudController extends AbstractCrudController
 {   
@@ -42,6 +44,7 @@ class OccasionCrudController extends AbstractCrudController
         [$disabled, $disabledAfterBilling] = $this->utilitiesService->easyAdminLogicWhenBilling($this->requestStack, $this->occasionRepository);
 
         return [
+            IdField::new('boite.rvj2id')->setLabel('Boite - RVJ2Id')->setDisabled(true),
             ImageField::new('boite.image')
                 ->setBasePath($this->getParameter('app.path.boites_images'))
                 ->onlyOnIndex()
@@ -146,6 +149,13 @@ class OccasionCrudController extends AbstractCrudController
         
     }
 
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('boite')
+        ;
+    }
+    
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if($entityInstance instanceof Occasion) {

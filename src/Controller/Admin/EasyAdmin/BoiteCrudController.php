@@ -4,9 +4,9 @@ namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\Boite;
 use DateTimeImmutable;
+use App\Service\UserService;
 use Doctrine\ORM\QueryBuilder;
 use App\Repository\BoiteRepository;
-use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -14,6 +14,8 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -22,10 +24,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ComparisonFilter;
 
 class BoiteCrudController extends AbstractCrudController
 {
@@ -114,10 +116,21 @@ class BoiteCrudController extends AbstractCrudController
                 ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
-            IntegerField::new('durationOfTheGame')
-                ->setLabel('Durée de la partie (en min)')
+            UrlField::new('linktopresentationvideo')
+                ->setLabel('Lien vers la vidéo de présentation du jeu:')
+                ->onlyOnForms()
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
+            IntegerField::new('durationMinOfTheGame')
+                ->setLabel('Durée de la partie minimum (en min)')
                 ->onlyOnForms()
                 ->setRequired(true)
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
+            IntegerField::new('durationMaxOfTheGame')
+                ->setLabel('Durée de la partie maximum (en min)')
+                ->onlyOnForms()
+                ->setRequired(false)
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
             AssociationField::new('playersMin')
@@ -129,11 +142,6 @@ class BoiteCrudController extends AbstractCrudController
                 ->setLabel('Jusqu\'à (joueurs)')
                 ->onlyOnForms()
                 ->setRequired(false)
-                ->setPermission('ROLE_ADMIN')
-                ->setColumns(6),
-            UrlField::new('linktopresentationvideo')
-                ->setLabel('Lien vers la vidéo de présentation du jeu:')
-                ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
 
@@ -187,7 +195,7 @@ class BoiteCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Nouvelle boite')
             ->setPageTitle('edit', 'Édition d\'une boite')
             ->setDefaultSort(['id' => 'DESC'])
-            ->setSearchFields(['name', 'editor.name','id']);
+            ->setSearchFields(['name', 'editor.name','id','rvj2id']);
     }
 
     public function configureActions(Actions $actions): Actions
@@ -198,14 +206,24 @@ class BoiteCrudController extends AbstractCrudController
         
     }
 
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('age')
+            ->add('editor')
+        ;
+    }
+
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if ($entityInstance instanceof Boite) {
+
             $user = $this->security->getUser();
             $entityInstance->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user);
 
             $entityManager->persist($entityInstance);
             $entityManager->flush();
+            
         }
     }
 
