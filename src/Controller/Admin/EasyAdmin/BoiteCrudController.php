@@ -49,6 +49,7 @@ class BoiteCrudController extends AbstractCrudController
 
         return [
             FormField::addTab('Général'),
+            IdField::new('rvj2id')->setDisabled(true),
             ImageField::new('image')
                 ->setBasePath($this->getParameter('app.path.boites_images'))
                 ->onlyOnIndex()
@@ -140,7 +141,7 @@ class BoiteCrudController extends AbstractCrudController
             BooleanField::new('isOccasion')->setLabel('Disponilbe en occasion')->setPermission('ROLE_ADMIN'),
             IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms(),
             IntegerField::new('htPrice')->setLabel('Prix HT (en cents) d\'une boite complête en bon état')->onlyOnForms(),
-            AssociationField::new('itemsSecondaire')->setLabel('Articles:')->setPermission('ROLE_ADMIN'),
+            AssociationField::new('itemsSecondaire')->setLabel('Articles:')->setPermission('ROLE_ADMIN')->setDisabled(true),
 
             
             FormField::addTab('Paramètres')->setPermission('ROLE_ADMIN'),

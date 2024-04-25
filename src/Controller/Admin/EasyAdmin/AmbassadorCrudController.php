@@ -32,7 +32,7 @@ class AmbassadorCrudController extends AbstractCrudController
             TelephoneField::new('phone')->setLabel('Téléphone:')->onlyOnForms()->setColumns(6),
             EmailField::new('email')->setLabel('Adresse email:')->onlyOnForms()->setColumns(6),
             TextField::new('street')->setLabel('Adresse complète:')->onlyOnForms(),
-            AssociationField::new('city')->setLabel('Ville:')->autocomplete()->onlyOnForms(),
+            AssociationField::new('city')->setLabel('Ville:')->autocomplete()->onlyOnForms()->setRequired(false),
             TextareaField::new('description')->setLabel('Description:')->onlyOnForms()->setColumns(6),
             UrlField::new('fullurl')->setLabel('Adresse url complète:')->onlyOnForms(),
             UrlField::new('facebookLink')->setLabel('Url Facebook:')->onlyOnForms(),

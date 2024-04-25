@@ -153,7 +153,7 @@ class PanierController extends AbstractController
 
         $billingAndDeliveryForm = $this->createForm(BillingAndDeliveryAddressType::class, null, [
             'user' => $this->security->getUser(),
-            'shipping' => $shippingMethod,
+            'shippingMethod' => $shippingMethod,
         ]);
         $billingAndDeliveryForm->handleRequest($request);
 
@@ -176,7 +176,8 @@ class PanierController extends AbstractController
         return $this->render('site/panier/panier_addresses.html.twig', [
             'user' => $user,
             'billingAndDeliveryForm' => $billingAndDeliveryForm,
-            'voucherDiscountId' => $voucherDiscoundId
+            'voucherDiscountId' => $voucherDiscoundId,
+            'shippingMethod' => $shippingMethod
         ]);
     }
 
@@ -196,6 +197,19 @@ class PanierController extends AbstractController
 
         //on recupere la session
         $session = $request->getSession();
+        $billingAddressId = $session->get('billingAddressId');
+        $deliveryAddressId = $session->get('deliveryAddressId');
+        $shippingMethodId = $session->get('shippingMethodeId');
+
+        $shippingMethod = $this->shippingMethodRepository->findOneById($shippingMethodId);
+        
+        if($shippingMethod->getPrice() == 'GRATUIT'){
+            $deliveryAddress = $this->collectionPointRepository->findOneById($deliveryAddressId);
+        }else{
+            $deliveryAddress = $this->addressRepository->findOneById($deliveryAddressId);
+        }
+
+        $billingAddress = $this->addressRepository->findOneById($billingAddressId);
 
         $acceptCartForm = $this->createForm(AcceptCartType::class);
         $acceptCartForm->handleRequest($request);
@@ -240,6 +254,9 @@ class PanierController extends AbstractController
             'preparationHt' => $reponses['preparationHt'],
             'deliveryCostWithoutTax' => $reponses['deliveryCostWithoutTax'],
             'acceptCartForm' => $acceptCartForm,
+            'billingAddress' => $billingAddress,
+            'deliveryAddress' => $deliveryAddress
+
         ]);
     }
 

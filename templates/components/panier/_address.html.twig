@@ -10,7 +10,9 @@
     <fieldset class="col-11 mt-3 mt-md-0 col-md-5 border p-2 text-center">
         <legend>Livraison / retrait</legend>
         {{ deliveryAddress.organization ? deliveryAddress.organization : '' }}<br/>
-        {{ deliveryAddress.lastname }} {{ deliveryAddress.firstname }}<br/>
+        {% if deliveryAddress.lastname is not null %}
+            {{ deliveryAddress.lastname ? deliveryAddress.lastname : '' }} {{ deliveryAddress.firstname ? deliveryAddress.firstname : '' }}<br/>
+        {% endif %}
         {{ deliveryAddress.street }} <br/>
         {{ deliveryAddress.city }}
     </fieldset>

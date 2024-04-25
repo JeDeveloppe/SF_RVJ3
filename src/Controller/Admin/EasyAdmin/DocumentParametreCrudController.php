@@ -7,6 +7,8 @@ use App\Entity\DocumentParametre;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -48,6 +50,14 @@ class DocumentParametreCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Nouveaux paramètres')
             ->setPageTitle('edit', 'Édition de paramètres')
         ;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
+        
     }
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void

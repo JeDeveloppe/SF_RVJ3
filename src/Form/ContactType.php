@@ -24,10 +24,11 @@ class ContactType extends AbstractType
             ->add('sujet', ChoiceType::class, [
                 'label' => 'Sujet de votre demande:',
                 'choices' => [
-                    'PARTENARIAT / AMBASSADEUR' => 'PARTENARIAT / AMBASSADEUR',
-                    'PRESSE'      => 'PRESSE',
+                    'AMBASSADEUR' => ' AMBASSADEUR',
                     'DON DE JEUX' => 'DON DE JEUX',
                     'DONNEES PERSONNELLES' => 'DONNEES PERSONNELLES',
+                    'PARTENARIAT' => 'PARTENARIAT',
+                    'PRESSE'      => 'PRESSE',
                     'AUTRE' => 'AUTRE'
                 ],
                 'placeholder' => 'Choisir...',

@@ -5,8 +5,8 @@ namespace App\Controller\Admin\EasyAdmin;
 use DateTimeImmutable;
 use App\Entity\Occasion;
 use Doctrine\ORM\QueryBuilder;
-use App\Repository\OccasionRepository;
 use App\Service\UtilitiesService;
+use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -14,10 +14,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use Symfony\Component\HttpFoundation\RequestStack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 
 class OccasionCrudController extends AbstractCrudController
 {   
@@ -40,6 +42,11 @@ class OccasionCrudController extends AbstractCrudController
         [$disabled, $disabledAfterBilling] = $this->utilitiesService->easyAdminLogicWhenBilling($this->requestStack, $this->occasionRepository);
 
         return [
+            ImageField::new('boite.image')
+                ->setBasePath($this->getParameter('app.path.boites_images'))
+                ->onlyOnIndex()
+                ->setLabel('Image')
+                ->setPermission('ROLE_BENEVOLE'),
             AssociationField::new('boite')
                 ->setLabel('Boite (active en occasion)')
                 ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
@@ -59,39 +66,44 @@ class OccasionCrudController extends AbstractCrudController
                 ->onlyOnForms(),
             AssociationField::new('boxCondition')
                 ->setLabel('État de la boite')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-                ->renderAsEmbeddedForm()->onlyOnIndex(),
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
+                ->renderAsEmbeddedForm()->onlyOnForms(),
             AssociationField::new('boxCondition')
                 ->setLabel('État de la boite')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
                 ->onlyOnForms()->setDisabled($disabledAfterBilling),
             AssociationField::new('equipmentCondition')
                 ->setLabel('État des pièces')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-                ->renderAsEmbeddedForm()->onlyOnIndex(),
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
+                ->renderAsEmbeddedForm()->onlyOnForms(),
             AssociationField::new('equipmentCondition')
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
                 ->setLabel('État des pièces')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                 ->onlyOnForms()->setDisabled($disabledAfterBilling),
             AssociationField::new('gameRule')
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
                 ->setLabel('Régle du jeu')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-                ->renderAsEmbeddedForm()->onlyOnIndex(),
+                ->renderAsEmbeddedForm()->onlyOnForms(),
             AssociationField::new('gameRule')
                 ->setLabel('Régle du jeu')
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
                 ->onlyOnForms()->setDisabled($disabledAfterBilling),
-            NumberField::new('boite.htPrice')
+            MoneyField::new('boite.htPrice')
                 ->setLabel('Prix HT en cents d\'une boite comme neuve:')
                 ->setDisabled(true)
+                ->setStoredAsCents()
+                ->setCurrency('EUR')
                 ->onlyOnForms(),
-            NumberField::new('priceWithoutTax')
+            MoneyField::new('priceWithoutTax')
                 ->setLabel('Prix de vente HT en cents')
-                ->onlyOnForms()
+                ->setStoredAsCents()
+                ->setCurrency('EUR')
                 ->setDisabled($disabledAfterBilling),
-            NumberField::new('discountedPriceWithoutTax')
+            MoneyField::new('discountedPriceWithoutTax')
                 ->setLabel('Prix de vente HT remiser en cents')
                 ->onlyOnForms()
+                ->setStoredAsCents()
+                ->setCurrency('EUR')
                 ->setDisabled($disabledAfterBilling)
                 ->setFormTypeOptions(['attr' => ['placeholder' => 'Mettre 0 pour aucune remise...']]),
             BooleanField::new('isOnline')

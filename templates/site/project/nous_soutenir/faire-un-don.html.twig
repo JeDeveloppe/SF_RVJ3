@@ -37,11 +37,13 @@
                                 </button>
                             </h2>
                             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                <div class="accordion-body lh-lg">
+                                <div class="accordion-body lh-lg text-center">
                                     {% include "site/project/components/_formForDonationWithHelloAsso.html.twig" %}
+                                    <br/>
+                                    Un reçu vous sera délivré par la plateforme.
+                                    <p class="col-12 text-center">Merci par avance pour votre soutien !</p>
                                 </div>
                             </div>
-                            <p class="col-12 text-center">Merci par avance pour votre soutien !</p>
                         </div>
 
                     {% endif %}
@@ -50,15 +52,16 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    En nous envoyant un chèque...
+                    Par chèque...
                 </button>
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                     <div class="accordion-body lh-lg text-center">
-                        Chèque à envoyer à l'adresse suivante:<br/><br/>
+                        A l'ordre de REFAITES VOS JEUX:<br/><br/>
                         {{ legales.companyName }}<br />
                         {{ legales.streetCompany }}<br/>
                         {{ legales.postalCodeCompany }} {{ legales.cityCompany }}<br />
+                    Si besoin, nous pouvons vous envoyer un reçu.
                     </div>
                     <p class="col-12 text-center">Merci par avance pour votre soutien !</p>
                 </div>

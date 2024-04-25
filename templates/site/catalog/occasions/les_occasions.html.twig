@@ -14,7 +14,7 @@
         
         {% include "components/catalog/_search_boite.html.twig" %}
 
-        <div class="col-12 text-center h4 text-danger">Uniquement disponible en retrait sur Caen !</div>
+        <div class="col-12 text-center h4 text-danger">Uniquement disponible en retrait sur Caen.</div>
 
         {% if occasions | length > 0 %}
 
@@ -45,17 +45,19 @@
                 <div class="col-12 text-center">
                     <p class="h2">Nous n'avons pas ce jeu en stock pour le moment.</p>
                     <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.refaitesvosjeux.fr" target="_blank">Facebook !</a></p>    
-                    <p class="h5 mt-5">Ou tenter votre chance chez l'un de nos partenaires:</p>
                 </div>
             </div>
             <div class="row justify-content-start mb-5">
+                {% if partenaires | length > 0 %}
+                    <p class="h5 mt-5 col-12 text-center">Ou tenter votre chance chez l'un de nos partenaires:</p>
 
-                {% for partenaire in partenaires %}
+                    {% for partenaire in partenaires %}
 
-                {% include "site/components/catalogues/card-partenaire.html.twig" %}
-                    
-                {% endfor %}
-            </div>
+                    {% include "site/components/catalogues/card-partenaire.html.twig" %}
+                        
+                    {% endfor %}
+                </div>
+                {% endif %}
         {% endif %}
 
     {% endif %}

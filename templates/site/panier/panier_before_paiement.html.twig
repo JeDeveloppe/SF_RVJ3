@@ -11,7 +11,7 @@
         <a href="{{ path('panier_start') }}" class="btn btn-outline-primary mx-auto"><i class="fa-solid fa-backward-fast"></i> Recommencer</a>
     </div>
 
-    {# {% include "components/panier/_address.html.twig" with {'billingAddress': billingAddress, 'deliveryAddress': deliveryAddress }%} #}
+    {% include "components/panier/_address.html.twig" with {'billingAddress': billingAddress, 'deliveryAddress': deliveryAddress }%}
 
     <div class="col-12 col-md-10 mx-auto">
 
@@ -45,7 +45,7 @@
             {% if remises.voucher.actif == true %}
                 <tr>
                     <td>Code de réduction ({{ remises.voucher.token }}):<br>
-                    Reste à utilisé: {{ (remises.voucher.voucherRemaining * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
+                    Reste à utiliser: {{ (remises.voucher.voucherRemaining * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
                     <td>- {{ (remises.voucher.used * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
                 </tr>
             {% endif %}

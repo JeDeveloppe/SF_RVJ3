@@ -3,14 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Address;
-use App\Entity\ShippingMethod;
 use App\Entity\CollectionPoint;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class BillingAndDeliveryAddressType extends AbstractType
 {
@@ -18,7 +16,7 @@ class BillingAndDeliveryAddressType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $user = $options['user'];
-        $shipping = $options['shipping'];
+        $shippingMethod = $options['shippingMethod'];
 
         $builder
             ->add('billingAddress', EntityType::class, [
@@ -41,7 +39,7 @@ class BillingAndDeliveryAddressType extends AbstractType
                 },
             ]);
         
-            if($shipping->getPrice() == 'GRATUIT'){
+            if($shippingMethod->getPrice() == 'GRATUIT'){
 
                 $builder
                     ->add('deliveryAddress', EntityType::class, [
@@ -54,12 +52,12 @@ class BillingAndDeliveryAddressType extends AbstractType
                         'multiple' => false,
                         'expanded' => false,
                         'mapped' => false,
-                        'query_builder' => function (EntityRepository $er) use ($shipping) {
+                        'query_builder' => function (EntityRepository $er) use ($shippingMethod) {
                             return $er->createQueryBuilder('c')
                                 ->where('c.isActivedInCart = :value')
                                 ->andWhere('c.shippingmethod = :shippingmethod')
                                 ->setParameter('value', true)
-                                ->setParameter('shippingmethod', $shipping)
+                                ->setParameter('shippingmethod', $shippingMethod)
                                 ->orderBy('c.firstname', 'ASC');
                         },
                     ]);
@@ -95,7 +93,7 @@ class BillingAndDeliveryAddressType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Address::class,
             'user' =>  null,
-            'shipping' => null,
+            'shippingMethod' => null,
         ]);
     }
 }

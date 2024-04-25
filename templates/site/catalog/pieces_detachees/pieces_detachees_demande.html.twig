@@ -27,9 +27,9 @@
 						{% endif %}
 				</h1>
 				<!-- BLOC PARTAGE RESEAUX SOCIAUX  -->
-				<div class="col-12 d-flex justify-content-center">
+				{# <div class="col-12 d-flex justify-content-center">
 					{% include "components/catalog/_share_buttons.html.twig" %}
-				</div>
+				</div> #}
 				<div class="card-body d-flex flex-wrap align-items-center mb-3">
 					<!-- IMAGE DE LA BOITE -->
 					{% include "components/catalog/_boite_image.html.twig" %}
@@ -118,7 +118,7 @@
 													{% for item in group.items|sort %}
 														
 															{% if  item.stockForSale > 0 %}
-																<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }}: {{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC - (Disponible: {{ item.stockForSale }})</option>
+																<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }}: {{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC - (Stock: {{ item.stockForSale }})</option>
 															{% else %}
 																<option data-image="{{ item.image }}" disabled>{{ item.name }}: Réapprovisionnement en cours...</option>
 															{% endif %}												
@@ -132,7 +132,7 @@
 														{% for item in boite.itemsSecondaire|sort %}
 																{% if item in group.items %}
 																	{% if  item.stockForSale > 0 %}
-																		<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }}: {{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC - (Disponible: {{ item.stockForSale }})</option>
+																		<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }}: {{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC - (Stock: {{ item.stockForSale }})</option>
 																	{% endif %}
 																{% endif %}
 														{% endfor %}

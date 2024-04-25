@@ -2,19 +2,24 @@
 
     <div class="col-10 col-md-9 mx-auto d-flex justify-content-center">
         {{ form_start(billingAndDeliveryForm) }}
-            <div class="input-group my-5">
+            <div class="input-group mt-5">
                 {{ form_widget(billingAndDeliveryForm.billingAddress) }}
             </div>
-            <div class="input-group my-5">
+            <div class="col-12 text-end mt-2">
+                <a href="{{ path('member_adresses') }}">Votre adresse n'existe pas ?</a>
+            </div>
+            <div class="input-group mt-5">
                 {{ form_widget(billingAndDeliveryForm.deliveryAddress) }}
             </div>
+            {% if shippingMethod.price == "PAYANT" %}
+                <div class="col-12 text-end mt-2">
+                    <a href="{{ path('member_adresses') }}">Votre adresse n'existe pas ?</a>
+                </div>
+            {% endif %}
             <div class="input-group mt-5">
                 <a href="{{ path('panier_start') }}" class="btn btn-outline-primary mx-auto"><i class="fa-solid fa-backward-step"></i> Précédent</a>
                 <button type="submit" class="btn btn-outline-primary mx-auto">Suivant <i class="fa-solid fa-forward-step"></i></button>
             </div>
         {{ form_end(billingAndDeliveryForm) }}
-    </div>
-    <div class="col-12 text-center mt-3">
-        <a href="{{ path('member_adresses') }}">Votre adresse n'existe pas ?</a>
     </div>
 </div>
