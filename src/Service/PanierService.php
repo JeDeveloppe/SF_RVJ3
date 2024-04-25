@@ -2,11 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\Address;
-use App\Entity\CollectionPoint;
 use App\Entity\Panier;
 use DateTimeImmutable;
-use App\Entity\Delivery;
 use App\Repository\ItemRepository;
 use App\Repository\PanierRepository;
 use App\Repository\DeliveryRepository;
@@ -19,9 +16,7 @@ use App\Repository\TaxRepository;
 use App\Repository\VoucherDiscountRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class PanierService
 {

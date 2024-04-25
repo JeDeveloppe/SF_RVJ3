@@ -58,6 +58,8 @@ use App\Repository\DocumentStatusRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\OffSiteOccasionSaleRepository;
+use App\Repository\PanierRepository;
+use App\Repository\ReserveRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -78,7 +80,9 @@ class DashboardController extends AbstractDashboardController
         private MailService $mailService,
         private EntityManagerInterface $em,
         private UserRepository $userRepository,
-        private PaiementService $paiementService
+        private PaiementService $paiementService,
+        private ReserveRepository $reserveRepository,
+        private PanierRepository $panierRepository
     )
     {
         
@@ -146,7 +150,8 @@ class DashboardController extends AbstractDashboardController
         return $this->render('admin/dashboard.html.twig', [
             'totals' => $totals,
             'itemsWithStockIsNull' => $itemsWithStockIsNull,
-            'setting' => $setting
+            'setting' => $setting,
+            'paniersOccasionsInCarts' => $this->panierRepository->findAllOccasionsInCart()
         ]);
     }
 
@@ -206,6 +211,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         $resetPasswords = $this->resetPasswordRepository->findBy(['isUsed' => false]);
+        $statusToBeTraitedDailys = $this->documentStatusRepository->findStatusIsTraitedDaily();
 
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');        
         yield MenuItem::linkToRoute('SITE','fa-solid fa-shop','app_home');
@@ -214,11 +220,11 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Traitements quotidien:')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('RETOUR EN STOCK','fa-solid fa-rotate-left', Returndetailstostock::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToRoute('DEVIS','fa-solid fa-money-bill','admin_traited_daily_devis')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToRoute('COMMANDES','fa-solid fa-money-bill','admin_traited_daily_commands')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToRoute('COMMANDES','fa-solid fa-money-bill','admin_traited_daily_commands')->setPermission('ROLE_ADMIN')
+            ->setBadge(count($this->documentRepository->findDocumentsToBeTraitedDailyWithStatus($statusToBeTraitedDailys[0])),'success');
         yield MenuItem::linkToRoute('GRAPHIQUES','fa-solid fa-chart-simple','jpgraph')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('RESERVER DES OCCASIONS','fa-solid fa-hand', Reserve::class)->setPermission('ROLE_ADMIN');
-
-        
+        yield MenuItem::linkToCrud('RESERVER DES OCCASIONS','fa-solid fa-hand', Reserve::class)->setPermission('ROLE_ADMIN')
+            ->setBadge(count($this->reserveRepository->findAll()),'warning');
 
         yield MenuItem::section('Gestion des boites:')->setPermission('ROLE_BENEVOLE');
         yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class)->setPermission('ROLE_BENEVOLE');
