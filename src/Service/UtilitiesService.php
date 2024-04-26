@@ -169,8 +169,8 @@ class UtilitiesService
         //?edition logic
         $id = $requestStack->getCurrentRequest()->get('entityId');
         if($id){
-            $entity = $repository->find($id);
-            if($entity->getIsOnline() == false){
+            $occasion = $repository->find($id);
+            if($occasion->getIsOnline() == false){
                 $disabledAfterBilling = true;
             }else{
                 $disabledAfterBilling = false;

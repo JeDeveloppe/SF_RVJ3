@@ -44,24 +44,24 @@ class OccasionCrudController extends AbstractCrudController
         [$disabled, $disabledAfterBilling] = $this->utilitiesService->easyAdminLogicWhenBilling($this->requestStack, $this->occasionRepository);
 
         return [
-            IdField::new('boite.rvj2id')->setLabel('Boite - RVJ2Id')->setDisabled(true),
+            TextField::new('boite.rvj2id')->setLabel('Boite - RVJ2Id')->setDisabled(true)->onlyWhenUpdating(),
             ImageField::new('boite.image')
                 ->setBasePath($this->getParameter('app.path.boites_images'))
                 ->onlyOnIndex()
                 ->setLabel('Image')
                 ->setPermission('ROLE_BENEVOLE'),
             AssociationField::new('boite')
-                ->setLabel('Boite (active en occasion)')
-                ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
+                ->setLabel('Dépend de la boite')
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                 ->setQueryBuilder(
                     fn(QueryBuilder $queryBuilder) => 
                     $queryBuilder
                     ->where('entity.isOccasion = :value')
                     ->setParameter('value', true)
-                    ->orderBy('entity.name', 'ASC')
+                    ->orderBy('entity.id', 'ASC')
                 )
                 ->setDisabled($disabled)
-                ->renderAsNativeWidget()->onlyWhenCreating(),
+                ->renderAsNativeWidget(),
             TextField::new('reference')->setLabel('Référence')->setDisabled(true),
             TextField::new('information')
                 ->setLabel('Information sur l\'occasion')
@@ -92,26 +92,26 @@ class OccasionCrudController extends AbstractCrudController
                 ->setFormTypeOptions(['attr' => ['placeholder' => 'Sélectionner...']])
                 ->onlyOnForms()->setDisabled($disabledAfterBilling),
             MoneyField::new('boite.htPrice')
-                ->setLabel('Prix HT en cents d\'une boite comme neuve:')
+                ->setLabel('Prix HT d\'une boite comme neuve:')
                 ->setDisabled(true)
                 ->setStoredAsCents()
                 ->setCurrency('EUR')
-                ->onlyOnForms(),
+                ->onlyWhenUpdating(),
             MoneyField::new('priceWithoutTax')
-                ->setLabel('Prix de vente HT en cents')
+                ->setLabel('Prix de vente HT')
                 ->setStoredAsCents()
                 ->setCurrency('EUR')
                 ->setDisabled($disabledAfterBilling),
             MoneyField::new('discountedPriceWithoutTax')
-                ->setLabel('Prix de vente HT remiser en cents')
-                ->onlyOnForms()
+                ->setLabel('Prix remiser HT')
                 ->setStoredAsCents()
                 ->setCurrency('EUR')
                 ->setDisabled($disabledAfterBilling)
                 ->setFormTypeOptions(['attr' => ['placeholder' => 'Mettre 0 pour aucune remise...']]),
             BooleanField::new('isOnline')
                 ->setLabel('En ligne')
-                ->setDisabled(true)->onlyOnIndex(),
+                ->renderAsSwitch(false)->onlyOnIndex(),
+            AssociationField::new('paniers')->setLabel('Dans un<br/> panier')->onlyOnIndex(),
             BooleanField::new('isOnline')
                 ->setLabel('En ligne')
                 ->setDisabled($disabledAfterBilling)->onlyOnForms(),
@@ -120,7 +120,7 @@ class OccasionCrudController extends AbstractCrudController
                 ->setDisabled(true)
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
             BooleanField::new('isNew')
-                ->setLabel('Neuf')
+                ->setLabel('Est neuf')
                 ->onlyOnForms()
                 ->setDisabled($disabledAfterBilling)
         ];
@@ -143,7 +143,6 @@ class OccasionCrudController extends AbstractCrudController
         
         return $actions
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->add(Crud::PAGE_EDIT, Action::DELETE)
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::NEW, 'ROLE_ADMIN');
         
@@ -153,6 +152,9 @@ class OccasionCrudController extends AbstractCrudController
     {
         return $filters
             ->add('boite')
+            ->add('isOnline')
+            ->add('priceWithoutTax')
+            ->add('paniers')
         ;
     }
     

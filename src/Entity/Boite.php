@@ -99,8 +99,8 @@ class Boite
         )]
     private ?NumbersOfPlayers $playersMin = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $rvj2id = null;
+    #[ORM\Column(length: 5, nullable: true)]
+    private ?string $rvj2id = null;
 
     #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'BoiteOrigine')]
     private Collection $itemsOrigine;
@@ -487,12 +487,12 @@ class Boite
         return $this;
     }
 
-    public function getRvj2id(): ?int
+    public function getRvj2id(): ?string
     {
-        return $this->rvj2id;
+        return $this->rvj2id ?? 'RVJ3';
     }
 
-    public function setRvj2id(?int $rvj2id): static
+    public function setRvj2id(?string $rvj2id): static
     {
         $this->rvj2id = $rvj2id;
 

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\OccasionRepository;
+use App\Repository\PanierRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -320,7 +321,14 @@ class Occasion
 
     public function getDiscountedPriceWithoutTax(): ?int
     {
-        return $this->discountedPriceWithoutTax;
+        if($this->discountedPriceWithoutTax == 0){
+
+            return null;
+
+        }else{
+
+            return $this->discountedPriceWithoutTax;
+        }
     }
 
     public function setDiscountedPriceWithoutTax(int $discountedPriceWithoutTax): static

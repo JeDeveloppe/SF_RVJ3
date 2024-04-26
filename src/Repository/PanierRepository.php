@@ -66,6 +66,16 @@ class PanierRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findOccasionsInCart($id): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.occasion :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
 //    /**
 //     * @return Panier[] Returns an array of Panier objects
 //     */

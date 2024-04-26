@@ -27,6 +27,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ComparisonFilter;
 
 class BoiteCrudController extends AbstractCrudController
@@ -73,9 +74,16 @@ class BoiteCrudController extends AbstractCrudController
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
             BooleanField::new('isOnline')
-                ->setLabel('En ligne')
+                ->renderAsSwitch(false)
+                ->setLabel('En ligne (pièces détachée)')
                 ->setPermission('ROLE_ADMIN')
-                ->setColumns(6),
+                ->setColumns(6)
+                ->onlyOnIndex(),
+            BooleanField::new('isOnline')
+                ->setLabel('En ligne (pièces détachée)')
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6)
+                ->onlyOnForms(),
             TextField::new('name')  
                 ->setLabel('Nom')
                 ->setPermission('ROLE_BENEVOLE')
@@ -146,15 +154,27 @@ class BoiteCrudController extends AbstractCrudController
                 ->setColumns(6),
 
             FormField::addTab('Occasion / Articles')->setPermission('ROLE_BENEVOLE'),
-            BooleanField::new('isOccasion')->setLabel('Disponilbe en occasion')->setPermission('ROLE_ADMIN'),
+            BooleanField::new('isOccasion')
+                ->setLabel('Disponilbe en occasion')
+                ->onlyOnIndex()
+                ->renderAsSwitch(false)
+                ->setPermission('ROLE_ADMIN'),
+            BooleanField::new('isOccasion')
+                ->setLabel('Disponilbe en occasion')
+                ->onlyOnForms()
+                ->setPermission('ROLE_ADMIN'),
             IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms(),
-            IntegerField::new('htPrice')->setLabel('Prix HT (en cents) d\'une boite complête en bon état')->onlyOnForms(),
-            AssociationField::new('itemsSecondaire')->setLabel('Articles:')->setPermission('ROLE_ADMIN')->setDisabled(true),
+            MoneyField::new('htPrice')
+                ->setLabel('Prix HT d\'une boite complête en bon état')
+                ->setStoredAsCents()
+                ->setCurrency('EUR')
+                ->onlyOnForms(),
+            AssociationField::new('itemsSecondaire')->setLabel('Articles:')->setPermission('ROLE_ADMIN')->setDisabled(true)->onlyOnForms(),
 
             
             FormField::addTab('Paramètres')->setPermission('ROLE_ADMIN'),
             BooleanField::new('isDeliverable')->setLabel('Livrable')->onlyOnForms()->setPermission('ROLE_ADMIN'),
-            BooleanField::new('isDeee')->setLabel('Deee')->setPermission('ROLE_ADMIN'),
+            BooleanField::new('isDeee')->setLabel('Deee')->onlyOnForms()->setPermission('ROLE_ADMIN'),
 
             
             FormField::addTab('Ventes')->setPermission('ROLE_ADMIN'),
@@ -219,7 +239,7 @@ class BoiteCrudController extends AbstractCrudController
         if ($entityInstance instanceof Boite) {
 
             $user = $this->security->getUser();
-            $entityInstance->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user);
+            $entityInstance->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user)->setRvj2id('RVJ3');
 
             $entityManager->persist($entityInstance);
             $entityManager->flush();
