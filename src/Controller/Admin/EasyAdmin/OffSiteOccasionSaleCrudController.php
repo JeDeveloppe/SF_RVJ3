@@ -146,7 +146,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
             $details['deliveryCostWithoutTax'] = new Delivery();
             $details['deliveryCostWithoutTax']->setPriceExcludingTax(0);
             $details['preparationHt'] = 0;
-            $details['shipping'] = $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT PENDANT UNE FOIRE']); //TODO mettre à jour comme CreationUndefined...
+            $details['shipping'] = $this->shippingMethodRepository->findOneBy(['name' => 'RETRAIT PENDANT UNE FOIRE']);
             $details['totauxOccasions']['weigth'] = $entityInstance->getOccasion()->getBoite()->getWeigth();
             $details['totauxOccasions']['price'] = $entityInstance->getMovementPrice();
             $details['panier_occasions'] = [];

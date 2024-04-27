@@ -174,7 +174,6 @@ class SiteController extends AbstractController
 
         $donnees = $this->ambassadorService->constructionMapOfFranceWithAmbassadors($baseUrl);
 
-        //TODO
         $metas['description'] = "Vous souhaitez contribuer activement au projet porté par l’association mais vous n’êtes pas sur Caen ?";
         
         return $this->render('site/project/nous_soutenir/devenir-ambassadeur.html.twig', [
@@ -211,8 +210,7 @@ class SiteController extends AbstractController
     public function buyGames(): Response
     {
         
-        //TODO
-        $metas['description'] = 'Description à faire';
+        $metas['description'] = "L’association recompose des jeux complets d’occasion à partir de plusieurs boîtes incomplètes.";
         
         return $this->render('site/project/nous_soutenir/acheter-des-jeux.html.twig', [
             'metas' => $metas,

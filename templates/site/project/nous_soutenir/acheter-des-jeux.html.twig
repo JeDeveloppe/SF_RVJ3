@@ -8,10 +8,31 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-11 col-md-9 col-xl-8 my-5 text-justify">
-            Le service propose aux particuliers et aux professionnels du bassin caennais  d’acquérir des jeux complets d’occasion à petits prix !<br/>
-            En achetant des jeux sur le site vous contribuez à une démarche citoyenne de réduction des déchets !
+        <div class="col-11 col-md-9 col-xl-8 my-5 text-center lead">
+            {{ metas.description }}
         </div>
+
+        <div class="col-11 lead">
+            <p>Tous les jeux sont vérifiés puis nettoyés avec des produits naturels.</p>
+
+            <p>Ils sont vendus entre 30 et 50 % du prix d’un jeu neuf (hors jeux vintage).<br/>
+            Une décote est appliquée lorsque la boîte est dans un état moyen ou que la règle du jeu a été photocopiée.</p>
+        </div>
+
+        <ul class="my-5 col-11 col-md-9 col-xl-7">
+            <li class="text-info fs-5">Vous êtes un particulier ?</li>
+                <ol>
+                    Vous pouvez commander les jeux sur notre <a href="{{ path('app_catalogue_occasions') }}">catalogue en ligne</a> et les retirer à la Coop 5 pour 100, 33 route de Trouville à Caen.<br/>
+                    <span class="text-danger fw-bolder">Pas d’envoi possible</span>.
+                </ol>
+
+            <li class="text-info fs-5 mt-4">Vous êtes une structure ?</li>
+                <ol>
+                    En adhérant à l’association (15€ l’année), vous avez accès à l’« espace boutique » situé dans nos locaux (sur rendez-vous).<br/>
+                    Vous y retrouverez tous les jeux référencés sur notre catalogue en ligne mais aussi des exclusivités (puzzles, jeux non référencés).<br/>
+                    Vous aurez également accès à notre stock de jeux complets dont le matériel a un défaut ou dont les pièces sont un peu abîmées (25 % du prix d’un jeu neuf).
+                </ol>
+        </ul>
 
         <div class="col-11 text-center mt-4">Nous sommes présent à de nombreuses foires au tour de Caen.</div>
 
