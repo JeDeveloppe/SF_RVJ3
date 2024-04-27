@@ -48,6 +48,7 @@ use App\Repository\UserRepository;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Returndetailstostock;
 use App\Entity\BadgeForMediaTimeline;
+use App\Entity\Benefit;
 use App\Entity\Reserve;
 use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
@@ -238,22 +239,24 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Enveloppes', 'fas fa-list', Envelope::class)->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Gestion des occasions:')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Liste des occasions', 'fas fa-list', Occasion::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Liste des ventes / dons', 'fas fa-list', OffSiteOccasionSale::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Types de mouvement', 'fas fa-list', MovementOccasion::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Liste des états (pièces, boite, règle)', 'fas fa-list', ConditionOccasion::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des occasions', 'fas fa-list', Occasion::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des ventes / dons', 'fas fa-list', OffSiteOccasionSale::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Types de mouvement', 'fas fa-list', MovementOccasion::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des états (pièces, boite, règle)', 'fas fa-list', ConditionOccasion::class)->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Gestion des ambassadeurs')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Liste des ambassadeurs', 'fas fa-list', Ambassador::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des ambassadeurs', 'fas fa-list', Ambassador::class)->setPermission('ROLE_ADMIN');
 
+        yield MenuItem::section('Gestion des prestations')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des prestations', 'fas fa-list', Benefit::class)->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Gestion des documents:')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Liste des documents', 'fas fa-list', Document::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des documents', 'fas fa-list', Document::class)->setPermission('ROLE_ADMIN');
         // yield MenuItem::linkToCrud('Lignes documents', 'fas fa-list', DocumentLine::class);
-        yield MenuItem::linkToCrud('Liste des paiements', 'fas fa-list', Payment::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Status des documents', 'fas fa-list', DocumentStatus::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Paramètres', 'fas fa-list', DocumentParametre::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
-        // yield MenuItem::linkToCrud('Liste des totaux', 'fas fa-list', DocumentLineTotals::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des paiements', 'fas fa-list', Payment::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Status des documents', 'fas fa-list', DocumentStatus::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Paramètres', 'fas fa-list', DocumentParametre::class)->setPermission('ROLE_ADMIN');
+        // yield MenuItem::linkToCrud('Liste des totaux', 'fas fa-list', DocumentLineTotals::class)->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Gestion des utilisateurs:')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Liste des clients', 'fas fa-list', User::class)->setPermission('ROLE_ADMIN');
@@ -263,22 +266,22 @@ class DashboardController extends AbstractDashboardController
             ->setBadge(count($resetPasswords),'info')->setPermission('ROLE_ADMIN');
         
         yield MenuItem::section('Gestion des paniers:')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Moyens de retrait/envoi', 'fas fa-list', ShippingMethod::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Lieux de retrait', 'fas fa-list', CollectionPoint::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Remises', 'fas fa-list', Discount::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Bon d\'achat', 'fas fa-list', VoucherDiscount::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Prix des livraisons', 'fas fa-list', Delivery::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Moyens de retrait/envoi', 'fas fa-list', ShippingMethod::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Lieux de retrait', 'fas fa-list', CollectionPoint::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Remises', 'fas fa-list', Discount::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Bon d\'achat', 'fas fa-list', VoucherDiscount::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Prix des livraisons', 'fas fa-list', Delivery::class)->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Gestion des partenaires')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Liste des partenaires', 'fas fa-list', Partner::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des partenaires', 'fas fa-list', Partner::class)->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Gestion des médias')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Liste des médias', 'fas fa-list', Media::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Liste des badges', 'fas fa-list', BadgeForMediaTimeline::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des médias', 'fas fa-list', Media::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des badges', 'fas fa-list', BadgeForMediaTimeline::class)->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Légale:')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Informations', 'fas fa-list', LegalInformation::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Taxes', 'fas fa-list', Tax::class)->setPermission('ROLE_ADMIN')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Informations', 'fas fa-list', LegalInformation::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Taxes', 'fas fa-list', Tax::class)->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Paramètres géographiques:')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Villes', 'fas fa-list', City::class)->setPermission('ROLE_ADMIN');

@@ -23,6 +23,7 @@ use App\Repository\DocumentRepository;
 use App\Repository\AmbassadorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\EmailForSendResetPasswordType;
+use App\Repository\BenefitRepository;
 use App\Repository\ResetPasswordRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
@@ -49,7 +50,8 @@ class SiteController extends AbstractController
         private ResetPasswordRepository $resetPasswordRepository,
         private PartnerService $partnerService,
         private PartnerRepository $partnerRepository,
-        private AmbassadorService $ambassadorService
+        private AmbassadorService $ambassadorService,
+        private BenefitRepository $benefitRepository
     )
     {
     }
@@ -219,7 +221,7 @@ class SiteController extends AbstractController
     }
 
     #[Route('/projet/nous-soutenir/adherer-a-l-association', name: 'app_adherer')]
-    public function adherer(Request $request): Response
+    public function adherer(): Response
     {
 
         //TODO
@@ -232,16 +234,16 @@ class SiteController extends AbstractController
 
     }
 
-    #[Route('/projet/nous-soutenir/nos-prestations', name: 'app_prestations')]
+    #[Route('/projet/nos-prestations', name: 'app_prestations')]
     public function prestations(Request $request): Response
     {
 
-        //TODO
-        $metas['description'] = 'Description à faire';
+        $metas['description'] = 'En plus de son activité de réemploi des jeux de société, l’association propose différentes prestations.';
         
         return $this->render('site/project/prestations.html.twig', [
             'metas' => $metas,            
-            'legales' => $this->legalInformationRepository->findOneBy([])
+            'legales' => $this->legalInformationRepository->findOneBy([]),
+            'benefits' => $this->benefitRepository->findAll()
         ]);
 
     }

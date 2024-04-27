@@ -29,6 +29,7 @@ class ContactType extends AbstractType
                     'DONNEES PERSONNELLES' => 'DONNEES PERSONNELLES',
                     'PARTENARIAT' => 'PARTENARIAT',
                     'PRESSE'      => 'PRESSE',
+                    'PRESTATION'      => 'PRESTATION',
                     'AUTRE' => 'AUTRE'
                 ],
                 'placeholder' => 'Choisir...',

@@ -4,7 +4,9 @@
 
 {% block body %}
 
-    <h1 class="col-12 text-center my-5">Les jeux d'occasion</h1>
+    <h1 class="col-12 text-center mt-5">Les jeux d'occasion</h1>
+    <div class="col-12 text-center h4 text-danger mb-3">Uniquement disponible en retrait sur Caen.</div>
+
 
     {% if fairDay is not null %}
 
@@ -14,15 +16,13 @@
         
         {% include "components/catalog/_search_occasion.html.twig" %}
 
-        <div class="col-12 text-center h4 text-danger">Uniquement disponible en retrait sur Caen.</div>
-
         {% if occasions | length > 0 %}
 
             <div class="row justify-content-around">
 
                 {% for key,occasion in occasions %}  
 
-                {% include "components/catalog/_card.html.twig" with { 'donnee': occasion, 'key': key } %}
+                    {% include "components/catalog/_card.html.twig" with { 'donnee': occasion, 'key': key } %}
 
                 {% endfor %}
 

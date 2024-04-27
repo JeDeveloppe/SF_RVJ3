@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Repository\AmbassadorRepository;
-use App\Repository\PartnerRepository;
 
 class AmbassadorService
 {

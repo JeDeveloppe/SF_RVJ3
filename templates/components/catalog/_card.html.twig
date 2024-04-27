@@ -11,25 +11,25 @@
         {% set entityNameController = 'Boite' %}
     {% endif %}
     
-    {# <div class="col-9 col-sm-6 mx-auto col-md-4 mx-md-0 col-lg-3 my-2"> #}
-        <div id="{{ setEntityId }}" class="card card_catalog m-2 p-0 shadow-lg rounded {{ transforms[key][0] }}">
-                <div class="side front d-flex justify-content-center align-items-center">
-                    <img class="card_catalog_img" src="{{ vich_uploader_asset(boite, 'imageFile') }}" alt="Image de la boite de jeu {{ boite.name }} - {{ boite.editor }}"/>
+    <div class="col-9 col-sm-6 col-md-4 mx-md-0 col-lg-3 my-4 d-flex justify-content-center">
+        <div id="{{ setEntityId }}" class="card card_catalog p-0 shadow-lg rounded {{ transforms[key][0] }}">
+            <div class="side front d-flex justify-content-center align-items-center">
+                <img class="card_catalog_img" src="{{ vich_uploader_asset(boite, 'imageFile') }}" alt="Image de la boite de jeu {{ boite.name }} - {{ boite.editor }}"/>
+            </div>
+            <div class="side {{ transforms[key][1] }} d-flex flex-column justify-content-around">
+                <div class="text-center p-2" data-toggle="tooltip" data-placement="top" title="{{ boite.name | raw }}">
+                    <span class="fs-5">{{ boite.name | raw }} </span><br/>
+                    <span class="fs-6">{{ boite.editor | raw }}</span><br/>
+                    {% if boite.year is not null %}
+                        <span class="fs-6">{{ boite.year }}</span>
+                    {% else %}
+                        <span class="fs-6">Année inconnue</span>
+                    {% endif %}
                 </div>
-                <div class="side {{ transforms[key][1] }} d-flex flex-column justify-content-around">
-                    <div class="text-center p-2" data-toggle="tooltip" data-placement="top" title="{{ boite.name | raw }}">
-                        <span class="fs-5">{{ boite.name | raw }} </span><br/>
-                        <span class="fs-6">{{ boite.editor | raw }}</span><br/>
-                        {% if boite.year is not null %}
-                            <span class="fs-6">{{ boite.year }}</span>
-                        {% else %}
-                            <span class="fs-6">Année inconnue</span>
-                        {% endif %}
-                    </div>
-                    <div class="d-flex flex-row justify-content-around align-items-center">
-                        {% include "components/catalog/_card_button.html.twig" with {'item': card_item }%}
-                        {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': entityNameController} %}
-                    </div>
+                <div class="d-flex flex-column align-items-center">
+                    {% include "components/catalog/_card_button.html.twig" with {'item': card_item }%}
+                    {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': entityNameController} %}
                 </div>
+            </div>
         </div>
-    {# </div> #}
+    </div>

@@ -17,7 +17,7 @@
 		<!-- BLOC PRESENTATION DU JEU  -->
 		<div class="row justify-content-center mt-3 mb-5">
 			<div class="card col-11 col-lg-10 p-0 border shadow mb-3">
-				<h1 class="col-12 text-center mt-3 h2">
+				<h1 class="col-12 text-center mt-4 h2">
 					{{ boite.name }}<br/>
 					{{ boite.editor }}<br/>
 						{% if boite.year is not null %}
@@ -88,7 +88,7 @@
 
 				{% for group in groups %}
 
-					<div class="card col-11 col-lg-10 mx-auto mb-3 p-0">
+					<div class="card col-11 col-lg-10 mx-auto my-3 p-0">
 						<div class="card-header">{{ group.group.name }}</div>
 						<div class="card-body d-flex justify-content-around flex-wrap">
 							<div class="col-11 col-md-5 d-flex justify-content-center align-items-center mb-3 mb-md-0">
@@ -182,7 +182,9 @@
 
 				}else{
 
-					imageDiv[index].src=currentPath+'/build/images/design/default.png';
+					// imageDiv[index].src=currentPath+'/build/images/design/default.png';
+					imageDiv[index].src=currentPath+upload_item_image_path+'/'+element.options[element.selectedIndex].getAttribute('data-image');
+
 
 				}
 			

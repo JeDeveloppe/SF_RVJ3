@@ -1,6 +1,5 @@
 {% if is_granted('ROLE_ADMIN') %}
-{# //TODO  #}
-    <a class="btn btn-dark" target="_blank" href="{{ ea_url()
+    <a class="btn btn-dark col-4 mt-1" target="_blank" href="{{ ea_url()
         .setController('App\\Controller\\Admin\\EasyAdmin\\'~ entityNameInController ~'CrudController')
         .setAction('edit')
         .setEntityId(setEntityId)

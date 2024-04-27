@@ -2,10 +2,14 @@
 
 namespace App\Command;
 
+use App\Service\BenefitService;
 use App\Service\ImportRvj2\EditorService;
+use App\Service\ImportRvj2\ItemGroupService;
 use Symfony\Component\Console\Command\Command;
 use App\Service\ImportRvj2\ImportBoitesService;
+use App\Service\ImportRvj2\ImportMediasService;
 use App\Service\ImportRvj2\ImportPiecesService;
+use App\Service\ImportRvj2\SiteSettingsService;
 use App\Service\ImportRvj2\ImportAdressesService;
 use App\Service\ImportRvj2\ImportPaiementService;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -25,9 +29,6 @@ use App\Service\ImportRvj2\CreationConditionOccasionService;
 use App\Service\ImportRvj2\CreationMouvementsOccasionService;
 use App\Service\ImportRvj2\CreationUndefinedAdminAndAdresseService;
 use App\Service\ImportRvj2\CreationEnvelopesAndColorsAndDiscountsService;
-use App\Service\ImportRvj2\ImportMediasService;
-use App\Service\ImportRvj2\ItemGroupService;
-use App\Service\ImportRvj2\SiteSettingsService;
 
 #[AsCommand(name: 'app:initforprod2')]
 
@@ -54,7 +55,8 @@ class InitForProd2 extends Command
             private CreationNombreDeJoueursService $creationNombreDeJoueursService,
             private SiteSettingsService $siteSettingsService,
             private ImportMediasService $importMediasService,
-            private ItemGroupService $itemGroupService
+            private ItemGroupService $itemGroupService,
+            private BenefitService $benefitService
         )
     {
         parent::__construct();
@@ -134,7 +136,10 @@ class InitForProd2 extends Command
         // $this->importMediasService->importMedias($io);
 
         //on injecte les groups pour les items
-        $this->itemGroupService->addItemGroups($io);
+        // $this->itemGroupService->addItemGroups($io);
+
+         //on injecte les prestations
+         $this->benefitService->addBenefits($io);
 
         return Command::SUCCESS;
     }
