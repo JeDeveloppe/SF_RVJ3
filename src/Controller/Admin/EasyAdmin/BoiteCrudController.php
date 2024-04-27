@@ -138,7 +138,7 @@ class BoiteCrudController extends AbstractCrudController
             IntegerField::new('durationMaxOfTheGame')
                 ->setLabel('Durée de la partie maximum (en min)')
                 ->onlyOnForms()
-                ->setRequired(false)
+                ->setRequired(true)
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
             AssociationField::new('playersMin')
@@ -163,7 +163,7 @@ class BoiteCrudController extends AbstractCrudController
                     ->orderBy('entity.orderOfAppearance', 'ASC'))
             ->setLabel('Jusqu\'à (joueurs)')
             ->onlyOnForms()
-            ->setRequired(false)
+            ->setRequired(true)
             ->setPermission('ROLE_ADMIN')
             ->setColumns(6),
 

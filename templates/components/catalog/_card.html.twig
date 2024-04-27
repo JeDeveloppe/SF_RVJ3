@@ -25,6 +25,9 @@
                     {% else %}
                         <span class="fs-6">Année inconnue</span>
                     {% endif %}
+                    {% if is_granted('ROLE_BENEVOLE') %}
+                        <br/>(boite {{ boite.id }})
+                    {% endif %}
                 </div>
                 <div class="d-flex flex-column align-items-center">
                     {% include "components/catalog/_card_button.html.twig" with {'item': card_item }%}
