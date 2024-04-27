@@ -94,7 +94,7 @@ class Boite
     #[ORM\ManyToOne(inversedBy: 'boites')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\LessThanOrEqual(
-        propertyPath:"playersMax",
+        propertyPath:"playersMax.name",
         message: "Cette valeur ne peut être supérieure au nombre de joueurs max !"
         )]
     private ?NumbersOfPlayers $playersMin = null;
@@ -412,7 +412,7 @@ class Boite
 
     public function __toString()
     {
-        return $this->id.' - '.$this->name.' - '.$this->editor.' - '.$this->year;
+        return $this->id.' - '.$this->rvj2id.' - '.$this->name.' - '.$this->editor.' - '.$this->year;
     }
 
     /**

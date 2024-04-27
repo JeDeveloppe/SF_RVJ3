@@ -2,7 +2,6 @@
 
 namespace App\Service\ImportRvj2;
 
-use App\Entity\MeansOfPayement;
 use App\Entity\NumbersOfPlayers;
 use App\Repository\NumbersOfPlayersRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,7 +19,7 @@ class CreationNombreDeJoueursService
 
         $players = [];
 
-        for($i = 1; $i < 9; $i++){
+        for($i = 1; $i < 13; $i++){
             $players[] = [
                 'name' => $i,
                 'key' => $i
@@ -47,7 +46,7 @@ class CreationNombreDeJoueursService
                 $player = new NumbersOfPlayers();
             }
 
-            $player->setName($playerArray['name'])->setKeyword($playerArray['key']);
+            $player->setName($playerArray['name'])->setKeyword($playerArray['key'])->setIsInOccasionFormSearch(true);
             $this->em->persist($player);
 
         }

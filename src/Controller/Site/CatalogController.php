@@ -2,14 +2,14 @@
 
 namespace App\Controller\Site;
 
-use App\Form\ItemChoiceType;
-use App\Form\ItemsForm;
 use App\Form\SearchBoiteInCatalogueType;
+use App\Form\SearchOccasionInCatalogueType;
 use App\Repository\BoiteRepository;
 use App\Repository\EditorRepository;
 use App\Repository\OccasionRepository;
 use App\Repository\PartnerRepository;
 use App\Repository\TaxRepository;
+use App\Service\OccasionService;
 use App\Service\PanierService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +28,7 @@ class CatalogController extends AbstractController
         private PartnerRepository $partnerRepository,
         private TaxRepository $taxRepository,
         private PanierService $panierService,
+        private OccasionService $occasionService
     )
     {
     }
@@ -134,15 +135,13 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-jeux-occasion', name: 'app_catalogue_occasions')]
     public function catalogueOccasions(Request $request): Response
     {
-        $form = $this->createForm(SearchBoiteInCatalogueType::class);
+        $form = $this->createForm(SearchOccasionInCatalogueType::class);
         $form->handleRequest($request);
 
 
         if($form->isSubmitted() && $form->isValid()) {
-            $search = $form->get('search')->getData();
-            $phrase = str_replace(" ","%",$search);
-
-            $donneesFromDatabases = $this->occasionRepository->findBoitesFromSearch($phrase);
+            
+            $donneesFromDatabases = $this->occasionService->findOccasionsFromOccasionForm($form);
 
         }else{
 

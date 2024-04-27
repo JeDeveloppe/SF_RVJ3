@@ -6,7 +6,6 @@ use App\Entity\Boite;
 use DateTimeImmutable;
 use App\Service\UserService;
 use Doctrine\ORM\QueryBuilder;
-use App\Repository\BoiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -20,15 +19,15 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ComparisonFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class BoiteCrudController extends AbstractCrudController
 {
@@ -52,7 +51,8 @@ class BoiteCrudController extends AbstractCrudController
 
         return [
             FormField::addTab('Général'),
-            IdField::new('rvj2id')->setDisabled(true),
+            IdField::new('rvj2id')->setDisabled(true)->onlyWhenUpdating(),
+            IdField::new('id')->setDisabled(true)->onlyWhenUpdating(),
             ImageField::new('image')
                 ->setBasePath($this->getParameter('app.path.boites_images'))
                 ->onlyOnIndex()
@@ -143,15 +143,29 @@ class BoiteCrudController extends AbstractCrudController
                 ->setColumns(6),
             AssociationField::new('playersMin')
                 ->setLabel('A partir de (joueurs)')
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->setQueryBuilder(
+                    fn(QueryBuilder $queryBuilder) => 
+                    $queryBuilder
+                        ->where('entity.isInOccasionFormSearch = :true')
+                        ->setParameter('true', true)
+                        ->orderBy('entity.orderOfAppearance', 'ASC'))
                 ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
             AssociationField::new('playersMax')
-                ->setLabel('Jusqu\'à (joueurs)')
-                ->onlyOnForms()
-                ->setRequired(false)
-                ->setPermission('ROLE_ADMIN')
-                ->setColumns(6),
+            ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+            ->setQueryBuilder(
+                fn(QueryBuilder $queryBuilder) => 
+                $queryBuilder
+                    ->where('entity.isInOccasionFormSearch = :true')
+                    ->setParameter('true', true)
+                    ->orderBy('entity.orderOfAppearance', 'ASC'))
+            ->setLabel('Jusqu\'à (joueurs)')
+            ->onlyOnForms()
+            ->setRequired(false)
+            ->setPermission('ROLE_ADMIN')
+            ->setColumns(6),
 
             FormField::addTab('Occasion / Articles')->setPermission('ROLE_BENEVOLE'),
             BooleanField::new('isOccasion')

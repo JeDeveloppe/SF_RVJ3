@@ -21,21 +21,25 @@ class OccasionRepository extends ServiceEntityRepository
         parent::__construct($registry, Occasion::class);
     }
 
-    public function findBoitesFromSearch($phrase): array
+    public function findOccasionsFromSearchByPhraseAndAge(string $phrase, int $age): array
     {
+
         return $this->createQueryBuilder('o')
             ->join('o.boite','b')
             ->join('b.editor','e')
-            ->where('e.name LIKE :val')
             ->orWhere('b.name LIKE :val')
+            ->orWhere('e.name LIKE :val')
             ->andWhere('o.isOnline = :online')
+            ->andWhere('b.age >= :age')
             ->setParameter('val', '%'.$phrase.'%')
+            ->setParameter('age', $age)
             ->setParameter('online', true)
             ->orderBy('b.name', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
+
 
 //    /**
 //     * @return Occasion[] Returns an array of Occasion objects

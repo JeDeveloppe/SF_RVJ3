@@ -27,6 +27,12 @@ class NumbersOfPlayers
     #[ORM\OneToMany(mappedBy: 'playersMax', targetEntity: Boite::class)]
     private Collection $boitesMax;
 
+    #[ORM\Column]
+    private ?bool $isInOccasionFormSearch = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $orderOfAppearance = null;
+
     public function __construct()
     {
         $this->boitesMin = new ArrayCollection();
@@ -123,6 +129,30 @@ class NumbersOfPlayers
                 $boitesMax->setPlayersMax(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsInOccasionFormSearch(): ?bool
+    {
+        return $this->isInOccasionFormSearch;
+    }
+
+    public function setIsInOccasionFormSearch(bool $isInOccasionFormSearch): static
+    {
+        $this->isInOccasionFormSearch = $isInOccasionFormSearch;
+
+        return $this;
+    }
+
+    public function getOrderOfAppearance(): ?int
+    {
+        return $this->orderOfAppearance;
+    }
+
+    public function setOrderOfAppearance(?int $orderOfAppearance): static
+    {
+        $this->orderOfAppearance = $orderOfAppearance;
 
         return $this;
     }

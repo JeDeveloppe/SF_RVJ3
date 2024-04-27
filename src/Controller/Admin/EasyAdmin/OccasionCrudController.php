@@ -44,14 +44,14 @@ class OccasionCrudController extends AbstractCrudController
         [$disabled, $disabledAfterBilling] = $this->utilitiesService->easyAdminLogicWhenBilling($this->requestStack, $this->occasionRepository);
 
         return [
-            TextField::new('boite.rvj2id')->setLabel('Boite - RVJ2Id')->setDisabled(true)->onlyWhenUpdating(),
+            IdField::new('id')->onlyWhenUpdating()->setDisabled(true),
             ImageField::new('boite.image')
                 ->setBasePath($this->getParameter('app.path.boites_images'))
                 ->onlyOnIndex()
                 ->setLabel('Image')
                 ->setPermission('ROLE_BENEVOLE'),
             AssociationField::new('boite')
-                ->setLabel('Dépend de la boite')
+                ->setLabel('Dépend de la boite<br/>(id-rvj2-nom-editeur-année)')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                 ->setQueryBuilder(
                     fn(QueryBuilder $queryBuilder) => 
@@ -61,7 +61,11 @@ class OccasionCrudController extends AbstractCrudController
                     ->orderBy('entity.id', 'ASC')
                 )
                 ->setDisabled($disabled)
-                ->renderAsNativeWidget(),
+                ->onlyWhenCreating(),
+            AssociationField::new('boite')
+                ->setLabel('Dépend de la boite<br/>(id-rvj2-nom-editeur-année)')
+                ->setDisabled($disabled)
+                ->onlyWhenUpdating()->onlyOnIndex(),
             TextField::new('reference')->setLabel('Référence')->setDisabled(true),
             TextField::new('information')
                 ->setLabel('Information sur l\'occasion')
@@ -134,7 +138,7 @@ class OccasionCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Nouvel occasion')
             ->setPageTitle('edit', 'Édition d\'un occasion')
             ->setDefaultSort(['boite.name' => 'ASC'])
-            ->setSearchFields(['reference', 'boite.name', 'boite.editor.name'])
+            ->setSearchFields(['reference', 'boite.name', 'boite.editor.name','id'])
         ;
     }
 
