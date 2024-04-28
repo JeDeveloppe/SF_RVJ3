@@ -51,7 +51,7 @@ class OccasionCrudController extends AbstractCrudController
                 ->setLabel('Image')
                 ->setPermission('ROLE_BENEVOLE'),
             AssociationField::new('boite')
-                ->setLabel('Dépend de la boite<br/>(id-rvj2-nom-editeur-année)')
+                ->setLabel('Dépend de la boite')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                 ->setQueryBuilder(
                     fn(QueryBuilder $queryBuilder) => 

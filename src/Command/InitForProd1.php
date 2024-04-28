@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Service\DocumentParametreService;
 use App\Service\UserService;
 use Symfony\Component\Console\Command\Command;
 use App\Service\ImportRvj2\ImportClientsService;
@@ -25,6 +26,7 @@ class InitForProd1 extends Command
             private ImportDepartementsService $importDepartementsService,
             private ImportVillesFrancaisesService $importVillesFrancaiseService,
             private ImportVillesBelgesService $importVillesBelgesService,
+            private DocumentParametreService $documentParametreService
         )
     {
         parent::__construct();
@@ -43,6 +45,9 @@ class InitForProd1 extends Command
         
         //ON CREE OU ON MET A JOUR L'ADMIN
         $this->userService->initForProd_adminUser($io);
+
+        //ON INJECTE les parametres des documents
+        $this->documentParametreService->initDocumentParametre($io);
 
         // on importe les clients
         $this->importClientsService->importClients($io);
