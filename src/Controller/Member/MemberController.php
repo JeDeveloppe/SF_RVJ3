@@ -53,7 +53,7 @@ class MemberController extends AbstractController
     {
         $user = $this->security->getUser();
                 
-        $donnees = $documentRepository->findBy(['user' => $user], ['id' => 'DESC']);
+        $donnees = $documentRepository->findBy(['user' => $user, 'isDeleteByUser' => false], ['id' => 'DESC']);
 
         $documents = $this->paginator->paginate(
             $donnees, /* query NOT result */

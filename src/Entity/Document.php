@@ -92,7 +92,7 @@ class Document
     private ?DocumentLineTotals $documentLineTotals = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isNotLastQuote = null;
+    private ?bool $isLastQuote = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $sendingAt = null;
@@ -439,14 +439,14 @@ class Document
         return $this;
     }
 
-    public function getIsNotLastQuote(): ?bool
+    public function getIsLastQuote(): ?bool
     {
-        return $this->isNotLastQuote;
+        return $this->isLastQuote;
     }
 
-    public function setIsNotLastQuote(?bool $isNotLastQuote): static
+    public function setIsLastQuote(?bool $isLastQuote): static
     {
-        $this->isNotLastQuote = $isNotLastQuote;
+        $this->isLastQuote = $isLastQuote;
 
         return $this;
     }

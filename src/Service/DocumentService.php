@@ -81,7 +81,7 @@ class DocumentService
             $numero = substr($lastDocumentByYear[0]->getQuoteNumber(), -4) + 1; //2022010001 reste 0001 + 1
 
             //on signal que le document precedent est supprimable
-            $lastDocumentByYear[0]->setIsNotLastQuote(true);
+            $lastDocumentByYear[0]->setIsLastQuote(false);
             $this->em->persist($lastDocumentByYear[0]);
             $this->em->flush();
 
@@ -170,6 +170,7 @@ class DocumentService
             ->setIsQuoteReminder(false)
             ->setEndOfQuoteValidation($endDevis)
             ->setCreatedAt($now)
+            ->setIsLastQuote(true)
             ->setTaxRate($panierParams['tax'])
             ->setTaxRateValue($panierParams['tax']->getValue())
             ->setCost($panierParams['preparationHt'])
@@ -249,35 +250,45 @@ class DocumentService
 
         foreach($documentsToDelete as $doc)
         {
-            $docLines = $this->documentLineRepository->findBy(['document' => $doc]);
+            if($doc->getIsLastQuote() == false){
 
-            foreach($docLines as $docLine){
+                $docLines = $this->documentLineRepository->findBy(['document' => $doc]);
 
-                if(!is_null($docLine->getItem())){
-                    $itemInDatabase = $this->itemRepository->find($docLine->getItem());
-                    $itemInDatabase->setStockForSale($itemInDatabase->getStockForSale() + $docLine->getQuantity());
-                    $this->em->persist($itemInDatabase);
-                    $this->em->remove($docLine);
+                foreach($docLines as $docLine){
+
+                    if(!is_null($docLine->getItem())){
+                        $itemInDatabase = $this->itemRepository->find($docLine->getItem());
+                        $itemInDatabase->setStockForSale($itemInDatabase->getStockForSale() + $docLine->getQuantity());
+                        $this->em->persist($itemInDatabase);
+                        $this->em->remove($docLine);
+                    }
+
+                    if(!is_null($docLine->getOccasion())){
+                        $occasionInDatabase = $this->occasionRepository->find($docLine->getOccasion());
+                        $occasionInDatabase->setIsOnline(true);
+                        $this->em->persist($occasionInDatabase);
+                        $this->em->remove($docLine);
+                    }
+
+                    if(!is_null($docLine->getBoite())){
+                        $returnInStock = new Returndetailstostock();
+                        $returnInStock->setDocument($doc->getQuoteNumber())
+                            ->setQuestion($docLine->getQuestion())
+                            ->setAnswer($docLine->getAnswer());
+                        $this->em->persist($returnInStock);
+                        $this->em->remove($docLine);
+                    }
                 }
+                
+                $this->em->remove($doc);
 
-                if(!is_null($docLine->getOccasion())){
-                    $occasionInDatabase = $this->occasionRepository->find($docLine->getOccasion());
-                    $occasionInDatabase->setIsOnline(true);
-                    $this->em->persist($occasionInDatabase);
-                    $this->em->remove($docLine);
-                }
+            }else{
 
-                if(!is_null($docLine->getBoite())){
-                    $returnInStock = new Returndetailstostock();
-                    $returnInStock->setDocument($doc->getQuoteNumber())
-                        ->setQuestion($docLine->getQuestion())
-                        ->setAnswer($docLine->getAnswer());
-                    $this->em->persist($returnInStock);
-                    $this->em->remove($docLine);
-                }
+                $doc->setIsDeleteByUser(true);
+                $this->em->persist($doc);
+                $this->em->flush();
+
             }
-            
-            $this->em->remove($doc);
         }
         
         $this->em->flush();

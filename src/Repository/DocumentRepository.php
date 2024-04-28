@@ -51,9 +51,10 @@ class DocumentRepository extends ServiceEntityRepository
             ->where('d.endOfQuoteValidation < :now')
             ->andWhere('d.billNumber IS NULL')
             ->andWhere('d.isQuoteReminder = :true') //devis bien relancer par email, on a donc remis X jours
-            ->andWhere('d.isNotLastQuote = :true')
+            ->andWhere('d.isLastQuote = :false')
             ->setParameter('now', $now)
             ->setParameter('true', true)
+            ->setParameter('false', false)
             ->getQuery()
             ->getResult()
         ;
