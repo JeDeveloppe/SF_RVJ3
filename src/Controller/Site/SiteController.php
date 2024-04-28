@@ -222,7 +222,6 @@ class SiteController extends AbstractController
     public function adherer(): Response
     {
 
-        //TODO
         $metas['description'] = 'Adhérer à l’association, c’est soutenir un projet à visée écologique et sociale.';
         
         return $this->render('site/project/nous_soutenir/adherer.html.twig', [
@@ -253,9 +252,9 @@ class SiteController extends AbstractController
         $form = $this->createForm(AddressForDonationType::class);
         $form->handleRequest($request);
 
-        //TODO IF PAYPLUG FOR DONATION
         if($form->isSubmitted() && $form->isValid()) {
-
+            
+            throw new \Exception('Traitement du formulaire non codé !');
         }
 
         $metas['description'] = 'Vous souhaitez soutenir financièrement le projet ?';

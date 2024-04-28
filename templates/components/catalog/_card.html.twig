@@ -10,8 +10,8 @@
         {% set setEntityId = boite.id %}
         {% set entityNameController = 'Boite' %}
     {% endif %}
-    
-    <div class="col-9 col-sm-6 col-md-4 mx-md-0 col-lg-3 my-4 d-flex justify-content-center">
+
+     <div class="col-9 col-sm-6 col-md-4 mx-md-0 col-lg-3 p-0 my-3 position-relative">
         <div id="{{ setEntityId }}" class="card card_catalog p-0 shadow-lg rounded {{ transforms[key][0] }}">
             <div class="side front d-flex justify-content-center align-items-center">
                 <img class="card_catalog_img" src="{{ vich_uploader_asset(boite, 'imageFile') }}" alt="Image de la boite de jeu {{ boite.name }} - {{ boite.editor }}"/>

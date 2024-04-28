@@ -275,7 +275,6 @@ class PanierController extends AbstractController
     #[Route('/panier/ajout-demande/{boite}', name: 'panier_add_demande')]
     public function addDemande(): Response
     {
-        //TODO
         return $this->redirectToRoute('app_catalogue_boites');
     }
 

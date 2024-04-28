@@ -18,7 +18,7 @@ class SearchBoiteInCatalogueType extends AbstractType
                 'label' => false,
                 'required' => true,
                 'attr' => [
-                    'placeholder' => 'Rechercher une boite...',
+                    'placeholder' => 'Rechercher une boite OU un éditeur',
                     'class' => 'form-control'
                 ],
                 'constraints' => [

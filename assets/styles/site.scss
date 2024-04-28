@@ -241,17 +241,19 @@
 
 .card_catalog {
   position: relative;
-  width: 230px;
-  height: 230px;
+  width: 70%;
+  height: 250px;
+  margin: auto;
   transform-style: preserve-3d;
   transform: rotateY(0deg);
   transition: transform 1s ease;
 }
 
 .card_catalog_img {
-  max-width: 100%;
+  max-width: 90%;
   object-fit: cover;
   overflow: hidden;
+  margin: auto;
 }
 
 // .card_catalog:hover {
