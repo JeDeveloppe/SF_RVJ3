@@ -92,7 +92,7 @@ class Document
     private ?DocumentLineTotals $documentLineTotals = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isLastQuoteCantBeDeleted = null;
+    private ?bool $isNotLastQuote = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $sendingAt = null;
@@ -197,7 +197,7 @@ class Document
         return $this;
     }
 
-    public function isIsQuoteReminder(): ?bool
+    public function getIsQuoteReminder(): ?bool
     {
         return $this->isQuoteReminder;
     }
@@ -439,14 +439,14 @@ class Document
         return $this;
     }
 
-    public function getIsLastQuoteCantBeDeleted(): ?bool
+    public function getIsNotLastQuote(): ?bool
     {
-        return $this->isLastQuoteCantBeDeleted;
+        return $this->isNotLastQuote;
     }
 
-    public function setIsLastQuoteCantBeDeleted(?bool $isLastQuoteCantBeDeleted): static
+    public function setIsNotLastQuote(?bool $isNotLastQuote): static
     {
-        $this->isLastQuoteCantBeDeleted = $isLastQuoteCantBeDeleted;
+        $this->isNotLastQuote = $isNotLastQuote;
 
         return $this;
     }

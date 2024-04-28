@@ -81,7 +81,7 @@ class DocumentService
             $numero = substr($lastDocumentByYear[0]->getQuoteNumber(), -4) + 1; //2022010001 reste 0001 + 1
 
             //on signal que le document precedent est supprimable
-            $lastDocumentByYear[0]->setIsLastQuoteCantBeDeleted(true);
+            $lastDocumentByYear[0]->setIsNotLastQuote(true);
             $this->em->persist($lastDocumentByYear[0]);
             $this->em->flush();
 
@@ -173,6 +173,7 @@ class DocumentService
             ->setTaxRate($panierParams['tax'])
             ->setTaxRateValue($panierParams['tax']->getValue())
             ->setCost($panierParams['preparationHt'])
+            ->setBillNumber(null)
             ->setIsDeleteByUser(false)
             ->setTimeOfSendingQuote(new DateTimeImmutable('now'))
             ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => $actionToSearch]))
@@ -246,54 +247,40 @@ class DocumentService
     public function deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock(array $documentsToDelete)
     {
 
-        foreach($documentsToDelete as $doc){
+        foreach($documentsToDelete as $doc)
+        {
+            $docLines = $this->documentLineRepository->findBy(['document' => $doc]);
 
-            $nextDocument = $this->documentRepository->findOneBy(['id' => $doc->getId() + 1]);
+            foreach($docLines as $docLine){
 
-            if($nextDocument){
-
-                $docLines = $doc->getDocumentLines();
-
-                foreach($docLines as $docLine){
-                    
-                    if(!is_null($docLine->getItem())){
-                        $itemInDatabase = $this->itemRepository->find($docLine->getItem());
-                        $itemInDatabase->setStockForSale($itemInDatabase->getStockForSale() + $docLine->getQuantity());
-                        $this->em->persist($itemInDatabase);
-                        $this->em->remove($docLine);
-                    }
-
-                    if(!is_null($docLine->getOccasion())){
-                        $occasionInDatabase = $this->occasionRepository->find($docLine->getOccasion());
-                        $occasionInDatabase->setIsOnline(true);
-                        $this->em->persist($occasionInDatabase);
-                        $this->em->remove($docLine);
-                    }
-
-                    if(!is_null($docLine->getBoite())){
-                        $returnInStock = new Returndetailstostock();
-                        $returnInStock->setDocument($doc->getQuoteNumber())
-                            ->setQuestion($docLine->getQuestion())
-                            ->setAnswer($docLine->getAnswer());
-                        $this->em->persist($returnInStock);
-                        $this->em->remove($docLine);
-                    }
-
+                if(!is_null($docLine->getItem())){
+                    $itemInDatabase = $this->itemRepository->find($docLine->getItem());
+                    $itemInDatabase->setStockForSale($itemInDatabase->getStockForSale() + $docLine->getQuantity());
+                    $this->em->persist($itemInDatabase);
+                    $this->em->remove($docLine);
                 }
 
-                $this->em->remove($doc);
+                if(!is_null($docLine->getOccasion())){
+                    $occasionInDatabase = $this->occasionRepository->find($docLine->getOccasion());
+                    $occasionInDatabase->setIsOnline(true);
+                    $this->em->persist($occasionInDatabase);
+                    $this->em->remove($docLine);
+                }
 
-                $this->em->flush();
-            }else{
-
-                //? pour ne pas afficher dans la partie membre
-                $doc->setIsLastQuoteCantBeDeleted(true);
-                $this->em->persist($doc);
-                $this->em->flush();
+                if(!is_null($docLine->getBoite())){
+                    $returnInStock = new Returndetailstostock();
+                    $returnInStock->setDocument($doc->getQuoteNumber())
+                        ->setQuestion($docLine->getQuestion())
+                        ->setAnswer($docLine->getAnswer());
+                    $this->em->persist($returnInStock);
+                    $this->em->remove($docLine);
+                }
             }
-
+            
+            $this->em->remove($doc);
         }
-
+        
+        $this->em->flush();
     }
 
     public function generateValuesForDocument($document):array

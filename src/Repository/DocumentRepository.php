@@ -50,10 +50,10 @@ class DocumentRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('d')
             ->where('d.endOfQuoteValidation < :now')
             ->andWhere('d.billNumber IS NULL')
-            ->andWhere('d.isQuoteReminder = :value') //devis bien relancer par email, on a donc remis X jours
-            ->andWhere('d.isLastQuoteCantBeDeleted IS NULL')
+            ->andWhere('d.isQuoteReminder = :true') //devis bien relancer par email, on a donc remis X jours
+            ->andWhere('d.isNotLastQuote = :true')
             ->setParameter('now', $now)
-            ->setParameter('value', true)
+            ->setParameter('true', true)
             ->getQuery()
             ->getResult()
         ;
@@ -64,9 +64,10 @@ class DocumentRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('d')
             ->where('d.endOfQuoteValidation < :now')
             ->andWhere('d.billNumber IS NULL')
-            ->andWhere('d.isQuoteReminder = :value')
+            ->andWhere('d.isQuoteReminder = :false')
+            ->andWhere('d.isDeleteByUser = :false')
             ->setParameter('now', $now)
-            ->setParameter('value', false)
+            ->setParameter('false', false)
             ->getQuery()
             ->getResult()
         ;

@@ -93,14 +93,14 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
         $now = new DateTimeImmutable('now');
-
-        $documentsToReminder = $this->documentRepository->findByDevisToReminder($now);
         $setting = $this->siteSettingRepository->findOneBy([]);
-        
+
+        //relance email des devis
+        $documentsToReminder = $this->documentRepository->findByDevisToReminder($now);
         $this->mailService->reminderQuotes($documentsToReminder, $now);
 
+        //remise en stock des items / boite supérieur à X jours dans les devis non payés
         $documentsToDelete = $this->documentRepository->findByDevisToDelete($now);
-
         $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock($documentsToDelete);
 
         $itemsWithStockIsNull = $this->itemRepository->findByStockForSaleIsNull();
