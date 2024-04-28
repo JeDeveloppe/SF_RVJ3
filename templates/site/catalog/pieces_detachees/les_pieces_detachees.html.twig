@@ -16,6 +16,7 @@
     {% endif %}
 
     {% if boites | length > 0 %}
+    {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 
         <div class="row justify-content-around">
         

@@ -16,7 +16,7 @@
 				{% if app.request.headers.get('referer') is null %}
 					<a class="btn btn-secondary" href="{{ path('app_catalogue_occasions') }}#{{ occasion.id }}">Retour au catalogue général</a>
 				{% else %}
-					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}#{{ occasion.id }}">Retour au catlaogue</a>
+					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}#{{ occasion.id }}">Retour au catalogue</a>
 				{% endif %}
 			</div>
 		</div>

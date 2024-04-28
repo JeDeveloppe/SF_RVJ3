@@ -1,0 +1,8 @@
+{% if 'detachees' not in currentPath %}
+    {% if product.discountedPriceWithoutTax > 0 %}
+        <strike class="text-danger"><b>{{ (product.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</b></strike>
+        <b>{{ (product.discountedPriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</b>
+    {% else %}
+        {{ (product.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC
+    {% endif %}
+{% endif %}

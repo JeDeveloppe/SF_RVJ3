@@ -16,15 +16,10 @@
     Règle du jeu: {{ occasion.gameRule }}<br/>
 
     {% if 'panier' not in currentPath %}
-        Prix de vente TTC:
-        {% if occasion.discountedPriceWithoutTax > 0 %}
-            <strike class="text-danger"><b>{{ (occasion.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</b></strike>
-            <b>{{ (occasion.discountedPriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €</b>
-        {% else %}
-            {{ (occasion.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €
-        {% endif %}
+        Prix de vente:
+        {% include "components/catalog/_displayPriceLogic.html.twig" with {'product': occasion, 'currentPath': currentPath} %}
     {% endif %}
 </p>
 {% if (occasion.information is not null) %}
-    <p><i class="fa-solid fa-circle-info text-info"></i> Informations:<br/> {{ occasion.information }}</p>
+    <p><i class="fa-solid fa-circle-info text-primary"></i> Informations:<br/> {{ occasion.information }}</p>
 {% endif %}

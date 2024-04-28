@@ -34,7 +34,7 @@
                            </div>
                         {% else %}
                            <div class="col-6 text-center">
-                              <span class='text-info'>PAS DE PAIEMENT</span><br/>
+                              <span class='text-primary'>PAS DE PAIEMENT</span><br/>
                               Valable jusqu'au {{ document.endOfQuoteValidation | date('d-m-Y') }}<br/>
                                  {% if document.isQuoteReminder == false %}
                                     {% set color = 'danger' %}
