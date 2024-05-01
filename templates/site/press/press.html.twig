@@ -6,40 +6,40 @@
 
     <h1 class="col-12 mt-5 text-center">Le coin presse</h1>
 
-<div class="row justify-content-center">
-    <div class="col-11 col-md-10 my-4">
-        <ul class="timeline">
-            {% for key,media in medias %}
-                {% if key is divisible by(2) %}
-                    <li class="timeline-inverted">
-                {% else %}
-                    <li>
-                {% endif %}
-                        <div class="timeline-badge" style="background-color:{{ media.badge.bgcolor }}"><i class="{{ media.badge.text }}"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                            <h5 class="timeline-title">{{ media.title }}</h5>
-                            <p>
-                                <small class="text-muted">
-                                <i class="fa fa-clock-o"></i>
-                                Publié le {{ media.publishedAt | date('d F Y') |format_datetime('full','none',locale='fr') }}
-                                </small>
-                            </p>
+    <div class="row justify-content-center">
+        <div class="col-11 col-md-10 my-4">
+            <ul class="timeline">
+                {% for key,media in medias %}
+                    {% if key is divisible by(2) %}
+                        <li class="timeline-inverted">
+                    {% else %}
+                        <li>
+                    {% endif %}
+                            <div class="timeline-badge" style="background-color:{{ media.badge.bgcolor }}"><i class="{{ media.badge.text }}"></i></div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                <h5 class="timeline-title">{{ media.title }}</h5>
+                                <p>
+                                    <small class="text-muted">
+                                    <i class="fa fa-clock-o"></i>
+                                    Publié le {{ media.publishedAt | date('d F Y') |format_datetime('full','none',locale='fr') }}
+                                    </small>
+                                </p>
+                                </div>
+                                <div class="timeline-body text-justify">
+                                {% if media.description is not null %}
+                                    {{ media.description }}
+                                {% endif %}
+                                <p class="text-end mt-2"><a href="{{ media.link }}" target="_blank">Lire l'article</a></p>
+                                </div>
                             </div>
-                            <div class="timeline-body text-justify">
-                            {% if media.description is not null %}
-                                {{ media.description }}
-                            {% endif %}
-                            <p class="text-end mt-2"><a href="{{ media.link }}" target="_blank">Lire l'article</a></p>
-                            </div>
-                        </div>
-                    </li>
-            {% endfor %}
-        </ul>
+                        </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-11 text-center">
+            <i class="fa-solid fa-lightbulb text-danger"></i> Création du service en 2020...
+        </div>
     </div>
-    <div class="col-11 text-center">
-        <i class="fa-solid fa-lightbulb text-danger"></i> Création du service en 2020...
-    </div>
-</div>
 
 {% endblock %}

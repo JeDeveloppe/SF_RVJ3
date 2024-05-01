@@ -195,7 +195,7 @@ class DashboardController extends AbstractDashboardController
         $entityDevisWithPrice = $this->documentStatusRepository->findOneBy(['action' => 'NO_PAID']);
 
         $devisWithoutPrice = $this->documentRepository->findBy(['documentStatus' => $entityDevisWithoutPrice]);
-        $devisWithPrice = $this->documentRepository->findBy(['documentStatus' => $entityDevisWithPrice]);
+        $devisWithPrice = $this->documentRepository->findBy(['documentStatus' => $entityDevisWithPrice, 'isDeleteByUser' => false]);
 
         return $this->render('admin/traited_daily_devis.html.twig', [
             'devisWithPrice' => $devisWithPrice,

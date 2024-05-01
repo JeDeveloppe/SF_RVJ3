@@ -52,7 +52,7 @@
                      <div class="col-5 text-center">{{ document.documentStatus.name }}</div>
                      <div class="col-5 text-center">
                         {% if document.sendingAt is not null %}
-                           {{ document.shippingMethod.name }} le: {{ document.sendingAt | date('d-m-Y') }}<br/>
+                           {{ document.shippingMethod.name }}<br/>le: {{ document.sendingAt | date('d-m-Y') }}<br/>
                            {% if document.sendingNumber is not null %}
                               Numéro de suivi: {{ document.sendingNumber }}
                            {% else %}

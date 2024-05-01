@@ -21,6 +21,17 @@ class DocumentLineRepository extends ServiceEntityRepository
         parent::__construct($registry, DocumentLine::class);
     }
 
+    public function countTotalOfItemsBilled(): int
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.boite IS NOT NULL') // comptage V2
+            ->orWhere('d.item IS NOT NULL') //comptage V3
+            ->select('count(d.item) + count(d.boite)')
+            ->getQuery()
+            ->getSingleScalarResult();
+        ;
+    }
+
 //    /**
 //     * @return DocumentLine[] Returns an array of DocumentLine objects
 //     */

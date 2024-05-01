@@ -161,6 +161,7 @@ class ImportBoitesService
             ->setIsDeee($this->nullToBoolean($arrayBoite['deee']))
             ->setCreatedAt(new DateTimeImmutable($arrayBoite['created_at']))
             ->setIsOnLine($isV3)
+            ->setPlayersMax($this->numbersOfPlayersRepository->findOneBy(['keyword' => (int) $arrayBoite['nbrJoueurs'] +1]) ?? $this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
             ->setImage($this->constructImagePath($arrayBoite['urlNom'], $arrayBoite['idCatalogue']));
         $boite->setRvj2id($arrayBoite['idCatalogue'])->setUpdatedAt(new DateTimeImmutable('now'));
 

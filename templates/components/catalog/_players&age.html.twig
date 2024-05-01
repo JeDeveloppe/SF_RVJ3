@@ -10,6 +10,10 @@
 
         <i class="fa-solid fa-person"></i> Uniquement {{ item.playersMin.name }} {{ dataJoueur }}
 
+    {% elseif item.playersMin.name > item.playersMax.name  %}
+
+        <i class="fa-solid fa-person"></i> A partir de {{ item.playersMin.name }} {{ dataJoueur }}.
+        
     {% else %}
 
         <i class="fa-solid fa-person"></i> De {{ item.playersMin.name }} à {{ item.playersMax.name }} joueurs.

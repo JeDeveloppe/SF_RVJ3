@@ -482,6 +482,7 @@ class Boite
 
     public function setPlayersMin(?NumbersOfPlayers $playersMin): static
     {
+        
         $this->playersMin = $playersMin;
 
         return $this;

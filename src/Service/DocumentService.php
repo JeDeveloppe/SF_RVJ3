@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use Mpdf\Mpdf;
 use DateInterval;
 use Twig\Environment;
 use DateTimeImmutable;
@@ -408,47 +407,31 @@ class DocumentService
     {
 
         $results = $this->generateValuesForDocument($document);
+
+        dd($results);
         $legales = $this->legalInformationRepository->findOneBy([]);
 
-        if($document->getCreatedAt()->format('Y') > 2023){
-            $header = $this->twig->render('site/document_download/2024/_header.html.twig', [
-                'legales' => $legales,
-                'document' => $document,
-    
-            ]);
-            $html = $this->twig->render('site/document_download/2024/_document_download.html.twig', [
-                'document' => $document,
-                'legales' => $legales,
-                "docLines" => $document->getDocumentLines(),
-                "tva" => $results['tauxTva'],
-                "docLine_items" => $results['docLine_items'],
-                "docLine_occasions" => $results['docLine_occasions'],
-                "docLine_boites" => $results['docLine_boites']
-            ]);
-            $footer = $this->twig->render('site/document_download/2024/_totalsTable.html.twig', [
-                'document' => $document,
-                "tva" => $results['tauxTva'],
-                "docLine_items" => $results['docLine_items'],
-                "docLine_occasions" => $results['docLine_occasions'],
-                "docLine_boites" => $results['docLine_boites']
-            ]);
-        }else{
-            //TODO generate PDF
-            dd('TODO');
-        }
-        
-        $mpdf = new Mpdf([
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'orientation' => 'P',
-            'setAutoTopMargin' => 'stretch',
-            'autoMarginPadding' => 30
-        ]);
+        $header = $this->twig->render('site/document_download/2024/_header.html.twig', [
+            'legales' => $legales,
+            'document' => $document,
 
-        $mpdf->SetHTMLHeader($header);
-        $mpdf->WriteHTML($html);
-        $mpdf->SetHTMLFooter($footer);
-        $mpdf->Output();
+        ]);
+        $html = $this->twig->render('site/document_download/2024/_document_download.html.twig', [
+            'document' => $document,
+            'legales' => $legales,
+            "docLines" => $document->getDocumentLines(),
+            "tva" => $results['tauxTva'],
+            "docLine_items" => $results['docLine_items'],
+            "docLine_occasions" => $results['docLine_occasions'],
+            "docLine_boites" => $results['docLine_boites']
+        ]);
+        $footer = $this->twig->render('site/document_download/2024/_totalsTable.html.twig', [
+            'document' => $document,
+            "tva" => $results['tauxTva'],
+            "docLine_items" => $results['docLine_items'],
+            "docLine_occasions" => $results['docLine_occasions'],
+            "docLine_boites" => $results['docLine_boites']
+        ]);
     }
 
     public function statusChange(Document $document, DocumentStatus $status)

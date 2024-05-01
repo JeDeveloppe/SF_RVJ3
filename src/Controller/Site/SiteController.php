@@ -24,6 +24,7 @@ use App\Repository\AmbassadorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\EmailForSendResetPasswordType;
 use App\Repository\BenefitRepository;
+use App\Repository\DocumentLineRepository;
 use App\Repository\ResetPasswordRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
@@ -143,14 +144,15 @@ class SiteController extends AbstractController
     }
 
     #[Route('/coin-presse', name: 'app_press')]
-    public function press(MediaRepository $mediaRepository): Response
+    public function press(MediaRepository $mediaRepository, DocumentLineRepository $documentLineRepository): Response
     {
         $metas['description'] = 'Quelques chiffres et liens de notre présence sur internet.';
         $medias = $mediaRepository->findBy(['isOnLine' => true],['publishedAt' => 'DESC']);
-        
+        $items = $documentLineRepository->countTotalOfItemsBilled();
         return $this->render('site/press/press.html.twig', [
             'metas' => $metas,
-            'medias' => $medias
+            'medias' => $medias,
+            'itemBilleds' => $items
         ]);
 
     }
