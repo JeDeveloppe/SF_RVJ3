@@ -1,0 +1,25 @@
+
+    <div
+    style="
+    position:relative;
+    left:0cm;
+    top:0cm;
+    width:10cm;
+    height:3cm;
+    font-size: 10px;
+    ">
+        <img src="{{ absolute_url(asset('/build/images/design/logoSite.jpg')) }}" alt=""><br/>
+        {{ legales.streetCompany }}<br/>
+        {{ legales.postalCodeCompany }} {{ legales.cityCompany }}<br/>
+        SIRET: {{ legales.siretCompany }}<br/>
+    </div>
+    <div class="card"
+    style="
+    position:absolute;
+    right:0%;
+    top:0%;
+    width:30%;
+    ">
+        <div class="card-header p-1 text-center bg-primary">FACTURE</div>
+        <div class="card-body p-1 text-center">{{ document.billNumber }}</div>
+    </div>

@@ -3,19 +3,20 @@
 namespace App\Service;
 
 use DateInterval;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Twig\Environment;
 use DateTimeImmutable;
 use App\Entity\Payment;
 use App\Entity\Document;
 use App\Entity\DocumentLine;
+use App\Entity\DocumentStatus;
 use App\Service\UtilitiesService;
 use App\Entity\DocumentLineTotals;
-use App\Entity\DocumentStatus;
 use App\Repository\ItemRepository;
 use App\Repository\UserRepository;
 use App\Entity\Returndetailstostock;
 use App\Repository\AddressRepository;
-use App\Repository\CollectionPointRepository;
 use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
 use App\Repository\OccasionRepository;
@@ -23,14 +24,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DocumentLineRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DocumentStatusRepository;
-use App\Repository\LegalInformationRepository;
-use App\Repository\DocumentParametreRepository;
 use App\Repository\ShippingMethodRepository;
+use App\Repository\CollectionPointRepository;
 use App\Repository\VoucherDiscountRepository;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use App\Repository\LegalInformationRepository;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\RouterInterface;
+use App\Repository\DocumentParametreRepository;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class DocumentService
 {
@@ -55,7 +57,7 @@ class DocumentService
         private RouterInterface $router,
         private ShippingMethodRepository $shippingMethodRepository,
         private CollectionPointRepository $collectionPointRepository,
-        private VoucherDiscountRepository $voucherDiscountRepository
+        private VoucherDiscountRepository $voucherDiscountRepository,
         ){
     }
 
@@ -244,8 +246,13 @@ class DocumentService
         $this->em->flush();
     }
 
-    public function deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock(array $documentsToDelete)
+    public function deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock(array $documentsToDelete = null)
     {
+        if(is_null($documentsToDelete)){
+            $now = new DateTimeImmutable('now');
+            $documentsToDelete = $this->documentRepository->findByDevisToDelete($now);
+        }
+
 
         foreach($documentsToDelete as $doc)
         {
@@ -403,37 +410,75 @@ class DocumentService
         return $document;
     }
 
-    public function generateFpdf($document)
+    public function generatePdf(Document $document)
     {
 
         $results = $this->generateValuesForDocument($document);
-
-        dd($results);
         $legales = $this->legalInformationRepository->findOneBy([]);
 
-        $header = $this->twig->render('site/document_download/2024/_header.html.twig', [
-            'legales' => $legales,
-            'document' => $document,
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+        $pdfOptions->isRemoteEnabled(true);
 
-        ]);
-        $html = $this->twig->render('site/document_download/2024/_document_download.html.twig', [
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+
+        // Retrieve the HTML generated in our twig file
+        if($document->getPayment()->getTimeOfTransaction()->format('Y') < 2024){
+            $year = 2023;
+        }else{
+            $year = 2024;
+        }
+
+        $html = $this->twig->render('pdf/'.$year.'/_document.html.twig', [
             'document' => $document,
             'legales' => $legales,
-            "docLines" => $document->getDocumentLines(),
-            "tva" => $results['tauxTva'],
-            "docLine_items" => $results['docLine_items'],
-            "docLine_occasions" => $results['docLine_occasions'],
-            "docLine_boites" => $results['docLine_boites']
+            'results' => $results,
+            'year' => $year
         ]);
-        $footer = $this->twig->render('site/document_download/2024/_totalsTable.html.twig', [
-            'document' => $document,
-            "tva" => $results['tauxTva'],
-            "docLine_items" => $results['docLine_items'],
-            "docLine_occasions" => $results['docLine_occasions'],
-            "docLine_boites" => $results['docLine_boites']
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+        
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("Facture RVJ - ".$document->getBillNumber().".pdf", [
+            "Attachment" => false
         ]);
+        exit(0);
+
+
+        // $header = $this->twig->render('site/document_download/2024/_header.html.twig', [
+        //     'legales' => $legales,
+        //     'document' => $document,
+
+        // ]);
+        // $html = $this->twig->render('site/document_download/2024/_document_download.html.twig', [
+        //     'document' => $document,
+        //     'legales' => $legales,
+        //     "docLines" => $document->getDocumentLines(),
+        //     "tva" => $results['tauxTva'],
+        //     "docLine_items" => $results['docLine_items'],
+        //     "docLine_occasions" => $results['docLine_occasions'],
+        //     "docLine_boites" => $results['docLine_boites']
+        // ]);
+        // $footer = $this->twig->render('site/document_download/2024/_totalsTable.html.twig', [
+        //     'document' => $document,
+        //     "tva" => $results['tauxTva'],
+        //     "docLine_items" => $results['docLine_items'],
+        //     "docLine_occasions" => $results['docLine_occasions'],
+        //     "docLine_boites" => $results['docLine_boites']
+        // ]);
+
     }
 
+    
     public function statusChange(Document $document, DocumentStatus $status)
     {
         $legales = $this->legalInformationRepository->findOneBy([]);

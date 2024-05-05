@@ -70,17 +70,17 @@ class InitForProd2 extends Command
 
         $io = new SymfonyStyle($input,$output);
 
-        //on importe les partenaires
-        $this->importPartenairesService->importPartenaires($io);
+        // //on importe les partenaires
+        // $this->importPartenairesService->importPartenaires($io);
 
-        //on importe les adresses (facturation et livraison)
-        $this->importAdressesService->importAdresses($io);
+        // //on importe les adresses (facturation et livraison)
+        // $this->importAdressesService->importAdresses($io);
 
-        //on creer le nombre de joueurs
-        $this->creationNombreDeJoueursService->addplayers($io);
+        // //on creer le nombre de joueurs
+        // $this->creationNombreDeJoueursService->addplayers($io);
 
-        //on importe les boites
-        $this->importBoitesService->importBoites($io);
+        // //on importe les boites
+        // $this->importBoitesService->importBoites($io);
 
         //on genere les editeurs de facon distinct
         $this->editorService->addEditorsInDatabase($io);

@@ -10,14 +10,15 @@ use App\Repository\AddressRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
+use App\Repository\LegalInformationRepository;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\DocumentParametreRepository;
-use App\Repository\LegalInformationRepository;
+use App\Service\MailService;
+use DateTimeImmutable;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
 
 class MemberController extends AbstractController
 {
@@ -31,7 +32,8 @@ class MemberController extends AbstractController
         private AddressRepository $addressRepository,
         private DocumentService $documentService,
         private LegalInformationRepository $legalInformationRepository,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private MailService $mailService
         )
     {
     }
@@ -52,7 +54,13 @@ class MemberController extends AbstractController
     public function membreHistorique(DocumentParametreRepository $documentParametreRepository, DocumentRepository $documentRepository, Request $request): Response
     {
         $user = $this->security->getUser();
-                
+
+        //relance email des devis
+        $now = new DateTimeImmutable('now');
+        $this->mailService->reminderQuotes($now);
+        //on supprime les document trop vieu non relancer
+        $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
+
         $donnees = $documentRepository->findBy(['user' => $user, 'isDeleteByUser' => false], ['id' => 'DESC']);
 
         $documents = $this->paginator->paginate(
@@ -121,7 +129,7 @@ class MemberController extends AbstractController
     }
 
     #[Route('/membre/download/facture/{tokenDocument}', name: 'member_facture_download')]
-    public function factureDownload($tokenDocument, Request $request)
+    public function factureDownload($tokenDocument)
     {
         $user = $this->security->getUser();
 
@@ -133,9 +141,10 @@ class MemberController extends AbstractController
 
         }else{
 
-            $this->documentService->generateFpdf($document, $request);
+            $pdf = $this->documentService->generatePdf($document);
 
-            return new Response();
+            return new Response($pdf->Output(), 200, array(
+                'Content-Type' => 'application/pdf'));
         }
     }
 }

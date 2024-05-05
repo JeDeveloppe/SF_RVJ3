@@ -9,7 +9,9 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use App\Repository\LegalInformationRepository;
 use App\Repository\DocumentParametreRepository;
+use App\Repository\DocumentRepository;
 use App\Repository\SiteSettingRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -21,7 +23,8 @@ class MailService
         private LegalInformationRepository $legalInformationRepository,
         private DocumentParametreRepository $documentParametreRepository,
         private SiteSettingRepository $siteSettingRepository,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private DocumentRepository $documentRepository
         ){
     }
 
@@ -59,7 +62,9 @@ class MailService
         }
     }
 
-    public function reminderQuotes(array $documents, $now){
+    public function reminderQuotes(DateTimeImmutable $now){
+
+        $documents = $this->documentRepository->findByDevisToReminder($now);
 
         foreach($documents as $document){
 
