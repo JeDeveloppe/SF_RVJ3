@@ -96,12 +96,10 @@ class DashboardController extends AbstractDashboardController
         $setting = $this->siteSettingRepository->findOneBy([]);
 
         //relance email des devis
-        $documentsToReminder = $this->documentRepository->findByDevisToReminder($now);
-        $this->mailService->reminderQuotes($documentsToReminder, $now);
+        $this->mailService->reminderQuotes($now);
 
         //remise en stock des items / boite supérieur à X jours dans les devis non payés
-        $documentsToDelete = $this->documentRepository->findByDevisToDelete($now);
-        $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock($documentsToDelete);
+        $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
         $itemsWithStockIsNull = $this->itemRepository->findByStockForSaleIsNull();
 

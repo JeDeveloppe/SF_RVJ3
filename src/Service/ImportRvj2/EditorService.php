@@ -2,11 +2,12 @@
 
 namespace App\Service\ImportRvj2;
 
-use App\Entity\Country;
+use Exception;
 use App\Entity\Editor;
+use App\Entity\Country;
 use App\Repository\BoiteRepository;
-use App\Repository\CountryRepository;
 use App\Repository\EditorRepository;
+use App\Repository\CountryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -38,7 +39,7 @@ class EditorService
                 $editor = new Editor();
             }
 
-            $editor->setName($simpleEditor['initeditor'])->setSlug($this->sluggerInterface->slug(strtolower($simpleEditor['initeditor'])));
+            $editor->setName($simpleEditor['initeditor'] ?? 'INCONNU')->setSlug($this->sluggerInterface->slug(strtolower($simpleEditor['initeditor'])));
 
             $io->progressAdvance();
             $this->em->persist($editor);
@@ -62,7 +63,13 @@ class EditorService
 
             $io->progressAdvance();
 
-            $this->em->persist($boite);
+            try{
+
+                $this->em->persist($boite);
+            }
+            catch(Exception $ex){
+                'ERREUR '.$editor;
+            }
 
         }
         $this->em->flush();
