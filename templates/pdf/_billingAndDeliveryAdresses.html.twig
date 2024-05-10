@@ -1,0 +1,45 @@
+<div class="card"
+    style="
+    position:absolute;
+    left:8.5cm;
+    top:3cm;
+    right:0cm;
+    width:10cm;
+    height:4.5cm;
+    border:1px solid black;
+    ">
+        <div class="card-body" style="font-size:22px;">
+            {% set facturations = document.billingAddress|split('<br/>') %}
+            {% for facturation in facturations %}
+                {% if loop.revindex0 == 1 %}
+                    {{ facturation }} -
+                {% else %}
+                    {{ facturation }}<br/>
+                {% endif %}
+            {% endfor %}
+        </div>
+</div>
+
+<div class="card"
+style="
+    position:absolute;
+    left:0cm;
+    top:3cm;
+    width:8cm;
+    height:4.5cm;
+    border:1px solid black;
+    ">
+    <div class="card-header text-center p-0 bg-primary">Livraison ou retrait / Informations:</div>
+    <div class="card-body py-0 px-1">
+        {% set deliveries = document.deliveryAddress|split('<br/>') %}
+        {# {{ document.sendingBy ?? 'ENVOI NON REFERENCER' }}<br/> #}
+            {% for delivery in deliveries %}
+                {% if loop.revindex0 == 1 %}
+                    {{ delivery }} -
+                {% else %}
+                    {{ delivery }}<br/>
+                {% endif %}
+            {% endfor %}
+        <p><br/>Payé le: {{ document.payment.timeOfTransaction | date('d-m-Y') }} {{ document.payment.details ? '<br/>'~ document.payment.details : '<br/>[DETAILS PAIEMENT ABSENT]' }}</p>
+    </div>
+</div>

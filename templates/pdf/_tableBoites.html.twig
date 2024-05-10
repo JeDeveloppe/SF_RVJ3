@@ -1,8 +1,8 @@
 {% if docLines_boites | length > 0 %}
     {% for docLine in docLines_boites %}
-        <tr>
+        <tr style="border-bottom:1px solid black;">
             <td colspan="2">
-                CONCERNANT:<br/>
+                Pièces détachées concernant:<br/>
                 {{ docLine.boite.id }} - {{ docLine.boite.name }} - {{ docLine.boite.editor }} - {{ docLine.boite.year ?? 'ANNEE INCONNUE' }}
                 <p>Votre demande: <br/> {{ docLine.question }}</p>
                 <p>La réponse: {{ docLine.answer }}</p>

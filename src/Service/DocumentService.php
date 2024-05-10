@@ -419,23 +419,16 @@ class DocumentService
         // Configure Dompdf according to your needs
         $pdfOptions = new Options();
         $pdfOptions->set('defaultFont', 'Arial');
+        $pdfOptions->set('chroot', realpath(''));
         $pdfOptions->isRemoteEnabled(true);
 
         // Instantiate Dompdf with our options
         $dompdf = new Dompdf($pdfOptions);
 
-        // Retrieve the HTML generated in our twig file
-        if($document->getPayment()->getTimeOfTransaction()->format('Y') < 2024){
-            $year = 2023;
-        }else{
-            $year = 2024;
-        }
-
-        $html = $this->twig->render('pdf/'.$year.'/_document.html.twig', [
+        $html = $this->twig->render('pdf/_document.html.twig', [
             'document' => $document,
             'legales' => $legales,
-            'results' => $results,
-            'year' => $year
+            'results' => $results
         ]);
 
         // Load HTML to Dompdf

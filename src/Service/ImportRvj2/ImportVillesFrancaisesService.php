@@ -31,7 +31,7 @@ class ImportVillesFrancaisesService
         $io->title('Importation des villes Françaises');
 
             $cities = $this->readCsvFileTotalVille();
-        
+            
             $io->progressStart(count($cities));
 
             foreach($cities as $arrayVille){

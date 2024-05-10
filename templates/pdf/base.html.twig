@@ -11,14 +11,19 @@
             {% endblock %}
         </head>
         <body>
-            {% include "pdf/" ~ year ~ "/_header.html.twig" %}
+            <header>
+                {% include "pdf/_header.html.twig" %}
+            </header>
 
-            {% include "pdf/" ~ year ~ "/_beforeBody.html.twig" %}
+            <footer>
+                {% include "pdf/_footer.html.twig" %}
+            </footer>
 
-            {% block body %}
-            {% endblock %}
+            <main>
+                {% block body %}
+                {% endblock %}
+            </main>
 
-            {% include "pdf/" ~ year ~ "/_footer.html.twig" %}
         </body>
     </html>
 {% endapply %}

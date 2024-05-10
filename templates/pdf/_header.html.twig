@@ -1,14 +1,22 @@
-
+    <img 
+        style="
+        width:3cm;
+        heigth:3cm;
+        position:relative;
+        top:-1cm;
+        "
+        src="build/images/design/logoSite.png" alt="Logo Retaites Vos Jeux">
+    
     <div
     style="
-    position:relative;
-    left:0cm;
-    top:0cm;
-    width:10cm;
-    height:3cm;
-    font-size: 10px;
+    position:absolute;
+    left:0.5cm;
+    top:1.5cm;
+    width:3cm;
+    font-size:10px;
+    overflow:hidden;
     ">
-        <img src="{{ absolute_url(asset('/build/images/design/logoSite.jpg')) }}" alt=""><br/>
+        {# <img src="{{ absolute_url(asset('public/build/images/design/logoSite.png')) }}" alt=""><br/> #}
         {{ legales.streetCompany }}<br/>
         {{ legales.postalCodeCompany }} {{ legales.cityCompany }}<br/>
         SIRET: {{ legales.siretCompany }}<br/>
@@ -18,6 +26,7 @@
     position:absolute;
     right:0%;
     top:0%;
+    border:1px solid black;
     width:30%;
     ">
         <div class="card-header p-1 text-center bg-primary">FACTURE</div>
