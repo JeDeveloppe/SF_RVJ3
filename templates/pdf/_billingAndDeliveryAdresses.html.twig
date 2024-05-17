@@ -29,8 +29,8 @@ style="
     height:4.5cm;
     border:1px solid black;
     ">
-    <div class="card-header text-center p-0 bg-primary">Livraison ou retrait / Informations:</div>
-    <div class="card-body py-0 px-1">
+    <div class="card-header text-center p-0 bg-primary">Livraison ou retrait</div>
+    <div class="card-body p-2" style="font-size:18px;">
         {% set deliveries = document.deliveryAddress|split('<br/>') %}
         {# {{ document.sendingBy ?? 'ENVOI NON REFERENCER' }}<br/> #}
             {% for delivery in deliveries %}
@@ -40,6 +40,17 @@ style="
                     {{ delivery }}<br/>
                 {% endif %}
             {% endfor %}
-        <p><br/>Payé le: {{ document.payment.timeOfTransaction | date('d-m-Y') }} {{ document.payment.details ? '<br/>'~ document.payment.details : '<br/>[DETAILS PAIEMENT ABSENT]' }}</p>
     </div>
+</div>
+
+<div class="card"
+style="
+    position:absolute;
+    left:0cm;
+    top:7.7cm;
+    width:100%;
+    height:1.4cm;
+    border:1px solid black;
+    ">
+    <div class="card-body p-2" style="font-size:12px;">Payé le: {{ document.payment.timeOfTransaction | date('d-m-Y') }} {{ document.payment.details ? ' - '~ document.payment.details : ' - [DETAILS PAIEMENT ABSENT]' }}</div>
 </div>

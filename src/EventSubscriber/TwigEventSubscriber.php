@@ -20,10 +20,21 @@ class TwigEventSubscriber implements EventSubscriberInterface
 
     public function onControllerEvent(ControllerEvent $event): void
     {
+        //for footer list
+        $dices = [
+            "1" => 'one',
+            "2" => 'two',
+            "3" => 'three',
+            "4" => 'four',
+            "5" => 'five',
+            "6" => 'six',
+        ];
+
         $siteSetting = $this->siteSettingRepository->findOneBy([]);
 
         $this->twig->addGlobal('marquee', $siteSetting->getMarquee());
         $this->twig->addGlobal('fairDay', $siteSetting->getFairday());
+        $this->twig->addGlobal('dices', $dices);
     }
 
     public static function getSubscribedEvents(): array

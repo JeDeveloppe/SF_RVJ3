@@ -1,7 +1,7 @@
 <nav id="navbar-top" class="navbar navbar-expand-lg bg-primary mt-3" data-bs-theme="light">
   <div id="logoTop">
     <a href="{{ path('app_home') }}">
-      <img class="img-thumbnail border-primary" src="{{ asset('build/images/design/logoSite.png') }}" alt="Refaites vos jeux">
+      <img class="img-thumbnail border-primary" src="{{ asset('build/images/design/logoSite.png') | imagine_filter('logoSite') }}" alt="Logo de Refaites vos jeux">
     </a>
   </div>
   <div class="container-fluid">
