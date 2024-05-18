@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Service\ImportRvj2;
+namespace App\Service;
 
 use Exception;
 use App\Entity\Editor;
-use App\Entity\Country;
 use App\Repository\BoiteRepository;
 use App\Repository\EditorRepository;
-use App\Repository\CountryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\String\Slugger\SluggerInterface;

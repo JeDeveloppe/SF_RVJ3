@@ -12,8 +12,8 @@ var simplemaps_countrymap_mapdata={
     
 		//State defaults
 		state_description: "",
-    state_color: "#54C5A7",
-    state_hover_color: "#EAD2A7",
+    state_color: "#2FA988",
+    state_hover_color: "#F6943E",
     state_url: "",
     border_size: 1.5,
     all_states_inactive: "no",
@@ -22,7 +22,7 @@ var simplemaps_countrymap_mapdata={
 		//Location defaults
 		location_description: "",
     location_url: "",
-    location_color: "#FF0067",
+    location_color: "#F6943E",
     location_opacity: 0.8,
     location_hover_opacity: 1,
     location_size: 15,

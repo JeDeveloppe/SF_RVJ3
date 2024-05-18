@@ -6,10 +6,9 @@ use App\Repository\NumbersOfPlayersRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class SearchOccasionInCatalogueType extends AbstractType
 {
@@ -32,14 +31,14 @@ class SearchOccasionInCatalogueType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'constraints' => [
-                    new NotBlank([
+                    new Assert\NotBlank([
                         'message' => 'Ne peut pas être vide...',
                     ]),
-                    new Length([
+                    new Assert\Length([
                         'min' => 3,
-                        'minMessage' => 'Au moins {{ limit }} charactères',
+                        'minMessage' => 'Minimum {{ limit }} charactères',
                         // max length allowed by Symfony for security reasons
-                        'max' => 50,
+                        'max' => 25,
                     ])
                 ]
             ])

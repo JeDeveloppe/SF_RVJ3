@@ -31,10 +31,12 @@ class OccasionRepository extends ServiceEntityRepository
             ->orWhere('e.name LIKE :val')
             ->andWhere('o.isOnline = :online')
             ->andWhere('b.age >= :age')
-            ->setParameter('val', '%'.$phrase.'%')
-            ->setParameter('age', $age)
-            ->setParameter('online', true)
-            ->orderBy('b.name', 'ASC')
+            ->setParameters([
+                'val' => '%'.$phrase.'%',
+                'age' => $age,
+                'online' =>  true,
+            ])
+            ->orderBy('b.id', 'ASC')
             ->getQuery()
             ->getResult()
         ;

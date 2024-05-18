@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\ImportRvj2;
+namespace App\Service;
 
 use App\Entity\LegalInformation;
 use App\Entity\Tax;
@@ -12,7 +12,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class CreationLegalInformationService
+class LegalInformationService
 {
     public function __construct(
         private TaxRepository $taxRepository,

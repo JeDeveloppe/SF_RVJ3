@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\ImportRvj2;
+namespace App\Service;
 
 use App\Entity\Boite;
 use DateTimeImmutable;
@@ -13,7 +13,7 @@ use App\Service\UtilitiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ImportBoitesService
+class BoiteService
 {
     public function __construct(
         private BoiteRepository $boiteRepository,
@@ -155,7 +155,7 @@ class ImportBoitesService
             ->setIsOccasion($arrayBoite['isComplet'])
             ->setWeigth($this->nullTo0($arrayBoite['poidBoite']))
             ->setAge((int) $arrayBoite['age'])
-            ->setPlayersMin($this->numbersOfPlayersRepository->findOneBy(['keyword' => $arrayBoite['nbrJoueurs']]) ?? $this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
+            ->setPlayersMin($this->numbersOfPlayersRepository->findOneBy(['keyword' => (int) $arrayBoite['nbrJoueurs']]) ?? $this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
             ->setHtPrice($this->utilitiesService->stringToNull($arrayBoite['prix_HT']))
             ->setCreatedBy($this->userRepository->findOneBy(['nickname' => $arrayBoite['createur']]))
             ->setIsDeee($this->nullToBoolean($arrayBoite['deee']))
@@ -169,7 +169,8 @@ class ImportBoitesService
         return $boite;
     }
 
-    private function nullToBoolean($value){
+    private function nullToBoolean($value)
+    {
         
         if($value == "NULL"){
             $value = 0;
@@ -180,7 +181,8 @@ class ImportBoitesService
         return $value;
     }
 
-    private function nullTo0($value){
+    private function nullTo0($value)
+    {
         
         if($value == "NULL"){
             $value = 0;
@@ -189,7 +191,8 @@ class ImportBoitesService
         return $value;
     }
 
-    public function saveImageOnServeur($slug, $uniqueName,$imageBlob){
+    public function saveImageOnServeur($slug, $uniqueName,$imageBlob)
+    {
 
         if (!file_exists($this->pathForImagesBoites())) {
             mkdir($this->pathForImagesBoites(), 0777, true);
@@ -207,13 +210,91 @@ class ImportBoitesService
 
     }
 
-    public function constructImagePath($slug,$unique_id){
+    public function constructImagePath($slug,$unique_id)
+    {
 
         return $slug.'_'.$unique_id.'.png';
     }
 
-    public function pathForImagesBoites(){
+    public function pathForImagesBoites()
+    {
 
         return './public/uploads/images/boites/';
+    }
+
+    public function importPieces(SymfonyStyle $io): void
+    {
+        $io->title('Importation des pieces dans les boites');
+
+        $pieces = $this->readCsvFilePieces();
+        
+        $io->progressStart(count($pieces));
+
+        foreach($pieces as $arrayPiece){
+            $io->progressAdvance();
+            $this->createOrUpdateContentBoite($arrayPiece);
+        }
+
+        $this->em->flush();
+
+        $io->progressFinish();
+        $io->success('Importation terminée');
+    }
+
+    private function readCsvFilePieces(): Reader
+    {
+        $csvPieces = Reader::createFromPath('%kernel.root.dir%/../import/_table_pieces.csv','r');
+        $csvPieces->setHeaderOffset(0);
+
+        return $csvPieces;
+    }
+
+    private function createOrUpdateContentBoite(array $arrayPiece): void
+    {
+
+        $boite = $this->boiteRepository->findOneBy(['rvj2id' => $arrayPiece['idJeu']]);
+
+        if($boite){
+            $boite->setContent($arrayPiece['contenu_total'])
+            ->setContentMessage($this->utilitiesService->stringToNull($arrayPiece['message']));
+            $this->em->persist($boite);
+        }
+
+    }
+
+    public function createUndefinedBoite($io)
+    {
+        $io->title('Création / mise à jour boite virtuelle');
+
+        $boite = $this->boiteRepository->findOneBy(['name' => 'BOITE SUPPRIMEE']); //! ne pas changer intitulé
+
+        if(!$boite){
+            $boite = new Boite();
+        }
+        
+        //on rentre la boite
+        $boite->setName('BOITE SUPPRIMEE')
+            ->setIniteditor('EDITEUR SUPPRIMER')
+            ->setYear(2100)
+            ->setSlug('boite-supprimee')
+            ->setIsDeliverable(false)
+            ->setIsOccasion(false)
+            ->setWeigth(0)
+            ->setAge((int) 0)
+            ->setPlayersMin($this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
+            ->setHtPrice(0)
+            ->setCreatedBy($this->userRepository->findOneBy(['nickname' => 'Je Développe']))
+            ->setIsDeee(false)
+            ->setCreatedAt(new DateTimeImmutable('now'))
+            ->setIsOnLine(false)
+            ->setImage('aucune image');
+
+        $boite->setUpdatedAt(new DateTimeImmutable('now'))
+            ->setCreatedBy($this->userRepository->findOneBy(['nickname' => 'Je Développe']));
+
+        $this->em->persist($boite);
+        $this->em->flush();
+
+        $io->success('Terminée');
     }
 }

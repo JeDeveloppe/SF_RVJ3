@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Service\ImportRvj2;
+namespace App\Service;
 
-use App\Entity\Country;
 use App\Entity\SiteSetting;
-use App\Repository\CountryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SiteSettingRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;

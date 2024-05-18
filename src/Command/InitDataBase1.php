@@ -2,31 +2,27 @@
 
 namespace App\Command;
 
+use App\Service\CityService;
+use App\Service\CountryService;
+use App\Service\DepartmentService;
 use App\Service\DocumentParametreService;
 use App\Service\UserService;
 use Symfony\Component\Console\Command\Command;
-use App\Service\ImportRvj2\ImportClientsService;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
-use App\Service\ImportRvj2\CreationCountrieService;
 use Symfony\Component\Console\Input\InputInterface;
-use App\Service\ImportRvj2\ImportDepartementsService;
-use App\Service\ImportRvj2\ImportVillesBelgesService;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\Service\ImportRvj2\ImportVillesFrancaisesService;
 
-#[AsCommand(name: 'app:initforprod1')]
+#[AsCommand(name: 'app:initdatabase1')]
 
-class InitForProd1 extends Command
+class InitDataBase1 extends Command
 {
     public function __construct(
             private UserService $userService,
-            private CreationCountrieService $creationCountrieService,
-            private ImportClientsService $importClientsService,
-            private ImportDepartementsService $importDepartementsService,
-            private ImportVillesFrancaisesService $importVillesFrancaiseService,
-            private ImportVillesBelgesService $importVillesBelgesService,
-            private DocumentParametreService $documentParametreService
+            private CountryService $countryService,
+            private DocumentParametreService $documentParametreService,
+            private DepartmentService $departmentService,
+            private CityService $cityService
         )
     {
         parent::__construct();
@@ -41,7 +37,7 @@ class InitForProd1 extends Command
         $io = new SymfonyStyle($input,$output);
         
         // creation PAYS name/isocode
-        $this->creationCountrieService->addCountries();
+        $this->countryService->addCountries();
         
         //ON CREE OU ON MET A JOUR L'ADMIN
         $this->userService->initForProd_adminUser($io);
@@ -50,14 +46,14 @@ class InitForProd1 extends Command
         $this->documentParametreService->initDocumentParametre($io);
 
         // on importe les clients
-        $this->importClientsService->importClients($io);
+        $this->userService->importClients($io);
 
         //on importe les departementss
-        $this->importDepartementsService->importDepartements($io);
+        $this->departmentService->importDepartements($io);
 
         //on importe les villes francaises
-        $this->importVillesFrancaiseService->importVilles1_5($io);
-        $this->importVillesBelgesService->importVilles1_5($io);
+        $this->cityService->importCitiesOfFrance($io);
+        $this->cityService->importCitiesOfBelgique($io);
 
         return Command::SUCCESS;
     }

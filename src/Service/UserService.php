@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\User;
 use DateTimeImmutable;
+use League\Csv\Reader;
 use App\Repository\UserRepository;
 use App\Repository\AddressRepository;
 use App\Repository\CountryRepository;
@@ -12,6 +13,7 @@ use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DocumentParametreRepository;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserService
@@ -135,7 +137,8 @@ class UserService
         return $donnees;
     }
 
-    public function disabledFieldWhenBenevole(){
+    public function disabledFieldWhenBenevole()
+    {
 
         $user = $this->security->getUser();
 
@@ -147,5 +150,113 @@ class UserService
         }
 
         return $disabledWhenBenevole;
+    }
+
+    public function importClients(SymfonyStyle $io): void
+    {
+        $io->title('Importation des clients');
+
+        $clients = $this->readCsvFileClients();
+        
+        $io->progressStart(count($clients));
+
+        foreach($clients as $arrayClient){
+            $io->progressAdvance();
+            $client = $this->createOrUpdateClient($arrayClient);
+            $this->em->persist($client);
+        }
+
+        $this->em->flush();
+
+        $io->progressFinish();
+        $io->success('Importation terminée');
+    }
+
+    //lecture des fichiers exportes dans le dossier import
+    private function readCsvFileClients(): Reader
+    {
+        $csvClients = Reader::createFromPath('%kernel.root.dir%/../import/_table_clients.csv','r');
+        $csvClients->setHeaderOffset(0);
+
+        return $csvClients;
+    }
+
+    private function createOrUpdateClient(array $arrayClient): User
+    {
+        $client = $this->userRepository->findOneBy(['email' => $arrayClient['email']]);
+
+        if(!$client){
+            $client = new User();
+        }
+
+        if($arrayClient['pseudo'] == "NULL"){
+            $pseudo = null;
+        }else{
+            $pseudo = $arrayClient['pseudo'];
+        }
+
+        switch($arrayClient['userLevel']){
+            case 4:
+                $role = ['ROLE_ADMIN'];
+                break;
+            case 5:
+                $role = ['ROLE_SUPER_ADMIN'];
+                break;
+            default:
+                $role = ['ROLE_USER'];
+        };
+        
+
+        $client->setEmail($arrayClient['email'])
+                ->setRvj2Id($arrayClient['idClient'])
+                ->setPassword($arrayClient['password'])
+                ->setRoles($role)
+                ->setNickname($pseudo)
+                ->setPhone($arrayClient['telephone'])
+                ->setMembership($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayClient['isAssociation']))
+                ->setCountry($this->countryRepository->findOneBy(['isocode' => $arrayClient['paysFacturation']]) ?? $this->countryRepository->findOneBy(['isocode' => 'INC']) );
+
+                if($arrayClient['timeInscription'] != 0){
+                    $time = $arrayClient['timeInscription'];
+                    $client->setCreatedAt($this->utilitiesService->getDateTimeImmutableFromTimestamp($time));
+                }
+
+                $time = $arrayClient['lastVisite'];
+                $client->setLastvisite($this->utilitiesService->getDateTimeImmutableFromTimestamp($time));
+
+
+        return $client;
+    }
+
+    public function createUndefinedUser($io)
+    {
+        //on vérifié si pn a déjà créer l'administrateur spécial
+        $user = $this->userRepository->findOneBy(['email' => $_ENV['UNDEFINED_USER_EMAIL']]);
+
+        if(!$user){
+            $user = new User();
+        }
+
+        $io->title('Création / mise à jour de l\'UNDEFINED_USER');
+
+        $random = $this->utilitiesService->generateRandomString(25);
+
+            $user->setCreatedAt(new DateTimeImmutable('now'))
+            ->setLastvisite(new DateTimeImmutable('now'))
+            ->setEmail($_ENV['UNDEFINED_USER_EMAIL'])
+            ->setRoles(['ROLE_USER'])
+            ->setNickname('Undefined_user')
+            ->setPhone(0000000000)
+            ->setCountry($this->countryRepository->findOneBy(['isocode' => 'FR']))
+            ->setPassword(
+                $this->userPasswordHasher->hashPassword(
+                        $user,
+                        $random
+                    )
+                );
+
+        $this->em->persist($user);
+        $this->em->flush();
+        $io->success('Création undéfined user ok');
     }
 }

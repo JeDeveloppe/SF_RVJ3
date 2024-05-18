@@ -135,7 +135,7 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-jeux-occasion', name: 'app_catalogue_occasions')]
     public function catalogueOccasions(Request $request): Response
     {
-        $form = $this->createForm(SearchOccasionInCatalogueType::class);
+        $form = $this->createForm(SearchOccasionInCatalogueType::class, null, ['method' => 'GET']);
         $form->handleRequest($request);
 
 

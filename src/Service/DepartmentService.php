@@ -1,20 +1,15 @@
 <?php
 
-namespace App\Service\ImportRvj2;
+namespace App\Service;
 
-use App\Entity\Departement;
 use App\Entity\Department;
 use App\Repository\CountryRepository;
-use App\Repository\DepartementRepository;
 use App\Repository\DepartmentRepository;
 use League\Csv\Reader;
-use App\Repository\PartenaireRepository;
-use App\Repository\PaysRepository;
-use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ImportDepartementsService
+class DepartmentService
 {
     public function __construct(
         private EntityManagerInterface $em,

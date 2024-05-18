@@ -1,27 +1,19 @@
 <?php
 
-namespace App\Service\ImportRvj2;
+namespace App\Service;
 
 use App\Entity\BadgeForMediaTimeline;
 use App\Entity\Media;
-use App\Entity\Partenaire;
-use App\Entity\Partner;
 use App\Repository\BadgeForMediaTimelineRepository;
-use App\Repository\CityRepository;
-use App\Repository\CountryRepository;
 use App\Repository\MediaRepository;
 use League\Csv\Reader;
-use App\Repository\PartenaireRepository;
-use App\Repository\PartnerRepository;
-use App\Repository\PaysRepository;
 use App\Repository\UserRepository;
-use App\Repository\VilleRepository;
 use App\Service\UtilitiesService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ImportMediasService
+class MediaService
 {
     public function __construct(
         private EntityManagerInterface $em,
@@ -87,7 +79,8 @@ class ImportMediasService
 
     }
 
-    public function addBadgeForMedia(){
+    public function addBadgeForMedia()
+    {
 
         $badges = [];
 

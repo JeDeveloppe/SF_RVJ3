@@ -5,6 +5,7 @@ namespace App\Service;
 use Exception;
 use Stripe\Stripe;
 use DateTimeImmutable;
+use League\Csv\Reader;
 use App\Entity\Payment;
 use App\Entity\Document;
 use App\Repository\PaymentRepository;
@@ -16,9 +17,10 @@ use App\Repository\DocumentStatusRepository;
 use App\Repository\MeansOfPayementRepository;
 use Symfony\Component\Routing\RouterInterface;
 use App\Repository\DocumentParametreRepository;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -38,7 +40,8 @@ class PaiementService
         private PaymentRepository $paymentRepository,
         private DocumentStatusRepository $documentStatusRepository,
         private UrlMatcherInterface $urlMatcherInterface,
-        private HttpClientInterface $client
+        private HttpClientInterface $client,
+        private UtilitiesService $utilitiesService
         ){
     }
 
@@ -483,7 +486,6 @@ class PaiementService
             }
     }
 
-
     public function paiementSuccessWithHelloAsso($tokenDocument)
     {
         $document = $this->documentRepository->findOneBy(['token' => $tokenDocument]);
@@ -570,5 +572,73 @@ class PaiementService
         $this->em->persist($document);
         $this->em->flush();
 
+    }
+
+    public function importPaiements(SymfonyStyle $io): void
+    {
+        $io->title('Importation des paiements');
+
+        $docs = $this->readCsvFileDocuments();
+
+        foreach($docs as $arrayDoc){
+
+            $num_transaction = $this->utilitiesService->stringToNull($arrayDoc['num_transaction']);
+
+            if(!is_null($num_transaction)){
+
+                $paiement = $this->createOrUpdatePaiement($arrayDoc);
+
+                $this->em->persist($paiement);
+            }
+        }
+
+        $this->em->flush();
+        $io->success('Importation terminée');
+
+    }
+
+    //lecture des fichiers exportes dans le dossier import
+    private function readCsvFileDocuments(): Reader
+    {
+        $csvDocuments = Reader::createFromPath('%kernel.root.dir%/../import/_table_documents.csv','r');
+        $csvDocuments->setHeaderOffset(0);
+
+        return $csvDocuments;
+    }
+
+    private function createOrUpdatePaiement(array $arrayDoc): Payment
+    {
+        $document = $this->documentRepository->findOneBy(['rvj2id' => $arrayDoc['idDocument']]);
+
+        $paiement = $this->paymentRepository->findOneBy(['document' => $document]);
+
+        if(!$paiement){
+            $paiement = new Payment();
+        }
+
+        //?cohérence mouvement ESPECES partout
+        if($arrayDoc['moyen_paiement'] == 'ESP')
+        {
+            $moyenPaiement = 'ESPÈCES';
+
+        }elseif($arrayDoc['moyen_paiement'] == 'NULL')
+        {//?il peut y avoir ce cas
+
+            $moyenPaiement = 'EN COURS';
+
+        }else{
+
+            $moyenPaiement = $arrayDoc['moyen_paiement'];
+
+        }
+
+        $paiement
+        ->setTokenPayment($arrayDoc['num_transaction'])
+        ->setDocument($document)
+        ->setMeansOfPayment($this->meansOfPayementRepository->findOneBy(['name' => $moyenPaiement]))
+        ->setCreatedAt($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayDoc['time_transaction']))
+        ->setTimeOfTransaction($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayDoc['time_transaction']));
+
+        return $paiement;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\ImportRvj2;
+namespace App\Service;
 
 use League\Csv\Reader;
 use App\Entity\DocumentLine;
@@ -15,7 +15,7 @@ use App\Repository\DocumentLineRepository;
 use App\Repository\DocumentLineTotalsRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ImportDocumentsLignesService
+class DocumentLigneService
 {
     public function __construct(
         private EntityManagerInterface $em,

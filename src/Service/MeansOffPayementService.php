@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Service\ImportRvj2;
+namespace App\Service;
 
 use App\Entity\MeansOfPayement;
 use App\Repository\MeansOfPayementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class CreationMoyenDePaiementService
+class MeansOffPayementService
 {
     public function __construct(
         private EntityManagerInterface $em,
@@ -15,7 +15,8 @@ class CreationMoyenDePaiementService
         ){
     }
 
-    public function addMoyens(SymfonyStyle $io){
+    public function addMoyens(SymfonyStyle $io)
+    {
 
         $moyens = ['CB','ESPÈCES','CHQ','VIR','DON','INCONNU','EN COURS'];
 

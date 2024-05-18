@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\ImportRvj2;
+namespace App\Service;
 
 use App\Entity\OffSiteOccasionSale;
 use League\Csv\Reader;
@@ -15,7 +15,7 @@ use App\Service\UtilitiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class CreationMouvementsOccasionService
+class OffSiteOccasionSaleService
 {
     public function __construct(
         private BoiteRepository $boiteRepository,

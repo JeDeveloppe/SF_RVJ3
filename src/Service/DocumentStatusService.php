@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Service\ImportRvj2;
+namespace App\Service;
 
 use App\Entity\DocumentStatus;
 use App\Repository\DocumentStatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class CreationDocumentStatusService
+class DocumentStatusService
 {
     public function __construct(
         private DocumentStatusRepository $documentStatusRepository,

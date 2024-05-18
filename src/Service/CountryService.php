@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Service\ImportRvj2;
+namespace App\Service;
 
 use App\Entity\Country;
 use App\Repository\CountryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class CreationCountrieService
+class CountryService
 {
     public function __construct(
         private CountryRepository $countryRepository,
