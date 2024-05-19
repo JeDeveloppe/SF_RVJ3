@@ -1,4 +1,4 @@
-{% extends 'site/base.html.twig' %}
+{% extends 'components/_base.html.twig' %}
 
 {% block title %}Nous soutenir{% endblock %}
 
@@ -15,7 +15,7 @@
                 </p> 
                 
                 <article class="my-4">
-                    <h4 class="text-dark">Acheter des jeux :</h4>
+                    <h4>Acheter des jeux :</h4>
 
                     <p class="mt-2 text-justify">
                         Le service propose aux particuliers et aux professionnels du bassin caennais  d’acquérir des jeux complets d’occasion à petits prix ! 
@@ -24,7 +24,7 @@
                 </article>
 
                 <article class="my-5">
-                    <h4 class="text-dark">Donner des jeux :</h4>
+                    <h4>Donner des jeux :</h4>
 
                     <ul>
                         <li>Le service récupère les jeux complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…).
@@ -49,11 +49,11 @@
                 </article>
 
                 <article class="my-5">
-                    <h4 class="text-dark">Agrandir le réseau:</h4>
+                    <h4>Agrandir le réseau:</h4>
 
                     <p class="mt-2 text-justify">
                         Le service cherche à développer le réseau autour du réemploi du jouet: vendeurs de pièces détachées, de jeux complets ou points de collecte.<br/>
-                        Vous souhaitez devenir l'un de nos <a class="text-dark" href="{{ path('carte_partenaires', {'pays': infosAndConfig.legales.country.name }) }}">partenaires</a> ? N'hésitez pas à nous contacter !
+                        Vous souhaitez devenir l'un de nos <a class="" href="{{ path('carte_partenaires', {'pays': infosAndConfig.legales.country.name }) }}">partenaires</a> ? N'hésitez pas à nous contacter !
                     </p>
 
                     <div class="row mt-3 justify-content-center">
@@ -68,7 +68,7 @@
     
 
                 <p class="text-center my-5">
-                    Pour toute question merci d'utiliser le <a href="{{ path('contact') }}" class="text-dark">formulaire en ligne</a>. 
+                    Pour toute question merci d'utiliser le <a href="{{ path('contact') }}">formulaire en ligne</a>. 
                 </p>
 
                 <div class="col-12 my-5 text-center">

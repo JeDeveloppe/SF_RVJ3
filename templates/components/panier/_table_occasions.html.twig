@@ -1,6 +1,6 @@
 {% if donnees | length > 0 %}
 
-    <table class="table table-stripped text-center align-bottom">
+    <table class="table table-stripped text-center align-bottom shadow-lg">
         <tr>
             <th class="col-2 text-muted small text-center">
                 Photo non contractuelle
@@ -11,9 +11,9 @@
         </tr>
         {% for panier in donnees %}
             <tr>
-                <td class="text-center"><img class="img_full-width" src="{{ vich_uploader_asset(panier.occasion.boite, 'imageFile') }}"/></td>
+                <td class="text-center align-middle"><img class="img_full-width" src="{{ vich_uploader_asset(panier.occasion.boite, 'imageFile') }}"/></td>
                 <td class="align-middle">
-						{% include "components/catalog/_occasion_details.html.twig"  with { 'occasion': panier.occasion } %}
+                        {% include "components/catalog/_occasion_details.html.twig"  with { 'occasion': panier.occasion } %}
 
                 </td>
                 <td class="align-middle text-center">{{ (panier.priceWithoutTax  * (1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</td>
@@ -21,5 +21,6 @@
             </tr>
         {% endfor %}
     </table>
+
 
 {% endif %}

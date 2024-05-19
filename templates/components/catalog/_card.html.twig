@@ -1,15 +1,15 @@
 
-    {% if occasions is defined %}
-        {% set boite = donnee.boite %}
-        {% set card_item = donnee %}
-        {% set setEntityId = donnee.id %}
-        {% set entityNameController = 'Occasion' %}
-    {% else %}
-        {% set boite = donnee %}
-        {% set card_item = donnee %}
-        {% set setEntityId = boite.id %}
-        {% set entityNameController = 'Boite' %}
-    {% endif %}
+{# si c'est un occasion passe en parametre #}
+{% if product.boite is defined %}
+    {% set boite = product.boite %}
+    {% set card_item = product %}
+    {% set setEntityId = product.id %}
+    {% set entityNameController = 'Occasion' %}
+{% else %}
+    {% set card_item = product %}
+    {% set setEntityId = product.id %}
+    {% set entityNameController = 'Boite' %}
+{% endif %}
 
     <div class="col-9 col-sm-6 col-md-4 mx-md-0 col-lg-3 p-0 my-3 position-relative">
         <div id="{{ setEntityId }}" class="card card_catalog p-0 shadow-lg rounded {{ transforms[key][0] }}">
@@ -27,9 +27,9 @@
                         <span class="fs-6">Année inconnue</span>
                     {% endif %}
                     {% if is_granted('ROLE_BENEVOLE') %}
-                        <br/>(boite {{ boite.id }})
+                        <br/>(Boite: {{ boite.id }})
                     {% endif %}<br/>
-                    <b>{% include "components/catalog/_displayPriceLogic.html.twig" with {'product': occasion} %}</b>
+                    <b>{% include "components/catalog/_displayPriceLogic.html.twig" with {'product': product, 'tax': tax} %}</b>
                 </div>
                 <div class="d-flex flex-column align-items-center">
                     {% include "components/catalog/_card_button.html.twig" with {'item': card_item }%}

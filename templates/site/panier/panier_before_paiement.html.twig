@@ -1,4 +1,4 @@
-{% extends "site/base.html.twig" %}
+{% extends "components/_base.html.twig" %}
 
 {% block title %}Panier{% endblock %}
 
@@ -11,9 +11,9 @@
         <a href="{{ path('panier_start') }}" class="btn btn-outline-primary mx-auto"><i class="fa-solid fa-backward-fast"></i> Recommencer</a>
     </div>
 
-    {% include "components/panier/_address.html.twig" with {'billingAddress': billingAddress, 'deliveryAddress': deliveryAddress }%}
 
     <div class="col-12 col-md-10 mx-auto">
+        {% include "components/panier/_address.html.twig" with {'billingAddress': billingAddress, 'deliveryAddress': deliveryAddress }%}
 
         {% include "components/panier/_table_items.html.twig" with {'donnees': items } %}
 
@@ -97,7 +97,7 @@
         Avec:
     </div>
     <div class="col-6 text-center mx-auto mt-2 mb-4">
-        {% include "components/_logo_paiement_with.html.twig" %}
+        {% include "components/paiement/_logo_paiement_with.html.twig" %}
     </div>
 
 {% endblock %}

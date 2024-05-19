@@ -1,4 +1,4 @@
-{% extends "site/base.html.twig" %}
+{% extends "components/_base.html.twig" %}
 
 {% block title %}Panier{% endblock %}
 
@@ -7,7 +7,7 @@
     <h1 class="col-12 text-center h2 mt-5">Panier</h1>
     <div class="col-12 text-center h4 mb-5 small">[choix des adresses]</div>
 
-    <div class="col-12 col-md-6 mx-auto my-5">
+    <div class="col-12 col-md-6 mx-auto">
 
         {% include "components/panier/_billingAndDeliveryForm.html.twig" %}
 

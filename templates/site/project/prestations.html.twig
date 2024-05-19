@@ -1,4 +1,4 @@
-{% extends 'site/base.html.twig' %}
+{% extends 'components/_base.html.twig' %}
 
 {% block title %}Prestations{% endblock %}
 
@@ -23,7 +23,6 @@
                 {{ benefit.description | raw }}
               </div>
             </div>
-            <a class="btn btn-lg btn-success fs-11 py-2 w-100 text-success-light shadow" href="{{ path('app_contact') }}">Nous contacter</a>
           </div>
         </div>
         {# <div class="col-11 my-4 col-md-6 my-md-0 col-xl-3">
@@ -44,5 +43,8 @@
       {% endfor %}
 
     </div>
+
+    {% include "site/project/components/_link-to-formulaire.html.twig" %}
+
 
 {% endblock %}

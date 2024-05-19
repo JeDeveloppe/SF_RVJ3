@@ -1,4 +1,4 @@
-{% extends "site/base.html.twig" %}
+{% extends "components/_base.html.twig" %}
 
 {% block title %}Panier{% endblock %}
 
@@ -6,92 +6,114 @@
 
     <h1 class="col-12 text-center h2 mt-5">Panier</h1>
 
-    <div class="col-12 col-md-10 mx-auto">
-
-        {% include "components/panier/_table_items.html.twig" with {'donnees': items } %}
-
-        {% include "components/panier/_table_occasions.html.twig" with {'donnees': occasions } %}
-
+    <div class="row mt-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Panier</li>
+                <li class="breadcrumb-item"><a href="#">Livraison et facturation</a></li>
+                <li class="breadcrumb-item"><a href="#">Résumer</a></li>
+            </ol>
+        </nav>
     </div>
-    <div id="shippingAndVoucherFormReturnUp"></div>
 
-    {% include "components/panier/_shippingMethodWithVoucherDiscount.html.twig" %}
+    <div class="row justify-content-center bg-primary rounded-2">
 
-    <div class="col-12 col-md-6 mx-auto my-5">
-        <table class="table table-striped align-middle">
-            <tr>
-                <td>Sous-total articles:</td>
-                <td>{{ (totalItems * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-            </tr>
-            {% if remises.volume.actif == true %}
-                <tr>
-                    <td>
-                    Remise sur les articles ( - {{ remises.volume.value }}%):<br/>
-                        {% if remises.volume.nextRemiseSupplementaire is not same as false %}
-                            Prochain pallier dès {{ remises.volume.nextQteForRemiseSupplementaire }} articles pour {{ remises.volume.nextRemiseSupplementaire }} % de remise.
-                        {% endif %}
-                    </td>
-                    <td> - {{ (remises.volume.remiseDeQte * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-                </tr>
-            {% endif %}
-            <tr>
-                <td>Sous-total occasions:</td>
-                <td>{{ (totalOccasions * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-            </tr>
-            {% if remises.voucher.actif == true %}
-                <tr>
-                    <td>Code de réduction ({{ remises.voucher.token }}):<br>
-                    Reste à utiliser: {{ (remises.voucher.voucherRemaining * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
-                    <td>- {{ (remises.voucher.used * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-                </tr>
-            {% endif %}
-            <tr>
-                <td>Livraison / retrait:<br/>
-                <small>(poid total: {{ weigthPanier }}g)</small>
-                </td>
-                <td class="align-middle">
-                    {% if deliveryCostWithoutTax == 0 %}
-                        Retrait
-                    {% else %}
-                        {{ (deliveryCostWithoutTax / 100) | number_format(2, '.', ',') }} € TTC
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Préparation:
-                    {% if preparationHt == 0 %}
-                        <br/>Abonnement jusqu'au {{ app.user.membership | date('d-m-Y') }}
-                    {% endif %}
-                </td>
-                <td>{{ (preparationHt * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-            </tr>
-            <tr>
-                <td>Total HT:</td>
-                <td>{{ (totalPanier / 100) | number_format(2, '.', ',') }} €</td>
-            </tr>
-            <tr>
-                <td>TVA:</td>
-                <td>
-                {% if totalPanier * ( 1 + (tax.value / 100)) - totalPanier == 0 %}
-                    0.00 €
-                {% else %}
-                    {{ (totalPanier * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') - (totalPanier / 100) | number_format(2, '.', ',') }} €</td>
-                {% endif %}
-            </tr>
-            <tr>
-                <td>Total à payer:</td>
-                <td>{{ (totalPanier * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-            </tr>
-        </table>
+        <div class="col-11 col-md-10 mx-auto mb-5">
+            {% include "components/panier/_table_items.html.twig" with {'donnees': items } %}
+        </div>
+
+        <div class="col-11 col-md-10 mx-auto mb-5">
+            {% include "components/panier/_table_occasions.html.twig" with {'donnees': occasions } %}
+        </div>
+
+        <div id="shippingAndVoucherFormReturnUp" class="col-12"></div>
+
+        <div class="col-11 col-md-9 mx-auto mb-5 bg-white rounded-2">
+            {% include "components/panier/_shippingMethodWithVoucherDiscount.html.twig" %}
+        </div>
+
     </div>
 
     {% if app.session.get('step_address') == true %}
+
+        <div class="row justify-content-center bg-primary rounded-2 my-4">
+
+            <div class="col-12 col-md-6 mx-auto py-4">
+                <table class="table table-striped align-middle">
+                    <tr>
+                        <td>Sous-total articles:</td>
+                        <td>{{ (totalItems * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                    </tr>
+                    {% if remises.volume.actif == true %}
+                        <tr>
+                            <td>
+                            Remise sur les articles ( - {{ remises.volume.value }}%):<br/>
+                                {% if remises.volume.nextRemiseSupplementaire is not same as false %}
+                                    Prochain pallier dès {{ remises.volume.nextQteForRemiseSupplementaire }} articles pour {{ remises.volume.nextRemiseSupplementaire }} % de remise.
+                                {% endif %}
+                            </td>
+                            <td> - {{ (remises.volume.remiseDeQte * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td>Sous-total occasions:</td>
+                        <td>{{ (totalOccasions * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                    </tr>
+                    {% if remises.voucher.actif == true %}
+                        <tr>
+                            <td>Code de réduction ({{ remises.voucher.token }}):<br>
+                            Reste à utiliser: {{ (remises.voucher.voucherRemaining * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
+                            <td>- {{ (remises.voucher.used * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td>Livraison / retrait:<br/>
+                        <small>(poid total: {{ weigthPanier }}g)</small>
+                        </td>
+                        <td class="align-middle">
+                            {% if deliveryCostWithoutTax == 0 %}
+                                Retrait
+                            {% else %}
+                                {{ (deliveryCostWithoutTax / 100) | number_format(2, '.', ',') }} € TTC
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Préparation:
+                            {% if preparationHt == 0 %}
+                                <br/>Abonnement jusqu'au {{ app.user.membership | date('d-m-Y') }}
+                            {% endif %}
+                        </td>
+                        <td>{{ (preparationHt * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                    </tr>
+                    <tr>
+                        <td>Total HT:</td>
+                        <td>{{ (totalPanier / 100) | number_format(2, '.', ',') }} €</td>
+                    </tr>
+                    <tr>
+                        <td>TVA:</td>
+                        <td>
+                        {% if totalPanier * ( 1 + (tax.value / 100)) - totalPanier == 0 %}
+                            0.00 €
+                        {% else %}
+                            {{ (totalPanier * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') - (totalPanier / 100) | number_format(2, '.', ',') }} €</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Total à payer:</td>
+                        <td>{{ (totalPanier * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
         <div class="col-10 col-md-9 mx-auto d-flex justify-content-center">
             <a class="btn btn-outline-primary mx-auto" href="{{ path('panier_addresses') }}">Choisir les adresses <i class="fa-solid fa-forward-step"></i></a>
         </div>
     {% else %}
-        <div class="col-10 col-md-9 mx-auto d-flex justify-content-center">
+        <div class="col-10 col-md-9 mx-auto d-flex justify-content-center mt-4">
             <a class="btn btn-outline-primary mx-auto" href="#shippingAndVoucherFormReturnUp">Destination du panier non choisi... <i class="fa-solid fa-caret-up"></i></a>
         </div> 
     {% endif %}

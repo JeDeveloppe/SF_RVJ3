@@ -17,7 +17,7 @@
 
     {% if 'panier' not in currentPath %}
         Prix de vente:
-        {% include "components/catalog/_displayPriceLogic.html.twig" with {'product': occasion, 'currentPath': currentPath} %}
+        {% include "components/catalog/_displayPriceLogic.html.twig" with {'product': occasion,'tax': tax} %}
     {% endif %}
 </p>
 {% if (occasion.information is not null) %}

@@ -62,7 +62,7 @@ class SiteController extends AbstractController
     {
         $metas['description'] = 'L’association Refaites vos jeux œuvre pour le réemploi des jeux et le lien social.';
 
-        return $this->render('site/index.html.twig', [
+        return $this->render('site/home/index.html.twig', [
             'metas' => $metas
         ]);
     }

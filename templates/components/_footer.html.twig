@@ -40,60 +40,37 @@
 
 <!-- Remove the container if you want to extend the Footer to full width. -->
 <div class="container-fluide">
-	<footer
-		class="bg-primary text-center text-lg-start text-white">
+	<footer class="bg-primary text-center text-lg-start text-white">
 		<!-- Grid container -->
-		<div
-			class="container p-4">
+		<div class="container p-4">
 			<!--Grid row-->
-			<div
-				class="row my-4">
+			<div class="row my-4">
 				<!--Grid column-->
 				<div class="order-4 order-lg-1 col-lg-3 col-md-6 mb-4 mb-md-0">
 
-					<div class="shadow-1-strong d-flex align-items-center justify-content-center mb-4 mx-auto">
-						<img class="img-thumbnail" src="{{ asset('build/images/design/logoSite.png') | imagine_filter('logoSite') }}" alt="Refaites vos jeux" loading="lazy"/>
+					<div class="d-flex align-items-center justify-content-center mb-4 mx-auto">
+						<img class="img-thumbnail border-info border-3" src="{{ asset('build/images/design/logoSite.png') | imagine_filter('logoSite') }}" alt="Refaites vos jeux" loading="lazy"/>
 					</div>
-
-					<p class="text-info text-start">L’association œuvre pour le réemploi des jeux et le lien social.</p>
-
-					<ul class="list-unstyled d-flex flex-row justify-content-center">
-						<li>
-							<a class="text-secondary px-2" href="https://www.facebook.com/refaitesvosjeux">
-								<img src="{{ asset('build/images/design/logoFacebook.png') }}" width="40" height="40" class="imgFindUsOnFacebook" alt="Suivez-nous sur Facebook !" title="Suivez-nous sur Facebook !">
-							</a>
-						</li>
-						{# <li>
-						              <a class="text-white px-2" href="#!">
-						                <i class="fab fa-instagram"></i>
-						              </a>
-						            </li>
-						            <li>
-						              <a class="text-white ps-2" href="#!">
-						                <i class="fab fa-youtube"></i>
-						              </a>
-						            </li> #}
-					</ul>
 
 				</div>
 				<!--Grid column-->
 
 				<!--Grid column-->
 				<div class="order-lg-1 col-lg-3 col-md-6 mb-4 mb-md-0">
-					<h5 class="text-uppercase mb-4 text-info shadow text-center p-1">Catalogues</h5>
+					<h5 class="text-uppercase mb-4 text-info text-center p-1 bg-white rounded-1">Catalogues</h5>
 
 					<ul class="list-unstyled text-start ps-1">
 						<li class="mb-2">
 							<a href="{{ path('app_catalogue_pieces_detachees') }}" class="text-white text-decoration-none detect-rotate">
-								<i class="fa-solid fa-dice-{{dices[1]}} pe-3"></i>Pièces détachées</a>
+								<i class="text-secondary fa-solid fa-dice-{{dices[1]}} pe-3"></i>Pièces détachées</a>
 						</li>
 						<li class="mb-2">
 							<a href="{{ path('app_catalogue_occasions') }}" class="text-white text-decoration-none detect-rotate">
-								<i class="fa-solid fa-dice-{{dices[2]}} pe-3"></i>Jeux d'occasion</a>
+								<i class="text-secondary fa-solid fa-dice-{{dices[2]}} pe-3"></i>Jeux d'occasion</a>
 						</li>
 						<li class="mb-2">
 							<a href="{{ path('app_prestations') }}" class="text-white text-decoration-none detect-rotate">
-								<i class="fa-solid fa-dice-{{dices[3]}} pe-3"></i>Nos prestations</a>
+								<i class="text-secondary fa-solid fa-dice-{{dices[3]}} pe-3"></i>Nos prestations</a>
 						</li>
 					</ul>
 				</div>
@@ -101,20 +78,24 @@
 
 				<!--Grid column-->
 				<div class="order-lg-2 col-lg-3 col-md-6 mb-4 mb-md-0">
-					<h5 class="text-uppercase mb-4 text-info shadow text-center p-1">Informations</h5>
+					<h5 class="text-uppercase mb-4 text-info text-center p-1 bg-white rounded-1">Informations</h5>
 
 					<ul class="list-unstyled text-start ps-1">
 						<li class="mb-2">
 							<a href="{{ path('app_who_are_we') }}" class="text-white text-decoration-none detect-rotate">
-								<i class="fa-solid fa-dice-{{dices[1]}} pe-3"></i>Qui sommes nous ?</a>
+								<i class="text-secondary fa-solid fa-dice-{{dices[1]}} pe-3"></i>Qui sommes nous ?</a>
+						</li>
+						<li class="mb-2">
+							<a href="{{ path('app_support_us') }}" class="text-white text-decoration-none detect-rotate">
+								<i class="text-secondary fa-solid fa-dice-{{dices[2]}} pe-3"></i>Nous soutenir</a>
 						</li>
 						<li class="mb-2">
 							<a href="{{ path('app_partenaires') }}" class="text-white text-decoration-none detect-rotate">
-								<i class="fa-solid fa-dice-{{dices[2]}} pe-3"></i>Partenaires</a>
+								<i class="text-secondary fa-solid fa-dice-{{dices[3]}} pe-3"></i>Partenaires</a>
 						</li>
 						<li class="mb-2">
 							<a href="{{ path('app_press') }}" class="text-white text-decoration-none detect-rotate">
-								<i class="fa-solid fa-dice-{{dices[3]}} pe-3"></i>Presse</a>
+								<i class="text-secondary fa-solid fa-dice-{{dices[4]}} pe-3"></i>Presse</a>
 						</li>
 					</ul>
 				</div>
@@ -122,34 +103,43 @@
 
 				<!--Grid column-->
 				<div class="order-lg-3 col-lg-3 col-md-6 mb-4 mb-md-0">
-					<h5 class="text-uppercase mb-4 text-info shadow text-center p-1">Légale</h5>
+					<h5 class="text-uppercase mb-4 text-info text-center p-1 bg-white rounded-1">Légale</h5>
 					<ul class="list-unstyled text-start ps-1">
 						<li class="mb-2">
 							<a href="{{ path('app_conditions_generale_de_vente') }}" class="text-white text-decoration-none detect-rotate">
-								<i class="fa-solid fa-dice-{{dices[1]}} pe-3"></i>CGV</a>
+								<i class="text-secondary fa-solid fa-dice-{{dices[1]}} pe-3"></i>CGV</a>
 						</li>
 						<li class="mb-2">
 							<a href="{{ path('app_mentions_legales') }}" class="text-white text-decoration-none detect-rotate">
-								<i class="fa-solid fa-dice-{{dices[2]}} pe-3"></i>Mentions / CGU</a>
+								<i class="text-secondary fa-solid fa-dice-{{dices[2]}} pe-3"></i>Mentions / CGU</a>
 						</li>
 						<li class="mb-2">
 							<a href="{{ path('app_contact') }}" class="text-white text-decoration-none detect-rotate">
-								<i class="fa-solid fa-dice-{{dices[3]}} pe-3"></i>
-							</i>Contact</li>
-					</a>
-				</li>
-			</ul>
+								<i class="text-secondary fa-solid fa-dice-{{dices[3]}} pe-3"></i>Contact</li></a>
+						</li>
+					</ul>
+				</div>
+				<!--Grid column-->
+			</div>
+			<!--Grid row-->
 		</div>
-		<!--Grid column-->
+		<!-- Grid container -->
+	</footer>
+	<!-- Copyright -->
+	<div class="col-12 bg-dark d-flex flex-wrap align-items-center pt-2">
+		<div class="col-6 text-white px-2">
+			L’association qui œuvre pour le réemploi des jeux et le lien social.
+		</div>
+		<div class="col-6 text-end text-white small">
+			Suivez-nous sur: 
+			<a class="text-secondary px-2" href="https://www.facebook.com/refaitesvosjeux">
+				<img src="{{ asset('build/images/design/logoFacebook.png') }}" width="40" height="40" class="imgFindUsOnFacebook" alt="Suivez-nous sur Facebook !" title="Suivez-nous sur Facebook !">
+			</a>
+		</div>
+		<div class="col-12 text-center small bg-dark mt-2 text-white pb-2">
+			2021 - {{ "now" | date("Y") }}<br/> Make with ❤️ by
+			<a class="text-decoration-none cursor-alias text-white" href="https://www.je-developpe.fr/" target="_blank">Je-Développe</a>
+		</div>
 	</div>
-	<!--Grid row-->
-</div>
-<!-- Grid container -->
-
-<!-- Copyright -->
-<div class="text-center pb-1">
-	2021 -
-	{{ "now" | date("Y") }}<br/>
-	<a class="text-decoration-none cursor-alias small text-secondary" href="https://www.je-developpe.fr/" target="_blank">Je-Développe</a>
-</div>
-<!-- Copyright --></footer></div><!-- End of .container -->
+	<!-- Copyright -->
+</div><!-- End of .container -->

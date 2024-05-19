@@ -1,4 +1,4 @@
-{% extends "site/base.html.twig" %}
+{% extends "components/_base.html.twig" %}
 
 {% block title %}Catalogue des jeux d'occasion{% endblock %}
 
@@ -14,7 +14,7 @@
 
     {% else %}
         
-        {% include "components/catalog/_search_occasion.html.twig" %}
+        {% include "components/forms/_search_occasion.html.twig" %}
 
         {% if occasions | length > 0 %}
 
@@ -22,7 +22,7 @@
 
                 {% for key,occasion in occasions %}  
 
-                    {% include "components/catalog/_card.html.twig" with { 'donnee': occasion, 'key': key } %}
+                    {% include "components/catalog/_card.html.twig" with { 'product': occasion, 'key': key, 'tax': tax } %}
 
                 {% endfor %}
 
@@ -30,7 +30,7 @@
             
             <div class="row mt-5">
                 <div class="col-12 d-flex justify-content-center">
-                    {{ knp_pagination_render(occasions, 'components/pagination.html.twig') }}
+                    {{ knp_pagination_render(occasions, 'components/_pagination.html.twig') }}
                 </div>
             </div>
 

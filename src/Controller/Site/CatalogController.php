@@ -90,7 +90,9 @@ class CatalogController extends AbstractController
             'search' => $search ?? null,
             'partenaires' => $partenaires ?? null,
             'transforms' => $transforms ?? null,
-            'metas' => $metas
+            'metas' => $metas,
+            'tax' => $this->taxRepository->findOneBy([])
+
         ]);
     }
 
@@ -170,7 +172,8 @@ class CatalogController extends AbstractController
             'occasions_totales' => $donneesFromDatabases,
             'transforms' => $transforms ?? null,
             'metas' => $metas,
-            'form' => $form
+            'form' => $form,
+            'tax' => $this->taxRepository->findOneBy([]),
         ]);
     }
 

@@ -1,4 +1,4 @@
-{% extends 'site/base.html.twig' %}
+{% extends 'components/_base.html.twig' %}
 
 {% block title %}{{ document.quoteNumber }}{% endblock %}
 
@@ -130,7 +130,7 @@
             <div class="col-6 text-center">
                 <a href="{{ path('paiement', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-success" >Payer avec {{ app.request.server.get('PAIEMENT_MODULE') }}</a><br/><br/>
                 
-                {% include "components/_logo_paiement_with.html.twig" %}
+                {% include "components/paiement/_logo_paiement_with.html.twig" %}
 
             </div>
 
