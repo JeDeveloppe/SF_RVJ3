@@ -451,30 +451,6 @@ class DocumentService
             "Attachment" => false
         ]);
         exit(0);
-
-
-        // $header = $this->twig->render('site/document_download/2024/_header.html.twig', [
-        //     'legales' => $legales,
-        //     'document' => $document,
-
-        // ]);
-        // $html = $this->twig->render('site/document_download/2024/_document_download.html.twig', [
-        //     'document' => $document,
-        //     'legales' => $legales,
-        //     "docLines" => $document->getDocumentLines(),
-        //     "tva" => $results['tauxTva'],
-        //     "docLine_items" => $results['docLine_items'],
-        //     "docLine_occasions" => $results['docLine_occasions'],
-        //     "docLine_boites" => $results['docLine_boites']
-        // ]);
-        // $footer = $this->twig->render('site/document_download/2024/_totalsTable.html.twig', [
-        //     'document' => $document,
-        //     "tva" => $results['tauxTva'],
-        //     "docLine_items" => $results['docLine_items'],
-        //     "docLine_occasions" => $results['docLine_occasions'],
-        //     "docLine_boites" => $results['docLine_boites']
-        // ]);
-
     }
 
     public function statusChange(Document $document, DocumentStatus $status)

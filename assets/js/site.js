@@ -6,8 +6,8 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import '../styles/css/cookieconsent.css';
 import '../styles/scss/template_bootstrap.scss';
+import '../styles/css/cookieconsent.css';
 import '../styles/scss/site.scss';
 import '../styles/css/animations.css';
 import './toast';
