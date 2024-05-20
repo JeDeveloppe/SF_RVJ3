@@ -60,21 +60,29 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
         }else{
             $disabled = false;
             $required = true;
-            $occasionField = AssociationField::new('occasion')->setLabel('Occasion (toute la bdd)')
-                                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-                                ->setQueryBuilder(
-                                    fn(QueryBuilder $queryBuilder) => 
-                                    $queryBuilder
-                                        // ->where('entity.isOnline = :true')
-                                        // ->setParameter('true', true)
-                                        ->orderBy('entity.reference', 'ASC')
-                                )->setDisabled($disabled);
+
+            if($this->requestStack->getCurrentRequest()->get('crudAction') == 'new'){
+
+                $occasionField = AssociationField::new('occasion')->setLabel('Occasion (peut être en réservé)')
+                                    ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                                    ->setQueryBuilder(
+                                        fn(QueryBuilder $queryBuilder) => 
+                                        $queryBuilder
+                                            ->where('entity.isOnline = :true')
+                                            //TODO
+                                            // ->orWhere('entity.reserve = :true')
+                                            ->setParameter('true', true)
+                                            ->orderBy('entity.reference', 'ASC')
+                                    )->setDisabled($disabled)->onlyOnForms();
+            }else{
+                $occasionField = AssociationField::new('occasion')->setLabel('Occasion')->setDisabled($disabled)->onlyOnIndex();
+            }
         }
 
         return [
             DateTimeField::new('movementTime')
                 ->setLabel('Date de mouvement')
-                ->setFormat('dd-MM-yyy à HH:mm' )->setDisabled($disabled),
+                ->setFormat('dd-MM-yyy à HH:mm' )->setDisabled($disabled)->setRequired(true),
             TextField::new('placeOfTransaction')->setLabel('Lieu de vente/ don:')->setRequired($required)->setDisabled($disabled),
             $occasionField,
             IntegerField::new('movementPrice')
@@ -82,9 +90,6 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
                 ->setTextAlign('center')->setDisabled($disabled),
             AssociationField::new('user')
                 ->setLabel('Acheteur')
-                // ->setFormTypeOption('choice_label', function($item) {
-                //     return $item->getEmail();
-                // })
                 ->setQueryBuilder(
                     fn(QueryBuilder $queryBuilder) => 
                     $queryBuilder
@@ -93,7 +98,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
                 ->setFormTypeOption('choice_label', function($item) {
                     return $item->getEmail();
                 })
-                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->setFormTypeOptions(['placeholder' => 'Chercher -> passage'])
                 ->setDisabled($disabled)
                 ->onlyOnForms(),
             AssociationField::new('movement')
@@ -154,13 +159,19 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
             $details['panier_items'] = [];
             $details['occasion'] = $entityInstance->getOccasion();
 
-            $document = $this->documentService->generateDocumentInDatabaseFromSaleDuringAfair($details,$billingAddress,$deliveryAddress,$entityInstance);
+            //$this->documentService->generateDocumentInDatabaseFromSaleDuringAfair($details,$billingAddress,$deliveryAddress,$entityInstance);
 
             $user = $this->security->getUser();
             $entityInstance->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user);
             $entityManager->persist($entityInstance);
 
             $occasion = $entityInstance->getOccasion();
+
+            $reserve = $occasion->getReserve();
+            if($reserve){
+                $reserve->removeOccasion($occasion);
+            }
+
             $occasion->setIsOnline(false)->setOffSiteOccasionSale($entityInstance);
             $entityManager->persist($occasion);
 

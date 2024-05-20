@@ -43,6 +43,7 @@ class ShippingMethodCrudController extends AbstractCrudController
     {
         return $actions
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->remove(Crud::PAGE_DETAIL, Action::DELETE)
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
         
     }

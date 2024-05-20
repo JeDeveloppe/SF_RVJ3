@@ -42,7 +42,7 @@ class MovementOccasionCrudController extends AbstractCrudController
     {
         return $actions
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
+            ->remove(Crud::PAGE_DETAIL, Action::DELETE);
         
     }
 }
