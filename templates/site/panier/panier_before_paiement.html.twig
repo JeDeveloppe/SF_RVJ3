@@ -5,10 +5,23 @@
 {% block body %}
 
     <h1 class="col-12 text-center h2 mt-5">Panier</h1>
-    <div class="col-12 text-center h4 mb-5 small">[Vérification]</div>
 
-    <div class="col-11 mx-auto">
-        <a href="{{ path('panier_start') }}" class="btn btn-outline-primary mx-auto"><i class="fa-solid fa-backward-fast"></i> Recommencer</a>
+    <div class="row mt-5 mb-3 align-items-center">
+        <div class="col-4 text-center">
+            <div class="card bg-success text-white p-2">Panier</div>
+        </div>
+        <div class="col-4 text-center">
+            <div class="card bg-success text-white p-2">Adresses</div>
+        </div>
+        <div class="col-4 text-center">
+            <div class="card bg-secondary p-2">Confirmation</div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center my-5">
+        <div class="col-11 text-center">
+            <a href="{{ path('panier_start') }}" class="btn btn-outline-primary mx-auto"><i class="fa-solid fa-backward-fast"></i> Recommencer</a>
+        </div>
     </div>
 
 

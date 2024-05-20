@@ -7,10 +7,10 @@
     <h1 class="col-12 text-center my-5">Faire un don</h1>
 
     <p class="col-12 text-center lead">Vous souhaitez soutenir financièrement le projet ?</p>
-    <div class="row justify-content-center">
 
+    <div class="row justify-content-center my-5">
 
-        <div class="accordion my-5 col-11 mx-auto" id="accordionExample">
+        <div class="accordion col-11 col-md-9 mx-auto" id="accordionExample">
 
                     {% if app.request.server.get('PAIEMENT_MODULE') == 'PAYPLUG' %}
 
@@ -68,10 +68,11 @@
             </div>
         </div>
 
-
-
-    {% include "site/project/components/_link-to-formulaire.html.twig" %}
-
     </div>
 
+    <div class="row justify-content-center my-5">
+
+        {% include "site/project/components/_link_to_contact_page.html.twig" %}
+
+    </div>
 {% endblock %}

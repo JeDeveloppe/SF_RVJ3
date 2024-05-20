@@ -6,29 +6,31 @@
 
     <h1 class="col-12 text-center h2 mt-5">Panier</h1>
 
-    <div class="row mt-5">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active" aria-current="page">Panier</li>
-                <li class="breadcrumb-item"><a href="#">Livraison et facturation</a></li>
-                <li class="breadcrumb-item"><a href="#">Résumer</a></li>
-            </ol>
-        </nav>
+    <div class="row mt-5 mb-3 align-items-center">
+        <div class="col-4 text-center">
+            <div class="card bg-secondary p-2">Panier</div>
+        </div>
+        <div class="col-4 text-center">
+            <div class="card p-2">Adresses</div>
+        </div>
+        <div class="col-4 text-center">
+            <div class="card p-2">Confirmation</div>
+        </div>
     </div>
 
-    <div class="row justify-content-center bg-primary rounded-2">
+    <div class="row justify-content-center bg-primary rounded-2 py-4">
 
-        <div class="col-11 col-md-10 mx-auto mb-5">
+        <div class="col-11 col-md-10 mb-3">
             {% include "components/panier/_table_items.html.twig" with {'donnees': items } %}
         </div>
 
-        <div class="col-11 col-md-10 mx-auto mb-5">
+        <div class="col-11 col-md-10 mb-3">
             {% include "components/panier/_table_occasions.html.twig" with {'donnees': occasions } %}
         </div>
 
         <div id="shippingAndVoucherFormReturnUp" class="col-12"></div>
 
-        <div class="col-11 col-md-9 mx-auto mb-5 bg-white rounded-2">
+        <div class="col-11 col-md-9 bg-white rounded-2">
             {% include "components/panier/_shippingMethodWithVoucherDiscount.html.twig" %}
         </div>
 
@@ -109,12 +111,14 @@
 
         </div>
 
-        <div class="col-10 col-md-9 mx-auto d-flex justify-content-center">
+        <div class="col-10 col-md-9 mx-auto d-flex justify-content-center my-5">
             <a class="btn btn-outline-primary mx-auto" href="{{ path('panier_addresses') }}">Choisir les adresses <i class="fa-solid fa-forward-step"></i></a>
         </div>
+
     {% else %}
-        <div class="col-10 col-md-9 mx-auto d-flex justify-content-center mt-4">
-            <a class="btn btn-outline-primary mx-auto" href="#shippingAndVoucherFormReturnUp">Destination du panier non choisi... <i class="fa-solid fa-caret-up"></i></a>
+
+        <div class="col-10 col-md-9 mx-auto d-flex justify-content-center my-5">
+            <a class="btn btn-outline-info mx-auto" href="#shippingAndVoucherFormReturnUp">Destination du panier non choisi... <i class="fa-solid fa-caret-up"></i></a>
         </div> 
     {% endif %}
 

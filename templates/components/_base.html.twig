@@ -33,13 +33,14 @@
         {% include "components/_navbar.html.twig" %}
 
 
-        <div class="container px-2">
+        <div class="container base-container">
 
             {% include "components/_marquee.html.twig" %}
 
             {% include "components/_flash_message.html.twig" %}
 
             {% block body %}{% endblock %}
+
         </div>
 
         {% include "components/_footer.html.twig" %}

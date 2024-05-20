@@ -6,7 +6,7 @@
 
     <h1 class="col-12 text-center my-5">Adhérer à l'association</h1>
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center my-5">
 
         <div class="col-11 text-center mb-4">
             <p class="fs-4">{{ metas.description }}</p>
@@ -36,8 +36,12 @@
             <p class="fs-6"><a class="btn btn-lg btn-outline-info" href="https://www.helloasso.com/associations/refaites-vos-jeux/adhesions/formulaire-d-adhesion-a-l-association-refaites-vos-jeux" target="_blank">L’adhésion se fait via notre compte Helloasso.</a></p>
         </div>
 
-    {% include "site/project/components/_link-to-formulaire.html.twig" %}
-
     </div>
 
+    <div class="row justify-content-center my-5">
+
+        {% include "site/project/components/_link_to_contact_page.html.twig" %}
+
+    </div>
+    
 {% endblock %}
