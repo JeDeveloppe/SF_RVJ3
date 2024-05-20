@@ -13,6 +13,7 @@ use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DocumentParametreRepository;
+use App\Repository\LevelRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -28,7 +29,8 @@ class UserService
         private AddressRepository $addressRepository,
         private PartnerRepository $partnerRepository,
         private DocumentParametreRepository $documentParametreRepository,
-        private Security $security
+        private Security $security,
+        private LevelRepository $levelRepository
         ){
     }
 
@@ -49,6 +51,7 @@ class UserService
             ->setEmail($_ENV['ADMIN_EMAIL'])
             ->setRoles(['ROLE_SUPER_ADMIN'])
             ->setNickname('Je Développe')
+            ->setLevel($this->levelRepository->findOneBy(['nameInDatabase' => 'ROLE_SUPER_ADMIN' ]))
             ->setPhone($_ENV['ADMIN_PHONE'])
             ->setCountry($this->countryRepository->findOneBy(['isocode' => 'FR']))
             ->setPassword(
@@ -198,12 +201,15 @@ class UserService
         switch($arrayClient['userLevel']){
             case 4:
                 $role = ['ROLE_ADMIN'];
+                $level = $this->levelRepository->findOneBy(['nameInDatabase' => 'ROLE_ADMIN' ]);
                 break;
             case 5:
                 $role = ['ROLE_SUPER_ADMIN'];
+                $level = $this->levelRepository->findOneBy(['nameInDatabase' => 'ROLE_SUPER_ADMIN' ]);
                 break;
             default:
                 $role = ['ROLE_USER'];
+                $level = $this->levelRepository->findOneBy(['nameInDatabase' => 'ROLE_USER' ]);
         };
         
 
@@ -211,6 +217,7 @@ class UserService
                 ->setRvj2Id($arrayClient['idClient'])
                 ->setPassword($arrayClient['password'])
                 ->setRoles($role)
+                ->setLevel($level)
                 ->setNickname($pseudo)
                 ->setPhone($arrayClient['telephone'])
                 ->setMembership($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayClient['isAssociation']))

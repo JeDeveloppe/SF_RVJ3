@@ -3,9 +3,12 @@
 namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\User;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
@@ -13,15 +16,24 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class UserCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
         return User::class;
+    }
+
+    public function __construct(
+        private Security $security
+    )
+    {
     }
 
     public function configureFields(string $pageName): iterable
@@ -34,6 +46,7 @@ class UserCrudController extends AbstractCrudController
             IdField::new('id')->setLabel('Identifiant RVJ3')->setDisabled(true)->onlyOnForms(),
             AssociationField::new('level')
                 ->setLabel('Role')
+                ->setPermission('ROLE_ADMIN')
                 ->setFormTypeOptions(['attr' => ['placeholder' => 'Choisir un rôle']]),
             TextField::new('email')->setLabel('Adresse email')->setDisabled(true),
             TextField::new('nickname')->setLabel('Pseudo (pour les admins)')->onlyOnForms()->setFormTypeOptions(['attr' => ['placeholder' => 'Uniquement pour un admin...']]),
@@ -79,12 +92,31 @@ class UserCrudController extends AbstractCrudController
     {
         if ($entityInstance instanceof User) {
             
+            if(is_null($entityInstance->getLevel())){
+                $role = 'ROLE_USER';
+                $nickname = 'ROLE_USER #'.$entityInstance->getId();
+            }else{
+                $role = $entityInstance->getLevel()->getNameInDatabase();
+                $nickname = $entityInstance->getLevel()->getName().'#'.$entityInstance->getId();
+            }
+
             $roleMax = [];
-            $roleMax[] = $entityInstance->getLevel()->getNameInDatabase();
-            $entityInstance->setRoles($roleMax)->setNickname($entityInstance->getLevel()->getName().'#'.$entityInstance->getId());
+            $roleMax[] = $role;
+            $entityInstance->setRoles($roleMax)->setNickname($nickname);
 
             $entityManager->persist($entityInstance);
             $entityManager->flush();
         }
+    }
+
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder 
+    { 
+        $user = $this->security->getUser();
+
+        $response = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters); 
+        if(in_array('ROLE_BENEVOLE',$user->getRoles())){
+            $response->join('entity.level', 'l')->where("l.nameInDatabase = 'ROLE_USER'")->where("l.nameInDatabase = 'ROLE_BENEVOLE'"); 
+        }
+        return $response; 
     }
 }

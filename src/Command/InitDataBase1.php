@@ -6,6 +6,7 @@ use App\Service\CityService;
 use App\Service\CountryService;
 use App\Service\DepartmentService;
 use App\Service\DocumentParametreService;
+use App\Service\LevelService;
 use App\Service\UserService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -22,7 +23,8 @@ class InitDataBase1 extends Command
             private CountryService $countryService,
             private DocumentParametreService $documentParametreService,
             private DepartmentService $departmentService,
-            private CityService $cityService
+            private CityService $cityService,
+            private LevelService $levelService
         )
     {
         parent::__construct();
@@ -40,20 +42,21 @@ class InitDataBase1 extends Command
         $this->countryService->addCountries();
         
         //ON CREE OU ON MET A JOUR L'ADMIN
+        $this->levelService->addLevels($io);
         $this->userService->initForProd_adminUser($io);
 
         //ON INJECTE les parametres des documents
-        $this->documentParametreService->initDocumentParametre($io);
+        // $this->documentParametreService->initDocumentParametre($io);
 
         // on importe les clients
         $this->userService->importClients($io);
 
         //on importe les departementss
-        $this->departmentService->importDepartements($io);
+        // $this->departmentService->importDepartements($io);
 
         //on importe les villes francaises
-        $this->cityService->importCitiesOfFrance($io);
-        $this->cityService->importCitiesOfBelgique($io);
+        // $this->cityService->importCitiesOfFrance($io);
+        // $this->cityService->importCitiesOfBelgique($io);
 
         return Command::SUCCESS;
     }

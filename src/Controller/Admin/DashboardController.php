@@ -257,7 +257,7 @@ class DashboardController extends AbstractDashboardController
         // yield MenuItem::linkToCrud('Liste des totaux', 'fas fa-list', DocumentLineTotals::class)->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Gestion des utilisateurs:')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Liste des clients', 'fas fa-list', User::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des clients', 'fas fa-list', User::class)->setPermission('ROLE_BENEVOLE');
         yield MenuItem::linkToCrud('Liste des adresses', 'fas fa-list', Address::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Liste des roles', 'fa-solid fa-gear', Level::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Chgmts de mdp', 'fas fa-list', ResetPassword::class)
