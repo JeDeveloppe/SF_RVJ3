@@ -30,7 +30,7 @@ class BenefitCrudController extends AbstractCrudController
     {
         return $crud
             ->showEntityActionsInlined()
-            ->setPageTitle('index', 'Liste des préstations')
+            ->setPageTitle('index', 'Liste des prestations (visible sur le site)')
             ->setPageTitle('new', 'Nouvelle préstation')
             ->setPageTitle('edit', 'Édition d\'un préstation')
             ->setDefaultSort(['id' => 'ASC'])

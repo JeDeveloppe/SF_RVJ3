@@ -31,7 +31,7 @@ class ConditionOccasionCrudController extends AbstractCrudController
     {
         return $crud
             ->showEntityActionsInlined()
-            ->setPageTitle('index', 'Liste des états')
+            ->setPageTitle('index', 'Liste des états (pièces,boite,règle)')
             ->setPageTitle('new', 'Nouvel état')
             ->setPageTitle('edit', 'Édition d\'un état')
 

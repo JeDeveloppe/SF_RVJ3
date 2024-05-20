@@ -31,9 +31,9 @@ class MovementOccasionCrudController extends AbstractCrudController
     {
         return $crud
             ->showEntityActionsInlined()
-            ->setPageTitle('index', 'Liste des mouvements')
-            ->setPageTitle('new', 'Nouveau mouvement')
-            ->setPageTitle('edit', 'Édition d\un moouvement')
+            ->setPageTitle('index', 'Mouvements des occasions')
+            ->setPageTitle('new', 'Nouveau mouvement d\'occasion')
+            ->setPageTitle('edit', 'Édition d\un mouvement')
 
         ;
     }
