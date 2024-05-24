@@ -183,4 +183,17 @@ class UtilitiesService
 
         return [$disabled,$disabledAfterBilling];
     }
+
+    public function generateAccountNumber(int $id)
+    {
+
+        $accountTag = 'C';
+
+        $accountTagLength = 9;
+        $idLength = strlen($id);
+        $zeros = str_repeat("0", $accountTagLength - $idLength);
+
+        return $accountTag.$zeros.$id;
+
+    }
 }

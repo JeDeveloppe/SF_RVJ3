@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bccbfadd8665ea2301f8a62afc88e46a",
+    "content-hash": "4d23b1e17148a0121d9fbfa5de781da7",
     "packages": [
         {
             "name": "amenadiel/jpgraph",
@@ -8208,21 +8208,22 @@
         },
         {
             "name": "symfony/ux-autocomplete",
-            "version": "v2.13.3",
+            "version": "v2.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-autocomplete.git",
-                "reference": "6e2a25a580eda54903905e90097e4384c77d960d"
+                "reference": "b2c3c4302bc5b0062b3e8891460321fe694c466d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/6e2a25a580eda54903905e90097e4384c77d960d",
-                "reference": "6e2a25a580eda54903905e90097e4384c77d960d",
+                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/b2c3c4302bc5b0062b3e8891460321fe694c466d",
+                "reference": "b2c3c4302bc5b0062b3e8891460321fe694c466d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
                 "symfony/dependency-injection": "^6.3|^7.0",
+                "symfony/deprecation-contracts": "^2.5|^3",
                 "symfony/http-foundation": "^6.3|^7.0",
                 "symfony/http-kernel": "^6.3|^7.0",
                 "symfony/property-access": "^6.3|^7.0",
@@ -8234,7 +8235,7 @@
             "require-dev": {
                 "doctrine/collections": "^1.6.8|^2.0",
                 "doctrine/doctrine-bundle": "^2.4.3",
-                "doctrine/orm": "^2.9.4",
+                "doctrine/orm": "^2.9.4|^3.0",
                 "fakerphp/faker": "^1.22",
                 "mtdowling/jmespath.php": "^2.6",
                 "symfony/form": "^6.3|^7.0",
@@ -8249,7 +8250,7 @@
                 "symfony/uid": "^6.3|^7.0",
                 "twig/twig": "^2.14.7|^3.0.4",
                 "zenstruck/browser": "^1.1",
-                "zenstruck/foundry": "^1.33"
+                "zenstruck/foundry": "1.37.*"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -8279,7 +8280,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-autocomplete/tree/v2.13.3"
+                "source": "https://github.com/symfony/ux-autocomplete/tree/v2.17.0"
             },
             "funding": [
                 {
@@ -8295,7 +8296,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-12T21:55:15+00:00"
+            "time": "2024-04-19T06:36:45+00:00"
         },
         {
             "name": "symfony/ux-toggle-password",

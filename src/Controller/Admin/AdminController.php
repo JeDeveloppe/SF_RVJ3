@@ -2,18 +2,19 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\SiteSetting;
+use App\Form\AddressType;
+use App\Form\ManualInvoiceType;
 use App\Repository\UserRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DocumentStatusRepository;
 use App\Repository\LegalInformationRepository;
 use App\Repository\PaymentRepository;
+use App\Repository\ReserveRepository;
 use App\Repository\SiteSettingRepository;
 use App\Service\DocumentService;
 use App\Service\MailService;
 use App\Service\PaiementService;
-use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,6 +34,7 @@ class AdminController extends AbstractController
         private PaiementService $paiementService,
         private SiteSettingRepository $siteSettingRepository,
         private UserRepository $userRepository,
+        private ReserveRepository $reserveRepository
     )
     {
     }
@@ -100,4 +102,40 @@ class AdminController extends AbstractController
         return new Response('TERMINER: tous les paiements sur HelloAsso ont été mis à jour ! (100% de réussite)');
 
     }
+
+
+
+
+    // #[Route('/admin/creation-facture-manuelle/', name: 'admin_manual_invoice_billing_address')]
+    // public function manualInvoiceBillingAddress(Request $request): Response
+    // {
+    //     $session = $request->getSession();
+
+    //     if(is_null($session->get('step_manual_invoice'))){
+
+    //         $this->addFlash('warning', 'Réservation inconnue !');
+    //         return $this->redirectToRoute('admin');
+
+    //     }else{
+
+    //         $reserve = $this->reserveRepository->find($session->get('step_manual_invoice'));
+
+    //         if(!$reserve){
+
+    //             $this->addFlash('warning', 'Réservation inconnue !');
+    //             return $this->redirectToRoute('admin');
+    
+    //         }else{
+
+    //             $form = $this->createForm(AddressType::class);
+    //             $form->handleRequest($request);
+
+    //             return $this->render('admin/manual_invoice/address.html.twig', [
+    //                 'reserve' => $reserve,
+    //                 'form' => $form
+    //             ]);
+    //         }
+
+    //     }
+    // }
 }

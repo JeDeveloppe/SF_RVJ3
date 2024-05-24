@@ -51,6 +51,7 @@ class UserService
             ->setEmail($_ENV['ADMIN_EMAIL'])
             ->setRoles(['ROLE_SUPER_ADMIN'])
             ->setNickname('Je Développe')
+            ->setAccountnumber('init')
             ->setLevel($this->levelRepository->findOneBy(['nameInDatabase' => 'ROLE_SUPER_ADMIN' ]))
             ->setPhone($_ENV['ADMIN_PHONE'])
             ->setCountry($this->countryRepository->findOneBy(['isocode' => 'FR']))
@@ -61,6 +62,10 @@ class UserService
                     )
                 );
 
+        $this->em->persist($user);
+        $this->em->flush();
+
+        $user->setAccountnumber($this->utilitiesService->generateAccountNumber($user->getId()));
         $this->em->persist($user);
         $this->em->flush();
 
@@ -76,6 +81,7 @@ class UserService
             ->setLastvisite(new DateTimeImmutable('now'))
             ->setEmail('client_de_passage@refaitesvosjeux.fr')
             ->setRoles(['ROLE_USER'])
+            ->setAccountnumber('init')
             ->setPhone(0000000000)
             ->setCountry($this->countryRepository->findOneBy(['isocode' => 'FR']))
             ->setPassword(
@@ -86,6 +92,10 @@ class UserService
                 );
 
         $this->em->persist($user);
+        $this->em->flush();
+
+        $member = $this->generateAccountNumber($user);
+        $this->em->persist($member);
         $this->em->flush();
 
         $io->success('Admin créé / mise à jour!');
@@ -173,6 +183,21 @@ class UserService
 
         $io->progressFinish();
         $io->success('Importation terminée');
+
+        $io->title('Création du numéro client');
+
+        $users = $this->userRepository->findAll();
+        $io->progressStart(count($users));
+
+        foreach($users as $member){
+            $user = $this->generateAccountNumber($member);
+            $this->em->persist($user);
+            $io->progressAdvance();
+        }
+        $this->em->flush();
+
+        $io->progressFinish();
+        $io->success('Importation terminée');
     }
 
     //lecture des fichiers exportes dans le dossier import
@@ -218,6 +243,7 @@ class UserService
                 ->setPassword($arrayClient['password'])
                 ->setRoles($role)
                 ->setLevel($level)
+                ->setAccountnumber('init')
                 ->setNickname($pseudo)
                 ->setPhone($arrayClient['telephone'])
                 ->setMembership($this->utilitiesService->getDateTimeImmutableFromTimestamp($arrayClient['isAssociation']))
@@ -252,6 +278,7 @@ class UserService
             ->setLastvisite(new DateTimeImmutable('now'))
             ->setEmail($_ENV['UNDEFINED_USER_EMAIL'])
             ->setRoles(['ROLE_USER'])
+            ->setAccountnumber('init')
             ->setNickname('Undefined_user')
             ->setPhone(0000000000)
             ->setCountry($this->countryRepository->findOneBy(['isocode' => 'FR']))
@@ -264,6 +291,19 @@ class UserService
 
         $this->em->persist($user);
         $this->em->flush();
+
+        $member = $this->generateAccountNumber($user);
+        $this->em->persist($member);
+        $this->em->flush();
+
         $io->success('Création undéfined user ok');
+    }
+
+    public function generateAccountNumber(User $user)
+    {
+        $user->setAccountnumber($this->utilitiesService->generateAccountNumber($user->getId()));
+
+        return $user;
+
     }
 }

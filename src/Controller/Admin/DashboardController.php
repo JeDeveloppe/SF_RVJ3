@@ -14,9 +14,11 @@ use App\Entity\Media;
 use App\Entity\Editor;
 use DateTimeImmutable;
 use App\Entity\Address;
+use App\Entity\Benefit;
 use App\Entity\Country;
 use App\Entity\Partner;
 use App\Entity\Payment;
+use App\Entity\Reserve;
 use App\Entity\Delivery;
 use App\Entity\Discount;
 use App\Entity\Document;
@@ -47,20 +49,20 @@ use App\Repository\ItemRepository;
 use App\Repository\UserRepository;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Returndetailstostock;
+use App\Repository\PanierRepository;
 use App\Entity\BadgeForMediaTimeline;
-use App\Entity\Benefit;
-use App\Entity\Reserve;
+use App\Form\ManualInvoiceType;
 use App\Repository\PaymentRepository;
+use App\Repository\ReserveRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SiteSettingRepository;
 use App\Repository\ResetPasswordRepository;
 use App\Repository\DocumentStatusRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\OffSiteOccasionSaleRepository;
-use App\Repository\PanierRepository;
-use App\Repository\ReserveRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -203,8 +205,7 @@ class DashboardController extends AbstractDashboardController
 
     public function configureDashboard(): Dashboard
     {
-        return Dashboard::new()
-            ->setTitle('RVJ3');
+        return Dashboard::new()->setTitle('RVJ3');
     }
 
     public function configureMenuItems(): iterable

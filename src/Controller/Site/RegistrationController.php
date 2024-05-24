@@ -6,6 +6,7 @@ use App\Entity\User;
 use DateTimeImmutable;
 use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
+use App\Service\UtilitiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,13 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 class RegistrationController extends AbstractController
 {
     #[Route('/inscription', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function register(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        UserAuthenticatorInterface $userAuthenticator,
+        UserAuthenticator $authenticator,
+        EntityManagerInterface $entityManager,
+        UtilitiesService $utilitiesService): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -35,6 +42,7 @@ class RegistrationController extends AbstractController
             $user->setCreatedAt(new DateTimeImmutable('now'))
             ->setLastvisite(new DateTimeImmutable('now'))
             ->setRoles(['ROLE_USER'])
+            ->setAccountnumber('init')
             ->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -45,6 +53,9 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
+            $user->setAccountnumber($utilitiesService->generateAccountNumber($user->getId()));
+            $entityManager->persist($user);
+            $entityManager->flush();
 
             return $userAuthenticator->authenticateUser(
                 $user,

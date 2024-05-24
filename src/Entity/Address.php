@@ -41,7 +41,6 @@ class Address
     #[ORM\Column(nullable:true)]
     private ?int $rvj2id = null;
 
-
     public function getId(): ?int
     {
         return $this->id;
@@ -147,4 +146,5 @@ class Address
     {
         return $this->organization.' '.$this->lastname.' '.$this->firstname.' '.$this->street.' '.$this->city;
     }
+
 }

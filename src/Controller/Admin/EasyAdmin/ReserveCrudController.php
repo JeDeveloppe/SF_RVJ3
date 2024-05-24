@@ -9,10 +9,14 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ReserveCrudController extends AbstractCrudController
 {
@@ -23,7 +27,9 @@ class ReserveCrudController extends AbstractCrudController
 
     public function __construct(
         private Security $security,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private RequestStack $requestStack,
+        private AdminUrlGenerator $adminUrlGenerator
     )
     {
     }
@@ -33,6 +39,10 @@ class ReserveCrudController extends AbstractCrudController
         $someRepository = $this->em->getRepository(Occasion::class);
 
         return [
+            AssociationField::new('user', 'Client')
+                ->setQueryBuilder(
+                    fn(QueryBuilder $queryBuilder) => 
+                    $queryBuilder)->setFormTypeOptions(['placeholder' => 'Client / compte...'])->setRequired(false),
             AssociationField::new('occasions')
             ->setLabel('Occasions à mettre de côter:')
             ->setQueryBuilder(
@@ -70,6 +80,18 @@ class ReserveCrudController extends AbstractCrudController
             ->setDefaultSort(['id' => 'DESC'])
             ->setSearchFields(['occasions.reference'])
         ;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {       
+        $approveAction = Action::new('approve')
+        ->addCssClass('btn btn-success')
+        ->setIcon('fa fa-check-circle')
+        ->linkToCrudAction('admin_manual_invoice_start', ['reserveId' => $this->requestStack->getCurrentRequest()->get('entityId')]);
+
+        return $actions
+            ->add(Crud::PAGE_EDIT, $approveAction);
+        
     }
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void

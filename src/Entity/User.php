@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Un compte avec cet email existe déjà !!')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -98,6 +98,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'updatedBy', targetEntity: Boite::class)]
     private Collection $boitesUpdated;
+
+    #[ORM\Column(length: 10)]
+    private ?string $accountnumber = null;
 
     public function __construct()
     {
@@ -363,7 +366,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString()
     {
-        return $this->nickname ?? 'User #'.$this->id;
+        return $this->accountnumber.' # '.$this->email;
     }
 
     /**
@@ -704,6 +707,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $boitesUpdated->setUpdatedBy(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAccountnumber(): ?string
+    {
+        return $this->accountnumber;
+    }
+
+    public function setAccountnumber(string $accountnumber): static
+    {
+        $this->accountnumber = $accountnumber;
 
         return $this;
     }

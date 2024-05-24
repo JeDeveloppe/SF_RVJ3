@@ -31,6 +31,9 @@ class Reserve
     #[ORM\OneToMany(mappedBy: 'reserve', targetEntity: Occasion::class)]
     private Collection $occasions;
 
+    #[ORM\ManyToOne(inversedBy: 're')]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
@@ -107,4 +110,17 @@ class Reserve
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
 }
