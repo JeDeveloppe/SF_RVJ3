@@ -96,7 +96,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
                     ->orderBy('entity.email', 'ASC')
                 )
                 ->setFormTypeOption('choice_label', function($item) {
-                    return $item->getEmail();
+                    return $item->getAccountNumber().' # '.$item->getEmail();
                 })
                 ->setFormTypeOptions(['placeholder' => 'Chercher -> passage'])
                 ->setDisabled($disabled)
@@ -123,6 +123,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Nouveau mouvement d\'un occasion')
             ->setPageTitle('edit', 'Édition d\'un mouvement occasion')
             ->setDefaultSort(['createdAt' => 'DESC'])
+            ->setEntityLabelInSingular('Nouveau mouvement')
         ;
     }
 

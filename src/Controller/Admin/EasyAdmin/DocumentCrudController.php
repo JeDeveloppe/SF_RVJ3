@@ -4,7 +4,6 @@ namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\Document;
 use App\Repository\DocumentRepository;
-use phpDocumentor\Reflection\Types\Integer;
 use App\Repository\DocumentStatusRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
