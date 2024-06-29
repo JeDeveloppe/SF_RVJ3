@@ -21,6 +21,22 @@ class CollectionPointRepository extends ServiceEntityRepository
         parent::__construct($registry, CollectionPoint::class);
     }
 
+    public function findOneCollectionPointForOccasionBuy(): ?CollectionPoint
+    {
+        $name = $_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME'];
+
+        return $this->createQueryBuilder('c')
+            ->join('c.shippingmethod', 's')
+            ->where('s.name = :name')
+            ->andWhere('c.isOriginForWebSiteCmds = :val')
+            ->setParameter('val', true)
+            ->setParameter('name', $name)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
 //    /**
 //     * @return CollectionPoint[] Returns an array of CollectionPoint objects
 //     */

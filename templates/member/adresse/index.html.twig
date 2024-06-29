@@ -6,7 +6,7 @@
 
    {% include "member/nav.html.twig" %}
 
-    <div class="h3 mt-3" id="facturation">Mes adresses de facturation</div>
+    <div class="h3 mt-3" id="facturation">Mon adresse de facturation</div>
 
     <div class="row justify-content-around align-items-center">
         {% if facturation_adresses | length >  0 %}
@@ -27,17 +27,14 @@
                 <div class="card-header">Aucune pour le moment...</div>
             </div>
         {% endif %}
-
-        <div class="col-12 col-md-5 text-center">
-            {% if facturation_adresses | length < 2 %}
-                <a class="btn btn-outline-primary mt-3" href="{{ path('adresse_new') }}">Créer une nouvelle adresse (maximum 2)</a>
-            {% else %}
-                <p class="p-2 text-center h5 mt-3">Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
-            {% endif %}
-        </div>
+        {% if facturation_adresses | length < 1 %}
+            <div class="col-12 text-center">
+                <a class="btn btn-outline-primary mt-3" href="{{ path('adresse_new') }}">Créer une nouvelle adresse</a>
+            </div>
+        {% endif %}
     </div>
 
-    <div class="h3 mt-5" id="facturation">Mes adresses de livraison</div>
+    <div class="h3 mt-5" id="facturation">Mon adresse de livraison</div>
 
     <div class="row justify-content-around align-items-center mb-5">
         {% if livraison_adresses | length >  0 %}
@@ -58,13 +55,11 @@
                 <div class="card-header">Aucune pour le moment...</div>
             </div>
         {% endif %}
-        <div class="col-12 col-md-5 text-center">
-            {% if livraison_adresses | length < 2 %}
-                <a class="btn btn-outline-primary mt-3" href="{{ path('adresse_new') }}">Créer une nouvelle adresse (maximum 2)</a>
-            {% else %}
-                <p class="p-2 text-center h5 mt-3">Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
-            {% endif %}
-        </div>
+        {% if livraison_adresses | length < 1 %}
+            <div class="col-12 text-center">    
+                <a class="btn btn-outline-primary mt-3" href="{{ path('adresse_new') }}">Créer une nouvelle adresse</a>
+            </div>
+        {% endif %}
     </div>
   
 

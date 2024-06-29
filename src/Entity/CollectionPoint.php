@@ -38,6 +38,9 @@ class CollectionPoint
     #[ORM\JoinColumn(nullable: false)]
     private ?ShippingMethod $shippingmethod = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isOriginForWebSiteCmds = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -128,6 +131,18 @@ class CollectionPoint
     public function setShippingmethod(?ShippingMethod $shippingmethod): static
     {
         $this->shippingmethod = $shippingmethod;
+
+        return $this;
+    }
+
+    public function isIsOriginForWebSiteCmds(): ?bool
+    {
+        return $this->isOriginForWebSiteCmds;
+    }
+
+    public function setIsOriginForWebSiteCmds(?bool $isOriginForWebSiteCmds): static
+    {
+        $this->isOriginForWebSiteCmds = $isOriginForWebSiteCmds;
 
         return $this;
     }

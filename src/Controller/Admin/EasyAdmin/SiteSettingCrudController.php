@@ -6,6 +6,7 @@ use App\Entity\SiteSetting;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
 class SiteSettingCrudController extends AbstractCrudController
 {
@@ -24,6 +25,7 @@ class SiteSettingCrudController extends AbstractCrudController
             TextareaField::new('fairday')
                 ->setLabel('Texte pour les foires:')
                 ->setFormTypeOptions(['attr' => ['placeholder' => '(laisser vide pour désactiver)']]),
+            IntegerField::new('distanceMaxForOccasionBuy','Distance Max vente Occasion (en kms)')
         ];
     }
 }

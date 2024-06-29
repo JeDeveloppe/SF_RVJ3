@@ -25,7 +25,7 @@ class SiteSettingsService
             $siteSettings = new SiteSetting();
         }
 
-        $siteSettings->setBlockEmailSending(true)->setMarquee(null);
+        $siteSettings->setBlockEmailSending(true)->setMarquee(null)->setDistanceMaxForOccasionBuy(15);
         $this->em->persist($siteSettings);
         $this->em->flush();
 

@@ -37,11 +37,12 @@ class AdresseController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             $user = $security->getUser();
             $isFacturation = $form->get('isFacturation')->getData();
+            $nbrOfAdressesMax = 1;
 
             $adressesFacturation = $this->addressRepository->findBy(['user' => $user, 'isFacturation' => true]);
             $adressesLivraison = $this->addressRepository->findBy(['user' => $user, 'isFacturation' => false]);
 
-            if(count($adressesFacturation) >= 2 && $isFacturation == true || count($adressesLivraison) >= 2 && $isFacturation == false){
+            if(count($adressesFacturation) >= $nbrOfAdressesMax && $isFacturation == true || count($adressesLivraison) >= $nbrOfAdressesMax && $isFacturation == false){
 
                 $this->addFlash('warning', 'Vous avez atteint(e) le nombre maximum d\'adresses !');
 

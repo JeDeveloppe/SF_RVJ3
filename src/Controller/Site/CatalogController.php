@@ -2,21 +2,25 @@
 
 namespace App\Controller\Site;
 
-use App\Form\SearchBoiteInCatalogueType;
-use App\Form\SearchOccasionInCatalogueType;
+use App\Service\PanierService;
+use App\Service\OccasionService;
+use App\Repository\TaxRepository;
 use App\Repository\BoiteRepository;
 use App\Repository\EditorRepository;
-use App\Repository\OccasionRepository;
 use App\Repository\PartnerRepository;
-use App\Repository\TaxRepository;
-use App\Service\OccasionService;
-use App\Service\PanierService;
+use App\Repository\OccasionRepository;
+use App\Form\SearchBoiteInCatalogueType;
+use App\Form\SearchOccasionInCatalogueType;
+use App\Repository\AddressRepository;
+use App\Repository\CollectionPointRepository;
+use App\Repository\SiteSettingRepository;
+use App\Service\AdresseService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Symfony\Bundle\SecurityBundle\Security;
 
 class CatalogController extends AbstractController
 {
@@ -28,7 +32,11 @@ class CatalogController extends AbstractController
         private PartnerRepository $partnerRepository,
         private TaxRepository $taxRepository,
         private PanierService $panierService,
-        private OccasionService $occasionService
+        private OccasionService $occasionService,
+        private AddressRepository $addressRepository,
+        private CollectionPointRepository $collectionPointRepository,
+        private AdresseService $adresseService,
+        private SiteSettingRepository $siteSettingRepository
     )
     {
     }
@@ -178,7 +186,7 @@ class CatalogController extends AbstractController
     }
 
     #[Route('/jeu-occasion/{reference_occasion}/{editor_slug}/{boite_slug}', name: 'occasion')]
-    public function occasion($reference_occasion, $editor_slug): Response
+    public function occasion($reference_occasion, Security $security, $editor_slug): Response
     {
 
         $occasion = $this->occasionRepository->findOneBy(
@@ -193,12 +201,38 @@ class CatalogController extends AbstractController
             return $this->redirectToRoute('app_catalogue_occasions');
         }
 
+        $user = $security->getUser();
+
+        if(!$user){
+
+            $delivery = null;
+
+        }else{
+
+            $deliveryAdresse = $this->addressRepository->findOneBy(['user' => $user, 'isFacturation' => false]);
+            $collectionPoint = $this->collectionPointRepository->findOneCollectionPointForOccasionBuy();
+            $kmsBetweenCollectionPointAndDeliveryAdress = $this->adresseService->get_distance_from_collectePoint($collectionPoint, $deliveryAdresse);
+            
+            $setting = $this->siteSettingRepository->findOneBy([]);
+
+            if($kmsBetweenCollectionPointAndDeliveryAdress < $setting->getDistanceMaxForOccasionBuy()){
+
+                $delivery = true;
+
+            }else{
+
+                $delivery = false;
+
+            }
+        }
+
         $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.$occasion->getBoite()->getName().' - '.$occasion->getBoite()->getEditor()->getName();
 
         return $this->render('site/catalog/occasions/occasion.html.twig', [
             'occasion' => $occasion,
             'tax' => $this->taxRepository->findOneBy([]),
-            'metas' => $metas
+            'metas' => $metas,
+            'delivery' => $delivery
         ]);
     }
 }

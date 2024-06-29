@@ -27,7 +27,8 @@ class CollectionPointCrudController extends AbstractCrudController
             TextField::new('lastname')->setLabel('Prénom:'),
             TextField::new('street')->setLabel('Adresse:'),
             AssociationField::new('city')->setLabel('Ville:')->autocomplete(),
-            BooleanField::new('isActivedInCart')->setLabel('Actif dans le panier:')
+            BooleanField::new('isActivedInCart')->setLabel('Actif dans le panier:'),
+            BooleanField::new('isOriginForWebSiteCmds')->setLabel('Sert d\'origine pour cmd web (distance):'),
         ];
     }
 

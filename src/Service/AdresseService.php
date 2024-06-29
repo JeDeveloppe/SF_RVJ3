@@ -4,6 +4,7 @@ namespace App\Service;
 
 use League\Csv\Reader;
 use App\Entity\Address;
+use App\Entity\CollectionPoint;
 use App\Repository\AddressRepository;
 use App\Repository\CityRepository;
 use App\Repository\CountryRepository;
@@ -164,5 +165,24 @@ class AdresseService
         $this->em->flush();
 
         $io->success('Terminée');
+    }
+
+    //return distance en metre entre 2 points gps
+    public function get_distance_from_collectePoint(CollectionPoint $collectionPoint, Address $deliveryAdresse){
+        $lat1 = $collectionPoint->getCity()->getLatitude();
+        $lng1 = $collectionPoint->getCity()->getLongitude();
+        $lat2 = $deliveryAdresse->getCity()->getLatitude();
+        $lng2 = $deliveryAdresse->getCity()->getLongitude();
+        $earth_radius = 6378137;   // Terre = sphère de 6378km de rayon
+        $rlo1 = deg2rad($lng1);
+        $rla1 = deg2rad($lat1);
+        $rlo2 = deg2rad($lng2);
+        $rla2 = deg2rad($lat2);
+        $dlo = ($rlo2 - $rlo1) / 2;
+        $dla = ($rla2 - $rla1) / 2;
+        $a = (sin($dla) * sin($dla)) + cos($rla1) * cos($rla2) * (sin($dlo) * sin($dlo));
+        $d = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+      return ($earth_radius * $d / 1000);
     }
 }

@@ -31,6 +31,7 @@ class AddressType extends AbstractType
                 ])
             ->add('organization', TextType::class, [
                 'label' => 'Organisation:',
+                'required' => false,
                 'attr' => [
                     'class' => 'form-control'
                 ],

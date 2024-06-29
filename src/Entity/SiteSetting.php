@@ -23,6 +23,9 @@ class SiteSetting
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $fairday = null;
 
+    #[ORM\Column]
+    private ?int $distanceMaxForOccasionBuy = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class SiteSetting
     public function setFairday(?string $fairday): static
     {
         $this->fairday = $fairday;
+
+        return $this;
+    }
+
+    public function getDistanceMaxForOccasionBuy(): ?int
+    {
+        return $this->distanceMaxForOccasionBuy;
+    }
+
+    public function setDistanceMaxForOccasionBuy(int $distanceMaxForOccasionBuy): static
+    {
+        $this->distanceMaxForOccasionBuy = $distanceMaxForOccasionBuy;
 
         return $this;
     }
