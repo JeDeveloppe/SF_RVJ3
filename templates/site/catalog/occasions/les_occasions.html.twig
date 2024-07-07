@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    <h1 class="col-12 text-center mt-5">Les jeux d'occasion</h1>
+    <h1 class="col-12 text-center mt-5">Les jeux <span class="text_violet">d'occasion</span></h1>
     <div class="col-12 text-center h4 text-danger mb-3">Uniquement disponible en retrait sur Caen.</div>
 
 
@@ -14,51 +14,54 @@
 
     {% else %}
         
-        {% include "components/forms/_search_occasion.html.twig" %}
-
-        {% if occasions | length > 0 %}
-
-            <div class="row justify-content-around">
-
-                {% for key,occasion in occasions %}  
-
-                    {% include "components/catalog/_card.html.twig" with { 'product': occasion, 'key': key, 'tax': tax } %}
-
-                {% endfor %}
-
+        <div class="row mt-5">
+            <div class="col-11 col-lg-4">
+                {% include "components/forms/_search_occasion.html.twig" %}
             </div>
-            
-            <div class="row mt-5">
-                <div class="col-12 d-flex justify-content-center">
-                    {{ knp_pagination_render(occasions, 'components/_pagination.html.twig') }}
-                </div>
-            </div>
+            <div class="col-12 col-lg-8 d-flex flex-wrap justify-content-around align-items-stretch">
 
+                {% if occasions | length > 0 %}
 
-            <div class="row mb-5 justify-content-start">
-                <div class="col-12 text-center">{{ occasions_totales | length }} occasions en ligne.</div>
-            </div>
+                        {% if occasions | length > 1 %}
+                            {% set jeu_dispo = 'jeux disponibles' %}
+                        {% else %}
+                            {% set jeu_dispo = 'jeu disponible' %}
+                        {% endif %}
+                        <div class="col-11 fw-bolder mt-5 mt-lg-0">{{ occasions_totales | length }} {{ jeu_dispo }}.</div>
 
-        {% else %}
+                        {% for key,occasion in occasions %}  
 
-            <div class="row">
-                <div class="col-12 text-center">
-                    <p class="h2">Nous n'avons pas de jeux en stock pour le moment.</p>
-                    <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.refaitesvosjeux.fr" target="_blank">Facebook !</a></p>    
-                </div>
-            </div>
-            <div class="row justify-content-start mb-5">
-                {% if partenaires | length > 0 %}
-                    <p class="h5 mt-5 col-12 text-center">Ou tenter votre chance chez l'un de nos partenaires:</p>
+                            {% include "components/catalog/_card.html.twig" with { 'product': occasion, 'key': key, 'tax': tax } %}
 
-                    {% for partenaire in partenaires %}
+                        {% endfor %}
 
-                    {% include "site/components/catalogues/card-partenaire.html.twig" %}
-                        
-                    {% endfor %}
-                </div>
+                        <div class="col-12 d-flex justify-content-center my-5">
+                            {{ knp_pagination_render(occasions, 'components/_pagination.html.twig') }}
+                        </div>
+
+                {% else %}
+
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <p class="h2">Nous n'avons pas de jeux en stock pour le moment.</p>
+                            <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.refaitesvosjeux.fr" target="_blank">Facebook !</a></p>    
+                        </div>
+                    </div>
+                    <div class="row justify-content-start mb-5">
+                        {% if partenaires | length > 0 %}
+                            <p class="h5 mt-5 col-12 text-center">Ou tenter votre chance chez l'un de nos partenaires:</p>
+
+                            {% for partenaire in partenaires %}
+
+                            //TODO 
+                            {% include "site/components/catalogues/card-partenaire.html.twig" %}
+                                
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                 {% endif %}
-        {% endif %}
+            </div>
+        </div>
 
     {% endif %}
 

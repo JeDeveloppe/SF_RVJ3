@@ -25,22 +25,22 @@ class SearchOccasionInCatalogueType extends AbstractType
         $builder
             ->add('search', TextType::class, [
                 'label' => 'Nom:',
-                'required' => true,
+                'required' => false,
                 'attr' => [
                     'placeholder' => 'Nom de jeu OU d\'éditeur...',
                     'class' => 'form-control'
                 ],
-                'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Ne peut pas être vide...',
-                    ]),
-                    new Assert\Length([
-                        'min' => 3,
-                        'minMessage' => 'Minimum {{ limit }} charactères',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 25,
-                    ])
-                ]
+                // 'constraints' => [
+                //     new Assert\NotBlank([
+                //         'message' => 'Ne peut pas être vide...',
+                //     ]),
+                //     new Assert\Length([
+                //         'min' => 3,
+                //         'minMessage' => 'Minimum {{ limit }} charactères',
+                //         // max length allowed by Symfony for security reasons
+                //         'max' => 25,
+                //     ])
+                // ]
             ])
             ->add('playerMin', ChoiceType::class, [
                 'label' => 'Nombre de joueur(s):',

@@ -15,22 +15,6 @@ import './bootstrap.js';
 
 require('bootstrap');
 
-// Navbar effect
-window.onscroll = function() {scrollFunction()};
-
-function scrollFunction() {
-  if (document.body.scrollTop >= 80 || document.documentElement.scrollTop >= 80) {
-    document.getElementById("navbar-top").style.padding = "5px 2px";
-    document.getElementById("navbar-top").classList.remove("mt-3");
-    document.getElementById("logoTop").style.scale = 0.5;
-  } else {
-    document.getElementById("navbar-top").style.padding = "30px 10px";
-    document.getElementById("navbar-top").classList.add("mt-3");
-    document.getElementById("logoTop").style.scale = 1;
-  }
-}
-// End navbar effect
-
 // SEO skill
 document.querySelector('meta[property~="og:title"]').setAttribute("content",document.title);
 document.querySelector('meta[name="description"]').setAttribute("content",document.querySelector('meta[property~="og:description"]').content);

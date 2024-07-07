@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    <h1 class="col-12 mt-5 text-center">Le coin presse</h1>
+    <h1 class="col-12 mt-5 text-center">Le coin <span class="text_violet">presse</span></h1>
 
     <div class="row justify-content-center">
         <div class="col-11 col-md-10 my-4">
@@ -16,7 +16,7 @@
                         <li>
                     {% endif %}
                             <div class="timeline-badge" style="background-color:{{ media.badge.bgcolor }}"><i class="{{ media.badge.text }}"></i></div>
-                            <div class="timeline-panel">
+                            <div class="timeline-panel bg-white rounded-2">
                                 <div class="timeline-heading">
                                 <h5 class="timeline-title">{{ media.title }}</h5>
                                 <p>
@@ -37,7 +37,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="col-11 text-center">
+        <div class="col-11 text-center mb-3">
             <i class="fa-solid fa-2x fa-lightbulb text-info"></i> Création du service en 2020...
         </div>
     </div>

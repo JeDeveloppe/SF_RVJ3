@@ -145,12 +145,12 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-jeux-occasion', name: 'app_catalogue_occasions')]
     public function catalogueOccasions(Request $request): Response
     {
-        $form = $this->createForm(SearchOccasionInCatalogueType::class, null, ['method' => 'GET']);
+        $form = $this->createForm(SearchOccasionInCatalogueType::class);
         $form->handleRequest($request);
 
 
         if($form->isSubmitted() && $form->isValid()) {
-            
+
             $donneesFromDatabases = $this->occasionService->findOccasionsFromOccasionForm($form);
 
         }else{
@@ -166,22 +166,15 @@ class CatalogController extends AbstractController
             24 /*limit per page*/
         );
 
-        //? effet rotation X ou Y aléatoire sur les cards
-        $class_transforms = [['transformX','backX'],['transformY','backY']];
-        for($i=0;$i<count($occasions);$i++){
-            shuffle($class_transforms);
-            $transforms[] = $class_transforms[0];
-        }
-
         $metas['description'] = 'Catalogue complet des jeux d\'occasion disponible à la vente en retrait sur Caen.';
 
         return $this->render('site/catalog/occasions/les_occasions.html.twig', [
             'occasions' => $occasions,
             'occasions_totales' => $donneesFromDatabases,
-            'transforms' => $transforms ?? null,
             'metas' => $metas,
             'form' => $form,
             'tax' => $this->taxRepository->findOneBy([]),
+            'partenaires' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true])
         ]);
     }
 
