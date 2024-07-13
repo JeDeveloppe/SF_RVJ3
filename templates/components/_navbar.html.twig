@@ -40,7 +40,7 @@
             <a class="nav-link text-dark" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
           </li>
         </ul>
-        <ul class="navbar-nav ms-auto me-2">
+        <ul class="navbar-nav ms-auto me-4">
           {% if is_granted('ROLE_USER') %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
@@ -61,12 +61,15 @@
               <a class="nav-link text-dark" href="{{ path('app_register') }}"><i class="fa-solid fa-user-plus"></i></a>
             </li>
           {% endif %}
-          <li class="nav-item">
+          <li class="nav-item me-5">
             {% if is_granted('ROLE_USER') %}
               {% if app.user.paniers | length > 0 %}
-                <a class="nav-link text-dark" href="{{ path('panier_start') }}">Panier ({{ app.user.paniers | length }})</a>
+                <a class="nav-link text-dark" href="{{ path('panier_start') }}">
+                  <img id="cartLogo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier">
+                    <span id="cartValue">{{ app.user.paniers | length }}</span>
+                    </a>
               {% else %}
-                <a class="nav-link text-dark">Panier (0)</a>
+                <a href="#" class="nav-link text-dark"><img id="cartLogo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier"></a>
               {% endif %}
             {% endif %}
           </li>

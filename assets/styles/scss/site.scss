@@ -21,6 +21,22 @@ body{
   scale: 1.5;
 }
 
+#cartLogo{
+  position: absolute;
+}
+#cartValue{
+  border-radius: 50%;
+  background: #FEC538;
+  width: 19px;
+  height: 19px;
+  padding: 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-left: 140%;
+}
+
 #header_info{
   background: #5F4ECB 0% 0% no-repeat padding-box;
   width: 100%;
