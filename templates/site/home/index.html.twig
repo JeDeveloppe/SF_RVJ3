@@ -17,7 +17,10 @@
         </div>
         <div class="col-12 d-flex mt-3">
             <a class="btn btn_juliette btn_juliette_bg_dark" href="{{ path('app_catalogue_occasions') }}">Acheter un jeu</a>
-            <a class="btn btn_juliette btn_juliette_bg_white" href="{{ path('app_catalogue_pieces_detachees') }}">Completer un jeu</br>Livraison possible</a>
+            <a class="btn btn_juliette btn_juliette_bg_white d-flex flex-column" href="{{ path('app_catalogue_pieces_detachees') }}">
+            Completer un jeu</br>
+            <small>Livraison possible</small>
+            </a>
         </div>
 
     </div>
@@ -34,6 +37,7 @@
         <li>Bla bla à faire</li>
     </ul>
 </div>
+
 
 <div class="row justify-content-around py-5 bg-white">
     <div class="col-11 col-sm-5 mb-4 mb-lg-0 col-lg-3 d-flex flex-column ps-5 justify-content-center align-items-center align-items-lg-start">
@@ -80,7 +84,10 @@
     <div class="col-12 mt-4 text-center">
         <img class="index_chess" src="{{ asset('build/images/design/trace_and_chess.png') }}" alt="catalogue des pièces détachées">
     </div>
-    <a class="btn btn_juliette btn_juliette_bg_white mt-3" href="{{ path('app_catalogue_pieces_detachees') }}">Completer un jeu</br>Livraison possible</a>
+    <a class="btn btn_juliette btn_juliette_bg_white mt-3 d-flex flex-column" href="{{ path('app_catalogue_pieces_detachees') }}">
+        Completer un jeu</br>
+        <small>Livraison possible</small>
+    </a>
 
 </div>
 

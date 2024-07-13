@@ -26,14 +26,14 @@
         
     </head>
     <body>
-        {% include "components/_cookies_alert.html.twig" %}
-
-        {% include "components/sharing/facebook/fb_root.html.twig" %}
-            
-        {% include "components/_navbar.html.twig" %}
-
 
         <div class="container-fluid">
+
+            {% include "components/_cookies_alert.html.twig" %}
+
+            {% include "components/sharing/facebook/fb_root.html.twig" %}
+                
+            {% include "components/_navbar.html.twig" %}
 
             {% include "components/_marquee.html.twig" %}
 
@@ -41,9 +41,9 @@
 
             {% block body %}{% endblock %}
 
-        </div>
+            {% include "components/_footer.html.twig" %}
 
-        {% include "components/_footer.html.twig" %}
+        </div>
 
         {{ encore_entry_script_tags('site') }}
 
