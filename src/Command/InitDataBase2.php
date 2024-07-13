@@ -94,7 +94,7 @@ class InitDataBase2 extends Command
         // $this->userService->createUndefinedUser($io);
         // $this->boiteService->createUndefinedBoite($io);
         // $this->adresseService->createRetredAddress($io);
-        $this->shippingMethodService->createShippingMethode($io);
+        // $this->shippingMethodService->createShippingMethode($io);
 
         //on cree les conditions des occasions
         $this->occasionService->addConditions($io);

@@ -31,7 +31,9 @@
 
                         {% for key,occasion in occasions %}  
 
-                            {% include "components/catalog/_cardOccasion.html.twig" with { 'product': occasion, 'key': key, 'tax': tax } %}
+                            <div class="col-9 col-sm-6 col-md-4 mx-md-0 px-3 px-lg-1 my-3">
+                                {% include "components/catalog/_cardOccasion.html.twig" with { 'product': occasion, 'tax': tax } %}
+                            </div>
 
                         {% endfor %}
 

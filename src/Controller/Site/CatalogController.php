@@ -150,7 +150,7 @@ class CatalogController extends AbstractController
     }
 
     #[Route('/catalogue-jeux-occasion', name: 'app_catalogue_occasions')]
-    public function catalogueOccasions(Request $request, Security $security, EntityManagerInterface $em): Response
+    public function catalogueOccasions(Request $request): Response
     {
         $form = $this->createForm(SearchOccasionInCatalogueType::class);
         $form->handleRequest($request);
@@ -257,13 +257,18 @@ class CatalogController extends AbstractController
             }
         }
 
+        $query = $this->occasionRepository->findAleatoireOccasionsByAgeWhitoutThisOccasion($occasion->getBoite()->getAge(), $occasion);
+        shuffle($query); // on mélange
+        $firstElements = array_slice($query, 0, 4); //on prend les 6 premiers apres avoir mélanger
+
         $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.$occasion->getBoite()->getName().' - '.$occasion->getBoite()->getEditor()->getName();
 
         return $this->render('site/catalog/occasions/occasion.html.twig', [
             'occasion' => $occasion,
             'tax' => $this->taxRepository->findOneBy([]),
             'metas' => $metas,
-            'delivery' => $delivery
+            'delivery' => $delivery,
+            'firstElements' => $firstElements
         ]);
     }
 }

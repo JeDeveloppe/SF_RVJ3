@@ -5,7 +5,6 @@ namespace App\Service;
 use League\Csv\Reader;
 use App\Entity\Occasion;
 use App\Entity\MovementOccasion;
-use Symfony\Component\Form\Form;
 use App\Entity\ConditionOccasion;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -60,7 +59,48 @@ class OccasionService
     public function addConditions(SymfonyStyle $io)
     {
 
-        $conditions = ['BON ÉTAT','ÉTAT MOYEN','ORIGINALE','SUR LA BOITE','IMPRIMÉE','COMME NEUF','SANS','NEUF','NEUVE'];
+        $green = '#00BC9D';
+        $orange = '#FDC448';
+        $red = '#E84798';
+
+        $conditions = [
+            [
+                'name' => 'BON',
+                'color' => $green
+            ],
+            [
+                'name' => 'MOYEN',
+                'color' => $orange
+            ],
+            [
+                'name' => 'ORIGINALE',
+                'color' => $green
+            ],
+            [
+                'name' => 'SUR LA BOITE',
+                'color' => $green
+            ],
+            [
+                'name' => 'IMPRIMÉE',
+                'color' => $green
+            ],
+            [
+                'name' => 'COMME NEUF',
+                'color' => $green
+            ],
+            [
+                'name' => 'SANS',
+                'color' => $red
+            ],
+            [
+                'name' => 'NEUF',
+                'color' => $green
+            ],
+            [
+                'name' => 'NEUVE',
+                'color' => $green
+            ]
+            ];
 
         $ventesDons = ['DON','VENTE','INCONNU'];
 
@@ -74,7 +114,7 @@ class OccasionService
                 $condition = new ConditionOccasion();
             }
 
-            $condition->setName($conditionArray);
+            $condition->setName($conditionArray['name'])->setColor($conditionArray['color']);
             $this->em->persist($condition);
 
         }

@@ -4,13 +4,20 @@
 
 {% block body %}
 
-<h1 class="col-12 text-center my-5">Donner ses jeux</h1>
 
-<div class="row justify-content-center">
-    <div class="col-11 col-md-9 col-xl-7">
+
+
+<div class="row justify-content-around">
+    <div class="col-11 col-md-5">
+        <h1 class="col-12 mt-5 text-center"><span class="text_juliette_purple">Donner</span> ses jeux</h1>
+        {{ metas.description }}
+        <a class="btn btn_juliette btn_juliette_bg_dark mt-3" href="#">Trouvez un point de collecte</a>
+    </div>
+    <div class="col-11 col-md-5">
         {{ metas.description }}
     </div>
 </div>
+
 <div class="row justify-content-center my-3">
     <h3 class="h4 col-11 col-md-9 col-xl-7 text-center my-4">Où donner ses jeux ?</h3>
     <ul class="col-11 col-md-9 col-xl-7">
@@ -43,6 +50,7 @@
             </ol>
     </ul>
 </div>
+
 <div class="row justify-content-center mb-5">
     <div class="col-11 col-md-9 col-xl-7 lead text-warning">
     L’association prend en charge les frais de port des personnes et des structures qui sont ambassadrices Refaites vos jeux.
@@ -51,5 +59,23 @@
     Nous vous remercions par avance pour vos dons ! 
     </div>
 </div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+<div class="row bg-white">
+    <h2 class="col-12 mt-5 text-center title_bis mb-4">Envoyer des jeux <span class="text_juliette_purple">par colis</span></h2>
+    <div class="col-4"></div>
+    <div class="col-8 d-flex">
+        <div class="col-6">
+            <h4>LA POSTE</h4>
+        
+        </div>
+        <div class="col-6">
+            <h4>MONDIAL RELAY</h4>
+        </div>
+    </div>
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
 
 {% endblock %}

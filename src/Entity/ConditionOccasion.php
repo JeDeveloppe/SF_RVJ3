@@ -27,6 +27,9 @@ class ConditionOccasion
     #[ORM\OneToMany(mappedBy: 'gameRule', targetEntity: Occasion::class)]
     private Collection $gameRules;
 
+    #[ORM\Column(length: 15, nullable: true)]
+    private ?string $color = null;
+
     public function __construct()
     {
         $this->boxConditions = new ArrayCollection();
@@ -144,5 +147,17 @@ class ConditionOccasion
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): static
+    {
+        $this->color = $color;
+
+        return $this;
     }
 }

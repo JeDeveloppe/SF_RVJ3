@@ -1,24 +1,31 @@
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 
-<p class="col-12">
-    {% include "components/catalog/_durationOfTheGame.html.twig" with {'item': occasion.boite }%}<br/>
-    {% include "components/catalog/_players&age.html.twig" with {'item': occasion.boite }%}<br/>
+<div class="col-12 d-flex flex-column mt-2">
+    {% include "components/catalog/_durationOfTheGame.html.twig" with {'item': occasion.boite }%}
+    {% include "components/catalog/_players&age.html.twig" with {'item': occasion.boite }%}
     {% if 'panier' not in currentPath %}
         {% if occasion.boite.linktopresentationvideo is not null %}
                 <a class="text-decoration-none" href="{{ occasion.boite.linktopresentationvideo }}" target="_blank"><i class="fa-solid fa-video"></i> Voir la vidéo de présentation.</a>
         {% endif %}
     {% endif %}
-</p>
-<p>
-    État de la boite: {{ occasion.boxCondition }}<br/>
-    État du matériel: {{ occasion.equipmentCondition }}<br/>
-    Règle du jeu: {{ occasion.gameRule }}<br/>
+    {% include "components/catalog/_displayPriceLogic.html.twig" with {'product': occasion,'tax': tax} %}
 
-    {% if 'panier' not in currentPath %}
-        Prix de vente:
-        {% include "components/catalog/_displayPriceLogic.html.twig" with {'product': occasion,'tax': tax} %}
-    {% endif %}
-</p>
+</div>
+<div class="col-12 mt-4 d-flex occasion_detail_etats">
+    <div class="col-2">
+        État de la boite:<br/>
+        État du matériel:<br/>
+        Règle du jeu:<br/>
+    </div>
+    <div class="col-4 text-end">
+        {{ occasion.boxCondition }} <i class="fa-solid fa-circle" style="color: {{ occasion.boxCondition.color }};width:10px;height:10px;"></i><br/>
+        {{ occasion.equipmentCondition }} <i class="fa-solid fa-circle" style="color: {{ occasion.equipmentCondition.color }};width:10px;height:10px;"></i><br/>
+        {{ occasion.gameRule }} <i class="fa-solid fa-circle" style="color: {{ occasion.gameRule.color }};width:10px;height:10px;"></i><br/>
+    </div>
+
+
+
+</div>
 {% if (occasion.information is not null) %}
     <p><i class="fa-solid fa-circle-info text-primary"></i> Informations:<br/> {{ occasion.information }}</p>
 {% endif %}

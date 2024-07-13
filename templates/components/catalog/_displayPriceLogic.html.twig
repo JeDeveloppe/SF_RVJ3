@@ -1,10 +1,9 @@
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 
-{% if 'occasion' in currentPath %}
-    {% if product.discountedPriceWithoutTax > 0 %}
-        <strike class="">{% include "components/catalog/_countPrice.html.twig" %}</strike><br/>
+    <div class="col-12 mt-2">
+        {% if product.discountedPriceWithoutTax > 0 %}
+            <strike class="mt-1">{% include "components/catalog/_countPrice.html.twig" %}</strike><br/>
+        {% endif %}
         <span class="text_juliette_yellow">{% include "components/catalog/_countPrice.html.twig" %} € TTC</span>
-    {% else %}
-        <span class="text_juliette_yellow">{% include "components/catalog/_countPrice.html.twig" %} € TTC</span>
-    {% endif %}
-{% endif %}
+    </div>
+

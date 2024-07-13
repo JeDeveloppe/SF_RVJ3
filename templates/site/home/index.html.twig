@@ -74,8 +74,9 @@
             </div>
         </div>
     </div>
-    <div class="col-11 index_wave_separator mt-5">t</div>
 </div>
+
+{% include "components/_separateur_wave.html.twig" %}
 
 <div class="row justify-content-center py-5 bg-white">
     <div id="index_info" class="col-12 display-4 text-center">
@@ -91,40 +92,7 @@
 
 </div>
 
-<div class="row justify-content-center my-5">
-    <div id="index_info" class="col-12 display-4 text-center">
-        <span class="text_juliette_purple">Donnez</span> vos jeux !
-    </div>
-    <div class="col-12 col-md-6 mt-4">
-        L’association récupère les jeux de société complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…). Nous récupérons également les puzzles complets et les jeux éducatifs en boîte carton (pour apprendre à lire, compter…), qu’ils soient complets ou incomplets.
-    </div>
-    <div class="col-12 mt-5 d-flex flex-wrap justify-content-around">
-        <div class="card card_index_info my-2 pb-4 bg_green">
-            <div class="card-body">
-                <p class="card-title py-2">TROUVER UN POINT DE COLLECTE</p>
-                <p class="card-text">Vous pouvez déposer les jeux dans nos points de collecte permanents en France.</p>
-                <a class="col-6 mx-auto btn btn_juliette btn_juliette_bg_dark mb-4" href="{{ path('app_give_your_games') }}">Donner des jeux</a>
-            </div>
-            <img class="card-img-top" src="{{ asset('build/images/design/index/index_collect.png') }}" alt="Don de pièces détachées">
-        </div>
-        <div class="card card_index_info my-2 pb-4 bg_orange">
-            <div class="card-body">
-                <p class="card-title py-2">ENVOYER DES JEUX PAR COLIS</p>
-                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipiscing elit edum.</p>
-                <a class="col-6 mx-auto btn btn_juliette btn_juliette_bg_dark mb-4" href="">Envoyer des jeux</a>
-            </div>
-            <img class="card-img-top" src="{{ asset('build/images/design/index/index_colis.png') }}" alt="Envoyer un colis de jeux">
-        </div>
-        <div class="card card_index_info my-2 pb-4 bg_violet">
-            <div class="card-body">
-                <p class="card-title py-2">ORGANISER UNE COLLECTE DE JEUX</p>
-                <p class="card-text">Collectez des jeux près de chez vous et envoyez-les nous !</p>
-                <a class="col-6 mx-auto btn btn_juliette btn_juliette_bg_dark mb-4" href="{{ path('app_became_ambassador') }}">DEVENIR AMBASSADEUR·RICE</a>
-            </div>
-            <img class="card-img-top" src="{{ asset('build/images/design/index/index_ambassador.png') }}" alt="Particiter en tant qu'ambassadeur Refaites vos jeux">
-        </div>
-    </div>
-</div>
+{% include "components/_row_donner_ses_jeux.html.twig" %}
 
 <div class="row my-4">
     <div class="col-12 text-center">

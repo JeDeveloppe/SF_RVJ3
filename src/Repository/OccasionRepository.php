@@ -42,6 +42,25 @@ class OccasionRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findAleatoireOccasionsByAgeWhitoutThisOccasion(int $age, Occasion $occasion): array
+    {
+
+        return $this->createQueryBuilder('o')
+            ->join('o.boite','b')
+            ->where('o.isOnline = :online')
+            ->andWhere('b.age >= :age')
+            ->andWhere('o.id != :occasionId')
+            ->setParameters([
+                'occasionId' => $occasion->getId(),
+                'age' => $age,
+                'online' =>  true,
+            ])
+            ->orderBy('o.id', 'ASC')
+            ->getQuery()
+            ->setMaxResults(20)
+            ->getResult()
+        ;
+    }
 
 //    /**
 //     * @return Occasion[] Returns an array of Occasion objects

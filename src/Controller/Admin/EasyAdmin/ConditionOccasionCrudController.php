@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ColorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class ConditionOccasionCrudController extends AbstractCrudController
@@ -21,6 +22,7 @@ class ConditionOccasionCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name'),
+            ColorField::new('color'),
             AssociationField::new('boxConditions')->setLabel('Les boites en...')->setDisabled(true),
             AssociationField::new('equipmentConditions')->setLabel('Les pièces en...')->setDisabled(true),
             AssociationField::new('gameRules')->setLabel('La règle du jeu en...')->setDisabled(true),
