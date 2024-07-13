@@ -1,15 +1,17 @@
 {% if item.durationMinOfTheGame is not null %}
-    
-    {% if item.durationMinOfTheGame == item.durationMaxOfTheGame or item.durationMaxOfTheGame is null %}
+    //TODO durée
+    <span class="span_duration_game">
+        {% if item.durationMinOfTheGame == item.durationMaxOfTheGame or item.durationMaxOfTheGame is null %}
 
-        <i class="fa-solid fa-clock"></i> Durée de la partie: {{ item.durationMinOfTheGame }} min.
+            Durée: environ {{ item.durationMinOfTheGame }} min.
 
-    {% else %}
+        {% else %}
 
-        <i class="fa-solid fa-person"></i> Durée de la partie: Entre {{ item.durationMinOfTheGame }} et {{ item.durationMaxOfTheGame }} min.
-        
-    {% endif %}
-    
+            Durée: entre {{ item.durationMinOfTheGame }} et {{ item.durationMaxOfTheGame }} min.
+            
+        {% endif %}
+    </span>
+
 {% else %}
 
     {% if is_granted('ROLE_BENEVOLE') %}

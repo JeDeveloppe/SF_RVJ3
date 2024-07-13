@@ -20,7 +20,7 @@ body{
   border-radius: 24px;
 }
 
-.btn{
+.btn_juliette{
   border-radius: 24px;
   height: 46px;
   padding: 10px 10px 10px 10px;
@@ -30,14 +30,21 @@ body{
   text-transform: uppercase;
   margin: 10px 10px 0px 0px;
 }
-
-.btn_julie_bg_dark{
-  background: #1C1D3D 0% 0% no-repeat padding-box;
-  color: #fff;
-  width:178px;
+.btn_juliette a{
+  text-decoration: none;
 }
 
-.btn_julie_bg_white{
+.btn_juliette_bg_dark{
+  background: #1C1D3D 0% 0% no-repeat padding-box;
+  color: #fff;
+}
+
+.btn_juliette_bg_yellow{
+  background: #FEC538 0% 0% no-repeat padding-box;
+  border-radius: 24px;
+}
+
+.btn_juliette_bg_white{
   background: #FFFFFF 0% 0% no-repeat padding-box;
   border: 1px solid #1C1C3E;
   width: 178px
@@ -50,8 +57,11 @@ body{
   color: #1DBA9D;
 }
 
-.text_violet{
+.text_juliette_purple{
   color: #5F49CE;
+}
+.text_juliette_yellow{
+  color: #FA8900;
 }
 
 #index_info_separator{
@@ -393,6 +403,7 @@ footer{
 .card_ > .info_photo{
   font-size: 10px;
   text-align: center;
+  width: 100%;
 }
 .card_div_img{
   width: 100%;
@@ -406,9 +417,37 @@ footer{
 }
 
 .card_catalog_img {
-  max-width: 85%;
+  max-width: 65%;
   object-fit: cover;
   margin: auto;
+}
+
+.card_boite_name{
+  text-align: left;
+  font: normal normal 600 16px/20px Nunito;
+  letter-spacing: 0px;
+  color: #1C1C3E;
+  opacity: 1;
+  text-transform: lowercase;
+  display: inline-block;
+}
+.card_boite_name:first-letter{
+  text-transform: uppercase;
+}
+
+.span_players_ages{
+  text-align: left;
+  font: normal normal 300 14px/20px Nunito;
+  letter-spacing: 0px;
+  color: #1C1C3ECC;
+  opacity: 1;
+}
+.span_duration_game{
+  text-align: left;
+  font: normal normal 300 14px/20px Nunito;
+  letter-spacing: 0px;
+  color: #1C1C3ECC;
+  opacity: 1;
 }
 
 // .card_catalog:hover {

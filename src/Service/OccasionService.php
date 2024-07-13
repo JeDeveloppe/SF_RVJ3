@@ -31,17 +31,9 @@ class OccasionService
     {
     }
 
-    public function findOccasionsFromOccasionForm(Form $form)
+    public function findOccasionsFromOccasionForm($phrase,$age,$players)
     {
-        //le texte saisie
-        $search = $form->get('search')->getData();
-        $phrase = str_replace(" ","%",$search);
 
-        //age choisie
-        $age = $form->get('age')->getData() ?? 0;
-
-        //nombre de joueurs
-        $players = $form->get('playerMin')->getData();
         //si pas de choix du nombre de joueurs
         if(count($players) == 0){
             [$playerChoices,$ageChoices,$lengthChoices] = $this->searchOccasionInCatalogueType->formOccasionChoices();

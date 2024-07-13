@@ -18,7 +18,7 @@
             </div>
             <p class="info_photo">Photo non contractuelle</p>
             <div class="p-2" data-toggle="tooltip" data-placement="top" title="{{ boite.name | raw }}">
-                <span class="fs-6 fw-bolder">{{ boite.name | raw }} </span><br/>
+                <span class="fw-bolder">{{ boite.name | raw }} </span><br/>
             </div>
             <div class="d-flex flex-column align-items-center mt-auto">
                 <b>{% include "components/catalog/_displayPriceLogic.html.twig" with {'product': product, 'tax': tax} %}</b>

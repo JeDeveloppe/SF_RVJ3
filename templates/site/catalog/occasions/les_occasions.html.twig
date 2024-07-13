@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    <h1 class="col-12 text-center mt-5">Les jeux <span class="text_violet">d'occasion</span></h1>
+    <h1 class="col-12 text-center mt-5">Les jeux <span class="text_juliette_purple">d'occasion</span></h1>
     <div class="col-12 text-center h4 text-danger mb-3">Uniquement disponible en retrait sur Caen.</div>
 
 
@@ -15,7 +15,7 @@
     {% else %}
         
         <div class="row mt-5">
-            <div class="col-11 col-lg-4">
+            <div class="col-11 col-md-9 col-lg-4 mx-auto">
                 {% include "components/forms/_search_occasion.html.twig" %}
             </div>
             <div class="col-12 col-lg-8 d-flex flex-wrap justify-content-around align-items-stretch">
@@ -31,7 +31,7 @@
 
                         {% for key,occasion in occasions %}  
 
-                            {% include "components/catalog/_card.html.twig" with { 'product': occasion, 'key': key, 'tax': tax } %}
+                            {% include "components/catalog/_cardOccasion.html.twig" with { 'product': occasion, 'key': key, 'tax': tax } %}
 
                         {% endfor %}
 

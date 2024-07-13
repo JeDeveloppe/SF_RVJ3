@@ -2,9 +2,9 @@
 
 {% if 'occasion' in currentPath %}
     {% if product.discountedPriceWithoutTax > 0 %}
-        <strike class="text-danger"><b>{{ (product.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }}</b></strike>
-        <b>{{ (product.discountedPriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</b>
+        <strike class="">{% include "components/catalog/_countPrice.html.twig" %}</strike><br/>
+        <span class="text_juliette_yellow">{% include "components/catalog/_countPrice.html.twig" %} € TTC</span>
     {% else %}
-        {{ (product.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC
+        <span class="text_juliette_yellow">{% include "components/catalog/_countPrice.html.twig" %} € TTC</span>
     {% endif %}
 {% endif %}

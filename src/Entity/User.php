@@ -102,6 +102,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 10)]
     private ?string $accountnumber = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CatalogOccasionSearch::class)]
+    private Collection $catalogOccasionSearches;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
@@ -118,6 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->media = new ArrayCollection();
         $this->reserves = new ArrayCollection();
         $this->boitesUpdated = new ArrayCollection();
+        $this->catalogOccasionSearches = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -719,6 +723,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAccountnumber(string $accountnumber): static
     {
         $this->accountnumber = $accountnumber;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CatalogOccasionSearch>
+     */
+    public function getCatalogOccasionSearches(): Collection
+    {
+        return $this->catalogOccasionSearches;
+    }
+
+    public function addCatalogOccasionSearch(CatalogOccasionSearch $catalogOccasionSearch): static
+    {
+        if (!$this->catalogOccasionSearches->contains($catalogOccasionSearch)) {
+            $this->catalogOccasionSearches->add($catalogOccasionSearch);
+            $catalogOccasionSearch->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCatalogOccasionSearch(CatalogOccasionSearch $catalogOccasionSearch): static
+    {
+        if ($this->catalogOccasionSearches->removeElement($catalogOccasionSearch)) {
+            // set the owning side to null (unless already changed)
+            if ($catalogOccasionSearch->getUser() === $this) {
+                $catalogOccasionSearch->setUser(null);
+            }
+        }
 
         return $this;
     }

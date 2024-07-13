@@ -2,25 +2,30 @@
 
 namespace App\Controller\Site;
 
+use DateTimeImmutable;
 use App\Service\PanierService;
+use App\Service\AdresseService;
 use App\Service\OccasionService;
 use App\Repository\TaxRepository;
 use App\Repository\BoiteRepository;
 use App\Repository\EditorRepository;
+use App\Entity\CatalogOccasionSearch;
+use App\Repository\AddressRepository;
 use App\Repository\PartnerRepository;
 use App\Repository\OccasionRepository;
 use App\Form\SearchBoiteInCatalogueType;
-use App\Form\SearchOccasionInCatalogueType;
-use App\Repository\AddressRepository;
-use App\Repository\CollectionPointRepository;
 use App\Repository\SiteSettingRepository;
-use App\Service\AdresseService;
+use App\Form\SearchOccasionInCatalogueType;
+use App\Repository\CatalogOccasionSearchRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use App\Repository\CollectionPointRepository;
+use App\Service\UtilitiesService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 
 class CatalogController extends AbstractController
 {
@@ -36,7 +41,9 @@ class CatalogController extends AbstractController
         private AddressRepository $addressRepository,
         private CollectionPointRepository $collectionPointRepository,
         private AdresseService $adresseService,
-        private SiteSettingRepository $siteSettingRepository
+        private SiteSettingRepository $siteSettingRepository,
+        private CatalogOccasionSearchRepository $catalogOccasionSearchRepository,
+        private UtilitiesService $utilitiesService
     )
     {
     }
@@ -143,7 +150,7 @@ class CatalogController extends AbstractController
     }
 
     #[Route('/catalogue-jeux-occasion', name: 'app_catalogue_occasions')]
-    public function catalogueOccasions(Request $request): Response
+    public function catalogueOccasions(Request $request, Security $security, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(SearchOccasionInCatalogueType::class);
         $form->handleRequest($request);
@@ -151,14 +158,44 @@ class CatalogController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            $donneesFromDatabases = $this->occasionService->findOccasionsFromOccasionForm($form);
+                $search = $form->get('search')->getData();
+                $phrase = str_replace(" ","%",$search);
+                $age = $form->get('age')->getData() ?? 0;
+                $players = $form->get('playerMin')->getData() ?? [];
+
+                //TODO
+                // $data = new CatalogOccasionSearch();
+                // $data->setPhrase($phrase)
+                //         ->setToken($this->utilitiesService->generateRandomString())
+                //         ->setAge($age)
+                //         ->setPlayers($players)
+                //         ->setCreatedAt(new DateTimeImmutable('now'))
+                //         ->setUser($security->getUser());
+                // $em->persist($data);
+                // $em->flush($data);
+
+                $donneesFromDatabases = $this->occasionService->findOccasionsFromOccasionForm($phrase,$age,$players);
+                
 
         }else{
 
-            $donneesFromDatabases = $this->occasionRepository->findBy(['isOnline' => true],['id' => 'DESC']);
+            if($request->get('search') && strlen($request->get('search')) == 250){ //! variable provient de utilitiesService
+
+                $data = $this->catalogOccasionSearchRepository->findByToken($request->get('token'));
+
+                if($data){
+
+                    $donneesFromDatabases = $this->occasionService->findOccasionsFromOccasionForm($data->getPhrase(),$data->getAge(),$data->getPlayers());
+
+                }
+
+            }else{
+
+                $data = null;
+                $donneesFromDatabases = $this->occasionRepository->findBy(['isOnline' => true],['id' => 'DESC']);
+            }
 
         }
-
 
         $occasions = $this->paginator->paginate(
             $donneesFromDatabases, /* query NOT result */
@@ -173,6 +210,7 @@ class CatalogController extends AbstractController
             'occasions_totales' => $donneesFromDatabases,
             'metas' => $metas,
             'form' => $form,
+            'data' => $data ?? null,
             'tax' => $this->taxRepository->findOneBy([]),
             'partenaires' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true])
         ]);

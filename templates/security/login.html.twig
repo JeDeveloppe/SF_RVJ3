@@ -15,14 +15,14 @@
         </div>
     {% endif %}
 
-    <h1 class=" col-12 text-center my-4">Se <span class="text_violet">connecter</span></h1>
+    <h1 class=" col-12 text-center my-4">Se <span class="text_juliette_purple">connecter</span></h1>
     <label for="inputEmail">Email:</label>
     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control mb-3" autocomplete="email" required autofocus>
     <label for="inputPassword">Mot de passe:</label>
     <input type="password" name="password" id="inputPassword" class="form-control mb-3" autocomplete="current-password" required>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-    <button class="btn btn-lg btn-primary" type="submit">S'identifier</button>
+    <button class="btn btn_juliette btn_juliette_bg_yellow" type="submit">S'identifier</button>
 
 </form>
     <div class="col-12 text-end mb-3">

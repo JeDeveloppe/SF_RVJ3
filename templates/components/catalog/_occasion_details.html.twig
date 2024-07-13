@@ -1,7 +1,6 @@
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 
-<p class="col-12 small">
-    A partir de {{ occasion.boite.age }} ans.<br/>
+<p class="col-12">
     {% include "components/catalog/_durationOfTheGame.html.twig" with {'item': occasion.boite }%}<br/>
     {% include "components/catalog/_players&age.html.twig" with {'item': occasion.boite }%}<br/>
     {% if 'panier' not in currentPath %}

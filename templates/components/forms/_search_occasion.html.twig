@@ -1,15 +1,12 @@
 {% include "components/forms/_display_form_errors.html.twig" %}
 
-
     {{ form_start(form) }}
-        <div class="col-12 d-flex flex-column flex-wrap justify-content-around">
-            <div class="col-12 d-flex flex-column">
-                <div class="form-group mb-3 col-12">
-                    {{ form_widget(form.search) }}
-                </div>
-                <div class="form-group mb-3 col-12">
-                    {{ form_widget(form.age) }}
-                </div>
+        <div class="col-12 col-lg-12 d-flex flex-column flex-wrap justify-content-around">
+            <div class="form-group mb-3 col-12">
+                {{ form_widget(form.search) }}
+            </div>
+            <div class="form-group mb-3 col-12">
+                {{ form_widget(form.age) }}
             </div>
             <div class="col-12">
                 <div class="form-group mb-3 card p-1">
@@ -23,7 +20,7 @@
             </div>
             <div class="col-12">
                 {% set currentPath = app.request.get('_route') %}
-                <div class="input-group-append text-center mt-4 col-12">
+                <div class="input-group-append text-center col-12">
                     {# <button class="btn btn-outline-primary" type="submit">Chercher</button> #}
                     <div class="btn-group" role="group">
                         <button type="submit" class="btn btn-outline-primary">Chercher</button>
