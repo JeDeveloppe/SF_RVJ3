@@ -6,7 +6,107 @@
 
     <div class="js-locations" data-locations="{{ donnees }}"></div>
 
-    <h1 class="col-12 text-center my-5">Devenir <span class="text_juliette_purple">ambassadeur·rice</span></h1>
+
+<div class="row justify-content-center align-items-center my-5">
+    <div class="col-12 col-md-4 d-flex flex-column pt-3">
+        <h1 class="col-12">
+            Devenir<br/><span class="text-purple">ambassadeur·rice</span>
+        </h1>
+        <div class="col-12">Vous souhaitez contribuer activement au projet porté par l’association ? Particuliers ou structures… où que vous soyez en France, collectez des jeux près de chez vous et faites-les nous parvenir !</div>
+
+        <div class="col-12 d-flex justify-content-start mt-3">
+            <a class="btn btn-dark" href="{{ path('app_catalogue_occasions') }}">Organiser une collecte</a>
+        </div>
+
+    </div>
+    <div class="col-12 mt-3 mt-md-0 col-md-4 d-flex justify-content-center">
+        <img src="{{ asset('build/images/design/ambassadeur/rosace_violet.svg') }}" alt="Rosace">
+    </div>
+</div>
+
+<div class="row justify-content-center align-items-center bg-white p-4">
+    <div class="col-12 mt-3 mt-md-0 col-md-5 d-flex justify-content-center">
+        <img src="{{ asset('build/images/design/ambassadeur/rosace_violet.svg') }}" alt="Rosace">
+    </div>
+    <div class="col-12 col-md-7 d-flex flex-column pt-3">
+        <h2 class="col-12">
+            Organiser <span class="text-purple">une collecte</span>
+        </h2>
+        <div class="col-9">
+            À l’échelle nationale, nous faisons le constat que peu de structures ont la capacité de valoriser en grande quantité les jeux de société incomplets.
+            Nous avons donc imaginé une mission d’ambassadrice/ambassadeur. Cette mission consiste à collecter des jeux incomplets près de chez vous (où que vous soyez en France) et à nous les envoyer afin qu’ils soient complétés ou qu’ils alimentent le catalogue des pièces détachées.
+        </div>
+        <h3 class="col-12 text-orange mt-3">QUI PEUT DEVENIR AMBASSADEUR·RICE ?</h3>
+        <div class="col-9">
+            La mission d’ambassadeur·rice peut être assurée par un particulier ou une structure (ressourcerie, association, école, centre de loisirs…). Pour cela, il suffit de compléter le formulaire d’inscription et de nous le retourner par mail :
+            <a class="btn btn-dark mt-2" href="{{ path('app_download_ambassador_quide') }}">Télécharger le formulaire</a>
+        </div>
+
+    </div>
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+
+<div class="row justify-content-around py-5 bg-white">
+    <h2 class="col-12 text-center"><span class="text-purple">Quels jeux</span> collecter ?</h2>
+    <div class="col-12 d-flex flex-wrap justify-content-around justify-content-md-center mt-4">
+        <div class="col-11 col-sm-7 col-md-5 col-lg-4">
+            <div class="card card_collectons py-4">
+                <div class="col-12 card_collectons_img">
+                    <img src="{{ asset('build/images/design/index/exemple_jeux_inities.png') }}" alt="Lot de jeux récoltés">
+                    <i class="fa-solid fa-check position-absolute text-white fa-5x rounded-circle bg-success p-3"></i>
+                </div>
+                <h4 class="text-center text-orange">Nous collectons</h5>
+                <div class="card-body">
+                    <ul class="card_collectons_ul_success list-unstyled">
+                        <li>Jeux de société modernes et anciens</li>
+                        <li>Jeux éducatifs en boîte carton</li>
+                        <li>Pièces détachées (pions, dés, sabliers…)</li>
+                        <li>Puzzles complets</li>
+                        <li>Jeux d’encastrement en bois</li>
+                        <li>Certains jouets : Domino Express, jeux SMARTMAX et GEOMAG</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-11 mt-3 col-sm-7 col-md-5 mt-md-0 col-lg-4">
+            <div class="card card_collectons py-4">
+                <div class="col-12 card_collectons_img">
+                    <img src="{{ asset('build/images/design/index/exemple_jeux_inities.png') }}" alt="Lot de jeux non récoltés">
+                    <i class="fa-solid fa-xmark position-absolute text-white fa-5x rounded-circle bg-danger p-3"></i>
+                </div>
+                <h4 class="text-center text-orange">Nous ne collectons pas</h5>
+                <div class="card-body">
+                    <ul class="card_collectons_ul_wrong list-unstyled">
+                        <li>Jouets</li>
+                        <li>Puzzles incomplets</li>
+                        <li>Jeux de société de sous-marques ou certains jeux de marques distributeurs (ex : Pavillon)</li>
+                        <li>Certains jeux trop lourds pour envoi ou difficiles à revaloriser. Ex : Trivial Pursuit, In ze boîte, jeux TV (sauf Pyramide)…</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+<div class="row justify-content-around py-4 bg-white">
+    <h2 class="col-12 text-center"><span class="text-purple">Comment çà</span> marche ?</h2>
+</div>
+
+<div class="row justify-content-around py-5">
+    <h2 class="col-12 text-center">RÉFÉRENCER VOTRE POINT DE COLLECTE</h2>
+    <div class="col-md-5 text-center">
+        Vous pouvez accueillir du grand public ?<br/>
+        N’hésitez pas à référencer votre point de collecte pour qu’il soit visible sur notre carte interactive. Pour cela, vous pouvez faire la demande dans le formulaire<br/>
+        d’inscription du programme ambassadeur·rice.
+        <a class="btn btn-orange mt-4" href="">VOIR LES POINTS DE COLLECTE</a>
+    </div>
+</div>
+
+{# 
 
     <div class="row justify-content-center my-5">
         <div class="col-11 d-flex justify-content-center align-items-center">
@@ -39,6 +139,6 @@
 
         {% include "site/project/components/_link_to_contact_page.html.twig" %}
 
-    </div>
+    </div> #}
 
 {% endblock %}

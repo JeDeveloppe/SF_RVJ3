@@ -1,25 +1,24 @@
-  <div class="row">
-    <ul id="header_info" class="nav justify-content-center justify-content-md-end">
-      <li class="nav-item">
-        <a class="nav-link text-white" href="{{ path('app_who_are_we') }}">L'association</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-white" href="{{ path('app_prestations') }}">Prestations</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-white" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur·rice</a>
-      </li>
-    </ul>
-  </div>
-  <a id="logoNav" href="{{ path('app_home') }}">
-    <img src="{{ asset('build/images/design/logoSiteHeader.svg') }}" alt="Logo de Refaites vos jeux">
-  </a>
-  <nav class="navbar navbar-expand-md" data-bs-theme="light">
+<div class="row bg-white">
+  <ul id="header_info" class="d-flex justify-content-center justify-content-md-end py-2 text-uppercase display-6">
+    <li class="list-unstyled">
+      <a class="p-4 text-white text-decoration-none small" href="{{ path('app_who_are_we') }}">L'association</a>
+    </li>
+    <li class="list-unstyled">
+      <a class="p-4 text-white text-decoration-none small" href="{{ path('app_prestations') }}">Prestations</a>
+    </li>
+    <li class="list-unstyled">
+      <a class="p-4 text-white text-decoration-none small" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur·rice</a>
+    </li>
+  </ul>
+  <nav class="navbar navbar-expand-md bg-white" data-bs-theme="light">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse justify-content-center" id="navbarColor02">
+      <div class="collapse navbar-collapse justify-content-around" id="navbarColor02">
+        <a id="logoNav" href="{{ path('app_home') }}">
+          <img src="{{ asset('build/images/design/logoSiteHeader.svg') }}" alt="Logo de Refaites vos jeux">
+        </a>
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
             <a class="nav-link text-dark" href="{{ path('app_catalogue_occasions') }}">Tous les jeux</a>
@@ -77,3 +76,4 @@
       </div>
     </div>
   </nav>
+  </div>

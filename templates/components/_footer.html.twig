@@ -1,80 +1,62 @@
 <footer class="row mt-auto bg-white pt-4 justify-content-around">
 	<div class="col-md-6 col-lg-3 mb-4 mb-md-0 d-flex flex-column justify-content-around">
-		<div class="col-12 d-flex justify-content-center">
-			<img id="logoInFooter" src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo Refaites vos jeux" loading="lazy"/>
-		</div>
-		<div class="col-10 mx-auto text-uppercase">Refaites Vos Jeux oeuvre pour le réemploi des jeux et le lien social.</div>
+		<img id="logoInFooter" class="img-fluid col-6" src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo Refaites vos jeux" loading="lazy"/>
+		<div id="logoInFooter_text" class="col-12">Refaites Vos Jeux oeuvre pour le réemploi des jeux et le lien social.</div>
 	</div>
 	<div class="col-md-6 col-lg-3 mb-4 mb-md-0">
-		<h5 class="text-uppercase mb-4 text-black p-1 bg-white rounded-1">Boutique</h5>
-
-		<ul class="list-unstyled text-start">
+		<h5 class="">Boutique</h5>
+		<ul class="list-unstyled">
 			<li class="">
-				<a href="{{ path('app_catalogue_occasions') }}" class="text-black text-decoration-none detect-rotate">
-					<i class="text-secondary fa-solid fa-dice-{{dices[1]}} pe-3"></i>Jeux d'occasion</a>
+				<a href="{{ path('app_catalogue_occasions') }}" class="text-black text-decoration-none">Jeux d'occasion</a>
 			</li>
 			<li class="">
-				<a href="{{ path('app_catalogue_pieces_detachees') }}" class="text-black text-decoration-none detect-rotate">
-					<i class="text-secondary fa-solid fa-dice-{{dices[2]}} pe-3"></i>Pièces détachées</a>
+				<a href="{{ path('app_catalogue_pieces_detachees') }}" class="text-black text-decoration-none">Pièces détachées</a>
 			</li>
 		</ul>
 	</div>
 	<div class="col-md-6 col-lg-3 mb-4 mb-md-0">
-		<h5 class="text-uppercase mb-4 text-black p-1 bg-white rounded-1">A propos</h5>
-
-		<ul class="list-unstyled text-start">
+		<h5 class="">A propos</h5>
+		<ul class="list-unstyled">
 			<li class="">
-				<a href="{{ path('app_who_are_we') }}" class="text-black text-decoration-none detect-rotate">
-					<i class="text-secondary fa-solid fa-dice-{{dices[1]}} pe-3"></i>L'association</a>
+				<a href="{{ path('app_who_are_we') }}" class="text-black text-decoration-none">L'association</a>
 			</li>
 			<li class="">
-				<a href="{{ path('app_prestations') }}" class="text-black text-decoration-none detect-rotate">
-					<i class="text-secondary fa-solid fa-dice-{{dices[2]}} pe-3"></i>Nos prestations</a>
+				<a href="{{ path('app_prestations') }}" class="text-black text-decoration-none">Nos prestations</a>
 			</li>
 			<li class="">
-				<a href="{{ path('app_became_ambassador') }}" class="text-black text-decoration-none detect-rotate">
-					<i class="text-secondary fa-solid fa-dice-{{dices[3]}} pe-3"></i>Devenir ambassadeur·rice</a>
+				<a href="{{ path('app_became_ambassador') }}" class="text-black text-decoration-none">Devenir ambassadeur·rice</a>
 			</li>
 			<li class="">
-				<a href="{{ path('app_give_your_games') }}" class="text-black text-decoration-none detect-rotate">
-					<i class="text-secondary fa-solid fa-dice-{{dices[4]}} pe-3"></i>Donner ses jeux</a>
+				<a href="{{ path('app_give_your_games') }}" class="text-black text-decoration-none">Donner ses jeux</a>
 			</li>
 			<li class="">
-				<a href="{{ path('app_support_us') }}" class="text-black text-decoration-none detect-rotate">
-					<i class="text-secondary fa-solid fa-dice-{{dices[4]}} pe-3"></i>Nous soutenir</a>
+				<a href="{{ path('app_support_us') }}" class="text-black text-decoration-none">Nous soutenir</a>
 			</li>
 			<li class="">
-				<a href="{{ path('app_partenaires') }}" class="text-black text-decoration-none detect-rotate">
-					<i class="text-secondary fa-solid fa-dice-{{dices[5]}} pe-3"></i>Partenaires</a>
+				<a href="{{ path('app_partenaires') }}" class="text-black text-decoration-none">Partenaires</a>
 			</li>
 		</ul>
 	</div>
 	<div class="col-md-6 col-lg-3 mb-4 mb-md-0">
-		<h5 class="text-uppercase mb-4 text-black p-1 bg-white rounded-1">Et plus encore...</h5>
-		<ul class="list-unstyled text-start">
+		<h5 class="">Et plus encore...</h5>
+		<ul class="list-unstyled">
 			<li class="">
-				<a href="{{ path('app_conditions_generale_de_vente') }}" class="text-black text-decoration-none detect-rotate">
-					<i class="text-secondary fa-solid fa-dice-{{dices[1]}} pe-3"></i>Conditions générales de vente</a>
+				<a href="{{ path('app_conditions_generale_de_vente') }}" class="text-black text-decoration-none">Conditions générales de vente</a>
 			</li>
 			<li class="">
-				<a href="{{ path('app_mentions_legales') }}" class="text-black text-decoration-none detect-rotate">
-					<i class="text-secondary fa-solid fa-dice-{{dices[2]}} pe-3"></i>Mentions légales</a>
+				<a href="{{ path('app_mentions_legales') }}" class="text-black text-decoration-none">Mentions légales</a>
 			</li>
 			<li class="">
-				<a href="{{ path('app_contact') }}" class="text-black text-decoration-none detect-rotate">
-					<i class="text-secondary fa-solid fa-dice-{{dices[3]}} pe-3"></i>Contact</a>
+				<a href="{{ path('app_contact') }}" class="text-black text-decoration-none">Contact</a>
 			</li>
 			<li class="">
-				<a href="{{ path('app_press') }}" class="text-black text-decoration-none detect-rotate">
-					<i class="text-secondary fa-solid fa-dice-{{dices[6]}} pe-3"></i>Presse</a>
+				<a href="{{ path('app_press') }}" class="text-black text-decoration-none">Presse</a>
 			</li>
 			<li class="">
-				<a href="https://www.facebook.com/refaitesvosjeux" class="text-decoration-none">
-					<i class="text-secondary pe-3"></i>
+				<a href="https://www.facebook.com/refaitesvosjeux">
 					<img src="{{ asset('build/images/design/footer/facebook_link.svg') }}" alt="Suivez-nous sur Facebook !">
 				</a>
-				<a href="#" class="text-decoration-none">
-					<i class="text-secondary pe-3"></i>
+				<a href="#">
 					<img src="{{ asset('build/images/design/footer/instagram_link.svg') }}" alt="Suivez-nous sur Instagram !">
 				</a>
 			</li>
@@ -101,20 +83,20 @@
 
 			<!--Grid column-->
 			<div class="order-lg-1 col-lg-3 col-md-6 mb-4 mb-md-0">
-				<h5 class="text-uppercase mb-4 text-black p-1 bg-white rounded-1">Catalogues</h5>
+				<h5 class="">Catalogues</h5>
 
-				<ul class="list-unstyled text-start">
+				<ul class="list-unstyled">
 					<li class="">
-						<a href="{{ path('app_catalogue_pieces_detachees') }}" class="text-black text-decoration-none detect-rotate">
-							<i class="text-secondary fa-solid fa-dice-{{dices[1]}} pe-3"></i>Pièces détachées</a>
+						<a href="{{ path('app_catalogue_pieces_detachees') }}" class="text-black text-decoration-none">
+	Pièces détachées</a>
 					</li>
 					<li class="">
-						<a href="{{ path('app_catalogue_occasions') }}" class="text-black text-decoration-none detect-rotate">
-							<i class="text-secondary fa-solid fa-dice-{{dices[2]}} pe-3"></i>Jeux d'occasion</a>
+						<a href="{{ path('app_catalogue_occasions') }}" class="text-black text-decoration-none">
+	Jeux d'occasion</a>
 					</li>
 					<li class="">
-						<a href="{{ path('app_prestations') }}" class="text-black text-decoration-none detect-rotate">
-							<i class="text-secondary fa-solid fa-dice-{{dices[3]}} pe-3"></i>Nos prestations</a>
+						<a href="{{ path('app_prestations') }}" class="text-black text-decoration-none">
+	Nos prestations</a>
 					</li>
 				</ul>
 			</div>
@@ -122,24 +104,24 @@
 
 			<!--Grid column-->
 			<div class="order-lg-2 col-lg-3 col-md-6 mb-4 mb-md-0">
-				<h5 class="text-uppercase mb-4 text-black p-1 bg-white rounded-1">A propos</h5>
+				<h5 class="">A propos</h5>
 
-				<ul class="list-unstyled text-start">
+				<ul class="list-unstyled">
 					<li class="">
-						<a href="{{ path('app_who_are_we') }}" class="text-black text-decoration-none detect-rotate">
-							<i class="text-secondary fa-solid fa-dice-{{dices[1]}} pe-3"></i>Qui sommes nous ?</a>
+						<a href="{{ path('app_who_are_we') }}" class="text-black text-decoration-none">
+	Qui sommes nous ?</a>
 					</li>
 					<li class="">
-						<a href="{{ path('app_support_us') }}" class="text-black text-decoration-none detect-rotate">
-							<i class="text-secondary fa-solid fa-dice-{{dices[2]}} pe-3"></i>Nous soutenir</a>
+						<a href="{{ path('app_support_us') }}" class="text-black text-decoration-none">
+	Nous soutenir</a>
 					</li>
 					<li class="">
-						<a href="{{ path('app_partenaires') }}" class="text-black text-decoration-none detect-rotate">
-							<i class="text-secondary fa-solid fa-dice-{{dices[3]}} pe-3"></i>Partenaires</a>
+						<a href="{{ path('app_partenaires') }}" class="text-black text-decoration-none">
+	Partenaires</a>
 					</li>
 					<li class="">
-						<a href="{{ path('app_press') }}" class="text-black text-decoration-none detect-rotate">
-							<i class="text-secondary fa-solid fa-dice-{{dices[4]}} pe-3"></i>Presse</a>
+						<a href="{{ path('app_press') }}" class="text-black text-decoration-none">
+	Presse</a>
 					</li>
 				</ul>
 			</div>
@@ -147,19 +129,19 @@
 
 			<!--Grid column-->
 			<div class="order-lg-3 col-lg-3 col-md-6 mb-4 mb-md-0">
-				<h5 class="text-uppercase mb-4 text-black p-1 bg-white rounded-1">Légale</h5>
-				<ul class="list-unstyled text-start">
+				<h5 class="">Légale</h5>
+				<ul class="list-unstyled">
 					<li class="">
-						<a href="{{ path('app_conditions_generale_de_vente') }}" class="text-black text-decoration-none detect-rotate">
-							<i class="text-secondary fa-solid fa-dice-{{dices[1]}} pe-3"></i>CGV</a>
+						<a href="{{ path('app_conditions_generale_de_vente') }}" class="text-black text-decoration-none">
+	CGV</a>
 					</li>
 					<li class="">
-						<a href="{{ path('app_mentions_legales') }}" class="text-black text-decoration-none detect-rotate">
-							<i class="text-secondary fa-solid fa-dice-{{dices[2]}} pe-3"></i>Mentions / CGU</a>
+						<a href="{{ path('app_mentions_legales') }}" class="text-black text-decoration-none">
+	Mentions / CGU</a>
 					</li>
 					<li class="">
-						<a href="{{ path('app_contact') }}" class="text-black text-decoration-none detect-rotate">
-							<i class="text-secondary fa-solid fa-dice-{{dices[3]}} pe-3"></i>Contact</li></a>
+						<a href="{{ path('app_contact') }}" class="text-black text-decoration-none">
+	Contact</li></a>
 					</li>
 				</ul>
 			</div>

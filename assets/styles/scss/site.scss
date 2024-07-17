@@ -1,3 +1,8 @@
+:root{
+  --green: #1DBA9D;
+  --danger: #dc3545;
+}
+
 html{
   margin: 0;
   padding: 0
@@ -8,17 +13,40 @@ body{
   width: 100%;
   margin: 0;
   padding: 0;
+  font-family: Nunito;
+}
+
+nav{
+  width: 100%;
+  height: 72px;
 }
 
 #logoNav {
-  position: absolute;
+
   right: 0;
   padding: 5% 5%;
 
 }
 
 #logoNav img{
-  scale: 1.5;
+  scale: 1;
+}
+
+//footer
+footer{
+  color: #1C1E3C;
+  font: normal normal 300 14px/36px Nunito;
+  letter-spacing: 0px;
+}
+
+footer a {
+  text-decoration: none;
+  color: #1C1E3C;
+}
+
+#logoPageAmbassadeur img{
+  scale: 6;
+  display: block;
 }
 
 //page d'étail de l'occasion
@@ -72,65 +100,33 @@ body{
   border-radius: 24px;
 }
 
-.btn_juliette{
-  border-radius: 24px;
-  max-width: 300px;
-  max-height: 55px;
-  padding: 10px 10px 10px 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-transform: uppercase;
-  margin: 10px 10px 0px 0px;
-}
-.btn_juliette a{
-  text-decoration: none;
-}
-
-.btn_juliette_bg_dark{
-  background: #1C1D3D 0% 0% no-repeat padding-box;
-  color: #fff;
-}
-
-.btn_juliette_bg_yellow{
-  background: #FEC538 0% 0% no-repeat padding-box;
-  border-radius: 24px;
-}
-
-.btn_juliette_bg_white{
-  background: #FFFFFF 0% 0% no-repeat padding-box;
-  border: 1px solid #1C1C3E;
-  width: 178px
-}
-
-#index_info, h1, h2{
+h1, h2, h3, h4, h5, h6{
   font-family: Sound Bubble;
   letter-spacing: 0px;
   text-transform: uppercase;
   color: #1DBA9D;
 }
-.title_bis{
-  text-align: left;
-  font: normal normal normal 42px/56px Sound Bubble;
-  letter-spacing: 0px;
-  color: #00BB9D;
-  text-transform: uppercase;
+
+h1{
+  font-size:  54/64px;
+}
+h2{
+  font-size:  44/54px;
+}
+
+.title_bis, h2{
+  font-size: 42px/56px;
 }
 
 h4{
-    text-align: center;
-  font: normal normal normal 32px/44px Sound Bubble;
+  font-size: 34/44px;
   letter-spacing: 0px;
-  color: #FFA83E;
-  text-transform: uppercase;
-  opacity: 1;
 }
 
-.text_juliette_purple{
-  color: #5F49CE;
-}
-.text_juliette_yellow{
-  color: #FA8900;
+h5{
+  font-size: 24/34px;
+  letter-spacing: 0px;
+  color: #1C1C3E;
 }
 
 .__shop{
@@ -172,7 +168,7 @@ h4{
   color: #1C1E3C;
 }
 
-.index_wave_separator{
+.wave_separator{
     background-color: #FEC538;
     height: 30px;
       --mask:
@@ -187,8 +183,8 @@ h4{
 }
 
 .card_index_info{
-  width: 372px;
   border-radius: 20px;
+  overflow: hidden;
 }
 
 .card_index_info > .card-body > .card-title{
@@ -203,28 +199,56 @@ h4{
   max-height: 200px;
 }
 
-.bg_green{
-  background: #00BB9D 0% 0% no-repeat padding-box;
-}
-.bg_orange{
-  background: #FFA83E 0% 0% no-repeat padding-box;
-}
-.bg_violet{
-  background: #8F75DB 0% 0% no-repeat padding-box;
-}
 .card-img-top-index{
   margin:auto;
   max-width: 80%;
 }
 
-#logoInFooter{
-  scale: 1.5;
-  margin-bottom: 5%;
+#ogoInFooter_text{
+  font-size:  14/20px;
 }
 
 footer{
   font: normal normal 300 14px/36px Nunito;
   letter-spacing: 0px;
+}
+
+footer a:hover{
+  color: #5F49CE;
+}
+
+.card_collectons{
+  background: #F8F1E9 0% 0% no-repeat padding-box;
+  border-radius: 20px;
+  opacity: 1;
+}
+.card_collectons_img{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+.card_collectons_img img{
+  width: 70%;
+  position: relative;
+}
+
+.card_collectons_ul_success li:before {
+  --icon-space: 1.3em;
+  content: "\f058"; /* FontAwesome Unicode */
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-left: calc( var(--icon-space) * -0.5 );
+  width: var(--icon-space);
+  color: var(--green);
+}
+.card_collectons_ul_wrong li:before {
+  --icon-space: 1.3em;
+  content: "\f057"; /* FontAwesome Unicode */
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-left: calc( var(--icon-space) * -0.5 );
+  width: var(--icon-space);
+  color: var(--danger);
 }
 
 .liveToast {
@@ -740,10 +764,11 @@ footer{
 @media (min-width: 576px) {
   #logoNav {
     padding: 4% 4%;
+    display: none;
   }
   
   #logoNav img{
-    scale: 1.4;
+    scale: 1;
   }
 }
 
@@ -751,11 +776,11 @@ footer{
 @media (min-width: 768px) {
   #logoNav {
     padding: 3% 3%;
+    display: block;
   }
   
   #logoNav img{
-    scale: 1.3;
-    opacity: 0;
+    scale: 1;
   }
 }
 
@@ -767,7 +792,7 @@ footer{
   }
   
   #logoNav img{
-    scale: 1.1;
+    scale: 1;
     opacity: 1;
   }
 }
@@ -775,13 +800,13 @@ footer{
 // X-Large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) {
   #logoNav img {
-    scale: 1.3;
+    scale: 1;
   }
 }
 
 // XX-Large devices (larger desktops, 1400px and up)
 @media (min-width: 1400px) {
   #logoNav img {
-    scale: 1.3;
+    scale: 1;
   }
 }

@@ -6,7 +6,8 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import '../styles/scss/template_bootstrap.scss';
+// import '../styles/scss/template_bootstrap.scss';
+import '../styles/css/bootstrap.scss';
 import '../styles/css/cookieconsent.css';
 import '../styles/scss/site.scss';
 import '../styles/css/animations.css';
@@ -57,26 +58,3 @@ function getCookie(cname) {
   return "";
 }
 // End CookieBand effect 
-
-let links = Array.from(document.querySelectorAll('.detect-rotate'));
-links.forEach((arrayElement, index) => {
-  setTimeout(function(){
-    links[index].firstElementChild.classList.add('opacity-0');
- }, 20);
-});
-
-links.forEach((link) => link.addEventListener(
-    "mouseover",
-    function (link) {
-      // on met l'accent sur la cible de mouseover
-      link.target.firstElementChild.classList.remove("opacity-0");
-      link.target.firstElementChild.classList.add("roll-in-left");
-
-      setTimeout(function () {
-        link.target.firstElementChild.classList.add("opacity-0");
-        link.target.firstElementChild.classList.remove("roll-in-left");
-      }, 5000);
-    },
-    false,
-  )
-)
