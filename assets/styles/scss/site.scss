@@ -3,16 +3,14 @@
   --danger: #dc3545;
 }
 
-html{
-  margin: 0;
-  padding: 0
-}
-
-body{
-  background: #F8F1E9 0% 0% no-repeat padding-box;
-  width: 100%;
+* {
   margin: 0;
   padding: 0;
+  }
+
+body{
+  background: #F7F2EC 0% 0% no-repeat padding-box;
+  width: 100%;
   font-family: Nunito;
 }
 
@@ -22,7 +20,6 @@ nav{
 }
 
 #logoNav {
-
   right: 0;
   padding: 5% 5%;
 
@@ -47,6 +44,15 @@ footer a {
 #logoPageAmbassadeur img{
   scale: 6;
   display: block;
+}
+
+.card_ambassadeur_number{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card_ambassadeur_number > .position-relative{
+  opacity: 30%;
 }
 
 //page d'étail de l'occasion
@@ -211,10 +217,15 @@ h5{
 footer{
   font: normal normal 300 14px/36px Nunito;
   letter-spacing: 0px;
+  margin-top: auto;
 }
 
 footer a:hover{
   color: #5F49CE;
+}
+
+#logoInFooter{
+  scale: 0.8;
 }
 
 .card_collectons{

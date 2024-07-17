@@ -28,7 +28,7 @@
     <div class="col-12 mt-3 mt-md-0 col-md-5 d-flex justify-content-center">
         <img src="{{ asset('build/images/design/ambassadeur/rosace_violet.svg') }}" alt="Rosace">
     </div>
-    <div class="col-12 col-md-7 d-flex flex-column pt-3">
+    <div class="col-12 col-md-7 d-flex flex-column pt-3 px-0">
         <h2 class="col-12">
             Organiser <span class="text-purple">une collecte</span>
         </h2>
@@ -37,9 +37,9 @@
             Nous avons donc imaginé une mission d’ambassadrice/ambassadeur. Cette mission consiste à collecter des jeux incomplets près de chez vous (où que vous soyez en France) et à nous les envoyer afin qu’ils soient complétés ou qu’ils alimentent le catalogue des pièces détachées.
         </div>
         <h3 class="col-12 text-orange mt-3">QUI PEUT DEVENIR AMBASSADEUR·RICE ?</h3>
-        <div class="col-9">
+        <div class="col-12 d-flex flex-wrap">
             La mission d’ambassadeur·rice peut être assurée par un particulier ou une structure (ressourcerie, association, école, centre de loisirs…). Pour cela, il suffit de compléter le formulaire d’inscription et de nous le retourner par mail :
-            <a class="btn btn-dark mt-2" href="{{ path('app_download_ambassador_quide') }}">Télécharger le formulaire</a>
+            <a class="btn btn-dark mt-4" href="{{ path('app_download_ambassador_quide') }}">Télécharger le formulaire</a>
         </div>
 
     </div>
@@ -94,6 +94,67 @@
 
 <div class="row justify-content-around py-4 bg-white">
     <h2 class="col-12 text-center"><span class="text-purple">Comment çà</span> marche ?</h2>
+    <div class="col-12 text-center mt-3">
+       <b>Avant de vous lancer…</b><br/> Assurez-vous qu’il n’existe pas près de chez vous des structures de réemploi<br/>susceptibles de valoriser ces jeux incomplets.
+    </div>
+    <div class="col-12 d-flex flex-wrap justify-content-around align-items-center mt-5">
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="card border-0">
+                <div class="card-body">
+                    <span class="card_ambassadeur_number">
+                        <i class="fa-solid fa-circle fa-8x position-relative"></i>
+                        <i class="fa-solid fa-1 fa-5x text-orange position-absolute"></i>
+                    </span>
+                    <h6 class="text-dark text-center mt-3">Complétez le formulaire </h6>
+                    <div class="card-text">
+                        //TODO Lorem ipsum dolor sit amet consectetur adipiscing elit edum. Lorem ipsum dolor sit amet consectetur adipiscing elit edum.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="card border-0">
+                <div class="card-body">
+                    <span class="card_ambassadeur_number">
+                        <i class="fa-solid fa-circle fa-8x position-relative"></i>
+                        <i class="fa-solid fa-2 fa-5x text-orange position-absolute"></i>
+                    </span>
+                    <h6 class="text-dark text-center mt-3">Collectez les jeux </h6>
+                    <div class="card-text">
+                        //TODO Lorem ipsum dolor sit amet consectetur adipiscing elit edum. Lorem ipsum dolor sit amet consectetur adipiscing elit edum.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="card border-0">
+                <div class="card-body">
+                    <span class="card_ambassadeur_number">
+                        <i class="fa-solid fa-circle fa-8x position-relative"></i>
+                        <i class="fa-solid fa-3 fa-5x text-orange position-absolute"></i>
+                    </span>
+                    <h6 class="text-dark text-center mt-3">Pesez votre colis </h6>
+                    <div class="card-text">
+                        Pesez votre colis et envoyez-nous un mail avec le poids. Nous vous envoyons alors le bon de livraison à imprimer et à coller sur le carton.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="card border-0">
+                <div class="card-body">
+                    <span class="card_ambassadeur_number">
+                        <i class="fa-solid fa-circle fa-8x position-relative"></i>
+                        <i class="fa-solid fa-4 fa-5x text-orange position-absolute"></i>
+                    </span>
+                    <h6 class="text-dark text-center mt-3">Envoyez gratuitement les jeux </h6>
+                    <div class="card-text">
+                        Et voilà, le tour est joué ! L’envoi des jeux se fait via Mondial Relay. Les frais de port sont pris en charge par l’association.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row justify-content-around py-5">
@@ -102,7 +163,9 @@
         Vous pouvez accueillir du grand public ?<br/>
         N’hésitez pas à référencer votre point de collecte pour qu’il soit visible sur notre carte interactive. Pour cela, vous pouvez faire la demande dans le formulaire<br/>
         d’inscription du programme ambassadeur·rice.
-        <a class="btn btn-orange mt-4" href="">VOIR LES POINTS DE COLLECTE</a>
+    </div>
+    <div class="col-12 mt-4 d-flex justify-content-around">
+        <a class="btn btn-orange" href="">VOIR LES POINTS DE COLLECTE</a>
     </div>
 </div>
 
