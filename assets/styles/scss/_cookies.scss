@@ -1,0 +1,30 @@
+.cookiealert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0 !important;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100%);
+    transition: all 500ms ease-out;
+    color: #ecf0f1;
+    background-color: #212327;
+}
+
+.cookiealert.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0%);
+    transition-delay: 1000ms;
+}
+
+.cookiealert a {
+    text-decoration: underline;
+}
+
+.cookiealert .acceptcookies {
+    margin-left: 10px;
+    vertical-align: baseline;
+}
