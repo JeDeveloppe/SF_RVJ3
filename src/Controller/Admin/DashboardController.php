@@ -240,9 +240,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Gestion des ambassadeurs')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Liste des ambassadeurs', 'fas fa-list', Ambassador::class)->setPermission('ROLE_ADMIN');
 
-        yield MenuItem::section('Gestion des prestations')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Liste des prestations', 'fas fa-list', Benefit::class)->setPermission('ROLE_ADMIN');
-
         yield MenuItem::section('Gestion des documents:')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Liste des documents', 'fas fa-list', Document::class)->setPermission('ROLE_ADMIN');
         // yield MenuItem::linkToCrud('Lignes documents', 'fas fa-list', DocumentLine::class);

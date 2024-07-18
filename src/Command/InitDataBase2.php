@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Service\AdresseService;
-use App\Service\BenefitService;
 use App\Service\BoiteService;
 use App\Service\ColorService;
 use App\Service\DeliveryService;
@@ -37,7 +36,6 @@ class InitDataBase2 extends Command
 {
     public function __construct(
             private AdresseService $adresseService,
-            private BenefitService $benefitService,
             private BoiteService $boiteService,
             private OffSiteOccasionSaleService $offSiteOccasionSaleServiceService,
             private MeansOffPayementService $meansOffPayementService,
@@ -142,9 +140,6 @@ class InitDataBase2 extends Command
 
         //on injecte les groups pour les items
         $this->itemGroupService->addItemGroups($io);
-
-        //on injecte les prestations
-        $this->benefitService->addBenefits($io);
 
         return Command::SUCCESS;
     }

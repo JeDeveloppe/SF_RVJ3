@@ -1,0 +1,170 @@
+{% extends "components/_base.html.twig" %}
+
+{% block title %}Nos prestations{% endblock %}
+
+{% block body %}
+
+<div class="row justify-content-around align-items-center my-5">
+    <div class="col-11 col-md-4 d-flex flex-column justify-content-around pt-3">
+        <h1 class="col-11">
+            Nos <span class="text-purple">prestations</span>
+        </h1>
+        <div class="col-11">//TODO Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+
+        <div class="col-11 d-flex justify-content-around mt-3">
+            <a class="btn btn-dark" href="{{ path('app_prestations') }}#id_animations">Animations</a>
+            <a class="btn btn-orange" href="{{ path('app_prestations') }}#id_inventaires">Inventaires</a>
+        </div>
+
+    </div>
+    <div class="col-11 mt-3 mt-md-0 col-md-4 d-flex justify-content-around">
+        <img src="{{ asset('build/images/design/ambassadeur/rosace_violet.svg') }}" alt="Rosace">
+    </div>
+</div>
+
+<div class="row justify-content-center align-items-center bg-white py-5">
+    <div class="col-11 mt-3 mt-md-0 col-md-5 div_ambassadeur_img">
+        <img src="{{ asset('build/images/design/ambassadeur/collecte.png') }}" alt="Exemple de collecte">
+    </div>
+    <div class="col-11 col-md-7 d-flex flex-column pt-3 px-0 mt-3 mt-md-0">
+        <h2 id="id_animations" class="col-12">
+            <span class="text-purple">Animations</span> et ateliers
+        </h2>
+        <div class="col-9">
+            À l’échelle nationale, nous faisons le constat que peu de structures ont la capacité de valoriser en grande quantité les jeux de société incomplets.
+            Nous avons donc imaginé une mission d’ambassadrice/ambassadeur. Cette mission consiste à collecter des jeux incomplets près de chez vous (où que vous soyez en France) et à nous les envoyer afin qu’ils soient complétés ou qu’ils alimentent le catalogue des pièces détachées.
+        </div>
+        <h3 class="col-12 text-orange mt-3">QUI PEUT DEVENIR AMBASSADEUR·RICE ?</h3>
+        <div class="col-12 d-flex flex-wrap">
+            La mission d’ambassadeur·rice peut être assurée par un particulier ou une structure (ressourcerie, association, école, centre de loisirs…). Pour cela, il suffit de compléter le formulaire d’inscription et de nous le retourner par mail :
+            <a class="btn btn-dark mt-4" href="{{ path('app_download_ambassador_quide') }}">Télécharger le formulaire</a>
+        </div>
+
+    </div>
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+
+<div class="row justify-content-around py-5 bg-white">
+    <h2 id="id_inventaires" class="col-12 text-center"><span class="text-purple">Inventaire </span> de jeux</h2>
+    <div class="col-12 d-flex flex-wrap justify-content-around justify-content-md-center mt-4">
+        <div class="col-11 col-sm-7 col-md-5 col-lg-4">
+            <div class="card card_collectons py-4">
+                <div class="col-12 card_collectons_img">
+                    <img src="{{ asset('build/images/design/index/exemple_jeux_inities.png') }}" alt="Lot de jeux récoltés">
+                    <i class="fa-solid fa-check position-absolute text-white fa-5x rounded-circle bg-success p-3"></i>
+                </div>
+                <h4 class="text-center text-orange">Nous collectons</h5>
+                <div class="card-body">
+                    <ul class="card_collectons_ul_success list-unstyled">
+                        <li>Jeux de société modernes et anciens</li>
+                        <li>Jeux éducatifs en boîte carton</li>
+                        <li>Pièces détachées (pions, dés, sabliers…)</li>
+                        <li>Puzzles complets</li>
+                        <li>Jeux d’encastrement en bois</li>
+                        <li>Certains jouets : Domino Express, jeux SMARTMAX et GEOMAG</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-11 mt-3 col-sm-7 col-md-5 mt-md-0 col-lg-4">
+            <div class="card card_collectons py-4">
+                <div class="col-12 card_collectons_img">
+                    <img src="{{ asset('build/images/design/index/exemple_jeux_inities.png') }}" alt="Lot de jeux non récoltés">
+                    <i class="fa-solid fa-xmark position-absolute text-white fa-5x rounded-circle bg-danger p-3"></i>
+                </div>
+                <h4 class="text-center text-orange">Nous ne collectons pas</h5>
+                <div class="card-body">
+                    <ul class="card_collectons_ul_wrong list-unstyled">
+                        <li>Jouets</li>
+                        <li>Puzzles incomplets</li>
+                        <li>Jeux de société de sous-marques ou certains jeux de marques distributeurs (ex : Pavillon)</li>
+                        <li>Certains jeux trop lourds pour envoi ou difficiles à revaloriser. Ex : Trivial Pursuit, In ze boîte, jeux TV (sauf Pyramide)…</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+<div class="row justify-content-around py-4 bg-white">
+    <h2 class="col-12 text-center"><span class="text-purple">Comment çà</span> marche ?</h2>
+    <div class="col-12 text-center mt-3">
+       <b>Avant de vous lancer…</b><br/> Assurez-vous qu’il n’existe pas près de chez vous des structures de réemploi<br/>susceptibles de valoriser ces jeux incomplets.
+    </div>
+    <div class="col-12 d-flex flex-wrap justify-content-around align-items-center mt-5">
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="card border-0">
+                <div class="card-body">
+                    <span class="card_ambassadeur_number">
+                        <i class="fa-solid fa-circle fa-8x position-relative"></i>
+                        <i class="fa-solid fa-1 fa-5x text-orange position-absolute"></i>
+                    </span>
+                    <h6 class="text-dark text-center mt-3">Complétez le formulaire </h6>
+                    <div class="card-text">
+                        //TODO Lorem ipsum dolor sit amet consectetur adipiscing elit edum. Lorem ipsum dolor sit amet consectetur adipiscing elit edum.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="card border-0">
+                <div class="card-body">
+                    <span class="card_ambassadeur_number">
+                        <i class="fa-solid fa-circle fa-8x position-relative"></i>
+                        <i class="fa-solid fa-2 fa-5x text-orange position-absolute"></i>
+                    </span>
+                    <h6 class="text-dark text-center mt-3">Collectez les jeux </h6>
+                    <div class="card-text">
+                        //TODO Lorem ipsum dolor sit amet consectetur adipiscing elit edum. Lorem ipsum dolor sit amet consectetur adipiscing elit edum.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="card border-0">
+                <div class="card-body">
+                    <span class="card_ambassadeur_number">
+                        <i class="fa-solid fa-circle fa-8x position-relative"></i>
+                        <i class="fa-solid fa-3 fa-5x text-orange position-absolute"></i>
+                    </span>
+                    <h6 class="text-dark text-center mt-3">Pesez votre colis </h6>
+                    <div class="card-text">
+                        Pesez votre colis et envoyez-nous un mail avec le poids. Nous vous envoyons alors le bon de livraison à imprimer et à coller sur le carton.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="card border-0">
+                <div class="card-body">
+                    <span class="card_ambassadeur_number">
+                        <i class="fa-solid fa-circle fa-8x position-relative"></i>
+                        <i class="fa-solid fa-4 fa-5x text-orange position-absolute"></i>
+                    </span>
+                    <h6 class="text-dark text-center mt-3">Envoyez gratuitement les jeux </h6>
+                    <div class="card-text">
+                        Et voilà, le tour est joué ! L’envoi des jeux se fait via Mondial Relay. Les frais de port sont pris en charge par l’association.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-around py-5">
+    <h2 class="col-12 text-center">UN PROJET EN PARTICULIER ?</h2>
+    <div class="col-md-5 text-center">
+            Vous souhaitez mettre en place un projet particulier ?<br/>
+            Journée de formation, team building…<br/>
+            Nous étudierons toutes vos propositions !
+    </div>
+    <div class="col-12 mt-4 d-flex justify-content-around">
+        <a class="btn btn-orange" href="{{ path('app_contact') }}">nous contacter</a>
+    </div>
+</div>
+
+{% endblock %}

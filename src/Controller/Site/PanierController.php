@@ -111,7 +111,7 @@ class PanierController extends AbstractController
             $reponses = $this->panierService->calculateAllCart($user);
         }
 
-        return $this->render('site/panier/panier.html.twig', [
+        return $this->render('site/pages/panier/panier.html.twig', [
             'shippingAndVoucherForm' => $shippingAndVoucherForm,
             'occasions' => $reponses['panier_occasions'],
             'boites' => $reponses['panier_boites'],

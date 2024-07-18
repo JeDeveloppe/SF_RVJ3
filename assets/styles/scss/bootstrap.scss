@@ -2828,7 +2828,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-orange {
-  color: #fff;
+  color: var(--dark);
   background-color: var(--orange);
   border-color: var(--orange);
 }

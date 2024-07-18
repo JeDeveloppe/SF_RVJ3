@@ -23,7 +23,6 @@ use App\Repository\DocumentRepository;
 use App\Repository\AmbassadorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\EmailForSendResetPasswordType;
-use App\Repository\BenefitRepository;
 use App\Repository\DocumentLineRepository;
 use App\Repository\ResetPasswordRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +51,6 @@ class SiteController extends AbstractController
         private PartnerService $partnerService,
         private PartnerRepository $partnerRepository,
         private AmbassadorService $ambassadorService,
-        private BenefitRepository $benefitRepository
     )
     {
     }
@@ -62,7 +60,7 @@ class SiteController extends AbstractController
     {
         $metas['description'] = 'L’association Refaites vos jeux œuvre pour le réemploi des jeux et le lien social.';
 
-        return $this->render('site/home/index.html.twig', [
+        return $this->render('site/pages/home.html.twig', [
             'metas' => $metas
         ]);
     }
@@ -73,7 +71,7 @@ class SiteController extends AbstractController
         $legales = $this->legalInformationRepository->findOneBy(['isOnline' => true], ['id' => 'ASC']);
         $metas['description'] = 'Vous avez un jeu de société incomplet ? Refaites vos jeux vous propose un service pour donner une seconde vie à votre jeu, nous avons plein de pièces détachées en stock.';
 
-        return $this->render('site/legale/mentions_legales.html.twig', [
+        return $this->render('site/pages/legale/mentions_legales.html.twig', [
             'legales' => $legales,
             'metas' => $metas
         ]);
@@ -85,7 +83,7 @@ class SiteController extends AbstractController
         $legales = $this->legalInformationRepository->findOneBy(['isOnline' => true], ['id' => 'ASC']);
         $metas['description'] = 'Nos conditions générales de ventes concernant le site.';
 
-        return $this->render('site/legale/cgv.html.twig', [
+        return $this->render('site/pages/legale/cgv.html.twig', [
             'legales' => $legales,
             'metas' => $metas
         ]);
@@ -137,7 +135,7 @@ class SiteController extends AbstractController
             return $this->redirectToRoute('app_contact');
         }
     
-        return $this->render('site/contact/contact.html.twig', [
+        return $this->render('site/pages/contact.html.twig', [
             'form' => $form->createView(),
             'metas' => $metas
         ]);
@@ -149,7 +147,7 @@ class SiteController extends AbstractController
         $metas['description'] = 'Quelques chiffres et liens de notre présence sur internet.';
         $medias = $mediaRepository->findBy(['isOnLine' => true],['publishedAt' => 'DESC']);
         $items = $documentLineRepository->countTotalOfItemsBilled();
-        return $this->render('site/press/press.html.twig', [
+        return $this->render('site/pages/press.html.twig', [
             'metas' => $metas,
             'medias' => $medias,
             'itemBilleds' => $items
@@ -157,18 +155,18 @@ class SiteController extends AbstractController
 
     }
 
-    #[Route('/projet/qui-sommes-nous', name: 'app_who_are_we')]
+    #[Route('/qui-sommes-nous', name: 'app_who_are_we')]
     public function whoAreWe(): Response
     {
         $metas['description'] = 'Une petite description de ce qu\'est le service de Refaites vos jeux';
         
-        return $this->render('site/project/qui_sommes_nous.html.twig', [
+        return $this->render('site/pages/qui_sommes_nous.html.twig', [
             'metas' => $metas
         ]);
 
     }
 
-    #[Route('/projet/nous-soutenir/devenir-ambassadeur-ambassadrice', name: 'app_became_ambassador')]
+    #[Route('/devenir-ambassadeur-rice', name: 'app_became_ambassador')]
     public function becameAmbassador(Request $request): Response
     {
         
@@ -178,7 +176,7 @@ class SiteController extends AbstractController
 
         $metas['description'] = "Vous souhaitez contribuer activement au projet porté par l’association mais vous n’êtes pas sur Caen ?";
         
-        return $this->render('site/project/nous_soutenir/devenir-ambassadeur.html.twig', [
+        return $this->render('site/pages/devenir_ambassadeur.html.twig', [
             'metas' => $metas,
             'donnees' => $donnees
         ]);
@@ -233,16 +231,15 @@ class SiteController extends AbstractController
 
     }
 
-    #[Route('/projet/nos-prestations', name: 'app_prestations')]
+    #[Route('/nos-prestations', name: 'app_prestations')]
     public function prestations(Request $request): Response
     {
 
         $metas['description'] = 'En plus de son activité de réemploi des jeux de société, l’association propose différentes prestations.';
         
-        return $this->render('site/project/prestations.html.twig', [
+        return $this->render('site/pages/nos_prestations.html.twig', [
             'metas' => $metas,            
             'legales' => $this->legalInformationRepository->findOneBy([]),
-            'benefits' => $this->benefitRepository->findAll()
         ]);
 
     }
