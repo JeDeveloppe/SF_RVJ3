@@ -45,6 +45,14 @@ footer a {
   scale: 6;
   display: block;
 }
+.div_ambassadeur_img{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.div_ambassadeur_img img{
+  width: 40%;
+}
 
 .card_ambassadeur_number{
   display: flex;
@@ -792,6 +800,10 @@ footer a:hover{
   
   #logoNav img{
     scale: 1;
+  }
+
+  .div_ambassadeur_img img{
+    width: 60%;
   }
 }
 
