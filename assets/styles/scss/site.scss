@@ -14,12 +14,17 @@
 * {
   margin: 0;
   padding: 0;
-  }
+}
+
+html{
+  scroll-behavior: smooth;
+}
 
 body{
   background: #F7F2EC 0% 0% no-repeat padding-box;
   width: 100%;
   font-family: Nunito;
+  color: #1C1E3C; 
 }
 
 h1, h2, h3, h4, h5, h6{
