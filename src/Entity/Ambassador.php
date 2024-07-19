@@ -26,10 +26,6 @@ class Ambassador
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $street = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ambassadors')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?City $city = null;
-
     #[ORM\Column(length: 18, nullable: true)]
     private ?string $phone = null;
 
@@ -66,6 +62,12 @@ class Ambassador
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $instagramLink = null;
+
+    #[ORM\ManyToOne(inversedBy: 'ambassadors')]
+    private ?City $city = null;
+
+    #[ORM\Column]
+    private ?bool $onTheCarte = null;
 
     public function getId(): ?int
     {
@@ -116,18 +118,6 @@ class Ambassador
     public function setStreet(?string $street): static
     {
         $this->street = $street;
-
-        return $this;
-    }
-
-    public function getCity(): ?City
-    {
-        return $this->city;
-    }
-
-    public function setCity(?City $city): static
-    {
-        $this->city = $city;
 
         return $this;
     }
@@ -272,6 +262,30 @@ class Ambassador
     public function setInstagramLink(?string $instagramLink): static
     {
         $this->instagramLink = $instagramLink;
+
+        return $this;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function isOnTheCarte(): ?bool
+    {
+        return $this->onTheCarte;
+    }
+
+    public function setOnTheCarte(bool $onTheCarte): static
+    {
+        $this->onTheCarte = $onTheCarte;
 
         return $this;
     }

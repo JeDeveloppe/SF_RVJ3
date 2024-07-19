@@ -47,19 +47,19 @@ class City
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: CollectionPoint::class)]
     private Collection $collectionPoints;
 
-    #[ORM\OneToMany(mappedBy: 'city', targetEntity: Ambassador::class)]
-    private Collection $ambassadors;
-
     #[ORM\OneToMany(mappedBy: 'privatecity', targetEntity: Ambassador::class)]
     private Collection $ambassadorsprivate;
+
+    #[ORM\OneToMany(mappedBy: 'City', targetEntity: Ambassador::class)]
+    private Collection $ambassadors;
 
     public function __construct()
     {
         $this->partners = new ArrayCollection();
         $this->addresses = new ArrayCollection();
         $this->collectionPoints = new ArrayCollection();
-        $this->ambassadors = new ArrayCollection();
         $this->ambassadorsprivate = new ArrayCollection();
+        $this->ambassadors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -249,36 +249,6 @@ class City
     /**
      * @return Collection<int, Ambassador>
      */
-    public function getAmbassadors(): Collection
-    {
-        return $this->ambassadors;
-    }
-
-    public function addAmbassador(Ambassador $ambassador): static
-    {
-        if (!$this->ambassadors->contains($ambassador)) {
-            $this->ambassadors->add($ambassador);
-            $ambassador->setCity($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAmbassador(Ambassador $ambassador): static
-    {
-        if ($this->ambassadors->removeElement($ambassador)) {
-            // set the owning side to null (unless already changed)
-            if ($ambassador->getCity() === $this) {
-                $ambassador->setCity(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Ambassador>
-     */
     public function getAmbassadorsprivate(): Collection
     {
         return $this->ambassadorsprivate;
@@ -300,6 +270,36 @@ class City
             // set the owning side to null (unless already changed)
             if ($ambassadorsprivate->getPrivatecity() === $this) {
                 $ambassadorsprivate->setPrivatecity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ambassador>
+     */
+    public function getAmbassadors(): Collection
+    {
+        return $this->ambassadors;
+    }
+
+    public function addAmbassador(Ambassador $ambassador): static
+    {
+        if (!$this->ambassadors->contains($ambassador)) {
+            $this->ambassadors->add($ambassador);
+            $ambassador->setCity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAmbassador(Ambassador $ambassador): static
+    {
+        if ($this->ambassadors->removeElement($ambassador)) {
+            // set the owning side to null (unless already changed)
+            if ($ambassador->getCity() === $this) {
+                $ambassador->setCity(null);
             }
         }
 

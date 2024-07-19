@@ -12,12 +12,10 @@ class AmbassadorService
     }
 
 
-    public function constructionMapOfFranceWithAmbassadors($baseUrl)
+    public function constructionMapOfFranceWithAmbassadors($baseUrl, array $ambassadors)
     {
 
         $stores = []; //? toutes les réponses seront dans ce tableau final
-        $ambassadors = $this->ambassadorRepository->findAll();
-
 
         foreach($ambassadors as $ambassador)
         {

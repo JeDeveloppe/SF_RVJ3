@@ -1,0 +1,75 @@
+{% extends "components/_base.html.twig" %}
+
+{% block title %}Donner ses jeux{% endblock %}
+
+{% block body %}
+
+<div class="js-locations" data-locations="{{ donnees }}"></div>
+
+<div class="row justify-content-around align-items-center my-5">
+    <div class="col-11 col-md-5 d-flex flex-column justify-content-around pt-3">
+        <h1 class="col-11">
+            <span class="text-purple">Donner</span> ses jeux
+        </h1>
+        <div class="col-11">
+            L’association récupère les jeux de société complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…). Nous récupérons également les puzzles complets et les jeux éducatifs en boîte carton (pour apprendre à lire, compter…), qu’ils soient complets ou incomplets.
+        </div>
+        <div class="col-11 d-flex justify-content-around mt-3">
+            <a class="btn btn-dark" href="{{ path('app_give_your_games') }}#idCollectPoint">Trouvez un point de collecte</a>
+        </div>
+
+    </div>
+    <div class="col-11 mt-3 mt-md-0 col-md-5 d-flex justify-content-around">
+        <img src="{{ asset('build/images/design/ambassadeur/rosace_violet.svg') }}" alt="Rosace">
+    </div>
+</div>
+
+<div class="row justify-content-center align-items-center bg-white py-5">
+    <h2 id="id_animations" class="col-11 text-center">
+        Trouver un point de<br/>collecte <span class="text-purple">près de chez moi</span>
+    </h2>
+    <div class="col-12 d-flex flex-wrap justify-content-around mt-4">
+        <div class="col-9 col-md-6">
+            <script type="text/javascript" src="{{ asset('map/mapdata_france.js') }}"></script> 
+            <script type="text/javascript" src="{{ asset('map/countrymap_france.js') }}"></script> 
+            <div id="map_france"></div>
+        </div>
+        <div class="col-9 mt-4 col-md-6 mt-md-0">
+            <ul class="list-group overflow-auto">
+                {% for ambassador in ambassadors %}
+                    <li class="list-group-item d-flex">
+                        <div class="col-2 col-lg-1 d-flex justify-content-center align-items-center">
+                            <i class="fa-solid fa-location-pin fa-3x text-green position-relative"></i>
+                            <i class="fa-solid fa-shop text-white position-absolute mt-n2"></i>
+                        </div>
+                        <div class="col-10 col-lg-11">
+                            <b>{{ ambassador.organization }}</b><br/>
+                            <span class="small">{{ ambassador.street }} {{ ambassador.city.postalcode }} {{ ambassador.city.name }}</span><br/>
+                            <span class="small text-secondary">{{ ambassador.description | raw }}</span>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+<div class="row bg-white">
+    <h2 class="col-12 mt-5 text-center title_bis mb-4">Envoyer des jeux <span class="text-purple">par colis</span></h2>
+    <div class="col-4"></div>
+    <div class="col-8 d-flex">
+        <div class="col-6">
+            <h4>LA POSTE</h4>
+        
+        </div>
+        <div class="col-6">
+            <h4>MONDIAL RELAY</h4>
+        </div>
+    </div>
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+{% endblock %}

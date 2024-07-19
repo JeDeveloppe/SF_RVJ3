@@ -21,6 +21,16 @@ class AmbassadorRepository extends ServiceEntityRepository
         parent::__construct($registry, Ambassador::class);
     }
 
+    public function findAmbassadorsForCarte(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.onTheCarte = :true')
+            ->setParameter('true', true)
+            ->orderBy('a.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 //    /**
 //     * @return Ambassador[] Returns an array of Ambassador objects
 //     */

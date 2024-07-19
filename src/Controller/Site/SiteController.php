@@ -23,6 +23,7 @@ use App\Repository\DocumentRepository;
 use App\Repository\AmbassadorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\EmailForSendResetPasswordType;
+use App\Repository\CollectionPointRepository;
 use App\Repository\DocumentLineRepository;
 use App\Repository\ResetPasswordRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,6 +52,7 @@ class SiteController extends AbstractController
         private PartnerService $partnerService,
         private PartnerRepository $partnerRepository,
         private AmbassadorService $ambassadorService,
+        private AmbassadorRepository $ambassadorRepository
     )
     {
     }
@@ -169,16 +171,10 @@ class SiteController extends AbstractController
     #[Route('/devenir-ambassadeur-rice', name: 'app_became_ambassador')]
     public function becameAmbassador(Request $request): Response
     {
-        
-        $baseUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-
-        $donnees = $this->ambassadorService->constructionMapOfFranceWithAmbassadors($baseUrl);
-
         $metas['description'] = "Vous souhaitez contribuer activement au projet porté par l’association mais vous n’êtes pas sur Caen ?";
         
         return $this->render('site/pages/devenir_ambassadeur.html.twig', [
             'metas' => $metas,
-            'donnees' => $donnees
         ]);
 
     }
@@ -266,16 +262,21 @@ class SiteController extends AbstractController
 
     }
 
-    #[Route('/projet/nous-soutenir/donner-ses-jeux', name: 'app_give_your_games')]
-    public function giveYourGames(): Response
+    #[Route('/donner-ses-jeux', name: 'app_give_your_games')]
+    public function giveYourGames(Request $request): Response
     {
+        $baseUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+        $ambassadors = $this->ambassadorRepository->findAmbassadorsForCarte();
+
+        $donnees = $this->ambassadorService->constructionMapOfFranceWithAmbassadors($baseUrl, $ambassadors);
+
+        $metas['description'] = "L’association récupère les jeux de société complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…). Nous récupérons également les puzzles complets et les jeux éducatifs en boîte carton (pour apprendre à lire, compter…), qu’ils soient complets ou incomplets.";
         
-        $metas['description'] = "L’association récupère les jeux de société complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…).
-        Nous récupérons également les puzzles complets et les jeux éducatifs en boîte carton (pour apprendre à lire, compter…), qu’ils soient complets ou incomplets.";
-        
-        return $this->render('site/project/nous_soutenir/donner-ses-jeux.html.twig', [
+        return $this->render('site/pages/donner_ses_jeux.html.twig', [
             'metas' => $metas,
-            'legales' => $this->legalInformationRepository->findOneBy([])
+            'legales' => $this->legalInformationRepository->findOneBy([]),
+            'donnees' => $donnees,
+            'ambassadors' => $ambassadors
         ]);
 
     }

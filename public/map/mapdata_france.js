@@ -12,8 +12,8 @@ var simplemaps_countrymap_mapdata={
     
 		//State defaults
 		state_description: "",
-    state_color: "#2FA988",
-    state_hover_color: "#F6943E",
+    state_color: "#F0E7DC",
+    state_hover_color: "#F0E7DC",
     state_url: "",
     border_size: 1.5,
     all_states_inactive: "no",
@@ -22,11 +22,11 @@ var simplemaps_countrymap_mapdata={
 		//Location defaults
 		location_description: "",
     location_url: "",
-    location_color: "#F6943E",
+    location_color: "#00BB9D",
     location_opacity: 0.8,
     location_hover_opacity: 1,
-    location_size: 15,
-    location_type: "square",
+    location_size: 1,
+    location_type: "marker", //['image', 'circle', 'square', 'marker', 'triangle', 'heart', 'star', 'diamond']
     location_image_source: "frog.png",
     location_border_color: "#FFFFFF",
     location_border: 2,

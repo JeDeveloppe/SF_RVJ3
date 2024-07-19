@@ -10,7 +10,6 @@
 @import '_presse.scss';
 @import '_toast.scss';
 
-
 * {
   margin: 0;
   padding: 0;
@@ -21,7 +20,7 @@ html{
 }
 
 body{
-  background: #F7F2EC 0% 0% no-repeat padding-box;
+  background: #F0E7DC 0% 0% no-repeat padding-box;
   width: 100%;
   font-family: Nunito;
   color: #1C1E3C; 
@@ -35,10 +34,10 @@ h1, h2, h3, h4, h5, h6{
 }
 
 h1{
-  font-size:  54/64px;
+  font-size:  64px;
 }
 h2{
-  font-size:  44/54px;
+  font-size:  54px;
 }
 
 .title_bis, h2{
