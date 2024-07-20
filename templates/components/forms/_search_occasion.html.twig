@@ -5,26 +5,12 @@
             <div class="form-group mb-3 col-12">
                 {{ form_widget(form.search) }}
             </div>
-            <div class="form-group mb-3 col-12">
-                {{ form_widget(form.age) }}
-            </div>
-            <div class="col-12">
-                <div class="form-group mb-3 card p-1">
-                    <label for="exampleInputPassword1">{{ form_label(form.playerMin) }}</label>
-                    <ul class="d-flex justify-content-start flex-wrap mt-2">
-                        {% for player in form.playerMin %}
-                            <li class="list-unstyled col-3"> {{ form_widget(player) }} {{ form_label(player) }} 
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
             <div class="col-12">
                 {% set currentPath = app.request.get('_route') %}
                 <div class="input-group-append text-center col-12">
                     {# <button class="btn btn-outline-primary" type="submit">Chercher</button> #}
                     <div class="btn-group" role="group">
                         <button type="submit" class="btn btn-outline-primary">Chercher</button>
-                        <a href="{{ path(currentPath) }}" type="button" class="btn btn-outline-secondary">Reset</a>
                     </div>
                 </div>
             </div>

@@ -11,22 +11,22 @@
 
             {% if delivery == true %}
             
-                <a class="btn btn-dark" href="{{ path('panier_add_occasion', {'occasion_id': item.id }) }}">Ajouter au panier</a>
+                <a class="btn btn-dark mt-3" href="{{ path('panier_add_occasion', {'occasion_id': item.id }) }}">Ajouter au panier</a>
 
             {% else %}
 
-            <i class="fas fa-lightbulb text-info"></i> Vous semblez être trop loin pour un retrait...</a>
+            <i class="fas fa-lightbulb text-info mt-3"></i> Vous semblez être trop loin pour un retrait...</a>
 
             {% endif %}
 
         {% endif %}
 
     {% else %}
-        <a class="btn btn_juliette_bg_yellow" href="{{ path('catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.slug , 'editorSlug': boite.editor.slug  }) }}">Voir les pièces disponibles</a>
+        <a class="btn btn-orange mt-3" href="{{ path('catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.slug , 'editorSlug': boite.editor.slug  }) }}">Voir les pièces disponibles</a>
     {% endif %}
 
 {% else %}
 
-    <a href="{{ path('app_login') }}" class="btn btn_juliette_bg_yellow mt-3 mb-2 ">Merci de vous identifier</a>
+    <a href="{{ path('app_login') }}" class="btn btn-orange mt-3 mb-2 ">Merci de vous identifier</a>
     
 {% endif %}

@@ -10,8 +10,8 @@
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 {% block body %}
 
-		<div class="row mt-2 mt-lg-5 pt-5">
-			<div class="col-12 col-md-6 ps-5">
+		<div class="row py-2 py-lg-3">
+			<div class="col-12 col-md-6 ps-5 d-flex">
 				{% if app.request.headers.get('referer') is null %}
 					<a class="btn btn-secondary" href="{{ path('app_catalogue_occasions') }}#{{ occasion.id }}">Retour au catalogue général</a>
 				{% else %}
@@ -21,8 +21,8 @@
 		</div>
 
 		<!-- BLOC PRESENTATION DU JEU  -->
-		<div class="row bg-white">
-			<div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
+		<div class="row justify-content-around bg-white">
+			<div class="col-10 col-md-6 d-flex justify-content-center align-items-center">
 				<div class="col-12 col-md-6 text-center p-0">
 					<div class="divImgPresentation mt-1">
 						<div class="zoom">
@@ -44,17 +44,17 @@
 					</span>
 				</div>
 			</div>
-			<div class="col-12 col-md-6 d-flex flex-column">
-					<div class="col-12 occasion_detail_editor mt-5">{{ occasion.boite.editor }}</div>
-					<div class="col-12 occasion_detail_name">{{ occasion.boite.name }}</div>
+			<div class="col-10 col-md-6 d-flex flex-wrap">
+					<h1 class="col-12 occasion_detail_name mt-5">{{ occasion.boite.name }}</h1>
+					<div class="col-12 occasion_detail_editor">{{ occasion.boite.editor }}</div>
 					{% include "components/catalog/_occasion_details.html.twig"  with { 'occasion': occasion } %}
 					{# on inclus le bouton ajout au panier #}
-					<div class="col-12 my-2">
+					<div class="col-12 d-flex my-2 justify-content-around">
 						{% include "components/catalog/_card_cart_button.html.twig" with {'item': occasion}%}
 					</div>
-					<div class="col-12 d-flex justify-content-around my-5">
-						<div class="col __shop"><img src="{{ asset('build/images/design/cart/shop_retrait.svg') }}" alt="Logo shop_retrait"> Retrait sur Caen</div>
-						<div class="col __no_transport"><img src="{{ asset('build/images/design/cart/no_transport.svg') }}" alt="Logo no_transport"> Pas de livraison</div>
+					<div class="col-12 d-flex justify-content-around mt-2 mb-5">
+						<div class="col-6 text-center __shop"><img src="{{ asset('build/images/design/cart/shop_retrait.svg') }}" alt="Logo shop_retrait"> Retrait sur Caen</div>
+						<div class="col-6 text-center __no_transport"><img src="{{ asset('build/images/design/cart/no_transport.svg') }}" alt="Logo no_transport"> Pas de livraison</div>
 					</div>
 			</div>
 		</div>
@@ -62,7 +62,7 @@
 		{% include "components/_separateur_wave.html.twig" %}
 
 		<div class="row justify-content-around bg-white">
-			<div class="col-11 my-4 title_bis">Ces jeux pourraient <span class="text-purple">vous plaire</span></div>
+			<h3 class="col-11 my-4">Ces jeux pourraient <span class="text-purple">vous plaire</span></h3>
 			{% for firstElement in firstElements %} 
 			    <div class="col-8 col-sm-6 col-lg-3 mx-md-0 px-3 px-md-5 px-lg-1 my-3"> 
         			{% include "components/catalog/_cardOccasion.html.twig" with { 'product': firstElement, 'tax': tax } %}

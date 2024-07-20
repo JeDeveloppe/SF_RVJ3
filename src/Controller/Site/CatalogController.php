@@ -7,6 +7,7 @@ use App\Service\PanierService;
 use App\Service\AdresseService;
 use App\Service\OccasionService;
 use App\Repository\TaxRepository;
+use App\Service\UtilitiesService;
 use App\Repository\BoiteRepository;
 use App\Repository\EditorRepository;
 use App\Entity\CatalogOccasionSearch;
@@ -14,17 +15,17 @@ use App\Repository\AddressRepository;
 use App\Repository\PartnerRepository;
 use App\Repository\OccasionRepository;
 use App\Form\SearchBoiteInCatalogueType;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SiteSettingRepository;
 use App\Form\SearchOccasionInCatalogueType;
-use App\Repository\CatalogOccasionSearchRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\CollectionPointRepository;
-use App\Service\UtilitiesService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Form\SearchDetailsOccasionInCatalogueType;
+use App\Repository\CatalogOccasionSearchRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CatalogController extends AbstractController
@@ -155,6 +156,9 @@ class CatalogController extends AbstractController
         $form = $this->createForm(SearchOccasionInCatalogueType::class);
         $form->handleRequest($request);
 
+        $formDetailsOccasion = $this->createForm(SearchDetailsOccasionInCatalogueType::class);
+        $formDetailsOccasion->handleRequest($request);
+
 
         if($form->isSubmitted() && $form->isValid()) {
 
@@ -205,11 +209,12 @@ class CatalogController extends AbstractController
 
         $metas['description'] = 'Catalogue complet des jeux d\'occasion disponible à la vente en retrait sur Caen.';
 
-        return $this->render('site/catalog/occasions/les_occasions.html.twig', [
+        return $this->render('site/pages/catalog/occasions/les_occasions.html.twig', [
             'occasions' => $occasions,
             'occasions_totales' => $donneesFromDatabases,
             'metas' => $metas,
             'form' => $form,
+            'formDetailsOccasion' => $formDetailsOccasion,
             'data' => $data ?? null,
             'tax' => $this->taxRepository->findOneBy([]),
             'partenaires' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true])
@@ -263,7 +268,7 @@ class CatalogController extends AbstractController
 
         $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.$occasion->getBoite()->getName().' - '.$occasion->getBoite()->getEditor()->getName();
 
-        return $this->render('site/catalog/occasions/occasion.html.twig', [
+        return $this->render('site/pages/catalog/occasions/occasion.html.twig', [
             'occasion' => $occasion,
             'tax' => $this->taxRepository->findOneBy([]),
             'metas' => $metas,

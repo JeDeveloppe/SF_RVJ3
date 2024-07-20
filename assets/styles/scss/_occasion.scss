@@ -60,11 +60,12 @@
 }
 
 .card_boite_name {
-    text-align: left;
+    width: 100%;
     font: normal normal 600 16px/20px Nunito;
     letter-spacing: 0px;
     color: #1C1C3E;
     opacity: 1;
+    text-align: center;
     text-transform: lowercase;
     display: inline-block;
 }
