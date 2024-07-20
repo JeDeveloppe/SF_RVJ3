@@ -25,7 +25,7 @@ var simplemaps_countrymap_mapdata={
     location_color: "#00BB9D",
     location_opacity: 0.8,
     location_hover_opacity: 1,
-    location_size: 1,
+    location_size: 1, //in ambassadorService
     location_type: "marker", //['image', 'circle', 'square', 'marker', 'triangle', 'heart', 'star', 'diamond']
     location_image_source: "frog.png",
     location_border_color: "#FFFFFF",

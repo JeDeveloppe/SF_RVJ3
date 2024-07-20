@@ -15,6 +15,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 
 class AmbassadorCrudController extends AbstractCrudController
 {
@@ -35,6 +37,7 @@ class AmbassadorCrudController extends AbstractCrudController
             TextField::new('privatestreet')->setLabel('Adresse complète:'),
             AssociationField::new('privatecity')->setLabel('Ville:')->autocomplete(),
             BooleanField::new('onTheCarte','Sur la carte')->setDisabled(true),
+            IntegerField::new('colisSend', 'Nbre de colis<br/> envoyés'),
 
             FormField::addTab('Informations sur la carte'),
             TextField::new('organization')->setLabel('Organisation:')->onlyOnForms(),

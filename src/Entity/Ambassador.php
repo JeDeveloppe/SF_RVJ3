@@ -69,6 +69,9 @@ class Ambassador
     #[ORM\Column]
     private ?bool $onTheCarte = null;
 
+    #[ORM\Column]
+    private ?int $colisSend = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -286,6 +289,18 @@ class Ambassador
     public function setOnTheCarte(bool $onTheCarte): static
     {
         $this->onTheCarte = $onTheCarte;
+
+        return $this;
+    }
+
+    public function getColisSend(): ?int
+    {
+        return $this->colisSend;
+    }
+
+    public function setColisSend(int $colisSend): static
+    {
+        $this->colisSend = $colisSend;
 
         return $this;
     }

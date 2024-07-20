@@ -2,15 +2,21 @@
 
 namespace App\Service;
 
+use App\Entity\Ambassador;
+use League\Csv\Reader;
 use App\Repository\AmbassadorRepository;
+use App\Repository\CityRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class AmbassadorService
 {
     public function __construct(
-        private AmbassadorRepository $ambassadorRepository
+        private AmbassadorRepository $ambassadorRepository,
+        private EntityManagerInterface $em,
+        private CityRepository $cityRepository
         ){
     }
-
 
     public function constructionMapOfFranceWithAmbassadors($baseUrl, array $ambassadors)
     {
@@ -20,7 +26,7 @@ class AmbassadorService
         foreach($ambassadors as $ambassador)
         {
 
-            if(is_null($ambassador->getOrganization())){
+            if(strlen($ambassador->getOrganization()) == 0){
 
                 $name = '';
 
@@ -31,7 +37,7 @@ class AmbassadorService
 
             $nameAdress = $ambassador->getLastname().' '.$ambassador->getFirstname().'<br/>'.$ambassador->getStreet().'<br/>';
 
-            if(is_null($ambassador->getDescription())){
+            if(strlen($ambassador->getDescription()) == 0){
 
                 $description_detail = '';
 
@@ -40,7 +46,7 @@ class AmbassadorService
                 $description_detail = '<p style="margin-top:10px; padding:10px; width:100%; text-align:justify;">'.$ambassador->getDescription().'</p>';
             }
             
-            if(is_null($ambassador->getFullurl())){
+            if(strlen($ambassador->getFullurl()) == 0){
 
                 $url = '';
 
@@ -49,7 +55,7 @@ class AmbassadorService
                 $url = $ambassador->getFullurl();
             }
 
-            if(is_null($ambassador->getPhone())){
+            if(strlen($ambassador->getPhone()) == 0){
 
                 $phone = '';
 
@@ -58,7 +64,7 @@ class AmbassadorService
                 $phone = '<i class="fa-solid fa-phone"></i> : '.$ambassador->getPhone().'<br/>';
             }
 
-            if(is_null($ambassador->getEmail())){
+            if(strlen($ambassador->getEmail()) == 0){
 
                 $email = '';
 
@@ -67,7 +73,7 @@ class AmbassadorService
                 $email = '<i class="fa-solid fa-envelope"></i> : '.$ambassador->getEmail().'<br/>';
             }
 
-            if(is_null($ambassador->getFacebookLink())){
+            if(strlen($ambassador->getFacebookLink()) == 0){
 
                 $facebook = '';
 
@@ -76,7 +82,7 @@ class AmbassadorService
                 $facebook = '<i class="fa-brands fa-facebook"></i> :<a href="'.$ambassador->getFacebookLink().'">Lien vers Facebook</a><br/>';
             }
 
-            if(is_null($ambassador->getInstagramLink())){
+            if(strlen($ambassador->getInstagramLink()) == 0){
 
                 $instagram = '';
 
@@ -98,11 +104,11 @@ class AmbassadorService
             [
                 "lat" => $ambassador->getCity()->getLatitude(),
                 "lng" => $ambassador->getCity()->getLongitude(),
-                "color" => "#000000",
+                "color" => "#1DBA9D",
                 "name" => $name.$ambassador->getCity()->getName().' ('.$ambassador->getCity()->getDepartment()->getName().')',
                 "description" => $description,
                 "url" => $url,
-                "size" => 15,
+                "size" => 40,
             ];
         }
     
@@ -112,5 +118,65 @@ class AmbassadorService
         $donnees = $jsonStores;
 
         return $donnees;
+    }
+
+    public function importAmbassadors(SymfonyStyle $io): void
+    {
+        $io->title('Importation des ambassadeurs');
+
+        $ambassadors = $this->readCsvFileAmbassadors();
+        
+        $io->progressStart(count($ambassadors));
+
+        foreach($ambassadors as $arrayAmbassador){
+            $io->progressAdvance();
+            $ambassador = $this->createOrUpdateClient($arrayAmbassador);
+            $this->em->persist($ambassador);
+        }
+
+        $this->em->flush();
+
+        $io->progressFinish();
+        $io->success('Importation terminée');
+    }
+
+    //lecture des fichiers exportes dans le dossier import
+    private function readCsvFileAmbassadors(): Reader
+    {
+        $csvAmbassadeurs = Reader::createFromPath('%kernel.root.dir%/../import/ambassadeurs.csv','r');
+        $csvAmbassadeurs->setHeaderOffset(0);
+
+        return $csvAmbassadeurs;
+    }
+
+    private function createOrUpdateClient(array $arrayAmbassador): Ambassador
+    {
+        $ambassador = $this->ambassadorRepository->findOneBy(['privateemail' => $arrayAmbassador['Email']]);
+
+        if(!$ambassador){
+            $ambassador = new Ambassador();
+        }
+
+        $ambassador->setPrivateemail($arrayAmbassador['Email'])
+            ->setPrivatefirstname($arrayAmbassador['Prenom'])
+            ->setPrivatelastname($arrayAmbassador['Nom'])
+            ->setPrivatephone($arrayAmbassador['Phone'])
+            ->setPrivatestreet("A compléter")
+            ->setPrivatecity($this->cityRepository->findOneBy(['department' => str_replace(' ','-',$arrayAmbassador['Dept']), 'name' => $arrayAmbassador['Ville']]) ?? $this->cityRepository->findOneBy(['department' => '14', 'name' => 'CAEN']))
+            ->setOnTheCarte(false)
+            ->setColisSend((int)$arrayAmbassador['NbColis'] ?? 0);
+
+        if($arrayAmbassador['PtCollecte'] == 1){
+            $ambassador->setEmail($arrayAmbassador['Email'])
+            ->setOrganization($arrayAmbassador['Structure'])
+            ->setFirstname($arrayAmbassador['Prenom'])
+            ->setLastname($arrayAmbassador['Nom'])
+            ->setPhone($arrayAmbassador['Phone'])
+            ->setStreet("A compléter")
+            ->setCity($this->cityRepository->findOneBy(['department' => str_replace(' ','-',$arrayAmbassador['Dept']), 'name' => $arrayAmbassador['Ville']])  ?? $this->cityRepository->findOneBy(['department' => '14', 'name' => 'CAEN']))
+            ->setOnTheCarte(true);
+        }
+
+        return $ambassador;
     }
 }

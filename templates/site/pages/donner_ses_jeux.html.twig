@@ -15,7 +15,7 @@
             L’association récupère les jeux de société complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…). Nous récupérons également les puzzles complets et les jeux éducatifs en boîte carton (pour apprendre à lire, compter…), qu’ils soient complets ou incomplets.
         </div>
         <div class="col-11 d-flex justify-content-around mt-3">
-            <a class="btn btn-dark" href="{{ path('app_give_your_games') }}#idCollectPoint">Trouvez un point de collecte</a>
+            <a class="btn btn-dark" href="{{ path('app_give_your_games') }}#carte-des-points-de-collecte">Trouvez un point de collecte</a>
         </div>
 
     </div>
@@ -25,49 +25,74 @@
 </div>
 
 <div class="row justify-content-center align-items-center bg-white py-5">
-    <h2 id="id_animations" class="col-11 text-center">
+    <h2 id="carte-des-points-de-collecte" class="col-11 text-center">
         Trouver un point de<br/>collecte <span class="text-purple">près de chez moi</span>
     </h2>
-    <div class="col-12 d-flex flex-wrap justify-content-around mt-4">
-        <div class="col-9 col-md-6">
-            <script type="text/javascript" src="{{ asset('map/mapdata_france.js') }}"></script> 
-            <script type="text/javascript" src="{{ asset('map/countrymap_france.js') }}"></script> 
-            <div id="map_france"></div>
+    <div class="col-12 d-flex flex-wrap justify-content-center mt-5">
+        <div class="col-9 col-md-6 col-lg-5 d-flex justify-content-center align-items-center">
+            <div class="col-12 col-lg-11">
+                <script type="text/javascript" src="{{ asset('map/mapdata_france.js') }}"></script> 
+                <script type="text/javascript" src="{{ asset('map/countrymap_france.js') }}"></script> 
+                <div id="map_france"></div>
+            </div>
         </div>
-        <div class="col-9 mt-4 col-md-6 mt-md-0">
-            <ul class="list-group overflow-auto">
-                {% for ambassador in ambassadors %}
-                    <li class="list-group-item d-flex">
-                        <div class="col-2 col-lg-1 d-flex justify-content-center align-items-center">
-                            <i class="fa-solid fa-location-pin fa-3x text-green position-relative"></i>
-                            <i class="fa-solid fa-shop text-white position-absolute mt-n2"></i>
-                        </div>
-                        <div class="col-10 col-lg-11">
-                            <b>{{ ambassador.organization }}</b><br/>
-                            <span class="small">{{ ambassador.street }} {{ ambassador.city.postalcode }} {{ ambassador.city.name }}</span><br/>
-                            <span class="small text-secondary">{{ ambassador.description | raw }}</span>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+        <div class="d-flex flex-wrap col-9 mt-4 col-md-6 col-lg-5 mt-md-0">
+            <div class="col-12 overflow-auto" style="height: 400px">
+                <ul class="list-group">
+                    {% for ambassador in ambassadors %}
+                        <li class="list-group-item d-flex">
+                            <div class="col-2 col-lg-1 d-flex justify-content-center align-items-center">
+                                <i class="fa-solid fa-location-pin fa-3x text-green position-relative"></i>
+                                <i class="fa-solid fa-shop text-white position-absolute mt-n2"></i>
+                            </div>
+                            <div class="col-10 col-lg-11">
+                                <b>{{ ambassador.organization }}</b><br/>
+                                <span class="small">{{ ambassador.street }} {{ ambassador.city.postalcode }} {{ ambassador.city.name }}</span><br/>
+                                <span class="small text-secondary">{{ ambassador.description | raw }}</span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-12 text-center mt-4">Vous souhaitez devenir point de collecte ?</div>
+            <div class="col-12 d-flex justify-content-around">
+                <a class="btn btn-dark text-uppercase mt-4" href="{{ path('app_became_ambassador') }}">DEVENIR AMBASSADEUR·RICE</a>
+            </div>
         </div>
     </div>
 </div>
 
 {% include "components/_separateur_wave.html.twig" %}
 
-<div class="row bg-white">
-    <h2 class="col-12 mt-5 text-center title_bis mb-4">Envoyer des jeux <span class="text-purple">par colis</span></h2>
-    <div class="col-4"></div>
-    <div class="col-8 d-flex">
-        <div class="col-6">
-            <h4>LA POSTE</h4>
-        
+<div class="row justify-content-around bg-white py-4">
+    <h2 class="col-11 mt-5 text-center title_bis mb-4">Envoyer des jeux <span class="text-purple">par colis</span></h2>
+    <div class="col-11 d-flex flex-wrap justify-content-around">
+        <div class="col-11 col-md-4 d-flex justify-content-center align-items-center">
+            <img src="{{ asset('build/images/design/ambassadeur/rosace_violet.svg') }}" alt="Rosace">
         </div>
-        <div class="col-6">
-            <h4>MONDIAL RELAY</h4>
-        </div>
+        <div class="col-11 mt-3 col-md-8 mt-md-0 d-flex flex-wrap">
+            <div class="col-12 text-center mb-3">
+                <b>Pas de point de collecte près de chez vous ?</b><br/>
+                Vous pouvez aussi nous envoyer les jeux par la Poste ou via Mondial Relay.
+            </div>
+            <div class="col-6 text-center">
+                <h4 class="text-orange">LA POSTE</h4>
+                <p>
+                    <b>Voie postale ou Colissimo</b><br/>
+                    Refaites vos jeux 24 rue froide, 14980 ROTS
+                </p>
+            </div>
+            <div class="col-6 text-center">
+                <h4 class="text-orange">MONDIAL RELAY</h4>
+                <p>
+                    <b>Point Relais</b><br/>
+                    CARREFOUR EXPRESS, 14120 Mondeville.<br/>
+                    Email : {{ legales.emailCompany }}
+                </p>
+            </div>
+        </div>   
     </div>
+
 </div>
 
 {% include "components/_separateur_wave.html.twig" %}
