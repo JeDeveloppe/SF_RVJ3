@@ -1,4 +1,9 @@
-<div class="row bg-white">
+{% set bg_white_if_route_not_app_home = 'bg-white' %}
+{% if app.request.get('_route') == 'app_home'  %}
+  {% set bg_white_if_route_not_app_home = '' %}
+{% endif %}
+
+<div class="row {{ bg_white_if_route_not_app_home }}">
   <ul id="header_info" class="d-flex justify-content-center justify-content-md-end py-2 text-uppercase display-6">
     <li class="list-unstyled">
       <a class="p-4 text-white text-decoration-none small" href="{{ path('app_who_are_we') }}">L'association</a>
@@ -10,7 +15,7 @@
       <a class="p-4 text-white text-decoration-none small" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur·rice</a>
     </li>
   </ul>
-  <nav class="navbar navbar-expand-md bg-white" data-bs-theme="light">
+  <nav class="navbar navbar-expand-md {{ bg_white_if_route_not_app_home }}" data-bs-theme="light">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
