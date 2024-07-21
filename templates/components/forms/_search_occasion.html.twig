@@ -2,15 +2,28 @@
 
     {{ form_start(form) }}
         <div class="col-12 col-lg-12 d-flex flex-column flex-wrap justify-content-around">
-            <div class="form-group mb-3 col-12">
+            <div class="col-12 mb-3">
+                <label class="label_in_occasion_search_form">{{ form_label(form.search) }}</label>
                 {{ form_widget(form.search) }}
+            </div>
+            <div class="col-11 mb-3">
+                <label class="label_in_occasion_search_form">{{ form_label(form.age) }}</label>
+                {{ form_widget(form.age) }}
+            </div>
+            <div class="col-12">
+                <label class="label_in_occasion_search_form">{{ form_label(form.playerMin) }}</label>
+                <ul class="d-flex flex-wrap justify-content-start flex-wrap mt-2 p-0">
+                    {% for player in form.playerMin %}
+                            <li class="list-unstyled li_players"> {{ form_widget(player,{ 'attr': {'class': 'checkbox_players'} }) }} <span class="li_players_span">{{ form_label(player) }} </span></li>
+                    {% endfor %}
+                </ul>
             </div>
             <div class="col-12">
                 {% set currentPath = app.request.get('_route') %}
                 <div class="input-group-append text-center col-12">
-                    {# <button class="btn btn-outline-primary" type="submit">Chercher</button> #}
                     <div class="btn-group" role="group">
-                        <button type="submit" class="btn btn-outline-primary">Chercher</button>
+                        <button type="submit" class="btn btn-dark">Chercher</button>
+                        <a href="{{ path(currentPath) }}" type="button" class="btn btn-orange">Reset</a>
                     </div>
                 </div>
             </div>

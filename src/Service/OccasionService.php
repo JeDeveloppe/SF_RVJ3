@@ -8,7 +8,6 @@ use App\Entity\MovementOccasion;
 use App\Entity\ConditionOccasion;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Form\SearchOccasionInCatalogueType;
 use App\Repository\BoiteRepository;
 use App\Repository\MovementOccasionRepository;
 use App\Repository\ConditionOccasionRepository;
@@ -18,7 +17,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class OccasionService
 {
     public function __construct(
-        private SearchOccasionInCatalogueType $searchOccasionInCatalogueType,
         private OccasionRepository $occasionRepository,
         private ConditionOccasionRepository $conditionOccasionRepository,
         private MovementOccasionRepository $movementOccasionRepository,
@@ -28,32 +26,6 @@ class OccasionService
         private UtilitiesService $utilitiesService
     )
     {
-    }
-
-    public function findOccasionsFromOccasionForm($phrase,$age,$players)
-    {
-
-        //si pas de choix du nombre de joueurs
-        if(count($players) == 0){
-            [$playerChoices,$ageChoices,$lengthChoices] = $this->searchOccasionInCatalogueType->formOccasionChoices();
-
-            foreach($playerChoices as $playerChoice){
-                $players[] = $playerChoice;
-            }
-        }
-        $occasionsFromSearchByPhraseAndAge = $this->occasionRepository->findOccasionsFromSearchByPhraseAndAge($phrase,$age);
-
-        $occasions = [];
-
-        foreach($players as $player){
-            foreach($occasionsFromSearchByPhraseAndAge as $occasion){
-                if($occasion->getBoite()->getPlayersMin()->getName() == $player){
-                    $occasions[] = $occasion;
-                }
-            }
-        }
-
-        return array_unique($occasions);
     }
 
     public function addConditions(SymfonyStyle $io)

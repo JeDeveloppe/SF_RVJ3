@@ -17,14 +17,13 @@ use App\Repository\OccasionRepository;
 use App\Form\SearchBoiteInCatalogueType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SiteSettingRepository;
-use App\Form\SearchOccasionInCatalogueType;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Form\SearchOccasionsInCatalogueType;
 use App\Repository\CollectionPointRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Form\SearchDetailsOccasionInCatalogueType;
 use App\Repository\CatalogOccasionSearchRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -44,7 +43,9 @@ class CatalogController extends AbstractController
         private AdresseService $adresseService,
         private SiteSettingRepository $siteSettingRepository,
         private CatalogOccasionSearchRepository $catalogOccasionSearchRepository,
-        private UtilitiesService $utilitiesService
+        private UtilitiesService $utilitiesService,
+        private EntityManagerInterface $em,
+        private Security $security
     )
     {
     }
@@ -153,19 +154,16 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-jeux-occasion', name: 'app_catalogue_occasions')]
     public function catalogueOccasions(Request $request): Response
     {
-        $form = $this->createForm(SearchOccasionInCatalogueType::class);
+        $form = $this->createForm(SearchOccasionsInCatalogueType::class);
         $form->handleRequest($request);
 
-        $formDetailsOccasion = $this->createForm(SearchDetailsOccasionInCatalogueType::class);
-        $formDetailsOccasion->handleRequest($request);
 
+        if($form->isSubmitted() && $form->isSubmitted()) {
 
-        if($form->isSubmitted() && $form->isValid()) {
-
-                $search = $form->get('search')->getData();
-                $phrase = str_replace(" ","%",$search);
-                $age = $form->get('age')->getData() ?? 0;
-                $players = $form->get('playerMin')->getData() ?? [];
+            $search = $form->get('search')->getData();
+            $phrase = str_replace(" ","%",$search);
+            $age = $form->get('age')->getData() ?? 0;
+            $players = $form->get('playerMin')->getData() ?? [];
 
                 //TODO
                 // $data = new CatalogOccasionSearch();
@@ -174,37 +172,28 @@ class CatalogController extends AbstractController
                 //         ->setAge($age)
                 //         ->setPlayers($players)
                 //         ->setCreatedAt(new DateTimeImmutable('now'))
-                //         ->setUser($security->getUser());
-                // $em->persist($data);
-                // $em->flush($data);
+                //         ->setUser($this->security->getUser());
+                // $this->em->persist($data);
+                // $this->em->flush($data);
+                // $catalogueOccasionSearchs = $this->catalogOccasionSearchRepository->findAll();
+                // if(count($catalogueOccasionSearchs) > 100){ //on garde les 100 dernières recherches
+                //     $this->em->remove($catalogueOccasionSearchs[0]);
+                //     $this->em->flush();
+                // }
 
-                $donneesFromDatabases = $this->occasionService->findOccasionsFromOccasionForm($phrase,$age,$players);
-                
+            $donneesFromDatabases = $this->occasionRepository->searchOccasionsByNameOrEditorInCatalogue($phrase, $age, $players);
 
         }else{
 
-            if($request->get('search') && strlen($request->get('search')) == 250){ //! variable provient de utilitiesService
-
-                $data = $this->catalogOccasionSearchRepository->findByToken($request->get('token'));
-
-                if($data){
-
-                    $donneesFromDatabases = $this->occasionService->findOccasionsFromOccasionForm($data->getPhrase(),$data->getAge(),$data->getPlayers());
-
-                }
-
-            }else{
-
-                $data = null;
-                $donneesFromDatabases = $this->occasionRepository->findBy(['isOnline' => true],['id' => 'DESC']);
-            }
-
+            $data = null;
+            $donneesFromDatabases = $this->occasionRepository->findBy(['isOnline' => true],['id' => 'DESC']);
         }
 
         $occasions = $this->paginator->paginate(
             $donneesFromDatabases, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            24 /*limit per page*/
+            12, /*limit per page*/
+            ['name' => 'test']
         );
 
         $metas['description'] = 'Catalogue complet des jeux d\'occasion disponible à la vente en retrait sur Caen.';
@@ -214,8 +203,6 @@ class CatalogController extends AbstractController
             'occasions_totales' => $donneesFromDatabases,
             'metas' => $metas,
             'form' => $form,
-            'formDetailsOccasion' => $formDetailsOccasion,
-            'data' => $data ?? null,
             'tax' => $this->taxRepository->findOneBy([]),
             'partenaires' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true])
         ]);

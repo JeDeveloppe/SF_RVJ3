@@ -3,7 +3,7 @@
 {% block title %}Tous les jeux d'occasion{% endblock %}
 
 {% block body %}
-
+    
     <div class="row justify-content-around py-4">
         <h1 class="col-11 text-center">
             Tous les <span class="text-purple">jeux</span>
@@ -17,10 +17,10 @@
     {% else %}
         
         <div class="row justify-content-around py-5 bg-white">
-            <div class="col-11 col-md-9 col-lg-4">
-                {% include "components/forms/_search_details_occasion.html.twig" %}
+            <div class="col-11 col-md-9 col-lg-3">
+                {% include "components/forms/_search_occasion.html.twig" %}
             </div>
-            <div class="col-11 col-lg-8 d-flex flex-wrap justify-content-around align-items-stretch">
+            <div class="col-11 col-lg-9 d-flex flex-wrap justify-content-around align-items-stretch">
 
                 {% if occasions | length > 0 %}
 
@@ -30,8 +30,7 @@
                         {% set jeu_dispo = 'jeux disponibles' %}
                     {% endif %}
 
-                        <div class="col-6 fw-bolder mt-5 mt-lg-0">{{ occasions_totales | length }} {{ jeu_dispo }}.</div>
-                        {% include "components/forms/_search_occasion.html.twig" %}
+                        <div class="col-12 font-weight-bolder">{{ occasions_totales | length }} {{ jeu_dispo }}.</div>
 
                         {% for key,occasion in occasions %}  
 

@@ -5,12 +5,13 @@ namespace App\Form;
 use App\Repository\NumbersOfPlayersRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class SearchDetailsOccasionInCatalogueType extends AbstractType
+class SearchOccasionsInCatalogueType extends AbstractType
 {
     public function __construct(
         private NumbersOfPlayersRepository $numbersOfPlayersRepository
@@ -23,6 +24,14 @@ class SearchDetailsOccasionInCatalogueType extends AbstractType
         [$playerChoices,$ageChoices,$lengthChoices] = $this->formOccasionChoices();
 
         $builder
+            ->add('search', TextType::class, [
+                'label' => 'Je recherche:',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Un jeu, un éditeur...',
+                    'class' => 'form-control'
+                ]
+            ])
             ->add('playerMin', ChoiceType::class, [
                 'label' => 'Nombre de joueur(s):',
                 'attr' => [
@@ -33,7 +42,6 @@ class SearchDetailsOccasionInCatalogueType extends AbstractType
                 'multiple' => true,
             ])
             ->add('age', ChoiceType::class, [
-                'label' => false,
                 'attr' => [
                     'class' => 'form-control'
                 ],
