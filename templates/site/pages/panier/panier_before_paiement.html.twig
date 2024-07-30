@@ -4,113 +4,40 @@
 
 {% block body %}
 
-    <h1 class="col-12 text-center h2 mt-5">Panier</h1>
+{% include "site/pages/panier/components/_header_panier.html.twig" with {'page': 'paiement'} %}
 
-    <div class="row mt-5 mb-3 align-items-center">
-        <div class="col-4 text-center">
-            <div class="card bg-success text-white p-2">Panier</div>
-        </div>
-        <div class="col-4 text-center">
-            <div class="card bg-success text-white p-2">Adresses</div>
-        </div>
-        <div class="col-4 text-center">
-            <div class="card bg-secondary p-2">Confirmation</div>
-        </div>
-    </div>
+<div class="row justify-content-center bg-white pb-5 align-items-start">
+    <h3 class="col-12 text-center">Récapitulatif avant paiement</h3>
 
-    <div class="row justify-content-center my-5">
-        <div class="col-11 text-center">
-            <a href="{{ path('panier_start') }}" class="btn btn-outline-primary mx-auto"><i class="fa-solid fa-backward-fast"></i> Recommencer</a>
+    <!-- partie panier -->
+    <div class="card px-0 col-11 col-md-8 col-lg-6 d-flex flex-wrap pb-2">
+        {% include "site/pages/panier/components/_productsInCart.html.twig" with {'displayProductsInCart': true} %}
+        <div class="col-12">
+            {% include "site/pages/panier/components/_address.html.twig" with {'billingAddress': billingAddress, 'deliveryAddress': deliveryAddress }%}
+        </div>
+        <div class="col-12 d-flex justify-content-end">
+            <a href="{{ path('panier_start') }}" class="btn btn-orange"><i class="fa-solid fa-backward-fast mr-2"></i> Recommencer ?</a>
         </div>
     </div>
-
-
-    <div class="col-12 col-md-10 mx-auto">
-        {% include "components/panier/_address.html.twig" with {'billingAddress': billingAddress, 'deliveryAddress': deliveryAddress }%}
-
-        {% include "components/panier/_table_items.html.twig" with {'donnees': items } %}
-
-        {% include "components/panier/_table_occasions.html.twig" with {'donnees': occasions } %}
+    <!-- partie récapitulatif -->
+    <div class="col-11 p-0 px-lg-2 mt-4 col-md-8 mt-4 mt-lg-0 col-lg-5">
+            <div class="col-12 card rounded-4 p-0">
+                {% include "site/pages/panier/components/_recapitulatif.html.twig" with {'displayOccasions': false, 'displayItems': false, 'displayVoucher': false, 'displayShippingMethod': false, 'javascript': false } %}
+                <div class="col-12">
+                    {% include "site/pages/panier/components/_acceptCartForm.html.twig" %}
+                </div>
+            </div>
 
     </div>
-
-    <div class="col-12 col-md-6 mx-auto my-5">
-        <table class="table table-striped align-middle">
-            <tr>
-                <td>Sous-total articles:</td>
-                <td>{{ (totalItems * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-            </tr>
-            {% if remises.volume.actif == true %}
-                <tr>
-                    <td>
-                    Remise sur les articles ( - {{ remises.volume.value }}%):<br/>
-                        {% if remises.volume.nextRemiseSupplementaire is not same as false %}
-                            Prochain pallier dès {{ remises.volume.nextQteForRemiseSupplementaire }} articles pour {{ remises.volume.nextRemiseSupplementaire }} % de remise.
-                        {% endif %}
-                    </td>
-                    <td> - {{ (remises.volume.remiseDeQte * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-                </tr>
-            {% endif %}
-            <tr>
-                <td>Sous-total occasions:</td>
-                <td>{{ (totalOccasions * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-            </tr>
-            {% if remises.voucher.actif == true %}
-                <tr>
-                    <td>Code de réduction ({{ remises.voucher.token }}):<br>
-                    Reste à utiliser: {{ (remises.voucher.voucherRemaining * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
-                    <td>- {{ (remises.voucher.used * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-                </tr>
-            {% endif %}
-            <tr>
-                <td>Livraison / retrait:<br/>
-                <small>(poid total: {{ weigthPanier }}g)</small>
-                </td>
-                <td class="align-middle">
-                    {% if deliveryCostWithoutTax == 0 %}
-                        Retrait
-                    {% else %}
-                        {{ (deliveryCostWithoutTax / 100) | number_format(2, '.', ',') }} € TTC
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Préparation:
-                    {% if preparationHt == 0 %}
-                        <br/>Abonnement jusqu'au {{ app.user.membership | date('d-m-Y') }}
-                    {% endif %}
-                </td>
-                <td>{{ (preparationHt * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-            </tr>
-            <tr>
-                <td>Total HT:</td>
-                <td>{{ (totalPanier / 100) | number_format(2, '.', ',') }} €</td>
-            </tr>
-            <tr>
-                <td>TVA:</td>
-                <td>
-                {% if totalPanier * ( 1 + (tax.value / 100)) - totalPanier == 0 %}
-                    0.00 €
-                {% else %}
-                    {{ (totalPanier * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') - (totalPanier / 100) | number_format(2, '.', ',') }} €</td>
-                {% endif %}
-            </tr>
-            <tr>
-                <td>Total à payer:</td>
-                <td>{{ (totalPanier * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC</td>
-            </tr>
-        </table>
-    </div>
+</div>
 
 
-    {% include "components/panier/_acceptCartForm.html.twig" %}
 
-    <div class="col-12 text-center mt-4">
+    {# <div class="col-12 text-center mt-4">
         Avec:
     </div>
     <div class="col-6 text-center mx-auto mt-2 mb-4">
         {% include "components/paiement/_logo_paiement_with.html.twig" %}
-    </div>
+    </div> #}
 
 {% endblock %}

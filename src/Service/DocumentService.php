@@ -18,6 +18,7 @@ use App\Entity\DocumentLineTotals;
 use App\Repository\ItemRepository;
 use App\Repository\UserRepository;
 use App\Entity\Returndetailstostock;
+use App\Entity\ShippingMethod;
 use App\Repository\AddressRepository;
 use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
@@ -37,6 +38,7 @@ use App\Repository\DocumentParametreRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class DocumentService
 {
@@ -119,7 +121,7 @@ class DocumentService
         }
     }
 
-    public function saveDocumentLogicInDataBase(array $panierParams, Session $session):Document
+    public function saveDocumentLogicInDataBase(array $panierParams, Session $session, Request $request):Document
     {
 
         $document = $this->generateDocument($panierParams, $session);
@@ -127,7 +129,8 @@ class DocumentService
         $this->addVoucherDiscoundInDocumentLineTotals($panierParams, $documentLineTotals, $session);
         $this->generateAllLinesFromPanierIntoDocumentLines($panierParams, $document);
 
-        $session->remove('shippingMethodeId');
+        $request->cookies->remove('shippingMethodId');
+        $session->remove('shippingMethodId');
 
         return $document;
     }
@@ -137,7 +140,9 @@ class DocumentService
 
         $billingAddress = $this->addressRepository->find($session->get('billingAddressId'));
 
-        if($panierParams['shipping']->getPrice() == "PAYANT"){
+        $shippingMethod = $this->shippingMethodRepository->findOneBy(['id' => $session->get('shippingMethodId')]);
+
+        if($shippingMethod->getPrice() == "PAYANT"){
 
             $deliveryAddress = $this->addressRepository->find($session->get('deliveryAddressId'));
 
@@ -168,11 +173,11 @@ class DocumentService
         $document
             ->setToken($this->utilitiesService->generateRandomString())
             ->setQuoteNumber($docParams->getQuoteTag().$newNumero)
-            ->setTotalExcludingTax($panierParams['totalPanier'])
+            ->setTotalExcludingTax($panierParams['totalPanierHt'])
             ->setUser($this->security->getUser())
             ->setDeliveryAddress($this->adresseService->constructAdresseForSaveInDatabase($deliveryAddress))
             ->setBillingAddress($this->adresseService->constructAdresseForSaveInDatabase($billingAddress))
-            ->setTotalWithTax($this->utilitiesService->htToTTC($panierParams['totalPanier'],$panierParams['tax']->getValue()))
+            ->setTotalWithTax($this->utilitiesService->htToTTC($panierParams['totalPanierHt'],$panierParams['tax']->getValue()))
             ->setDeliveryPriceExcludingTax($panierParams['deliveryCostWithoutTax'])
             ->setIsQuoteReminder(false)
             ->setEndOfQuoteValidation($endDevis)
@@ -185,7 +190,7 @@ class DocumentService
             ->setIsDeleteByUser(false)
             ->setTimeOfSendingQuote(new DateTimeImmutable('now'))
             ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => $actionToSearch]))
-            ->setShippingMethod($panierParams['shipping']);
+            ->setShippingMethod($shippingMethod);
 
         $this->em->persist($document);
         $this->em->flush();

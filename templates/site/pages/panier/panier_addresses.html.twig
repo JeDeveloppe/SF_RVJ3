@@ -4,27 +4,33 @@
 
 {% block body %}
 
-    <h1 class="col-12 text-center h2 mt-5">Panier</h1>
 
-    <div class="row mt-5 mb-3 align-items-center">
-        <div class="col-4 text-center">
-            <div class="card bg-success text-white p-2">Panier</div>
-        </div>
-        <div class="col-4 text-center">
-            <div class="card bg-secondary p-2">Adresses</div>
-        </div>
-        <div class="col-4 text-center">
-            <div class="card p-2">Confirmation</div>
+{% include "site/pages/panier/components/_header_panier.html.twig" with {'page': 'adresses'} %}
+
+<div class="row justify-content-center bg-white pb-5 align-items-start">
+    <!-- partie panier -->
+    <div class="col-11 col-md-8 col-lg-6 d-flex flex-wrap">
+        <h3 class="col-12 px-0">Choix des adresses</h3>
+        <div class="col-12">
+        {% include "site/pages/panier/components/_billingAndDeliveryForm.html.twig" %}
         </div>
     </div>
+    <!-- partie récapitulatif -->
+    <div class="col-11 col-md-8 mt-4 mt-md-0 col-lg-5">
+        <h3 class="col-12 px-0">Récapitulatif</h3>
+        <div class="col-12 card rounded-4 p-0">
+            {% include "site/pages/panier/components/_recapitulatif.html.twig" with {'displayOccasions': false, 'displayItems': false, 'displayVoucher': false, 'displayShippingMethod': false, 'javascript': false } %}
+        </div>
+    </div>
+</div>
 
-    <div class="row justify-content-center my-5 bg-primary rounded-2">
+    {# <div class="row justify-content-center my-5 bg-primary rounded-2">
         <div class="col-11 col-md-6 col-lg-4 py-4">
 
             {% include "components/panier/_billingAndDeliveryForm.html.twig" %}
 
         </div>
-    </div>
+    </div> #}
 
 
 {% endblock %}

@@ -1,0 +1,5 @@
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+        {# {% if product.discountedPriceWithoutTax > 0 %}
+            <strike class="mt-1">{% include "components/occasion/_count_price.html.twig" %}</strike>
+        {% endif %} #}
+        {% include "components/occasion/_count_price.html.twig" with {'product': product }%} €

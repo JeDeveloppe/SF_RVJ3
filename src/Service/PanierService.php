@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Panier;
+use App\Entity\ShippingMethod;
 use DateTimeImmutable;
 use App\Repository\ItemRepository;
 use App\Repository\PanierRepository;
@@ -171,13 +172,13 @@ class PanierService
     public function calculateAllCart($user)
     {
         $session = $this->request->getSession();
-        $shipping = $this->shippingMethodRepository->findOneById($session->get('shippingMethodeId'));
+        $shippingMethod = $this->shippingMethodRepository->findOneById($session->get('shippingMethodId'));
         $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
         $responses = [];
         //? calcul de la remise sur les articles
         $responses['remises']['volume'] = $this->calculateRemise($this->panierRepository->findBy(['user' => $user]));
         
-        $responses['shipping'] = $shipping;
+        $responses['shippingMethod'] = $shippingMethod;
         $responses['panier_occasions'] = $this->panierRepository->findOccasionsByUser($user);
         $responses['panier_boites'] = $this->panierRepository->findBoitesByUser($user);
         $responses['panier_items'] = $this->panierRepository->findItemsByUser($user);
@@ -219,16 +220,16 @@ class PanierService
         $responses['totauxBoites'] = $this->utilitiesService->totauxItems($responses['panier_boites']);
 
         $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
+        $weigthPanier = $responses['weigthPanier'];
 
 
-        if(is_null($shipping)){
+        if(is_null($shippingMethod)){
 
             $responses['deliveryCostWithoutTax'] = 0;
 
         }else{
-                
-            $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shipping, $responses['weigthPanier']);
-            $responses['deliveryCostWithoutTax'] = $delivery->getPriceExcludingTax();
+
+            $responses['deliveryCostWithoutTax'] = $this->returnDeliveryCost($shippingMethod, $weigthPanier);
 
         }
 
@@ -249,7 +250,7 @@ class PanierService
         }
 
 
-        $responses['totalPanier'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']) - $responses['remises']['volume']['remiseDeQte'] - $responses['remises']['voucher']['used'];
+        $responses['totalPanierHt'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']) - $responses['remises']['volume']['remiseDeQte'] - $responses['remises']['voucher']['used'];
 
         return $responses;
     }
@@ -304,7 +305,7 @@ class PanierService
         $validation = false;
         $validationKO = [];
 
-        $stringVariablesToCheckIfThereExists = ['step_address','voucherDiscountId','billingAddressId','deliveryAddressId','shippingMethodeId'];
+        $stringVariablesToCheckIfThereExists = ['voucherDiscountId','billingAddressId','deliveryAddressId','shippingMethodId'];
 
         foreach($stringVariablesToCheckIfThereExists as $stringVariablesToCheckIfThereExist){
             if(array_key_exists($stringVariablesToCheckIfThereExist, $sessionArray)){
@@ -315,7 +316,16 @@ class PanierService
         }
 
         if(count($validationKO) > 0){
-            dd('Variables manquantes dans la session pour valider le panier: '.$validationKO);
+            dd('Variables manquantes dans la session pour valider le panier: '. var_dump($validationKO));
         }
+    }
+
+    public function returnDeliveryCost(ShippingMethod $shipping, int $weigthPanier)
+    {
+
+        $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shipping, $weigthPanier);
+        $result = $delivery->getPriceExcludingTax();
+
+        return $result;
     }
 }

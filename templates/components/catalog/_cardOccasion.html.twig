@@ -20,8 +20,8 @@
             {% include "components/catalog/_durationOfTheGame.html.twig" with {'item': boite } %}
         </div>
         <div class="col-12 d-flex flex-wrap justify-content-around align-items-center mb-1 px-0">
-            <div class="col-6 p-0">
-                {% include "components/catalog/_displayPriceLogic.html.twig" with {'product': product, 'tax': tax} %}
+            <div class="col-6 p-0 text-orange">
+                {% include "components/occasion/_display_occasion_price.html.twig" with {'product': product, 'tax': tax} %}
             </div>
             <div class="col-6 text-end p-0">
                 {% include "components/catalog/_card_button.html.twig" with {'item': card_item }%}

@@ -494,6 +494,7 @@ class PaiementService
         if(!$document){
             //pas de devis
             $response['messageFlash'] = 'Document inconnu!';
+            $response['redirectMethod'] = 'route';
             $response['route'] = 'app_home';
 
         }else if(!is_null($document->getBillNumber())){
@@ -517,9 +518,12 @@ class PaiementService
                 ]
             ]);
 
+            //on recupere la reponse du serveur
             $content = $result->toArray();
+
             //s'il y a eu enregistrement chez HelloAsso
-            if(isset($content['order'])){
+            if(isset($content['order']))
+            {
                 $order = $content['order'];
                 
                 //paiement accepter
@@ -540,11 +544,17 @@ class PaiementService
                     $this->em->persist($document);
                     $this->em->flush();
 
-                    $response['paiement'] = true;
+                    $response['paiement'] = 'Document payé!';
                 }
+
+            }else{
+                //pas d'enregistrement
+                $response['redirectMethod'] = 'url';
+                $response['route'] = $content['redirectUrl'];
             }
 
         }
+
         return $response;
     }
 

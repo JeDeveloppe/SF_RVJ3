@@ -64,7 +64,7 @@ class PaiementController extends AbstractController
 
             //si on a bien vérifié le paiement
             if(array_key_exists('paiement', $response)){
-                return $this->render('site/paiement/success.html.twig', [
+                return $this->render('site/pages/paiement/success.html.twig', [
                     'token' => $tokenDocument,
                 ]);
             }else{
@@ -79,12 +79,20 @@ class PaiementController extends AbstractController
             
             //si on a bien vérifié le paiement
             if(array_key_exists('paiement', $response)){
-                return $this->render('site/paiement/success.html.twig', [
+                return $this->render('site/pages/paiement/success.html.twig', [
                     'token' => $tokenDocument,
                 ]);
             }else{
-                $this->addFlash('warning', $response['messageFlash']);
-                return $this->redirectToRoute($response['route']);
+                // $this->addFlash('warning', $response['messageFlash']);
+                if($response['redirectMethod'] == 'url'){
+
+                    return $this->redirect($response['route']);
+
+                }else{
+                    
+                    return $this->redirectToRoute($response['route']);
+
+                }
             }
         
         }else{
@@ -105,7 +113,7 @@ class PaiementController extends AbstractController
 
         }else{
 
-            return $this->render('site/paiement/cancel.html.twig', [
+            return $this->render('site/pages/paiement/cancel.html.twig', [
                 'token' => $tokenDocument,
             ]);
         }

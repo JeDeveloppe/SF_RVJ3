@@ -1,0 +1,12 @@
+{{ form_start(acceptCartForm) }}
+    <div class="col-12 form-group my-4 text-center">
+        <label for="exampleInputEmail1">J'accepte les <a target="_blank" href="{{ path('app_conditions_generale_de_vente') }}">conditions générales de vente</a>:</label>
+        {{ form_widget(acceptCartForm.accept) }}
+    </div>
+    <div class="col-12 d-flex flex-column justify-content-center align-items-center">
+        <button class="btn btn-lg btn-outline-success" type="submit">Payer</button>
+        <div class="col-12 mt-4 text-center pb-3">
+            avec {% include "components/paiement/_logo_paiement_with.html.twig" %}
+        </div>
+    </div>
+{{ form_end(acceptCartForm) }}

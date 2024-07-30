@@ -65,15 +65,15 @@
               <a class="nav-link text-dark" href="{{ path('app_register') }}"><i class="fa-solid fa-user-plus"></i></a>
             </li>
           {% endif %}
-          <li class="nav-item me-5">
+          <li class="nav-item mr-5">
             {% if is_granted('ROLE_USER') %}
               {% if app.user.paniers | length > 0 %}
-                <a class="nav-link text-dark" href="{{ path('panier_start') }}">
-                  <img id="cartLogo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier">
-                    <span id="cartValue">{{ app.user.paniers | length }}</span>
-                    </a>
+                <a id="cart_link" class="nav-link text-dark" href="{{ path('panier_start') }}">
+                  <img id="cart_link_logo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier">
+                  <span id="cart_link_value">{{ app.user.paniers | length }}</span>
+                </a>
               {% else %}
-                <a href="#" class="nav-link text-dark"><img id="cartLogo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier"></a>
+                <a href="#" class="nav-link text-dark"><img id="cart_link_logo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier"></a>
               {% endif %}
             {% endif %}
           </li>

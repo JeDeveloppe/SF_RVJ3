@@ -8,7 +8,7 @@
                 <a class="text-decoration-none" href="{{ occasion.boite.linktopresentationvideo }}" target="_blank"><i class="fa-solid fa-video"></i> Voir la vidéo de présentation.</a>
         {% endif %}
     {% endif %}
-    {% include "components/catalog/_displayPriceLogic.html.twig" with {'product': occasion,'tax': tax} %}
+    <span class="text-orange">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': occasion,'tax': tax} %}</span>
 
 </div>
 <div class="col-12 mt-4 d-flex occasion_detail_etats">
@@ -22,9 +22,6 @@
         {{ occasion.equipmentCondition }} <i class="fa-solid fa-circle" style="color: {{ occasion.equipmentCondition.color }};width:5px;height:5px;"></i><br/>
         {{ occasion.gameRule }} <i class="fa-solid fa-circle" style="color: {{ occasion.gameRule.color }};width:5px;height:5px;"></i><br/>
     </div>
-
-
-
 </div>
 {% if (occasion.information is not null) %}
     <p><i class="fa-solid fa-circle-info text-primary"></i> Informations:<br/> {{ occasion.information }}</p>

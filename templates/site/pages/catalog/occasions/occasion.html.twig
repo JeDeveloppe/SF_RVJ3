@@ -45,16 +45,15 @@
 				</div>
 			</div>
 			<div class="col-10 col-md-6 d-flex flex-wrap">
-					<h1 class="col-12 occasion_detail_name mt-5">{{ occasion.boite.name }}</h1>
-					<div class="col-12 occasion_detail_editor">{{ occasion.boite.editor }}</div>
+					<div class="col-12 occasion_detail_editor mt-5">{{ occasion.boite.editor }}</div>
+					<h1 class="col-12 occasion_detail_name">{{ occasion.boite.name }}</h1>
 					{% include "components/catalog/_occasion_details.html.twig"  with { 'occasion': occasion } %}
 					{# on inclus le bouton ajout au panier #}
 					<div class="col-12 d-flex my-2 justify-content-around">
 						{% include "components/catalog/_card_cart_button.html.twig" with {'item': occasion}%}
 					</div>
 					<div class="col-12 d-flex justify-content-around mt-2 mb-5">
-						<div class="col-6 text-center __shop"><img src="{{ asset('build/images/design/cart/shop_retrait.svg') }}" alt="Logo shop_retrait"> Retrait sur Caen</div>
-						<div class="col-6 text-center __no_transport"><img src="{{ asset('build/images/design/cart/no_transport.svg') }}" alt="Logo no_transport"> Pas de livraison</div>
+						{% include "components/catalog/_shop_and_no_transport_logos.html.twig" %}
 					</div>
 			</div>
 		</div>

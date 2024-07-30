@@ -1,0 +1,26 @@
+
+
+{{ form_start(billingAndDeliveryForm) }}
+    <div class="col-12 card p-4">
+        <div class="input-group col-12 col-sm-11 mx-auto">
+            {{ form_widget(billingAndDeliveryForm.billingAddress) }}
+        </div>
+        <div class="col-12 text-right mt-2">
+            <a href="{{ path('member_adresses') }}">Votre adresse n'existe pas ?</a>
+        </div>
+    </div>
+    <div class="col-12 card p-4 mt-4">
+        <div class="input-group col-12 col-sm-11 mx-auto">
+            {{ form_widget(billingAndDeliveryForm.deliveryAddress) }}
+        </div>
+        {% if shippingMethod.price == "PAYANT" %}
+            <div class="col-12 text-right mt-2">
+                <a class="text-info" href="{{ path('member_adresses') }}">Votre adresse n'existe pas ?</a>
+            </div>
+        {% endif %}
+    </div>
+    <div class="input-group mt-5 d-flex justify-content-around">
+        <a href="{{ path('panier_start') }}" class="btn bg-orange"><i class="fa-solid fa-backward-step mr-1"></i> Précédent</a>
+        <button type="submit" class="btn bg-orange">Suivant <i class="fa-solid fa-forward-step ml-1"></i></button>
+    </div>
+{{ form_end(billingAndDeliveryForm) }}

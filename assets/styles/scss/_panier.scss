@@ -2,3 +2,22 @@
     position: relative;
     top: -100px;
 }
+
+.cart_step{
+    border-radius: 50%;
+    border: 2px solid #1C1C3E80;
+    width: 40px;
+    height: 40px;
+    padding: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.panier_display_boite_name_at_right{
+    text-transform: lowercase;
+    display: inline-block;
+}
+.panier_display_boite_name_at_right::first-letter{
+    text-transform: uppercase;
+}

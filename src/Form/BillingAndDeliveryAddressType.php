@@ -25,7 +25,7 @@ class BillingAndDeliveryAddressType extends AbstractType
                 'attr' => [
                     'class' => 'form-control text-center',
                 ],
-                'placeholder' => '-- Choisir une adresse de facturation --',
+                'placeholder' => '-- Adresse de facturation --',
                 'multiple' => false,
                 'expanded' => false,
                 'mapped' => false,
@@ -48,7 +48,7 @@ class BillingAndDeliveryAddressType extends AbstractType
                         'attr' => [
                             'class' => 'form-control text-center',
                         ],
-                        'placeholder' => '-- Choisir une adresse de retrait --',
+                        'placeholder' => '-- Adresse de retrait --',
                         'multiple' => false,
                         'expanded' => false,
                         'mapped' => false,
@@ -71,7 +71,7 @@ class BillingAndDeliveryAddressType extends AbstractType
                         'attr' => [
                             'class' => 'form-control text-center',
                         ],
-                        'placeholder' => '-- Choisir une adresse de livraison --',
+                        'placeholder' => '-- Adresse de livraison --',
                         'mapped' => false,
                         'multiple' => false,
                         'expanded' => false,

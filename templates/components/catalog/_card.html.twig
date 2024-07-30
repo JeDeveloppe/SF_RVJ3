@@ -1,15 +1,8 @@
 
 {# si c'est un occasion passe en parametre #}
-{% if product.boite is defined %}
-    {% set boite = product.boite %}
-    {% set card_item = product %}
-    {% set setEntityId = product.id %}
-    {% set entityNameController = 'Occasion' %}
-{% else %}
     {% set card_item = product %}
     {% set setEntityId = product.id %}
     {% set entityNameController = 'Boite' %}
-{% endif %}
 
     <div class="col-9 col-sm-6 col-md-4 mx-md-0 px-3 px-lg-1 my-3">
         <div id="{{ setEntityId }}" class="card_ d-flex flex-column h-100">
@@ -21,7 +14,7 @@
                 <span class="fw-bolder">{{ boite.name | raw }} </span><br/>
             </div>
             <div class="d-flex flex-column align-items-center mt-auto">
-                <b>{% include "components/catalog/_displayPriceLogic.html.twig" with {'product': product, 'tax': tax} %}</b>
+                {# <b>{% include "components/occasion/_display_occasion_price.html.twig" with {'product': card_item, 'tax': tax} %}</b> #}
                 {% include "components/catalog/_card_button.html.twig" with {'item': card_item }%}
                 {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': entityNameController} %}
             </div>

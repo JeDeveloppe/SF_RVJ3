@@ -100,7 +100,7 @@ class CatalogController extends AbstractController
 
         $metas['description'] = 'Catalogue complet de toutes les boites dont le service dispose de pièces détachées.';
 
-        return $this->render('site/catalog/pieces_detachees/les_pieces_detachees.html.twig', [
+        return $this->render('site/pages/catalog/pieces_detachees/les_pieces_detachees.html.twig', [
             'boites' => $boites,
             'boites_totales' => $donnees,
             'form' => $form,
@@ -143,7 +143,7 @@ class CatalogController extends AbstractController
             }
         }
 
-        return $this->render('site/catalog/pieces_detachees/pieces_detachees_demande.html.twig', [
+        return $this->render('site/pages/catalog/pieces_detachees/pieces_detachees_demande.html.twig', [
             'boite' => $boite,
             'metas' => $metas,
             'groups' => $groups,
@@ -157,8 +157,7 @@ class CatalogController extends AbstractController
         $form = $this->createForm(SearchOccasionsInCatalogueType::class);
         $form->handleRequest($request);
 
-
-        if($form->isSubmitted() && $form->isSubmitted()) {
+        if($form->isSubmitted() && $form->isValid()) {
 
             $search = $form->get('search')->getData();
             $phrase = str_replace(" ","%",$search);
@@ -183,20 +182,33 @@ class CatalogController extends AbstractController
 
             $donneesFromDatabases = $this->occasionRepository->searchOccasionsByNameOrEditorInCatalogue($phrase, $age, $players);
 
+        //TODO
+        }else if($request->isMethod('GET')){
+
+            $age = $request->query->getInt('age') ?? '';
+            $phrase = $request->query->getString('search');
+            if(strlen($request->query->get('players')) > 0){
+                $players = $request->query->get('players');
+            }else{
+                $players = [];
+            }
+
+            $donneesFromDatabases = $this->occasionRepository->searchOccasionsByNameOrEditorInCatalogue($phrase, $age, $players);
+
         }else{
 
-            $data = null;
+            //on cherche l'ensemble du catalogue
             $donneesFromDatabases = $this->occasionRepository->findBy(['isOnline' => true],['id' => 'DESC']);
+
         }
 
         $occasions = $this->paginator->paginate(
             $donneesFromDatabases, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            12, /*limit per page*/
-            ['name' => 'test']
+            24, /*limit per page*/
         );
 
-        $metas['description'] = 'Catalogue complet des jeux d\'occasion disponible à la vente en retrait sur Caen.';
+        $metas['description'] = 'Catalogue complet des jeux d\'occasion disponiblent en retrait sur Caen.';
 
         return $this->render('site/pages/catalog/occasions/les_occasions.html.twig', [
             'occasions' => $occasions,
@@ -204,7 +216,10 @@ class CatalogController extends AbstractController
             'metas' => $metas,
             'form' => $form,
             'tax' => $this->taxRepository->findOneBy([]),
-            'partenaires' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true])
+            'partenaires' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true]),
+            'search_in_url' => $phrase ?? '',
+            'age_in_url' => $age ?? '',
+            'players_in_url' => $players ?? []
         ]);
     }
 
