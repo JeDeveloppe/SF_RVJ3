@@ -10,7 +10,7 @@
     <h3 class="col-12 text-center">Récapitulatif avant paiement</h3>
 
     <!-- partie panier -->
-    <div class="card px-0 col-11 col-md-8 col-lg-6 d-flex flex-wrap pb-2">
+    <div class="px-0 col-11 col-md-8 col-lg-6 d-flex flex-wrap pb-2">
         {% include "site/pages/panier/components/_productsInCart.html.twig" with {'displayProductsInCart': true} %}
         <div class="col-12">
             {% include "site/pages/panier/components/_address.html.twig" with {'billingAddress': billingAddress, 'deliveryAddress': deliveryAddress }%}
@@ -20,7 +20,7 @@
         </div>
     </div>
     <!-- partie récapitulatif -->
-    <div class="col-11 p-0 px-lg-2 mt-4 col-md-8 mt-4 mt-lg-0 col-lg-5">
+    <div class="col-11 p-0 px-lg-2 mt-4 col-md-8 mt-4 mt-lg-0 col-lg-5 sticky-top">
             <div class="col-12 card rounded-4 p-0">
                 {% include "site/pages/panier/components/_recapitulatif.html.twig" with {'displayOccasions': false, 'displayItems': false, 'displayVoucher': false, 'displayShippingMethod': false, 'javascript': false } %}
                 <div class="col-12">

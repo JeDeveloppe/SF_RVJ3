@@ -1,5 +1,5 @@
 {% if displayProductsInCart == true %}
-    <div class="col-12 p-0">
+    <div class="card col-12 p-0 mb-3">
         {% include "site/pages/panier/components/_table_items.html.twig" with {'donnees': allCartValues['panier_items'] } %}
     </div>
     {% for panier in allCartValues['panier_occasions'] %}
