@@ -18,7 +18,7 @@ class AdressesVilleAutocompleteField extends AbstractType
         $resolver->setDefaults([
             'class' => City::class,
             'label' => 'Ville:',
-            'placeholder' => 'exemple:      14000 Caen',
+            'placeholder' => 'exemple: 14000 Caen',
             'choice_label' => function (City $city) {
                 return $city->getPostalcode().' '.$city->getName() ;
             },

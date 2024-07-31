@@ -1,40 +1,41 @@
-{% extends 'member/base.html.twig' %}
+{% extends "components/_base.html.twig" %}
 
-{% block member %}
+{% block title %}Espace membre{% endblock %}
 
-   <h1 class="col-12 text-center my-5">Mon historique</h1>
+{% block body %}
 
-   {% include "member/nav.html.twig" %}
+   {% include "member/components/_nav.html.twig" with {'pageMember': 'historique'} %}
 
-   <div class="row">
-      <p class="col-12 text-center text-danger"><i class="fas fa-info-circle"></i> Les devis de plus de {{ docParams.delayBeforeDeleteDevis * 2 }} jours sont automatiquement supprimés.</p>
+   <div class="row bg-white py-3">
+      <p class="col-12 text-center text-danger font-weight-bolder"><i class="fas fa-info-circle"></i> Les devis de plus de {{ docParams.delayBeforeDeleteDevis * 2 }} jours sont automatiquement supprimés.</p>
    </div>
 
-   <div class="row mb-3 justify-content-center">
+   <div class="row py-3 justify-content-center bg-white">
       {% if documents | length > 0 %}
          {% for document in documents %}
-               <div class="card col-12 col-md-8 col-xl-7 p-0 mb-3">
-                  <div class="card-header d-flex justify-content-between">
-                     <div class="col-8">
+            <div class="col-11 mb-3">
+               <div class="card p-0 mb-3 h-100">
+                  <div class="card-header d-flex flex-wrap justify-content-between">
+                     <div class="col-12">
                         {% if document.billNumber is not null %}
                            {{ document.billNumber }}
                         {% else %}
-                           {{ document.quoteNumber }} du {{ document.createdAt|date('d-m-Y') }}
+                           {{ document.quoteNumber }}
                         {% endif %}
                      </div>
-                     <div class="col-4 text-end">{{ (document.totalWithTax / 100) |number_format(2, '.', ',') }} €</div>
+                     <div class="col-12 text-right">{{ (document.totalWithTax / 100) |number_format(2, '.', ',') }} €</div>
                   </div>
-                  <div class="card-body d-flex align-items-center">
+                  <div class="card-body d-flex flex-wrap align-items-center">
                         {% if document.billNumber is not null %}
-                           <div class="col-8">
+                           <div class="col-12 text-center">
                               Payé le {{ document.payment.timeOfTransaction|date('d-m-Y') }} <br/>{{ document.payment.details }}
                            </div>
-                           <div class="col-4 text-center">
+                           <div class="col-12">
                               <a href="{{ path('member_facture_download', {'tokenDocument': document.token }) }}" target="_blank" data-toggle="tooltip" data-html="true" title="Facture en pdf"><i class="fas fa-print fa-2x"></i></a>
                            </div>
                         {% else %}
-                           <div class="col-6 text-center">
-                              <span class='text-primary'>PAS DE PAIEMENT</span><br/>
+                           <div class="col-12 text-center">
+                              <span class='text-orange'>PAS ENCORE DE PAIEMENT</span><br/>
                               Valable jusqu'au {{ document.endOfQuoteValidation | date('d-m-Y') }}<br/>
                                  {% if document.isQuoteReminder == false %}
                                     {% set color = 'danger' %}
@@ -43,14 +44,14 @@
                                  {% endif %}
                               Relancé par email: <i class="fa-solid fa-paper-plane text-{{ color }}"></i>
                            </div>
-                           <div class="col-6 text-center">
+                           <div class="col-12 d-flex justify-content-around text-center">
                               <a class="btn btn-outline-secondary" href="{{ path('document_view', {'tokenDocument': document.token }) }}">Visualiser le devis</a>
                            </div>
                         {% endif %}
                   </div>
-                  <div class="card-footer d-flex justify-content-between align-items-center">
-                     <div class="col-5 text-center">{{ document.documentStatus.name }}</div>
-                     <div class="col-5 text-center">
+                  <div class="card-footer d-flex flex-wrap justify-content-between align-items-center">
+                     <div class="col-12 text-center">{{ document.documentStatus.name }}</div>
+                     <div class="col-12 text-center">
                         {% if document.sendingAt is not null %}
                            {{ document.shippingMethod.name }}<br/>le: {{ document.sendingAt | date('d-m-Y') }}<br/>
                            {% if document.sendingNumber is not null %}
@@ -64,17 +65,21 @@
                      </div>
                   </div>
                </div>
-          
+            </div>
          {% endfor %}
       {% else %}
          <div class="col-12 text-center">PAS ENCORE DE DOCUMENTS</div>
       {% endif %}
    </div>
 
-   <div class="row mb-3">
-      <div class="col-12 d-flex justify-content-center">
-            {{ knp_pagination_render(documents, 'components/_pagination.html.twig') }}
+   {% if documents | length > limitPerPage %}
+
+      <div class="row py-2">
+         <div class="col-12 d-flex justify-content-center">
+               {{ knp_pagination_render(documents, 'components/_pagination.html.twig') }}
+         </div>
       </div>
-   </div>
+   
+   {% endif %}
 
 {% endblock %}

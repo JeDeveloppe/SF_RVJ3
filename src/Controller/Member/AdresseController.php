@@ -33,18 +33,18 @@ class AdresseController extends AbstractController
 
         $form = $this->createForm(AddressType::class);
         $form->handleRequest($request);
+        $nbrOfAdressesMax = $_ENV['NBR_MAX_ADDRESSES_FOR_MEMBER'];
 
         if($form->isSubmitted() && $form->isValid()) {
             $user = $security->getUser();
             $isFacturation = $form->get('isFacturation')->getData();
-            $nbrOfAdressesMax = 1;
 
             $adressesFacturation = $this->addressRepository->findBy(['user' => $user, 'isFacturation' => true]);
             $adressesLivraison = $this->addressRepository->findBy(['user' => $user, 'isFacturation' => false]);
 
             if(count($adressesFacturation) >= $nbrOfAdressesMax && $isFacturation == true || count($adressesLivraison) >= $nbrOfAdressesMax && $isFacturation == false){
 
-                $this->addFlash('warning', 'Vous avez atteint(e) le nombre maximum d\'adresses !');
+                $this->addFlash('warning', 'Vous avez atteint(e) le nombre maximum d\'adresses ! ('.$nbrOfAdressesMax.')');
 
             }else{
 
@@ -59,7 +59,8 @@ class AdresseController extends AbstractController
         }
 
         return $this->render('member/adresse/new.html.twig', [
-            'form' => $form
+            'form' => $form,
+            'nbrOfAdressesMax' => $nbrOfAdressesMax
         ]);
     }
 

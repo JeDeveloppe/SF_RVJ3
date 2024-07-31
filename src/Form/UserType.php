@@ -19,7 +19,7 @@ class UserType extends AbstractType
     {
         $builder
             ->add('email', TextType::class, [
-                'label' => 'Adresse email:',
+                'label' => 'Adresse email (identifiant):',
                 'attr' => [
                     'readonly' => true,
                     'class' => 'form-control mb-3'

@@ -1,14 +1,22 @@
 
 
-{{ form_start(billingAndDeliveryForm) }}
-    <div class="col-12 card p-4">
-        <div class="input-group col-12 col-sm-11 mx-auto">
-            {{ form_widget(billingAndDeliveryForm.billingAddress) }}
-        </div>
-        <div class="col-12 text-right mt-2">
-            <a href="{{ path('member_adresses') }}">Votre adresse n'existe pas ?</a>
-        </div>
+{{ form_start(billingAndDeliveryForm, { 'attr': {'class': 'col-12 d-flex flex-wrap justify-content-around align-items-center'} }) }}
+    <h3 class="col-12 px-0">Adresse de facturation:</h3>
+
+    <div class="col-12 p-0">
+        {% for address in billingAndDeliveryForm.billingAddress %}
+            <div class="col-12 d-flex align-items-center justify-content-start py-2 border">
+                {{ form_widget(address,{ 'attr': {'class': ''} }) }} <span class="">{{ form_label(address) }} </span>
+            </div>
+        {% endfor %}
     </div>
+
+
+
+    <div class="col-12 text-right mt-2">
+        <a href="{{ path('member_adresses') }}">Votre adresse n'existe pas ?</a>
+    </div>
+    <h3 class="col-12 px-0 mt-3">Adresse de livraison:</h3>
     <div class="col-12 card p-4 mt-4">
         <div class="input-group col-12 col-sm-11 mx-auto">
             {{ form_widget(billingAndDeliveryForm.deliveryAddress) }}

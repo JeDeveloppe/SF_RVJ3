@@ -38,20 +38,37 @@ class MemberController extends AbstractController
     {
     }
 
+    #[Route('/membre', name: 'member')]
+    public function member(DocumentParametreRepository $documentParametreRepository, DocumentRepository $documentRepository, Request $request): Response
+    {
+        $user = $this->security->getUser();
+
+        //relance email des devis
+        $now = new DateTimeImmutable('now');
+        $this->mailService->reminderQuotes($now);
+        //on supprime les document trop vieu non relancer
+        $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
+
+        return $this->render('member/member.html.twig', []);
+    }
+    
     #[Route('/membre/adresses', name: 'member_adresses')]
     public function membreAdresses(): Response
     {
         $user = $this->security->getUser();
+        $nbrOfAdressesMax = $_ENV['NBR_MAX_ADDRESSES_FOR_MEMBER'];
+
 
         return $this->render('member/adresse/index.html.twig', [
             'livraison_adresses' => $this->addressRepository->findBy(['user' => $user, 'isFacturation' => false]),
             'facturation_adresses' => $this->addressRepository->findBy(['user' => $user, 'isFacturation' => true]),
+            'nbrOfAdressesMax' => $nbrOfAdressesMax
         ]);
 
     }
 
-    #[Route('/membre', name: 'member')]
-    public function membreHistorique(DocumentParametreRepository $documentParametreRepository, DocumentRepository $documentRepository, Request $request): Response
+    #[Route('/membre/historique', name: 'member_historique')]
+    public function memberHistorique(DocumentParametreRepository $documentParametreRepository, DocumentRepository $documentRepository, Request $request): Response
     {
         $user = $this->security->getUser();
 
@@ -63,15 +80,17 @@ class MemberController extends AbstractController
 
         $donnees = $documentRepository->findBy(['user' => $user, 'isDeleteByUser' => false], ['id' => 'DESC']);
 
+        $limitPerPage = 10;
         $documents = $this->paginator->paginate(
             $donnees, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            10 /*limit per page*/
+            $limitPerPage /*limit per page*/
         );
 
         return $this->render('member/historique.html.twig', [
             'documents' => $documents,
-            'docParams' => $documentParametreRepository->findOneBy([])
+            'docParams' => $documentParametreRepository->findOneBy([]),
+            'limitPerPage' => $limitPerPage
         ]);
     }
 

@@ -354,7 +354,7 @@ class SiteController extends AbstractController
         }
     }
 
-    #[Route('/check-email', name: 'app_check_email')]
+    #[Route('/check-email', name: 'check_email')]
     public function checkEmail(Request $request): Response
     {
 
@@ -380,7 +380,7 @@ class SiteController extends AbstractController
             }
         }
 
-        return $this->render('site/password/email_to_send_link_for_reset_password.html.twig', [
+        return $this->render('site/pages/password/email_to_send_link_for_reset_password.html.twig', [
             'emailForSendResetPasswordForm' => $form->createView()
         ]);
     }
@@ -432,7 +432,7 @@ class SiteController extends AbstractController
             }
         }
 
-        return $this->render('site/password/reset_password.html.twig', [
+        return $this->render('site/pages/password/reset_password.html.twig', [
             'resetPasswordForm' => $form->createView()
         ]);
     }

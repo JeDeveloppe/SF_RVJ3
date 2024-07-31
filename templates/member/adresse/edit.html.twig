@@ -1,14 +1,16 @@
-{% extends 'member/base.html.twig' %}
+{% extends "components/_base.html.twig" %}
 
-{% block member %}
+{% block title %}Espace membre{% endblock %}
 
-    <a class="btn btn-primary" href="{{ path('member_adresses') }}">Retour aux adresses</a>
+{% block body %}
 
-   <h1 class="col-12 text-center my-5">Édition d'une adresse:</h1>
+    {% include "member/components/_nav.html.twig" with {'pageMember': 'adresses'} %}
 
-    <div class="row my-5">
-        
+    <div class="row bg-white pt-2 pb-5">
+
+        <h2 class="col-12 text-center my-5">Édition <span class="text-purple">d'une adresse:</span></h2>
+    
         {{ include('member/adresse/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
-        
+
     </div>
 {% endblock %}

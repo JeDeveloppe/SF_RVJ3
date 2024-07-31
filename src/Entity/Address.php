@@ -144,7 +144,7 @@ class Address
 
     public function __toString()
     {
-        return $this->organization.' '.$this->lastname.' '.$this->firstname.' '.$this->street.' '.$this->city;
+        return nl2br($this->organization.' '.$this->lastname.' '.$this->firstname.' '.$this->street.' '.$this->city);
     }
 
 }

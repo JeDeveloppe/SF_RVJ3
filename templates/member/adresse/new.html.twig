@@ -1,15 +1,16 @@
-{% extends 'member/base.html.twig' %}
+{% extends "components/_base.html.twig" %}
 
-{% block member %}
+{% block title %}Espace membre{% endblock %}
 
-    <div class="row my-5">
-    
-        <h3 class="col-12 text-center my-4">Création d'une adresse:</h3>
-        
-        <div class="col-6">
-            <a class="btn btn-primary text-center" href="{{ path('member_adresses') }}">Retour aux adresses</a>
-        </div>
-        
+{% block body %}
+
+    {% include "member/components/_nav.html.twig" with {'pageMember': 'adresses'} %}
+
+    <div class="row bg-white pt-2 pb-5">
+
+        <h2 class="col-12 text-center my-5">Créer <span class="text-purple">une adresse:</span></h2>
+
+        <h5 class="col-12 text-center text-danger font-weight-bolder">Nombre d'adresses maximum: {{ nbrOfAdressesMax }}</h5>
 
         {{ include('member/adresse/_form.html.twig') }}
 

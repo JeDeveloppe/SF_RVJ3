@@ -23,11 +23,11 @@ class BillingAndDeliveryAddressType extends AbstractType
                 'class' => Address::class,
                 'label' => false,
                 'attr' => [
-                    'class' => 'form-control text-center',
+                    'class' => 'col-12',
                 ],
                 'placeholder' => '-- Adresse de facturation --',
                 'multiple' => false,
-                'expanded' => false,
+                'expanded' => true,
                 'mapped' => false,
                 'query_builder' => function (EntityRepository $er) use ($user) {
                     return $er->createQueryBuilder('a')
@@ -46,11 +46,11 @@ class BillingAndDeliveryAddressType extends AbstractType
                         'class' => CollectionPoint::class,
                         'label' => false,
                         'attr' => [
-                            'class' => 'form-control text-center',
+                            'class' => 'form-control text-center col-12',
                         ],
                         'placeholder' => '-- Adresse de retrait --',
                         'multiple' => false,
-                        'expanded' => false,
+                        'expanded' => true,
                         'mapped' => false,
                         'query_builder' => function (EntityRepository $er) use ($shippingMethod) {
                             return $er->createQueryBuilder('c')
@@ -69,12 +69,12 @@ class BillingAndDeliveryAddressType extends AbstractType
                         'class' => Address::class,
                         'label' => false,
                         'attr' => [
-                            'class' => 'form-control text-center',
+                            'class' => 'form-control text-center col-12',
                         ],
                         'placeholder' => '-- Adresse de livraison --',
                         'mapped' => false,
                         'multiple' => false,
-                        'expanded' => false,
+                        'expanded' => true,
                         'query_builder' => function (EntityRepository $er) use ($user) {
                             return $er->createQueryBuilder('a')
                                 ->where('a.isFacturation = :value')

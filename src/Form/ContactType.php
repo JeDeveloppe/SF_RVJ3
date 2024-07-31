@@ -20,7 +20,7 @@ class ContactType extends AbstractType
                 'label' => 'Votre adresse email:',
                 'required' => true,
                 'attr' => ['class' => 'form-control mb-3'],
-            ])
+            ]) //TODO sujets
             ->add('sujet', ChoiceType::class, [
                 'label' => 'Sujet de votre demande:',
                 'choices' => [
@@ -39,7 +39,7 @@ class ContactType extends AbstractType
             ->add('message', TextareaType::class, [
                 'label' => 'Votre message:',
                 'required' => true,
-                'attr' => ['class' => 'form-control mb-3'],
+                'attr' => ['class' => 'form-control mb-5'],
             ])
             ->add('captcha', Recaptcha3Type::class, [
                 'constraints' => new Recaptcha3(),
@@ -49,7 +49,7 @@ class ContactType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Envoyer votre message',
-                'attr' => ['class' => 'btn btn-success'],
+                'attr' => ['class' => 'btn btn-success mx-auto'],
             ])
         ;
     }

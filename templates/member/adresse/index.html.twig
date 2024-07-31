@@ -1,67 +1,76 @@
-{% extends 'member/base.html.twig' %}
+{% extends "components/_base.html.twig" %}
 
-{% block member %}
+{% block title %}Espace membre{% endblock %}
 
-   <h1 class="col-12 text-center my-5">Mes adresses</h1>
+{% block body %}
 
-   {% include "member/nav.html.twig" %}
+    {% include "member/components/_nav.html.twig" with {'pageMember': 'adresses'} %}
 
-    <div class="h3 mt-3" id="facturation">Mon adresse de facturation</div>
-
-    <div class="row justify-content-around align-items-center">
-        {% if facturation_adresses | length >  0 %}
-            {% for adresse in facturation_adresses %}
-                <div class="card col-12 col-md-5 p-0 mt-3 mt-md-0">
-                    <div class="card-body d-flex flex-column">
-                        <div class="col-12">
-                            {{ adresse.organization ?? "" }} {{ adresse.lastname }} {{ adresse.firstname }}, {{ adresse.street }}, {{ adresse.city }}
-                        </div>
-                        <div class="col-12 d-flex justify-content-center align-items-center pt-4">
-                            {{ include('member/adresse/_delete_form.html.twig') }}
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <div class="card col-12 col-md-7 p-0">
-                <div class="card-header">Aucune pour le moment...</div>
-            </div>
-        {% endif %}
-        {% if facturation_adresses | length < 1 %}
-            <div class="col-12 text-center">
-                <a class="btn btn-outline-primary mt-3" href="{{ path('adresse_new') }}">Créer une nouvelle adresse</a>
-            </div>
-        {% endif %}
-    </div>
-
-    <div class="h3 mt-5" id="facturation">Mon adresse de livraison</div>
-
-    <div class="row justify-content-around align-items-center mb-5">
-        {% if livraison_adresses | length >  0 %}
-            {% for adresse in livraison_adresses %}
-                <div class="card col-12 col-md-5 p-0 mt-3 mt-md-0">
-                    <div class="card-body d-flex flex-column">
-                        <div class="col-12">
-                            {{ adresse.organization ?? "" }} {{ adresse.lastname }} {{ adresse.firstname }}, {{ adresse.street }}, {{ adresse.city }}
-                        </div>
-                        <div class="col-12 d-flex justify-content-center align-items-center pt-4">
-                            {{ include('member/adresse/_delete_form.html.twig') }}
+    <div class="row bg-white py-5">
+        <!-- partie addresses de facturation -->
+        <div class="col-12 col-md-6 d-flex flex-wrap justify-content-around">
+            <h5 class="col-12 text-center text-green">Mes adresses de livraison</h5>
+            {% if facturation_adresses | length >  0 %}
+                {% for adresse in facturation_adresses %}
+                    <div class="col-8 col-sm-6 col-md-8 mb-4 col-lg-6">
+                        <div class="card col-12 h-100 rounded-4">
+                            <div class="card-body d-flex flex-wrap justify-content-around">
+                                <div class="card-text">
+                                    {{ adresse.organization ?? "" }} <br>
+                                    {{ adresse.lastname }} {{ adresse.firstname }}<br>
+                                    {{ adresse.street }},<br>
+                                    {{ adresse.city }}
+                                </div>
+                                <div class="col-12 d-flex justify-content-center align-items-center pt-2 mt-auto">
+                                    {{ include('member/adresse/_delete_form.html.twig') }}
+                                </div>
+                            </div>
                         </div>
                     </div>
+                {% endfor %}
+            {% else %}
+                <div class="card col-12 col-md-7 p-0">
+                    <div class="card-header">Aucune pour le moment...</div>
                 </div>
-            {% endfor %}
-        {% else %}
-            <div class="card col-12 col-md-7 p-0">
-                <div class="card-header">Aucune pour le moment...</div>
+            {% endif %}
+            {% if facturation_adresses | length < nbrOfAdressesMax %}
+                <div class="col-12 d-flex justify-content-around">
+                    <a class="btn btn-dark mt-3" href="{{ path('adresse_new') }}">Créer une nouvelle adresse</a>
+                </div>
+            {% endif %}
+        </div>
+        <!-- partie addresses de livraison -->
+        <div class="col-12 col-md-6 d-flex flex-wrap justify-content-around mt-5 mt-md-0">
+            <div class="col-12 p-0">
+                <h5 class="col-12 text-center text-green">Mes adresses de facturation</h5>
+                {% if livraison_adresses | length >  0 %}
+                    {% for adresse in livraison_adresses %}
+                        <div class="col-8 col-sm-6 col-md-8 mb-4 col-lg-6">
+                            <div class="card col-12 h-100 rounded-4">
+                                <div class="card-body d-flex flex-wrap justify-content-around">
+                                        {{ adresse.organization ?? "" }} <br>
+                                        {{ adresse.lastname }} {{ adresse.firstname }}<br>
+                                        {{ adresse.street }},<br>
+                                        {{ adresse.city }}
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-center align-items-center pt-2 mt-auto">
+                                        {{ include('member/adresse/_delete_form.html.twig') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    {% include "member/adresse/components/_no_address_to_display.html.twig" %}
+                {% endif %}
+                {% if livraison_adresses | length < nbrOfAdressesMax %}
+                    <div class="col-12 d-flex justify-content-around">
+                        <a class="btn btn-dark mt-3" href="{{ path('adresse_new') }}">Créer une nouvelle adresse</a>
+                    </div>
+                {% endif %}
             </div>
-        {% endif %}
-        {% if livraison_adresses | length < 1 %}
-            <div class="col-12 text-center">    
-                <a class="btn btn-outline-primary mt-3" href="{{ path('adresse_new') }}">Créer une nouvelle adresse</a>
-            </div>
-        {% endif %}
+        </div>
     </div>
-  
 
-
+    {% include "components/_separateur_wave.html.twig" %}
 {% endblock %}

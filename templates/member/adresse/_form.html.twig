@@ -1,4 +1,4 @@
-<div class="col-12 col-md-7 mx-auto">
+<div class="col-10 col-sm-8 col-md-7 col-lg-6 col-xl-5 mx-auto px-0">
     {{ form_start(form) }}
         <div class="mb-3">
             {{ form_row(form.isFacturation) }}
@@ -15,12 +15,13 @@
         <div class="mb-3">
             {{ form_row(form.street) }}
         </div>
-        <div class="mb-3">
+        <div class="mb-5">
             {{ form_row(form.city) }}
         </div>
 
-        <div class="col-12 text-center">
-            <button class="btn btn-success my-3">{{ button_label|default('Enregistrer') }}</button>
+        <div class="col-12 d-flex flex-wrap justify-content-around px-0">
+            <a class="btn btn-orange" href="{{ path('member_adresses') }}">Retour aux adresses</a>
+            <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
         </div>
     {{ form_end(form) }}
 </div>
