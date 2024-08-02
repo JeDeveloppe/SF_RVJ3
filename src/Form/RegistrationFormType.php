@@ -60,8 +60,9 @@ class RegistrationFormType extends AbstractType
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'label' => 'Mot de passe:',
+                'help' => 'Minimum 8 caractères',
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password','class' => 'form-control mb-3'],
+                'attr' => ['autocomplete' => 'new-password','class' => 'form-control'],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Mot de passe obligatoire !',
@@ -79,7 +80,8 @@ class RegistrationFormType extends AbstractType
                 // this is read and encoded in the controller
                 'label' => 'Vérification du mot de passe:',
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password','class' => 'form-control mb-3'],
+                'help' => 'Minimum 8 caractères',
+                'attr' => ['autocomplete' => 'new-password','class' => 'form-control'],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Mot de passe obligatoire !',

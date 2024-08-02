@@ -6,7 +6,7 @@
 
     <div class="js-locations" data-locations="{{ donnees }}"></div>
 
-    <h1 class="col-12 mt-5 text-center">Nos <span class="text-purpleires</span></h1>
+    <h1 class="col-12 mt-5 text-center">Nos <span class="text-purple">partenaires</span></h1>
 
     <div class="row my-4">
         <div class="col-11 col-md-9 col-lg-6 mx-auto">
@@ -20,7 +20,7 @@
 
         {% for partner in partners %}
 
-            {% include "components/partner/_card_partner.html.twig" %}
+            {% include "site/pages/partners/_card_partner.html.twig" %}
 
         {% endfor %}
 

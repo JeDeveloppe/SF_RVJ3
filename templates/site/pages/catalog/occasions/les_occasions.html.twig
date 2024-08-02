@@ -17,11 +17,14 @@
     {% else %}
         
         <div class="row justify-content-around py-5 bg-white">
+            <!-- left column / searchs -->
             <div class="col-11 col-md-9 col-lg-3">
                 {% include "components/forms/_search_occasion.html.twig" %}
             </div>
-            <div class="col-11 col-lg-9 d-flex flex-wrap justify-content-around align-items-stretch">
-
+            <!-- rigth column / results -->
+            <div class="col-11 col-lg-9 d-flex flex-wrap justify-content-around align-items-stretch mt-5 mt-lg-0">
+            
+                <!-- left column / result > 0 -->
                 {% if occasions | length > 0 %}
 
                     {% set jeu_dispo = 'jeu disponible' %}
@@ -45,24 +48,23 @@
                         </div>
 
                 {% else %}
-
-                    <div class="row">
-                        <div class="col-12 text-center">
-                            <p class="h2">Nous n'avons pas de jeux en stock pour le moment.</p>
-                            <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.refaitesvosjeux.fr" target="_blank">Facebook !</a></p>    
-                        </div>
+                    <!-- left column / result == 0 -->
+                    <div class="col-12 text-center">
+                    //TODO logo boites vide ou autre
+                        <p class="h2">Aïe, aucune référence pour le moment...</p>
+                        <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.refaitesvosjeux.fr" target="_blank">Facebook !</a></p>    
                     </div>
-                    <div class="row justify-content-start mb-5">
-                        {% if partenaires | length > 0 %}
-                            <p class="h5 mt-5 col-12 text-center">Ou tenter votre chance chez l'un de nos partenaires:</p>
 
-                            {% for partenaire in partenaires %}
 
-                            //TODO 
-                            {% include "site/components/catalogues/card-partenaire.html.twig" %}
+                        {% if partners | length > 0 %}
+                            <div class="h5 mt-5 col-12 text-center">Ou tenter votre chance chez l'un de nos partenaires:</div>
+
+                            {% for partner in partners %}
+
+                                {% include "site/pages/catalog/components/_cardPartnerIfSearchIsEmpty.html.twig" %}
                                 
                             {% endfor %}
-                        </div>
+                        
                         {% endif %}
                 {% endif %}
             </div>

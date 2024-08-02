@@ -73,7 +73,7 @@
                   <span id="cart_link_value">{{ app.user.paniers | length }}</span>
                 </a>
               {% else %}
-                <a href="#" class="nav-link text-dark"><img id="cart_link_logo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier"></a>
+                <a id="cart_link" href="#" class="nav-link text-dark"><img id="cart_link_logo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier"></a>
               {% endif %}
             {% endif %}
           </li>

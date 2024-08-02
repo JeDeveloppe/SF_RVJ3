@@ -216,7 +216,7 @@ class CatalogController extends AbstractController
             'metas' => $metas,
             'form' => $form,
             'tax' => $this->taxRepository->findOneBy([]),
-            'partenaires' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true]),
+            'partners' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true]),
             'search_in_url' => $phrase ?? '',
             'age_in_url' => $age ?? '',
             'players_in_url' => $players ?? []
@@ -248,20 +248,29 @@ class CatalogController extends AbstractController
         }else{
 
             $deliveryAdresse = $this->addressRepository->findOneBy(['user' => $user, 'isFacturation' => false]);
-            $collectionPoint = $this->collectionPointRepository->findOneCollectionPointForOccasionBuy();
-            $kmsBetweenCollectionPointAndDeliveryAdress = $this->adresseService->get_distance_from_collectePoint($collectionPoint, $deliveryAdresse);
-            
-            $setting = $this->siteSettingRepository->findOneBy([]);
 
-            if($kmsBetweenCollectionPointAndDeliveryAdress < $setting->getDistanceMaxForOccasionBuy()){
+            if(is_null($deliveryAdresse)){
 
-                $delivery = true;
+                $delivery = null;
 
             }else{
 
-                $delivery = false;
+                $collectionPoint = $this->collectionPointRepository->findOneCollectionPointForOccasionBuy();
+                $kmsBetweenCollectionPointAndDeliveryAdress = $this->adresseService->get_distance_from_collectePoint($collectionPoint, $deliveryAdresse);
+                
+                $setting = $this->siteSettingRepository->findOneBy([]);
 
+                if($kmsBetweenCollectionPointAndDeliveryAdress < $setting->getDistanceMaxForOccasionBuy()){
+
+                    $delivery = true;
+
+                }else{
+
+                    $delivery = false;
+
+                }
             }
+
         }
 
         $query = $this->occasionRepository->findAleatoireOccasionsByAgeWhitoutThisOccasion($occasion->getBoite()->getAge(), $occasion);

@@ -7,7 +7,7 @@
 
 {% include "site/pages/panier/components/_header_panier.html.twig" with {'page': 'adresses'} %}
 
-<div class="row justify-content-center bg-white pb-5 align-items-start">
+<div class="row justify-content-center bg-white py-5 align-items-start">
     <!-- partie panier -->
     <div class="col-11 col-md-8 col-lg-6 d-flex flex-wrap">
         {% include "site/pages/panier/components/_billingAndDeliveryForm.html.twig" %}
@@ -20,14 +20,5 @@
         </div>
     </div>
 </div>
-
-    {# <div class="row justify-content-center my-5 bg-primary rounded-2">
-        <div class="col-11 col-md-6 col-lg-4 py-4">
-
-            {% include "components/panier/_billingAndDeliveryForm.html.twig" %}
-
-        </div>
-    </div> #}
-
 
 {% endblock %}

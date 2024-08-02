@@ -11,12 +11,15 @@
         {% endfor %}
     </div>
 
-
-
     <div class="col-12 text-right mt-2">
         <a href="{{ path('member_adresses') }}">Votre adresse n'existe pas ?</a>
     </div>
-    <h3 class="col-12 px-0 mt-3">Adresse de livraison:</h3>
+
+    {% set h3TitleLivraisonRetrait = "Adresse de livraison:" %}
+    {% if shippingMethod.price == "GRATUIT" %}
+        {% set h3TitleLivraisonRetrait = "Adresse de retrait:" %}
+    {% endif %}
+    <h3 class="col-12 px-0 mt-3">{{ h3TitleLivraisonRetrait }}</h3>
     <div class="col-12 card p-4 mt-4">
         <div class="input-group col-12 col-sm-11 mx-auto">
             {{ form_widget(billingAndDeliveryForm.deliveryAddress) }}

@@ -5,7 +5,7 @@
             <h5 class="text-orange">Occasions:</h5>
                 {% for panier in allCartValues['panier_occasions'] %}
                     <div class="panier_display_boite_name_at_right col-12 px-0 d-flex flex-wrap justify-content-around align-items-center">
-                        <div class="col-8">{{ panier.occasion.boite.name }}</div>
+                        <div class="col-8 font-weight-bolder">{{ panier.occasion.boite.name }}</div>
                         <div class="col-4 text-right">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': panier.occasion,'tax': allCartValues['tax']} %}</div>
                     </div>
                 {% endfor %}
@@ -19,7 +19,7 @@
             <h5 class="text-orange">Pièces détachées:</h5>
             {% for panier in allCartValues['panier_items'] %}
                 <div class="panier_display_boite_name_at_right col-12 px-0 d-flex flex-wrap justify-content-around align-items-center">
-                    <div class="col-8 font-weight-bolder">{{ panier.item.reference }}</div>
+                    <div class="col-8 font-weight-bolder text-uppercase">{{ panier.item.reference }}</div>
                     <div class="col-4 text-right">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': panier,'tax': allCartValues['tax']} %}</div>
                 </div>
             {% endfor %}

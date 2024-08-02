@@ -1,20 +1,18 @@
+{% set bgPanierOrange = '' %}
+{% set bgAdressesOrange = '' %}
+{% set bgPaiementOrange = '' %}
+
 {% if page == 'panier' %}
-    {% set bgPanierOrange = 'bg-orange' %}
-{% else %}
-    {% set bgPanierOrange = '' %}
+    {% set bgPanierOrange = 'bg-purple text-white' %}
 {% endif %}
 {% if page == 'adresses' %}
-    {% set bgAdressesOrange = 'bg-orange' %}
-{% else %}
-    {% set bgAdressesOrange = '' %}
+    {% set bgAdressesOrange = 'bg-purple text-white' %}
 {% endif %}
 {% if page == 'paiement' %}
-    {% set bgPaiementOrange = 'bg-orange' %}
-{% else %}
-    {% set bgPaiementOrange = '' %}
+    {% set bgPaiementOrange = 'bg-purple text-white' %}
 {% endif %}
 
-<div class="row justify-content-center py-5 bg-white">
+<div class="row justify-content-center py-3">
     <div class="px-3 d-flex flex-column align-items-center">
         <div class="cart_step {{ bgPanierOrange }}">1</div>
         <div class="col-12 d-flex justify-content-center">Mon panier</div>

@@ -102,7 +102,7 @@ class SiteController extends AbstractController
 
         $metas['description'] = 'Cette page répertorie tous les partenaires français du service. Il s’agit de personnes, d’organismes ou d’entreprises qui s’inscrivent dans la même démarche autour du jeu, du développement durable, du réemploi et de la réduction des déchets. Auprès de ces partenaires vous pouvez acheter, louer ou donner des jeux d’occasion !';
 
-        return $this->render('site/partner/partners.html.twig', [
+        return $this->render('site/pages/partners/partners.html.twig', [
             'donnees' => $donnees,
             'partners' => $partenaires,
             'metas' => $metas
