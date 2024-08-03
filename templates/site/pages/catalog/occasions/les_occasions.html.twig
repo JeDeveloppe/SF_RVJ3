@@ -3,19 +3,18 @@
 {% block title %}Tous les jeux d'occasion{% endblock %}
 
 {% block body %}
-    
-    <div class="row justify-content-around py-4">
-        <h1 class="col-11 text-center">
-            Tous les <span class="text-purple">jeux</span>
-        </h1>
-    </div>
 
     {% if fairDay is not null %}
-
+        <!-- foire en cours -->
         {% include "components/catalog/_fairDay.html.twig" %}
 
     {% else %}
-        
+        <!-- pas de foire en cours -->
+        <div class="row justify-content-around py-4">
+            <h1 class="col-11 text-center">
+                Tous les <span class="text-purple">jeux</span>
+            </h1>
+        </div>
         <div class="row justify-content-around py-5 bg-white">
             <!-- left column / searchs -->
             <div class="col-11 col-md-9 col-lg-3">

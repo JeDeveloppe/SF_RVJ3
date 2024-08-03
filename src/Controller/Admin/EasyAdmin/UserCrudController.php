@@ -97,7 +97,11 @@ class UserCrudController extends AbstractCrudController
                 $nickname = 'ROLE_USER #'.$entityInstance->getId();
             }else{
                 $role = $entityInstance->getLevel()->getNameInDatabase();
-                $nickname = $entityInstance->getLevel()->getName().'#'.$entityInstance->getId();
+                if(is_null($entityInstance->getLevel()->getName())){
+                    $nickname = NULL;
+                }else{
+                    $nickname = $entityInstance->getNickname();
+                }
             }
 
             $roleMax = [];

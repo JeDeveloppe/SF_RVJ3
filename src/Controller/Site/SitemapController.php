@@ -54,12 +54,13 @@ class SitemapController extends AbstractController
         //! traitement des catalogues
         //?liste des occasions
         $occasions = $this->occasionRepository->findBy(['isOnline' => true]);
+
         foreach($occasions as $occasion){
             $urls[] = [                
-                'loc'     => $this->generateUrl('occasion', ['reference_occasion' => $occasion->getReference(), 'editor_slug' => $occasion->getBoite()->getEditor()->getSlug(), 'boite_slug' => $occasion->getBoite()->getSlug() ?? "VIDE" ]),
-                'lastmod' => $occasion->getBoite()->getCreatedAt()->format('Y-m-d'),
+                'loc'        => $this->generateUrl('occasion', ['reference_occasion' => $occasion->getReference(), 'editor_slug' => $occasion->getBoite()->getEditor()->getSlug() ?? "VIDE", 'boite_slug' => $occasion->getBoite()->getSlug() ?? "VIDE" ]),
+                'lastmod'    => $occasion->getBoite()->getCreatedAt()->format('Y-m-d'),
                 'changefreq' => "monthly",
-                'priority' => 0.8
+                'priority'   => 0.8
             ];
         }
 
@@ -67,10 +68,10 @@ class SitemapController extends AbstractController
         $boites = $this->boiteRepository->findBy(['isOnline' => true]);
         foreach($boites as $boite){
             $urls[] = [                
-                'loc'     => $this->generateUrl('catalogue_pieces_detachees_demande', ['id' => $boite->getId(), 'slug' => $boite->getSlug(), 'editorSlug' => $boite->getEditor()->getSlug()]),
-                'lastmod' => $occasion->getBoite()->getCreatedAt()->format('Y-m-d'),
+                'loc'        => $this->generateUrl('catalogue_pieces_detachees_demande', ['id' => $boite->getId(), 'slug' => $boite->getSlug(), 'editorSlug' => $boite->getEditor()->getSlug()]),
+                'lastmod'    => $occasion->getBoite()->getCreatedAt()->format('Y-m-d'),
                 'changefreq' => "monthly",
-                'priority' => 0.8
+                'priority'   => 0.8
             ];
         }
 
@@ -86,7 +87,7 @@ class SitemapController extends AbstractController
         // }
 
         $response = new Response(
-            $this->renderView('site/sitemap/sitemap.html.twig', [
+            $this->renderView('sitemap/sitemap.html.twig', [
                 'urls'     => $urls,
                 'hostname' => $hostname
             ]),

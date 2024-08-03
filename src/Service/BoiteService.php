@@ -12,6 +12,7 @@ use App\Repository\UserRepository;
 use App\Service\UtilitiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class BoiteService
 {
@@ -20,7 +21,8 @@ class BoiteService
         private EntityManagerInterface $em,
         private UserRepository $userRepository,
         private UtilitiesService $utilitiesService,
-        private NumbersOfPlayersRepository $numbersOfPlayersRepository
+        private NumbersOfPlayersRepository $numbersOfPlayersRepository,
+        private SluggerInterface $sluggerInterface
         ){
     }
 
@@ -145,19 +147,21 @@ class BoiteService
             $year = (int) $arrayBoite['annee'];
         }
 
+        $createdBy = $this->userRepository->findOneBy(['nickname' => $arrayBoite['createur']]);
+
         $this->saveImageOnServeur($arrayBoite['urlNom'],$arrayBoite['idCatalogue'], $arrayBoite['imageBlob']);
 
         $boite->setName($arrayBoite['nom'])
             ->setIniteditor($arrayBoite['editeur'])
             ->setYear($year)
-            ->setSlug($arrayBoite['urlNom'])
+            ->setSlug($this->sluggerInterface->slug($arrayBoite['nom']))
             ->setIsDeliverable($arrayBoite['isLivrable'])
             ->setIsOccasion($arrayBoite['isComplet'])
             ->setWeigth($this->nullTo0($arrayBoite['poidBoite']))
             ->setAge((int) $arrayBoite['age'])
             ->setPlayersMin($this->numbersOfPlayersRepository->findOneBy(['keyword' => (int) $arrayBoite['nbrJoueurs']]) ?? $this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
             ->setHtPrice($this->utilitiesService->stringToNull($arrayBoite['prix_HT']))
-            ->setCreatedBy($this->userRepository->findOneBy(['nickname' => $arrayBoite['createur']]))
+            ->setCreatedBy($createdBy)
             ->setIsDeee($this->nullToBoolean($arrayBoite['deee']))
             ->setCreatedAt(new DateTimeImmutable($arrayBoite['created_at']))
             ->setIsOnLine($isV3)

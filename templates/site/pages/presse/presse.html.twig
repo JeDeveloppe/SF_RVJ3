@@ -4,9 +4,18 @@
 
 {% block body %}
 
-    <h1 class="col-12 mt-5 text-center">Le coin <span class="text-purple
+    <div class="row justify-content-around align-items-center my-5">
+        <div class="col-11 col-md-4 d-flex flex-column justify-content-around pt-3">
+            <h1 class="col-11">Le coin <span class="text-purple">presse</span></h1>
 
-    <div class="row justify-content-center">
+            <div class="col-11">//TODO Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+        </div>
+        <div class="col-11 mt-3 mt-md-0 col-md-4 d-flex justify-content-around">
+            <img src="{{ asset('build/images/design/prestations/prestation_header.png') }}" alt="Image historique du service">
+        </div>
+    </div>
+
+    <div class="row justify-content-center bg-white">
         <div class="col-11 col-md-10 my-4">
             <ul class="timeline">
                 {% for key,media in medias %}
@@ -30,7 +39,7 @@
                                 {% if media.description is not null %}
                                     {{ media.description }}
                                 {% endif %}
-                                <p class="text-end mt-2"><a href="{{ media.link }}" target="_blank">Lire l'article</a></p>
+                                <p class="text-end mt-2"><a href="{{ media.link }}" target="_blank">Voir</a></p>
                                 </div>
                             </div>
                         </li>
@@ -38,7 +47,7 @@
             </ul>
         </div>
         <div class="col-11 text-center mb-3">
-            <i class="fa-solid fa-2x fa-lightbulb text-info"></i> Création du service en 2020...
+            <i class="fa-solid fa-2x fa-lightbulb text-info small"></i> Création du service en 2020...
         </div>
     </div>
 

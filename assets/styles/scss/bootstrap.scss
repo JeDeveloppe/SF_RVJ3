@@ -6,6 +6,7 @@
  */
 :root {
   --blue: #007bff;
+  --brown: #795548;
   --indigo: #6610f2;
   --purple: #5F49CE;
   --pink: #e83e8c;
@@ -10121,6 +10122,9 @@ a.text-light:hover, a.text-light:focus {
 
 .text-dark {
   color: var(--dark) !important;
+}
+.text-brown {
+  color: var(--brown) !important;
 }
 .text-orange {
   color: var(--orange) !important;

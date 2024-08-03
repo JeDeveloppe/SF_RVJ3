@@ -137,7 +137,7 @@ class SiteController extends AbstractController
             return $this->redirectToRoute('app_contact');
         }
     
-        return $this->render('site/pages/contact.html.twig', [
+        return $this->render('site/pages/contact/contact.html.twig', [
             'form' => $form->createView(),
             'metas' => $metas
         ]);
@@ -149,7 +149,7 @@ class SiteController extends AbstractController
         $metas['description'] = 'Quelques chiffres et liens de notre présence sur internet.';
         $medias = $mediaRepository->findBy(['isOnLine' => true],['publishedAt' => 'DESC']);
         $items = $documentLineRepository->countTotalOfItemsBilled();
-        return $this->render('site/pages/press.html.twig', [
+        return $this->render('site/pages/presse/presse.html.twig', [
             'metas' => $metas,
             'medias' => $medias,
             'itemBilleds' => $items
@@ -173,7 +173,7 @@ class SiteController extends AbstractController
     {
         $metas['description'] = "Vous souhaitez contribuer activement au projet porté par l’association mais vous n’êtes pas sur Caen ?";
         
-        return $this->render('site/pages/devenir_ambassadeur.html.twig', [
+        return $this->render('site/pages/ambassadeur/devenir_ambassadeur.html.twig', [
             'metas' => $metas,
         ]);
 
@@ -233,7 +233,7 @@ class SiteController extends AbstractController
 
         $metas['description'] = 'En plus de son activité de réemploi des jeux de société, l’association propose différentes prestations.';
         
-        return $this->render('site/pages/nos_prestations.html.twig', [
+        return $this->render('site/pages/prestations/nos_prestations.html.twig', [
             'metas' => $metas,            
             'legales' => $this->legalInformationRepository->findOneBy([]),
         ]);
@@ -272,7 +272,7 @@ class SiteController extends AbstractController
 
         $metas['description'] = "L’association récupère les jeux de société complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…). Nous récupérons également les puzzles complets et les jeux éducatifs en boîte carton (pour apprendre à lire, compter…), qu’ils soient complets ou incomplets.";
         
-        return $this->render('site/pages/donner_ses_jeux.html.twig', [
+        return $this->render('site/pages/donner_jeux/donner_ses_jeux.html.twig', [
             'metas' => $metas,
             'legales' => $this->legalInformationRepository->findOneBy([]),
             'donnees' => $donnees,

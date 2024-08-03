@@ -1,0 +1,29 @@
+{% extends 'components/_base.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block body %}
+
+    <div class="row justify-content-around align-items-center my-5">
+        <div class="col-11 col-md-4 d-flex flex-column justify-content-around pt-3">
+            <h1 class="col-11">Contactez <span class="text-purple">le service</span></h1>
+
+            <div class="col-11">//TODO Vous avez une question ou vous recherchez une information ?</div>
+
+        </div>
+        <div class="col-11 mt-3 mt-md-0 col-md-4 d-flex justify-content-around">
+        //TODO
+            <img src="{{ asset('build/images/design/prestations/prestation_header.png') }}" alt="Image de pièces au détail">
+        </div>
+    </div>
+
+    <div class="row justify-content-around py-4 bg-white">
+
+        <div class="col-10 col-sm-8 col-md-7 col-lg-6 col-xl-5 px-0 py-3">
+
+            {{form(form)}}
+
+        </div>
+    </div>
+
+{% endblock %}

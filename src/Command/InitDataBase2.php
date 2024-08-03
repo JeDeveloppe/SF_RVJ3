@@ -82,10 +82,10 @@ class InitDataBase2 extends Command
         // $this->playerService->addplayers($io);
 
         //on importe les boites
-        // $this->boiteService->importBoites($io);
+        //$this->boiteService->importBoites($io);
 
         //on genere les editeurs de facon distinct
-        // $this->editorService->addEditorsInDatabase($io);
+        $this->editorService->addEditorsInDatabase($io);
 
         //on importe le detail des boites
         // $this->boiteService->importPieces($io);
@@ -144,7 +144,7 @@ class InitDataBase2 extends Command
         // $this->itemGroupService->addItemGroups($io);
 
         //on injecte les ambassadeurs
-        $this->ambassadorService->importAmbassadors($io);
+        //$this->ambassadorService->importAmbassadors($io);
 
         return Command::SUCCESS;
     }
