@@ -200,4 +200,44 @@ class OccasionService
 
         return $value;
     }
+
+    public function returnAgesChoices(string $category = null):array
+    {
+
+        switch($category){
+            case 'jeux-pour-enfants': //? pareil que la navbar et le footer
+                $agesByCategory = [
+                    'start' => 1,
+                    'end' => 6
+                ]; //TODO
+                break;
+            case 'jeux-pour-initie-es': //? pareil que la navbar et le footer
+                $agesByCategory = [
+                    'start' => 7,
+                    'end' => 99
+                ]; //TODO
+                break;
+            default:
+                $agesByCategory = [
+                    'start' => 1,
+                    'end' => 99
+                ]; //TODO
+                break;
+        }
+
+        //calcul
+        $choices = [];
+        $ageChoices = [];
+        for($i = $agesByCategory['start']; $i <= $agesByCategory['end']; $i++){
+            $an = ' an';
+            if($i > 1){
+                $an = ' ans';
+            }
+            $ageChoices['A partir de '.$i.$an] = $i;
+        }
+        $choices['form_options'] = $ageChoices;
+        $choices['start_and_end_ages'] = $agesByCategory;
+
+        return $choices;
+    }
 }

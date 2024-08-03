@@ -10,7 +10,6 @@ use App\Repository\TaxRepository;
 use App\Service\UtilitiesService;
 use App\Repository\BoiteRepository;
 use App\Repository\EditorRepository;
-use App\Entity\CatalogOccasionSearch;
 use App\Repository\AddressRepository;
 use App\Repository\PartnerRepository;
 use App\Repository\OccasionRepository;
@@ -25,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CatalogOccasionSearchRepository;
+use App\Service\CatalogueService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CatalogController extends AbstractController
@@ -45,11 +45,13 @@ class CatalogController extends AbstractController
         private CatalogOccasionSearchRepository $catalogOccasionSearchRepository,
         private UtilitiesService $utilitiesService,
         private EntityManagerInterface $em,
-        private Security $security
+        private Security $security,
+        private CatalogueService $catalogueService
     )
     {
     }
     
+    //TODO
     #[Route('/catalogue-pieces-detachees', name: 'app_catalogue_pieces_detachees')]
     public function cataloguePiecesDetachees(Request $request): Response
     {
@@ -113,7 +115,7 @@ class CatalogController extends AbstractController
         ]);
     }
 
-
+    //TODO
     #[Route('/catalogue-pieces-detachees/{editorSlug}/{id}/{slug}', name: 'catalogue_pieces_detachees_demande')]
     public function cataloguePiecesDetacheesDemande($id, $slug, $editorSlug, Request $request): Response
     {
@@ -151,61 +153,54 @@ class CatalogController extends AbstractController
         ]);
     }
 
-    #[Route('/catalogue-jeux-occasion', name: 'app_catalogue_occasions')]
-    public function catalogueOccasions(Request $request): Response
+    #[Route('/catalogue-jeux-occasion/{category}', name: 'app_catalogue_occasions')]
+    public function catalogueOccasions(Request $request, $category = NULL): Response
     {
-        $form = $this->createForm(SearchOccasionsInCatalogueType::class);
+        switch($category) {
+            case 'jeux-pour-enfants': //? pareil que la navbar et le footer
+                $titreDelaPage = '<h1 class="col-11 text-center">Jeux pour <span class="text-purple">enfants</span></h1>';
+                break;
+            case 'jeux-pour-initie-es': //? pareil que la navbar et le footer
+                $titreDelaPage = '<h1 class="col-11 text-center">Jeux pour <span class="text-purple">initié·es</span></h1>';
+                break;
+            default:
+                $titreDelaPage = '<h1 class="col-11 text-center">Tous les <span class="text-purple">jeux</span></h1>';
+        }
+
+        $choices = $this->occasionService->returnAgesChoices($category);
+
+        $form = $this->createForm(SearchOccasionsInCatalogueType::class, null,
+            [
+                'method' => 'GET',
+                'category' => $category,
+            ]);
         $form->handleRequest($request);
+
 
         if($form->isSubmitted() && $form->isValid()) {
 
             $search = $form->get('search')->getData();
             $phrase = str_replace(" ","%",$search);
-            $age = $form->get('age')->getData() ?? 0;
+            $age_start = $form->get('age_start')->getData() ?? $choices['start_and_end_ages']['start'];
+            $age_end = $choices['start_and_end_ages']['end'];
             $players = $form->get('playerMin')->getData() ?? [];
 
-                //TODO
-                // $data = new CatalogOccasionSearch();
-                // $data->setPhrase($phrase)
-                //         ->setToken($this->utilitiesService->generateRandomString())
-                //         ->setAge($age)
-                //         ->setPlayers($players)
-                //         ->setCreatedAt(new DateTimeImmutable('now'))
-                //         ->setUser($this->security->getUser());
-                // $this->em->persist($data);
-                // $this->em->flush($data);
-                // $catalogueOccasionSearchs = $this->catalogOccasionSearchRepository->findAll();
-                // if(count($catalogueOccasionSearchs) > 100){ //on garde les 100 dernières recherches
-                //     $this->em->remove($catalogueOccasionSearchs[0]);
-                //     $this->em->flush();
-                // }
+            //TODO à montrer et activer
+            $this->catalogueService->saveQueryInDataBase($request, $phrase, $age_start, $players);
 
-            $donneesFromDatabases = $this->occasionRepository->searchOccasionsByNameOrEditorInCatalogue($phrase, $age, $players);
-
-        //TODO
-        }else if($request->isMethod('GET')){
-
-            $age = $request->query->getInt('age') ?? '';
-            $phrase = $request->query->getString('search');
-            if(strlen($request->query->get('players')) > 0){
-                $players = $request->query->get('players');
-            }else{
-                $players = [];
-            }
-
-            $donneesFromDatabases = $this->occasionRepository->searchOccasionsByNameOrEditorInCatalogue($phrase, $age, $players);
+            $donneesFromDatabases = $this->occasionRepository->searchOccasionsByNameOrEditorInCatalogue($phrase, $age_start, $age_end, $players);
 
         }else{
 
             //on cherche l'ensemble du catalogue
-            $donneesFromDatabases = $this->occasionRepository->findBy(['isOnline' => true],['id' => 'DESC']);
+            $donneesFromDatabases = $this->occasionRepository->searchAllOccasions($choices['start_and_end_ages']['start'], $choices['start_and_end_ages']['end']);
 
         }
 
         $occasions = $this->paginator->paginate(
             $donneesFromDatabases, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            24, /*limit per page*/
+            12, /*limit per page*/
         );
 
         $metas['description'] = 'Catalogue complet des jeux d\'occasion disponiblent en retrait sur Caen.';
@@ -214,12 +209,10 @@ class CatalogController extends AbstractController
             'occasions' => $occasions,
             'occasions_totales' => $donneesFromDatabases,
             'metas' => $metas,
+            'titreDeLaPage' => $titreDelaPage,
             'form' => $form,
             'tax' => $this->taxRepository->findOneBy([]),
             'partners' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true]),
-            'search_in_url' => $phrase ?? '',
-            'age_in_url' => $age ?? '',
-            'players_in_url' => $players ?? []
         ]);
     }
 

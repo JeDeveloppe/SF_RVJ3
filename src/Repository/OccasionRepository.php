@@ -21,26 +21,42 @@ class OccasionRepository extends ServiceEntityRepository
         parent::__construct($registry, Occasion::class);
     }
 
-    public function searchOccasionsByNameOrEditorInCatalogue(string $phrase, int $age, array $players): array
+    public function searchOccasionsByNameOrEditorInCatalogue(string $phrase, int $age_start, int $age_end, array $players): array
     {
-
-        $logique_age = '=';
-        if($age == 0){
-            $logique_age = ">";
-        }
 
         return $this->createQueryBuilder('o')
             ->join('o.boite','b')
             ->join('b.editor','e')
             ->orWhere('b.name LIKE :phrase')
             ->orWhere('e.name LIKE :phrase')
-            // ->andWhere('b.playersMin >= :players')
-            ->andWhere('b.age '.$logique_age.' :age')
+            // ->andWhere('b.playersMin >= :players') //TODO if NULL
+            ->andWhere('b.age >= :age_start')
+            ->andWhere('b.age <= :age_end')
             ->andWhere('o.isOnline = :online')
             ->setParameters([
                 'phrase' => '%'.$phrase.'%',
-                'age' => $age,
-                // 'players' => $players,
+                'age_start' => $age_start,
+                'age_end' => $age_end,
+                // 'players' => $players, //TODO
+                'online' =>  true,
+            ])
+            ->orderBy('b.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function searchAllOccasions(int $age_start, int $age_end): array
+    {
+
+        return $this->createQueryBuilder('o')
+            ->join('o.boite','b')
+            ->where('b.age >= :age_start')
+            ->andWhere('b.age <= :age_end')
+            ->andWhere('o.isOnline = :online')
+            ->setParameters([
+                'age_start' => $age_start,
+                'age_end' => $age_end,
                 'online' =>  true,
             ])
             ->orderBy('b.id', 'ASC')

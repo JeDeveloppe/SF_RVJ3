@@ -26,16 +26,13 @@
         </a>
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link text-dark" href="{{ path('app_catalogue_occasions') }}">Tous les jeux</a>
+            <a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': null}) }}">Tous les jeux</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" href="#">Enfants</a>
+            <a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}">Enfants</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" href="#">Tout public</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" href="#">Initié·es</a>
+            <a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}">Initié·es</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-dark" href="{{ path('app_catalogue_pieces_detachees') }}">Pièces détachées</a>

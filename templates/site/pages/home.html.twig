@@ -16,7 +16,7 @@
             Disponibles en retrait à Caen dans le Calvados.
         </div>
         <div class="col-12 d-flex justify-content-around mt-3">
-            <a class="btn btn-dark" href="{{ path('app_catalogue_occasions') }}">Acheter un jeu</a>
+            <a class="btn btn-dark" href="{{ path('app_catalogue_occasions', {'category': null}) }}">Acheter un jeu</a>
             <a class="btn btn-light flex-column" href="{{ path('app_catalogue_pieces_detachees') }}">
             Completer un jeu</br>
             <small>Livraison possible</small>
@@ -45,7 +45,7 @@
             Des jeux<br/> pour
             <span class="text-purple">tous<br/> les âges</span>
         </h2>
-        <a class="btn btn-dark mt-3" href="{{ path('app_catalogue_occasions') }}" >Voir tous les jeux</a>
+        <a class="btn btn-dark mt-3" href="{{ path('app_catalogue_occasions', {'category': null}) }}" >Voir tous les jeux</a>
     </div>
     <div class="col-11 col-sm-5 mb-4 mb-lg-0 col-lg-3">
         <div class="col-12 card card_index_info_catalogue">

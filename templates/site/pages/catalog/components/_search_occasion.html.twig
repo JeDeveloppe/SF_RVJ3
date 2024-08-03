@@ -7,8 +7,8 @@
                 {{ form_widget(form.search) }}
             </div>
             <div class="col-11 mb-3">
-                <label class="label_in_occasion_search_form">{{ form_label(form.age) }}</label>
-                {{ form_widget(form.age) }}
+                <label class="label_in_occasion_search_form">{{ form_label(form.age_start) }}</label>
+                {{ form_widget(form.age_start) }}
             </div>
             <div class="col-12">
                 <label class="label_in_occasion_search_form">{{ form_label(form.playerMin) }}</label>
@@ -19,11 +19,11 @@
                 </ul>
             </div>
             <div class="col-12">
-                {% set currentPath = app.request.get('_route') %}
+                {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
                 <div class="input-group-append text-center col-12">
                     <div class="btn-group" role="group">
                         <button type="submit" class="btn btn-dark">Chercher</button>
-                        <a href="{{ path(currentPath) }}" type="button" class="btn btn-orange">Reset</a>
+                        <a href="{{ currentPath }}" type="button" class="btn btn-orange">Reset</a>
                     </div>
                 </div>
             </div>

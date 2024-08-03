@@ -13,7 +13,7 @@
 		<div class="row py-2 py-lg-3">
 			<div class="col-12 col-md-6 ps-5 d-flex">
 				{% if app.request.headers.get('referer') is null %}
-					<a class="btn btn-secondary" href="{{ path('app_catalogue_occasions') }}#{{ occasion.id }}">Retour au catalogue général</a>
+					<a class="btn btn-secondary" href="{{ path('app_catalogue_occasions', {'category': null}) }}#{{ occasion.id }}">Retour au catalogue général</a>
 				{% else %}
 					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}#{{ occasion.id }}">Retour au catalogue</a>
 				{% endif %}

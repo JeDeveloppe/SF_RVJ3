@@ -1,6 +1,6 @@
 {% extends "components/_base.html.twig" %}
 
-{% block title %}Tous les jeux d'occasion{% endblock %}
+{% block title %}Les jeux d'occasion{% endblock %}
 
 {% block body %}
 
@@ -11,17 +11,15 @@
     {% else %}
         <!-- pas de foire en cours -->
         <div class="row justify-content-around py-4">
-            <h1 class="col-11 text-center">
-                Tous les <span class="text-purple">jeux</span>
-            </h1>
+            {{ titreDeLaPage | raw }}
         </div>
         <div class="row justify-content-around py-5 bg-white">
             <!-- left column / searchs -->
             <div class="col-11 col-md-9 col-lg-3">
-                {% include "components/forms/_search_occasion.html.twig" %}
+                {% include "site/pages/catalog/components/_search_occasion.html.twig" %}
             </div>
             <!-- rigth column / results -->
-            <div class="col-11 col-lg-9 d-flex flex-wrap justify-content-around align-items-stretch mt-5 mt-lg-0">
+            <div class="col-11 col-lg-9 d-flex flex-wrap justify-content-start align-items-stretch mt-5 mt-lg-0">
             
                 <!-- left column / result > 0 -->
                 {% if occasions | length > 0 %}
@@ -43,7 +41,7 @@
                         {% endfor %}
 
                         <div class="col-12 d-flex justify-content-center my-5">
-                            {{ knp_pagination_render(occasions, 'components/_pagination.html.twig', {"search": search_in_url ? search_in_url : '' , "age": age_in_url ? age_in_url : '', "players": players_in_url ? players_in_url : ''}) }}
+                            {{ knp_pagination_render(occasions, 'components/_pagination.html.twig') }}
                         </div>
 
                 {% else %}

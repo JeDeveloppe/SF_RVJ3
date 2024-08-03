@@ -50,4 +50,13 @@ class CatalogOccasionSearchCrudController extends AbstractCrudController
             ->add('phrase')
         ;
     }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->showEntityActionsInlined()
+            ->setPageTitle('index', 'Liste des 100 dernières recherches')
+            ->setDefaultSort(['id' => 'DESC'])
+            ->setSearchFields(['phrase', 'age']);
+    }
 }
