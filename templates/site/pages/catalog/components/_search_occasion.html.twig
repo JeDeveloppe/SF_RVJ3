@@ -14,7 +14,15 @@
                 <label class="label_in_occasion_search_form">{{ form_label(form.playerMin) }}</label>
                 <ul class="d-flex flex-wrap justify-content-start flex-wrap mt-2 p-0">
                     {% for player in form.playerMin %}
-                            <li class="list-unstyled li_players"> {{ form_widget(player,{ 'attr': {'class': 'checkbox_players'} }) }} <span class="li_players_span">{{ form_label(player) }} </span></li>
+                            <li class="list-unstyled li_players"> {{ form_widget(player,{ 'attr': {'class': 'checkbox_players'} }) }} <span class="majesticCheckbox">{{ form_label(player) }} </span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-12">
+                <label class="label_in_occasion_search_form">{{ form_label(form.duration) }}</label>
+                <ul class="d-flex flex-wrap justify-content-start flex-wrap mt-2 p-0">
+                    {% for time in form.duration %}
+                            <li class="list-unstyled li_durations"> {{ form_widget(time,{ 'attr': {'class': 'checkbox_times'} }) }} <span class="majesticCheckbox">{{ form_label(time) }} </span></li>
                     {% endfor %}
                 </ul>
             </div>

@@ -25,7 +25,7 @@ class SearchOccasionsInCatalogueType extends AbstractType
 
         $category = $options['category'];
 
-        [$playerChoices,$ageChoices,$lengthChoices] = $this->formOccasionChoices($category);
+        [$playerChoices,$ageChoices,$durationsChoices] = $this->formOccasionChoices($category);
 
         $builder
             ->add('search', TextType::class, [
@@ -42,6 +42,15 @@ class SearchOccasionsInCatalogueType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'choices' => $playerChoices,
+                'expanded' => true,
+                'multiple' => true,
+            ])
+            ->add('duration',  ChoiceType::class, [
+                'label' => 'Durée de la partie:',
+                'attr' => [
+                    'class' => 'form-control'
+                ],
+                'choices' => $durationsChoices,
                 'expanded' => true,
                 'multiple' => true,
             ])
@@ -75,10 +84,10 @@ class SearchOccasionsInCatalogueType extends AbstractType
         $choices = $this->occasionService->returnAgesChoices($category);
 
         //TODO
-        $lengthChoices = [];
-        $lengthChoices['Moins de 30min'] = 29;
-        $lengthChoices['De 30min à 1hr'] = 29;
+        $durations = [];
+        $durations['Moins de 30min'] = 29;
+        $durations['De 30min à 1hr'] = 29;
 
-        return [$playerChoices,$choices['form_options'],$lengthChoices];
+        return [$playerChoices,$choices['form_options'],$durations];
     }
 }

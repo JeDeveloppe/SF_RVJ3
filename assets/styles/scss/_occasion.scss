@@ -83,7 +83,7 @@
 }
 
 
-.li_players{
+.li_players, .li_durations{
     width: 33px;
     height: 33px;
     margin: 2px;
@@ -91,7 +91,7 @@
     display: flex;
     justify-content: center;
 }
-.li_players > input[type=checkbox] {
+.li_players > input[type=checkbox], .li_durations > input[type=checkbox] {
     appearance: none;
     width: 100%;
     border: 1px solid #00000033;
@@ -100,7 +100,7 @@
     justify-content: center;
     align-items: center;
 }
-.li_players >input[type="checkbox"]::before {
+.li_players >input[type="checkbox"]::before, .li_durations >input[type="checkbox"]::before {
     content: "";
     width: 1em;
     height: 1em;
@@ -110,7 +110,7 @@
     background-color: var(--bg-secondary);
 }
 
-.li_players > input[type="checkbox"]:checked::before {
+.li_players > input[type="checkbox"]:checked::before, .li_durations > input[type="checkbox"]:checked::before{
     transform: scale(1);
 }
 .li_players_span{

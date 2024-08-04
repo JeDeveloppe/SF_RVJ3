@@ -24,12 +24,12 @@ document.querySelector('meta[name="description"]').setAttribute("content",docume
 let cookieChecked = getCookie('Refaitesvosjeux');
 
 if(cookieChecked !== "cookieChecked"){
-  let cookieHeadBand = document.querySelector(".cookiealert");
+  let cookieHeadBand = document.querySelector("#overlay");
   let cookieHeadBandButton = document.querySelector("#cookieHeadBandButton");
-  cookieHeadBand.classList.add('show');
+  cookieHeadBand.style.display="block";
 
   cookieHeadBandButton.addEventListener('click', () => {
-    cookieHeadBand.classList.remove('show');
+    cookieHeadBand.style.display="none";
     setCookie('Refaitesvosjeux','cookieChecked');
   })
 }

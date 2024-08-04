@@ -1,10 +1,21 @@
 <!-- START Bootstrap-Cookie-Alert -->
 
-    {# <div class="col-12 text-center cookiealert py-2" role="alert">
-        <b>Vous aimez les cookies?</b> &#x1F36A; Le site utilise uniquement un seul cookie pour faire quelques statistiques. <a class="text-warning" href="https://www.cnil.fr/fr/cookies-les-outils-pour-les-maitriser" target="_blank">En savoir plus</a>
-        <button id="cookieHeadBandButton" type="button" class="btn bg-primary text-white btn-sm acceptcookies">
-            Ok
-        </button>
-    </div> #}
+    <div id="overlay">
+        <div class="cookiealert col-11 col-sm-10 col-md-6 col-lg-5 p-2">
+            <div class="col-12 d-flex flex-wrap justify-content-around p-0">
+                <img src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo de Refaites vos jeux">
+                <div class="col-11 mt-2">Petite information sur les cookies du site. &#x1F36A;</div>
+                <div class="col-11">Le site utilise uniquement un cookie pour faire des statistiques et un autre pour gérer votre panier d'achat, rien de plus promis !</div>
+                <div class="col-11 text-right mt-1">
+                    <a class="text-warning" href="https://www.cnil.fr/fr/cookies-les-outils-pour-les-maitriser" target="_blank">En savoir plus</a>
+                </div>
+                <div class="col-11 d-flex justify-content-center">
+                    <button id="cookieHeadBandButton" type="button" class="btn btn-dark">
+                        Ok
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <!-- END Bootstrap-Cookie-Alert -->
