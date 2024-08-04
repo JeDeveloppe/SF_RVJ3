@@ -268,7 +268,7 @@ class PanierController extends AbstractController
 
         $this->addFlash($reponse[0], $reponse[1]);
 
-        //TODO redirect -2
+        //TODO redirect -2 René
 
         return $this->redirectToRoute('app_catalogue_occasions');
     }

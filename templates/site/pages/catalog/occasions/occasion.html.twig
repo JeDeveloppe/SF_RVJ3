@@ -21,8 +21,8 @@
 		</div>
 
 		<!-- BLOC PRESENTATION DU JEU  -->
-		<div class="row justify-content-around bg-white">
-			<div class="col-10 col-md-6 d-flex justify-content-center align-items-center">
+		<div class="row justify-content-center bg-white">
+			<div class="col-10 col-md-6 col-xl-5 d-flex justify-content-center align-items-center">
 				<div class="col-12 col-md-6 text-center p-0">
 					<div class="divImgPresentation mt-1">
 						<div class="zoom">
@@ -44,7 +44,7 @@
 					</span>
 				</div>
 			</div>
-			<div class="col-10 col-md-6 d-flex flex-wrap">
+			<div class="col-10 col-md-6 col-xl-5 d-flex flex-wrap">
 					<div class="col-12 occasion_detail_editor mt-5">{{ occasion.boite.editor }}</div>
 					<h1 class="col-12 occasion_detail_name">{{ occasion.boite.name }}</h1>
 					{% include "components/catalog/_occasion_details.html.twig"  with { 'occasion': occasion } %}
@@ -64,7 +64,7 @@
 			<h3 class="col-11 my-4">Ces jeux pourraient <span class="text-purple">vous plaire</span></h3>
 			{% for firstElement in firstElements %} 
 			    <div class="col-8 col-sm-6 col-lg-3 mx-md-0 px-3 px-md-5 px-lg-1 my-3"> 
-        			{% include "components/catalog/_cardOccasion.html.twig" with { 'product': firstElement, 'tax': tax } %}
+        			{% include "site/pages/catalog/components/_cardOccasion.html.twig" with { 'product': firstElement, 'tax': tax } %}
 				</div>
 			{% endfor %}
 		</div>

@@ -209,19 +209,19 @@ class OccasionService
                 $agesByCategory = [
                     'start' => 1,
                     'end' => 6
-                ]; //TODO
+                ]; //TODO Antoine
                 break;
             case 'jeux-pour-initie-es': //? pareil que la navbar et le footer
                 $agesByCategory = [
                     'start' => 7,
                     'end' => 99
-                ]; //TODO
+                ]; //TODO Antoine
                 break;
             default:
                 $agesByCategory = [
                     'start' => 1,
                     'end' => 99
-                ]; //TODO
+                ]; //TODO Antoine
                 break;
         }
 

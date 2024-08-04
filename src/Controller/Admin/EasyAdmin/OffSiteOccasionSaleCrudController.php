@@ -69,7 +69,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
                                         fn(QueryBuilder $queryBuilder) => 
                                         $queryBuilder
                                             ->where('entity.isOnline = :true')
-                                            //TODO
+                                            //TODO René
                                             // ->orWhere('entity.reserve = :true')
                                             ->setParameter('true', true)
                                             ->orderBy('entity.reference', 'ASC')

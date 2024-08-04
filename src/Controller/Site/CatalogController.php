@@ -53,7 +53,7 @@ class CatalogController extends AbstractController
     {
     }
     
-    //TODO
+    //TODO pièces détachées
     #[Route('/catalogue-pieces-detachees', name: 'app_catalogue_pieces_detachees')]
     public function cataloguePiecesDetachees(Request $request): Response
     {
@@ -117,7 +117,7 @@ class CatalogController extends AbstractController
         ]);
     }
 
-    //TODO
+    //TODO pièces détachées
     #[Route('/catalogue-pieces-detachees/{editorSlug}/{id}/{slug}', name: 'catalogue_pieces_detachees_demande')]
     public function cataloguePiecesDetacheesDemande($id, $slug, $editorSlug, Request $request): Response
     {
@@ -200,7 +200,7 @@ class CatalogController extends AbstractController
                 $durations = [];
             }
 
-            //TODO à montrer et activer
+            //TODO à montrer et activer si ok Antoine
             $this->catalogueService->saveQueryInDataBase($request, $phrase, $age_start, $players);
 
             $donneesFromDatabases = $this->occasionRepository->searchOccasionsByNameOrEditorInCatalogue($phrase, $age_start, $age_end, $players, $durations);

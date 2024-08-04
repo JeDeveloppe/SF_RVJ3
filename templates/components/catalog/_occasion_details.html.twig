@@ -8,7 +8,7 @@
                 <a class="text-decoration-none" href="{{ occasion.boite.linktopresentationvideo }}" target="_blank"><i class="fa-solid fa-video"></i> Voir la vidéo de présentation.</a>
         {% endif %}
     {% endif %}
-    <span class="text-orange">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': occasion,'tax': tax} %}</span>
+    <span class="mt-2 font-weight-bolder">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': occasion,'tax': tax} %}</span>
 
 </div>
 <div class="col-12 mt-4 d-flex occasion_detail_etats">

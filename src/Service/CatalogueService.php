@@ -24,7 +24,7 @@ class CatalogueService
     public function saveQueryInDataBase(Request $request, string $phrase, int $age, array $players)
     {
         if(!$request->query->getInt('page')){
-            $requestMaxToSave = 100; //TODO number ?
+            $requestMaxToSave = 100; //TODO Antoine
             $data = new CatalogOccasionSearch();
             $data->setPhrase($phrase)
                     ->setToken($this->utilitiesService->generateRandomString())

@@ -15,11 +15,11 @@
         </div>
         <div class="row justify-content-around py-5 bg-white">
             <!-- left column / searchs -->
-            <div class="col-11 col-md-9 col-lg-4">
+            <div class="col-11 col-md-4 col-lg-4 col-xl-3 px-0 d-flex flex-wrap justify-content-around">
                 {% include "site/pages/catalog/components/_search_occasion.html.twig" %}
             </div>
             <!-- rigth column / results -->
-            <div class="col-11 col-lg-8 d-flex flex-wrap justify-content-start align-items-stretch mt-5 mt-lg-0">
+            <div class="col-11 col-md-8 col-lg-8 col-xl-9 d-flex flex-wrap justify-content-around justify-content-md-start align-items-stretch mt-5 mt-md-0">
             
                 <!-- left column / result > 0 -->
                 {% if occasions | length > 0 %}
@@ -30,12 +30,12 @@
                         {% set jeu_dispo = 'jeux disponibles' %}
                     {% endif %}
 
-                        <div class="col-12 font-weight-bolder">{{ occasions_totales | length }} {{ jeu_dispo }}.</div>
+                        <div class="col-12 font-weight-bolder mb-3">{{ occasions_totales | length }} {{ jeu_dispo }}.</div>
 
                         {% for key,occasion in occasions %}  
 
-                            <div class="col-9 col-sm-6 col-lg-4 mx-md-0 px-3 px-lg-1 my-3">
-                                {% include "components/catalog/_cardOccasion.html.twig" with { 'product': occasion, 'tax': tax } %}
+                            <div class="col-9 col-sm-6 col-lg-4 col-xl-3 mx-md-0 p-1">
+                                {% include "site/pages/catalog/components/_cardOccasion.html.twig" with { 'product': occasion, 'tax': tax } %}
                             </div>
 
                         {% endfor %}

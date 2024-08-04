@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\DurationOfGame;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<DurationOfGame>
@@ -20,8 +20,6 @@ class DurationOfGameRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, DurationOfGame::class);
     }
-
-    //TODO René
 
 //    /**
 //     * @return DurationOfGame[] Returns an array of DurationOfGame objects

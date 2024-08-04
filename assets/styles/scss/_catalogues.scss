@@ -1,4 +1,4 @@
-.divImgPresentation {
+.divImgPresentation{
     .zoom {
         overflow: hidden;
         position: relative;
@@ -87,26 +87,14 @@
     }
 }
 
-.card_{
-    border: 2px solid #F7F2EC;
-    border-radius: 20px;
-    background-color: #fff;
-}
-
-.card_catalog_img {
-    max-width: 65%;
-    object-fit: cover;
-    margin: auto;
-}
-
 .card_ {
-    border: 2px solid var(var(--bg-secondary) ) ;
+    border: 2px solid var(--secondary);
     border-radius: 20px;
     background-color: #fff;
     padding: 0 5%;
 }
 
-.card_>.info_photo {
+.card_ > .info_photo {
     font-size: 10px;
 }
 
@@ -116,14 +104,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
     border-radius: 20px 20px;
     overflow: hidden;
-    padding: 5% 5%;
+    padding: 3% 3%;
 }
 
 .card_catalog_img {
-    max-width: 70%;
+    max-width: 100%;
+    object-fit: cover;
     margin: auto;
 }
 

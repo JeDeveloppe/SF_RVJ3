@@ -20,7 +20,7 @@ class ContactType extends AbstractType
                 'label' => 'Votre adresse email:',
                 'required' => true,
                 'attr' => ['class' => 'form-control mb-3'],
-            ]) //TODO sujets
+            ]) //TODO sujets Antoine
             ->add('sujet', ChoiceType::class, [
                 'label' => 'Sujet de votre demande:',
                 'choices' => [

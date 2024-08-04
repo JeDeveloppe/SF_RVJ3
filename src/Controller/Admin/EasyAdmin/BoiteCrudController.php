@@ -129,12 +129,6 @@ class BoiteCrudController extends AbstractCrudController
                 ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
-            AssociationField::new('durationGame')
-                ->setLabel('Durée de la partie maximum')
-                ->onlyOnForms()
-                ->setRequired(true)
-                ->setPermission('ROLE_ADMIN')
-                ->setColumns(6),
             AssociationField::new('playersMin')
                 ->setLabel('A partir de (joueurs)')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
@@ -148,18 +142,25 @@ class BoiteCrudController extends AbstractCrudController
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
             AssociationField::new('playersMax')
-            ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-            ->setQueryBuilder(
-                fn(QueryBuilder $queryBuilder) => 
-                $queryBuilder
-                    ->where('entity.isInOccasionFormSearch = :true')
-                    ->setParameter('true', true)
-                    ->orderBy('entity.orderOfAppearance', 'ASC'))
-            ->setLabel('Jusqu\'à (joueurs)')
-            ->onlyOnForms()
-            ->setRequired(true)
-            ->setPermission('ROLE_ADMIN')
-            ->setColumns(6),
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->setQueryBuilder(
+                    fn(QueryBuilder $queryBuilder) => 
+                    $queryBuilder
+                        ->where('entity.isInOccasionFormSearch = :true')
+                        ->setParameter('true', true)
+                        ->orderBy('entity.orderOfAppearance', 'ASC'))
+                ->setLabel('Jusqu\'à (joueurs)')
+                ->onlyOnForms()
+                ->setRequired(true)
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
+            AssociationField::new('durationGame')
+                ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
+                ->setLabel('Durée Max de la partie')
+                ->onlyOnForms()
+                ->setRequired(true)
+                ->setPermission('ROLE_ADMIN')
+                ->setColumns(6),
 
             FormField::addTab('Occasion / Articles')->setPermission('ROLE_BENEVOLE'),
             BooleanField::new('isOccasion')
