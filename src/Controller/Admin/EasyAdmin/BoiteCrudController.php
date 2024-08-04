@@ -129,14 +129,8 @@ class BoiteCrudController extends AbstractCrudController
                 ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
-            IntegerField::new('durationMinOfTheGame')
-                ->setLabel('Durée de la partie minimum (en min)')
-                ->onlyOnForms()
-                ->setRequired(true)
-                ->setPermission('ROLE_ADMIN')
-                ->setColumns(6),
-            IntegerField::new('durationMaxOfTheGame')
-                ->setLabel('Durée de la partie maximum (en min)')
+            AssociationField::new('durationGame')
+                ->setLabel('Durée de la partie maximum')
                 ->onlyOnForms()
                 ->setRequired(true)
                 ->setPermission('ROLE_ADMIN')

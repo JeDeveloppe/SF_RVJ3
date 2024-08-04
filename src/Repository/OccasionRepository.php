@@ -21,32 +21,69 @@ class OccasionRepository extends ServiceEntityRepository
         parent::__construct($registry, Occasion::class);
     }
 
-    public function searchOccasionsByNameOrEditorInCatalogue(string $phrase, int $age_start, int $age_end, array $players): array
+    public function searchOccasionsByNameOrEditorInCatalogue(string $phrase, int $age_start, int $age_end, array $players, array $durations): array
     {
 
-        return $this->createQueryBuilder('o')
-            ->join('o.boite','b')
-            ->join('b.editor','e')
-            ->orWhere('b.name LIKE :phrase')
-            ->orWhere('e.name LIKE :phrase')
-            // ->andWhere('b.playersMin >= :players') //TODO if NULL
-            ->andWhere('b.age >= :age_start')
-            ->andWhere('b.age <= :age_end')
-            ->andWhere('o.isOnline = :online')
-            ->setParameters([
-                'phrase' => '%'.$phrase.'%',
-                'age_start' => $age_start,
-                'age_end' => $age_end,
-                // 'players' => $players, //TODO
-                'online' =>  true,
-            ])
-            ->orderBy('b.id', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
+        $signe_players = "IN (:players)";
+        $value_players = $players;
+        if(count($players) == 0){
+            $signe_players = ">= (:players)";
+            $value_players = 0;
+        }
+        //s'il n'y une durée de partie
+        if(count($durations) > 0){
+
+            $query =  $this->createQueryBuilder('o')
+                ->join('o.boite','b')
+                ->join('b.editor','e')
+                ->orWhere('b.name LIKE :phrase')
+                ->orWhere('e.name LIKE :phrase')
+                ->andWhere('b.playersMin '.$signe_players)
+                ->andWhere('b.durationGame IN (:durations)')
+                ->andWhere('b.age = :age_start')
+                ->andWhere('b.age <= :age_end')
+                ->andWhere('o.isOnline = :online')
+                ->setParameters([
+                    'phrase' => '%'.$phrase.'%',
+                    'age_start' => $age_start,
+                    'age_end' => $age_end,
+                    'players' => $value_players,
+                    'durations' => $durations,
+                    'online' =>  true,
+                ])
+                ->orderBy('b.id', 'DESC')
+                ->getQuery()
+                ->getResult()
+            ;
+
+        }else{
+
+            $query =  $this->createQueryBuilder('o')
+                ->join('o.boite','b')
+                ->join('b.editor','e')
+                ->orWhere('b.name LIKE :phrase')
+                ->orWhere('e.name LIKE :phrase')
+                ->andWhere('b.playersMin '.$signe_players)
+                ->andWhere('b.age = :age_start')
+                ->andWhere('b.age <= :age_end')
+                ->andWhere('o.isOnline = :online')
+                ->setParameters([
+                    'phrase' => '%'.$phrase.'%',
+                    'age_start' => $age_start,
+                    'age_end' => $age_end,
+                    'players' => $value_players,
+                    'online' =>  true,
+                ])
+                ->orderBy('b.id', 'DESC')
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+
+        return $query;
     }
 
-    public function searchAllOccasions(int $age_start, int $age_end): array
+    public function searchAllOccasionsByStartAndEndFromCategory(int $age_start, int $age_end): array
     {
 
         return $this->createQueryBuilder('o')

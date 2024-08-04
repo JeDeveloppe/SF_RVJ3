@@ -47,6 +47,7 @@ use App\Entity\Returndetailstostock;
 use App\Repository\PanierRepository;
 use App\Entity\BadgeForMediaTimeline;
 use App\Entity\CatalogOccasionSearch;
+use App\Entity\DurationOfGame;
 use App\Repository\PaymentRepository;
 use App\Repository\ReserveRepository;
 use App\Repository\DocumentRepository;
@@ -221,6 +222,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class)->setPermission('ROLE_BENEVOLE');
         yield MenuItem::linkToCrud('Éditeurs', 'fas fa-list', Editor::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Joueurs', 'fas fa-list', NumbersOfPlayers::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Durée des parties', 'fas fa-list', DurationOfGame::class)->setPermission('ROLE_ADMIN');
         
         yield MenuItem::section('Gestion des articles:')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Groupe d\'articles', 'fas fa-list', ItemGroup::class)->setPermission('ROLE_ADMIN');

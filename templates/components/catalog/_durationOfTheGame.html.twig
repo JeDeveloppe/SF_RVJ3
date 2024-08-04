@@ -1,15 +1,8 @@
-{% if item.durationMinOfTheGame is not null %}
+{% if item.durationGame is not null %}
 
     <span class="span_duration_game">
-        {% if item.durationMinOfTheGame == item.durationMaxOfTheGame or item.durationMaxOfTheGame is null %}
-
-            Durée: environ {{ item.durationMinOfTheGame }} min.
-
-        {% else %}
-
-            Durée: entre {{ item.durationMinOfTheGame }} et {{ item.durationMaxOfTheGame }} min.
-            
-        {% endif %}
+    //TODO René
+            <br/>Durée: {{ item.durationGame.name }}.
     </span>
 
 {% else %}

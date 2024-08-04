@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CatalogOccasionSearchRepository;
+use App\Repository\DurationOfGameRepository;
 use App\Service\CatalogueService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -46,7 +47,8 @@ class CatalogController extends AbstractController
         private UtilitiesService $utilitiesService,
         private EntityManagerInterface $em,
         private Security $security,
-        private CatalogueService $catalogueService
+        private CatalogueService $catalogueService,
+        private DurationOfGameRepository $durationOfGameRepository
     )
     {
     }
@@ -184,16 +186,29 @@ class CatalogController extends AbstractController
             $age_start = $form->get('age_start')->getData() ?? $choices['start_and_end_ages']['start'];
             $age_end = $choices['start_and_end_ages']['end'];
             $players = $form->get('playerMin')->getData() ?? [];
+            $durations_choices = $form->get('duration')->getData() ?? [];
+
+            if(count($durations_choices) > 0){
+
+                $durations = [];
+                foreach($durations_choices as $duration_choice){
+                    $durations[] = $this->durationOfGameRepository->findOneBy(['name' => $duration_choice]);
+                }
+
+            }else{
+
+                $durations = [];
+            }
 
             //TODO à montrer et activer
             $this->catalogueService->saveQueryInDataBase($request, $phrase, $age_start, $players);
 
-            $donneesFromDatabases = $this->occasionRepository->searchOccasionsByNameOrEditorInCatalogue($phrase, $age_start, $age_end, $players);
+            $donneesFromDatabases = $this->occasionRepository->searchOccasionsByNameOrEditorInCatalogue($phrase, $age_start, $age_end, $players, $durations);
 
         }else{
 
             //on cherche l'ensemble du catalogue
-            $donneesFromDatabases = $this->occasionRepository->searchAllOccasions($choices['start_and_end_ages']['start'], $choices['start_and_end_ages']['end']);
+            $donneesFromDatabases = $this->occasionRepository->searchAllOccasionsByStartAndEndFromCategory($choices['start_and_end_ages']['start'], $choices['start_and_end_ages']['end']);
 
         }
 

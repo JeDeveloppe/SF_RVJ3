@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Repository\DurationOfGameRepository;
 use App\Repository\NumbersOfPlayersRepository;
 use App\Service\OccasionService;
 use Symfony\Component\Form\AbstractType;
@@ -16,7 +17,8 @@ class SearchOccasionsInCatalogueType extends AbstractType
 {
     public function __construct(
         private NumbersOfPlayersRepository $numbersOfPlayersRepository,
-        private OccasionService $occasionService
+        private OccasionService $occasionService,
+        private DurationOfGameRepository $durationOfGameRepository
         ){
     }
 
@@ -55,12 +57,13 @@ class SearchOccasionsInCatalogueType extends AbstractType
                 'multiple' => true,
             ])
             ->add('age_start', ChoiceType::class, [
+                'label' => 'Âge minimum:',
                 'attr' => [
                     'class' => 'form-control'
                 ],
                 'required' => false,
                 'choices' => $ageChoices,
-                'placeholder' => 'Âge minimum ?',
+                'placeholder' => '- Tous les âges -',
             ]);
     }
 
@@ -83,10 +86,11 @@ class SearchOccasionsInCatalogueType extends AbstractType
 
         $choices = $this->occasionService->returnAgesChoices($category);
 
-        //TODO
         $durations = [];
-        $durations['Moins de 30min'] = 29;
-        $durations['De 30min à 1hr'] = 29;
+        $durationsChecked = $this->durationOfGameRepository->findBy([],['name' => 'ASC']);
+        foreach($durationsChecked as $durationChecked){
+            $durations[$durationChecked->getName()] = $durationChecked->getName();
+        }
 
         return [$playerChoices,$choices['form_options'],$durations];
     }

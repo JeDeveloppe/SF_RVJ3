@@ -10,23 +10,29 @@
                 <label class="label_in_occasion_search_form">{{ form_label(form.age_start) }}</label>
                 {{ form_widget(form.age_start) }}
             </div>
-            <div class="col-12">
+            <div class="col-11 mb-3">
                 <label class="label_in_occasion_search_form">{{ form_label(form.playerMin) }}</label>
-                <ul class="d-flex flex-wrap justify-content-start flex-wrap mt-2 p-0">
+                <ul class="d-flex flex-wrap justify-content-start px-0 col-12">
                     {% for player in form.playerMin %}
-                            <li class="list-unstyled li_players"> {{ form_widget(player,{ 'attr': {'class': 'checkbox_players'} }) }} <span class="majesticCheckbox">{{ form_label(player) }} </span></li>
+                            <li class="list-unstyled col-1 col-md-3 col-lg-2 p-0 my-1 d-flex flex-wrap justify-content-center align-items-center">
+                                <div class="d-flex justify-content-center align-items-center li_players position-relative">{{ form_widget(player) }}</div>
+                                <span class="col-6 d-flex justify-content-center align-items-center li_players_label p-0 position-absolute">{{ form_label(player) }}</span>
+                            </li>
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-12">
+            <div class="col-11 mb-3">
                 <label class="label_in_occasion_search_form">{{ form_label(form.duration) }}</label>
-                <ul class="d-flex flex-wrap justify-content-start flex-wrap mt-2 p-0">
+                <ul class="d-flex flex-wrap justify-content-start px-0 col-12">
                     {% for time in form.duration %}
-                            <li class="list-unstyled li_durations"> {{ form_widget(time,{ 'attr': {'class': 'checkbox_times'} }) }} <span class="majesticCheckbox">{{ form_label(time) }} </span></li>
+                            <li class="list-unstyled col-12 p-0 my-1 d-flex flex-wrap justify-content-center align-items-center bg-danger">
+                                <div class="d-flex justify-content-end align-items-center li_durations bg-success">{{ form_widget(time) }}</div>
+                                <span class="col-9 li_durations_label bg-warning">{{ form_label(time) }}</span>
+                            </li>
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-12">
+            <div class="col-11">
                 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
                 <div class="input-group-append text-center col-12">
                     <div class="btn-group" role="group">

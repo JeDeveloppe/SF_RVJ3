@@ -117,15 +117,8 @@ class Boite
     #[ORM\ManyToOne(inversedBy: 'boitesMax')]
     private ?NumbersOfPlayers $playersMax = null;
 
-    #[ORM\Column(nullable: true)]
-    #[Assert\LessThanOrEqual(
-        propertyPath:"durationMaxOfTheGame",
-        message: "Cette valeur ne peut être supérieure à la durée maximum de la partie !"
-        )]
-    private ?int $durationMinOfTheGame = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $durationMaxOfTheGame = null;
+    #[ORM\ManyToOne(inversedBy: 'boites')]
+    private ?DurationOfGame $durationGame = null;
 
     public function __construct()
     {
@@ -590,26 +583,14 @@ class Boite
         return $this;
     }
 
-    public function getDurationMinOfTheGame(): ?int
+    public function getDurationGame(): ?DurationOfGame
     {
-        return $this->durationMinOfTheGame;
+        return $this->durationGame;
     }
 
-    public function setDurationMinOfTheGame(?int $durationMinOfTheGame): static
+    public function setDurationGame(?DurationOfGame $durationGame): static
     {
-        $this->durationMinOfTheGame = $durationMinOfTheGame;
-
-        return $this;
-    }
-
-    public function getDurationMaxOfTheGame(): ?int
-    {
-        return $this->durationMaxOfTheGame;
-    }
-
-    public function setDurationMaxOfTheGame(?int $durationMaxOfTheGame): static
-    {
-        $this->durationMaxOfTheGame = $durationMaxOfTheGame;
+        $this->durationGame = $durationGame;
 
         return $this;
     }
