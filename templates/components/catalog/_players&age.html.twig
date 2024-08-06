@@ -1,6 +1,6 @@
 {% if item.playersMax is not null %}
     
-    {% set dataJoueur = 1 %}
+    {% set dataJoueur = "joueur" %}
     {% if item.playersMin.name > 1 %}
         {% set dataJoueur = 'joueurs' %}
     {% endif %}
@@ -14,10 +14,6 @@
         {% if item.playersMin.name == item.playersMax.name %}
 
             Uniquement {{ item.playersMin.name }} {{ dataJoueur }} | Dès {{ item.age }} {{ dataAge }}
-
-        {% elseif item.playersMin.name > item.playersMax.name  %}
-
-            A partir de {{ item.playersMin.name }} {{ dataJoueur }} | Dès {{ item.age }} {{ dataAge }}
             
         {% else %}
 

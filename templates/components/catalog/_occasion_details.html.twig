@@ -24,5 +24,5 @@
     </div>
 </div>
 {% if (occasion.information is not null) %}
-    <p><i class="fa-solid fa-circle-info text-primary"></i> Informations:<br/> {{ occasion.information }}</p>
+    <div class="col-12 mt-3 small"><i class="fa-solid fa-circle-info text-primary"></i> Informations:<br/> {{ occasion.information | raw }}</div>
 {% endif %}

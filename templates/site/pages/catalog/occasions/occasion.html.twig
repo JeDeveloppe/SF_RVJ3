@@ -46,7 +46,7 @@
 			</div>
 			<div class="col-10 col-md-6 col-xl-5 d-flex flex-wrap">
 					<div class="col-12 occasion_detail_editor mt-5">{{ occasion.boite.editor }}</div>
-					<h1 class="col-12 occasion_detail_name">{{ occasion.boite.name }}</h1>
+					<h1 class="col-12 occasion_detail_name">{{ occasion.boite.name | raw }}</h1>
 					{% include "components/catalog/_occasion_details.html.twig"  with { 'occasion': occasion } %}
 					{# on inclus le bouton ajout au panier #}
 					<div class="col-12 d-flex my-2 justify-content-around">
