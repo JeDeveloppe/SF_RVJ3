@@ -31,6 +31,7 @@
     <div class="col-12 d-flex flex-wrap justify-content-center mt-5">
         <div class="col-9 col-md-6 col-lg-5 d-flex justify-content-center align-items-center">
             <div class="col-12 col-lg-11">
+                {# affichage de la carte de France #}
                 <script type="text/javascript" src="{{ asset('map/mapdata_france.js') }}"></script> 
                 <script type="text/javascript" src="{{ asset('map/countrymap_france.js') }}"></script> 
                 <div id="map_france"></div>
@@ -39,8 +40,8 @@
         <div class="d-flex flex-wrap col-9 mt-4 col-md-6 col-lg-5 mt-md-0">
             <div class="col-12 overflow-auto" style="height: 400px">
                 <ul class="list-group">
-                    {% for ambassador in ambassadors %}
-                        <li class="list-group-item d-flex">
+                    {% for key, ambassador in ambassadors %}
+                        <li class="list-group-item d-flex list-partners" id="{{ key }}">
                             <div class="col-2 col-lg-1 d-flex justify-content-center align-items-center">
                                 <i class="fa-solid fa-location-pin fa-3x text-green position-relative"></i>
                                 <i class="fa-solid fa-shop text-white position-absolute mt-n2"></i>
@@ -97,4 +98,28 @@
 
 {% include "components/_separateur_wave.html.twig" %}
 
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        let list_partners = document.getElementsByClassName("list-partners");
+
+        Array.from(list_partners).forEach(element => {
+            element.addEventListener(
+            "mouseenter",
+            function (event) {
+                // on met l'accent sur la cible de mouseenter
+                let markers = document.getElementsByClassName("sm_location");
+                markers[element.id].classList.add("bounce-top");
+
+                // on réinitialise la couleur après quelques instants
+                setTimeout(function () {
+                    markers[element.id].classList.remove("bounce-top");
+                }, 1000);
+            },
+            false,
+            );
+        });
+
+    </script>
 {% endblock %}
