@@ -14,143 +14,175 @@
         {% set tdText = 'Frais de gestion:' %}
     {% endif %}
 
-    <div class="col-12">
-        <a href="{{ path('member') }}" class="btn btn-outline-primary mx-auto"><i class="fa-solid fa-backward-step"></i> Précédent</a>
+    <div class="row justify-content-around align-items-center py-5">
+        <div class="col-11 col-md-5 d-flex flex-column justify-content-around pt-3">
+            <h1 class="col-11">
+                {% if document.billNumber is null %}
+                    <span class="text-purple">Devis</span><br/> {{ document.quoteNumber }} 
+                {% else %}
+                    <span class="text-purple">Facture</span><br/> {{ document.billNumber }}
+                {% endif %}
+            </h1>
+            <div class="col-11">
+                {% if document.billNumber is null %}
+                    Du {{ document.createdAt|date('d-m-Y') }}<br/>
+                    (valable jusqu'au {{ document.endOfQuoteValidation|date('d-m-Y') }})
+                {% else %}
+                    Payée le {{ document.payment.timeOfTransaction | date('d-m-Y') }} par {{ document.payment.meansOfPayment.name }}<br/>
+                    {{ document.shippingMethod }}<br/>
+                    {{ document.documentStatus.name }}
+                {% endif %}
+            </div>
+            <div class="col-11 d-flex justify-content-around mt-4">
+                <a href="{{ path('member_historique') }}" class="btn btn-outline-dark"><i class="fa-solid fa-backward-step mr-1"></i> Précédent</a>
+            </div>
+        </div>
+        <div class="col-11 mt-3 mt-md-0 col-md-5 d-flex justify-content-around">
+            <img src="{{ asset('build/images/design/donner_jeux/donner_piece_de_jeux.png') }}" alt="//TODO Image donner pièce de jeux">
+        </div>
     </div>
 
-    <h3 class="col-12 text-center my-5">
-        {% if document.billNumber is null %}
-            Devis {{ document.quoteNumber }} <br>
-            du {{ document.createdAt|date('d-m-Y') }} <br/>
-            <span class="small">(valable jusqu'au {{ document.endOfQuoteValidation|date('d-m-Y') }})</span>
-        {% else %}
-            Facture {{ document.billNumber }} 
-        {% endif %}
-    </h3>
-
-    {# SI Y A DES DEMANDES D'ARTICLES DANS LE PANIER #}
-    {% include "site/document_view/_items_view.html.twig" %}
-
-
-    {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
-    {% include "site/document_view/_occasions_view.html.twig" %}
-
-
-    {# SI Y A DES DEMANDES DE PIECES DETACHEES DANS LE PANIER #}
-    {% include "site/document_view/_boites_view.html.twig" %}
-
-
-    {# PARITE LIVRAISON #}
-    <div class="row justify-content-center my-5">
-        <h3 class="col-12 text-start">Facturation / Livraison / Retrait:</h3>
-
-        <div class="col-11 col-md-8">
-            <table class="table text-center">
-                <tr>
-                    <td>Facturation:</td>
-                    <td>Livraison / retrait:</td>
-                </tr>
-                <tr>
-                    <td>
-                        {% set facturations = document.billingAddress|split('<br/>') %}
+    <div class="row py-5 justify-content-around bg-white">
+        <div class="col-5">
+            <div class="card col-11 shadow border p-2">
+                <h5 class="text-purple">Facturation</h5>
+                <div class="col-12 text-right">
+                    {% set facturations = document.billingAddress|split('<br/>') %}
                         {% for facturation in facturations %}
                             {{ facturation }}<br/>
                         {% endfor %}
-                    </td>
-                    <td>
-                        {% set livraisons = document.deliveryAddress|split('<br/>') %}
-                        {% for livraison in livraisons %}
-                            {{ livraison }}<br/>
-                        {% endfor %}
-                    </td>
-                </tr>
-            </table>
+                </div>
+            </div>
+            <div class="card col-11 shadow mt-3 border p-2">
+                <h5 class="text-purple">
+                    {% if document.deliveryPriceExcludingTax == 0 %}
+                        Retrait à:
+                    {% else %}
+                        Livraison à:
+                    {% endif %}
+                </h5>
+                <div class="col-12 text-right">
+                    {% set deliveries = document.deliveryAddress|split('<br/>') %}
+                    {% for delivery in deliveries %}
+                        {{ delivery }}<br/>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-    </div>
-
-    {# PARITE TOTAUX #}
-    <div class="row justify-content-center my-5">
-        <h3 class="col-12 text-start">Totaux:</h3>
-
-        <div class="col-11 col-md-8">
-            <table class="table">
-                {% if document.documentLineTotals.occasionsPriceWithoutTax > 0 %}
-                    <tr>
-                        <td>Occasions:</td>
-                        <td>{{ (document.documentLineTotals.occasionsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100)) | number_format(2, '.', ',') }} € TTC</td>
-                    </tr>
-                {% endif %}
-                {% if document.documentLineTotals.boitesPriceWithoutTax > 0 %}
-                    <tr>
-                        <td>Pièces détachées (devis):</td>
-                        <td>{{ (document.documentLineTotals.boitesPriceWithoutTax / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }} € TTC</td>
-                    </tr>
-                {% endif %}
-                {% if document.documentLineTotals.itemsPriceWithoutTax > 0 %}
-                    <tr>
-                        <td>Articles:</td>
-                        <td>{{ (document.documentLineTotals.itemsPriceWithoutTax / 100 * (1 + document.taxRateValue / 100))  | number_format(2, '.', ',') }} € TTC</td>
-                    </tr>
-                    {% if document.documentLineTotals.discountonpurchase < 0 %}
+        <div class="col-7">
+            <table class="table table-striped align-middle px-0">
+                <tr>{% dump(document.documentLineTotals) %}
+                    <td class="col-8">Sous-total articles:</td>
+                    <td class="text-right">{{ ((document.documentLineTotals.itemsPriceWithoutTax + document.documentLineTotals.boitesPriceWithoutTax) * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
+                </tr>
+                {% if document.documentLineTotals.discountonpurchase != 0 %}
                     <tr>
                         <td>
-                            Remise sur les articles (- {{document.documentLineTotals.discountonpurchaseinpurcentage }}%):<br/>
+                            Remise sur les articles:
                         </td>
-                        <td>{{ (document.documentLineTotals.discountonpurchase / 100) | number_format(2, '.', ',') }} € TTC</td>
+                        <td class="text-right align-middle"> - {{ (document.documentLineTotals.discountonpurchase * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
                     </tr>
-                    {% endif %}
                 {% endif %}
                 <tr>
-                    <td>Livraison / Retrait:</td>
-                    <td>{{ (document.deliveryPriceExcludingTax / 100 * tva) | number_format(2, '.', ',') }} € TTC</td>
+                    <td>Sous-total occasions:</td>
+                    <td class="text-right">{{ (document.documentLineTotals.occasionsPriceWithoutTax * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
+                </tr>
+                {% if document.documentLineTotals.voucherDiscountValueUsed != 0 %}
+                    <tr>
+                        <td>Code de réduction:</td>
+                        <td class="text-right align-middle">{{ (document.documentLineTotals.voucherDiscountValueUsed * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    {% if document.deliveryPriceExcludingTax == 0 %}
+                        <td>Retrait: 
+                            {% if document.documentLineTotals.boitesWeigth > 0 %}
+                                <small>(poid total: {{ document.documentLineTotals.boitesWeigth }} g)</small>
+                            {% endif %}
+                        </td>
+                        <td class="align-middle text-right">
+                            0.00 €
+                        </td>
+                    {% else %}
+                        <td>Livraison:<br/>
+                            {% if document.documentLineTotals.boitesWeigth > 0 %}
+                                <small>(poid total: {{ document.documentLineTotals.boitesWeigth }} g)</small>
+                            {% endif %}
+                        </td>
+                        <td class="align-middle text-right">
+                            {{ (document.deliveryPriceExcludingTax * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €
+                        </td>
+                    {% endif %}
                 </tr>
                 <tr>
-                    <td>{{ tdText }}</td>
-                    <td>{{ (document.cost / 100 * tva) | number_format(2, '.', ',') }} € TTC</td>
+                    <td>
+                        Préparation:
+                        {% if document.cost == 0 %}
+                            <br/>Abonnement jusqu'au {{ app.user.membership | date('d-m-Y') }}
+                        {% endif %}
+                    </td>
+                    <td class="text-right">{{ (document.cost * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
                 </tr>
+
+                    <tr>
+                        <td>Total HT:</td>
+                        <td class="text-right">{{ (document.totalExcludingTax / 100) | number_format(2, '.', ',') }} €</td>
+                    </tr>
+                    <tr>
+                        <td>TVA:</td>
+                        <td class="text-right">
+                        {% if document.totalExcludingTax * ( 1 + (document.taxRateValue / 100)) - document.totalExcludingTax == 0 %}
+                            0.00 €
+                        {% else %}
+                            {{ ((document.totalExcludingTax * ( 1 + (document.taxRateValue / 100)))  - document.totalExcludingTax) / 100 | number_format(2, '.', ',')  }} €</td>
+                        {% endif %}
+                    </tr>
+
                 <tr>
-                    <td>Total HT:</td>
-                    <td>{{ (document.totalExcludingTax / 100) | number_format(2, '.', ',') }} €</td>
-                </tr>
-                <tr>
-                    <td>TVA:</td>
-                    <td>{{ ((document.totalWithTax - document.totalExcludingTax) / 100) | number_format(2, '.', ',') }} €</td>
-                </tr>
-                <tr>
-                    <td>Total TTC:</td>
-                    <td>{{ (document.totalWithTax / 100) | number_format(2, '.', ',')}} €</td>
+                    <td>Total à payer TTC:</td>
+                    <td class="text-right font-weight-bolder">
+                            {{ (document.totalExcludingTax * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} € TTC
+                    </td>
                 </tr>
             </table>
         </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
 
     {# PARTIE BOUTONS #}
     {% if document.billNumber is null %}
-        <div class="row my-5">
-            <div class="col-6 text-center">
-                <a href="{{ path('paiement', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-success" >Payer avec {{ app.request.server.get('PAIEMENT_MODULE') }}</a><br/><br/>
+        <div class="row py-5 bg-white">
+            <div class="col-6 d-flex flex-column justify-content-center align-items-center">
+                <a href="{{ path('paiement', {'tokenDocument': document.token}) }}" class="btn btn-success btn-lg" >Payer </a>
+                <div class="col-6 mt-4 text-center pb-3">
+                    avec {% include "components/paiement/_logo_paiement_with.html.twig" %}
+                </div>
+            </div>
+            {# <div class="col-6 d-flex justify-content-around">
+                <a href="{{ path('paiement', {'tokenDocument': document.token}) }}" class="btn btn-success" >Payer avec {{ app.request.server.get('PAIEMENT_MODULE') }}</a><br/><br/>
                 
                 {% include "components/paiement/_logo_paiement_with.html.twig" %}
 
-            </div>
+            </div> #}
 
             {% if app.user is not null and app.user.password == document.user.password %}
-                <div class="col-6 text-center">
-                    <a href="{{ path('member_delete_document', {'tokenDocument': document.token}) }}" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>
+                <div class="ccol-10 col-xl-2 mx-auto text-center">
+                    <a href="{{ path('member_delete_document', {'tokenDocument': document.token}) }}" class="btn btn-outline-danger" >Annuler le devis</a>
                 </div>
             {% endif %}
         </div>
     {% else %}
-        <div class="row justify-content-center my-5">
-            <div class="card col-11 col-md-6 p-0">
-                <div class="card-header"><i class="fa-solid fa-file-invoice text-success"></i> Document payé - {{ document.billNumber }}</div>
-                <div class="card-body">
-                    <p>Le {{ document.payment.timeOfTransaction | date('d-m-Y') }} par {{ document.payment.meansOfPayment.name }}</p>
-                    <p>{{ document.sendingBy }}</p>
-                </div>
-                <div class="card-footer text-end">{{ document.documentStatus.name }}</div>
-            </div>
-        </div>
+        {% include "components/_separateur_wave.html.twig" %}
     {% endif %}
 
 {% endblock %}
