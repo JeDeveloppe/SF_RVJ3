@@ -201,26 +201,44 @@ class OccasionService
         return $value;
     }
 
-    public function returnAgesChoices(string $category = null):array
+    public function returnAgesChoicesAndPageTitle(string $category = null):array
     {
 
         switch($category){
             case 'jeux-pour-enfants': //? pareil que la navbar et le footer
                 $agesByCategory = [
-                    'start' => 1,
+                    'start' => 2,
                     'end' => 6
+                ];
+                $twig = [
+                    'titleH1' => '<h1 class="col-11 text-center">Jeux pour <span class="text-purple">enfants</span></h1>'
                 ]; //TODO Antoine
                 break;
             case 'jeux-pour-initie-es': //? pareil que la navbar et le footer
                 $agesByCategory = [
+                    'start' => 12,
+                    'end' => 99
+                ];
+                $twig = [
+                    'titleH1' => '<h1 class="col-11 text-center">Jeux pour <span class="text-purple">initié·es</span></h1>'
+                ]; //TODO Antoine
+                break;
+            case 'jeux-tout-public': //? pareil que la navbar et le footer
+                $agesByCategory = [
                     'start' => 7,
                     'end' => 99
+                ];
+                $twig = [
+                    'titleH1' => '<h1 class="col-11 text-center">Jeux tout <span class="text-purple">puplic</span></h1>'
                 ]; //TODO Antoine
                 break;
             default:
                 $agesByCategory = [
                     'start' => 1,
                     'end' => 99
+                ];
+                $twig = [
+                    'titleH1' => '<h1 class="col-11 text-center">Tous les <span class="text-purple">jeux</span></h1>'
                 ]; //TODO Antoine
                 break;
         }
@@ -237,6 +255,7 @@ class OccasionService
         }
         $choices['form_options'] = $ageChoices;
         $choices['start_and_end_ages'] = $agesByCategory;
+        $choices['twig'] = $twig;
 
         return $choices;
     }

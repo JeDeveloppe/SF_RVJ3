@@ -84,7 +84,7 @@ class SearchOccasionsInCatalogueType extends AbstractType
             $playerChoices[$playerChecked->getName()] = $playerChecked->getName();
         }
 
-        $choices = $this->occasionService->returnAgesChoices($category);
+        $choices = $this->occasionService->returnAgesChoicesAndPageTitle($category);
 
         $durations = [];
         $durationsChecked = $this->durationOfGameRepository->findBy([],['name' => 'ASC']);

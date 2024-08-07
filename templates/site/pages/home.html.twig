@@ -51,7 +51,7 @@
         <div class="col-12 card card_index_info_catalogue">
                 <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_enfant.png') }}" alt="Lot de jeux pour enfants">
                 <div class="card-body">
-                    <div class="card-title text-center"><a href="">Enfants <i class="fa-solid fa-right-long"></i></a></div>
+                    <div class="card-title text-center"><a href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}">Enfants <i class="fa-solid fa-right-long"></i></a></div>
                     <p class="card-text text-center">A partir de 2 ans</p>
                 </div>
         </div>
@@ -60,7 +60,8 @@
         <div class="col-12 card card_index_info_catalogue">
             <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_tout_public.png') }}" alt="Lot de jeux tout public">
             <div class="card-body">
-                <div class="card-title text-center"><a href="">Tout public <i class="fa-solid fa-right-long"></i></a></div>
+            {# //TODO tout public = tous les jeux ? #}
+                <div class="card-title text-center"><a href="{{ path('app_catalogue_occasions', {'category': 'jeux-tout-public'}) }}">Tout public <i class="fa-solid fa-right-long"></i></a></div>
                 <p class="card-text text-center">A partir de 7 ans</p>
             </div>
         </div>
@@ -69,7 +70,7 @@
         <div class="col-12 card card_index_info_catalogue">
             <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_inities.png') }}" alt="Lot de jeux pour initiés">
             <div class="card-body">
-                <div class="card-title text-center"><a href="">Initié·es <i class="fa-solid fa-right-long"></i></a></div>
+                <div class="card-title text-center"><a href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}">Initié·es <i class="fa-solid fa-right-long"></i></a></div>
                 <p class="card-text text-center">A partir de 12 ans</p>
             </div>
         </div>

@@ -158,18 +158,8 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-jeux-occasion/{category}', name: 'app_catalogue_occasions')]
     public function catalogueOccasions(Request $request, $category = NULL): Response
     {
-        switch($category) {
-            case 'jeux-pour-enfants': //? pareil que la navbar et le footer
-                $titreDelaPage = '<h1 class="col-11 text-center">Jeux pour <span class="text-purple">enfants</span></h1>';
-                break;
-            case 'jeux-pour-initie-es': //? pareil que la navbar et le footer
-                $titreDelaPage = '<h1 class="col-11 text-center">Jeux pour <span class="text-purple">initié·es</span></h1>';
-                break;
-            default:
-                $titreDelaPage = '<h1 class="col-11 text-center">Tous les <span class="text-purple">jeux</span></h1>';
-        }
 
-        $choices = $this->occasionService->returnAgesChoices($category);
+        $choices = $this->occasionService->returnAgesChoicesAndPageTitle($category);
 
         $form = $this->createForm(SearchOccasionsInCatalogueType::class, null,
             [
@@ -224,7 +214,7 @@ class CatalogController extends AbstractController
             'occasions' => $occasions,
             'occasions_totales' => $donneesFromDatabases,
             'metas' => $metas,
-            'titreDeLaPage' => $titreDelaPage,
+            'titreDeLaPage' => $choices['twig']['titleH1'],
             'form' => $form,
             'tax' => $this->taxRepository->findOneBy([]),
             'partners' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true]),
