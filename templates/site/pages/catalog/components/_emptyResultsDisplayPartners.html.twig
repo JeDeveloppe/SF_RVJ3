@@ -1,0 +1,16 @@
+<div class="col-12 text-center">
+//TODO logo boites vide ou autre
+    <p class="h3">Aïe, aïe, aïe... aucune référence pour le moment...</p>
+    <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.refaitesvosjeux.fr" target="_blank">Facebook !</a></p>    
+</div>
+
+{% if partners | length > 0 %}
+    <div class="h5 mt-5 col-12 text-center">Ou tenter votre chance chez l'un de nos partenaires:</div>
+
+    {% for partner in partners %}
+
+        {% include "site/pages/catalog/components/_cardPartnerIfSearchIsEmpty.html.twig" %}
+        
+    {% endfor %}
+
+{% endif %}

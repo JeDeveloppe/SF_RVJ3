@@ -50,7 +50,7 @@
 					{% include "components/catalog/_occasion_details.html.twig"  with { 'occasion': occasion } %}
 					{# on inclus le bouton ajout au panier #}
 					<div class="col-12 d-flex my-2 justify-content-around">
-						{% include "components/catalog/_card_cart_button.html.twig" with {'item': occasion}%}
+						{% include "site/pages/catalog/components/_cardOccasion_button.html.twig" with {'item': occasion}%}
 					</div>
 					<div class="col-12 d-flex justify-content-around mt-2 mb-5">
 						{% include "components/catalog/_shop_and_no_transport_logos.html.twig" %}

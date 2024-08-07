@@ -53,7 +53,6 @@ class CatalogController extends AbstractController
     {
     }
     
-    //TODO pièces détachées
     #[Route('/catalogue-pieces-detachees', name: 'app_catalogue_pieces_detachees')]
     public function cataloguePiecesDetachees(Request $request): Response
     {
@@ -75,19 +74,9 @@ class CatalogController extends AbstractController
 
         }
 
-        //on tri uniquement les donnees avec articles
-        $donnees = [];
-
-        foreach($donneesFromDatabases as $donneesFromDatabase){
-            if(count($donneesFromDatabase->getItemsOrigine()) > 0 OR count($donneesFromDatabase->getItemsSecondaire()) > 0){
-
-                array_push($donnees,$donneesFromDatabase);
-
-            }
-        }
 
         $boites = $this->paginator->paginate(
-            $donnees, /* query NOT result */
+            $donneesFromDatabases, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
             24 /*limit per page*/
         );
@@ -106,10 +95,9 @@ class CatalogController extends AbstractController
 
         return $this->render('site/pages/catalog/pieces_detachees/les_pieces_detachees.html.twig', [
             'boites' => $boites,
-            'boites_totales' => $donnees,
             'form' => $form,
             'search' => $search ?? null,
-            'partenaires' => $partenaires ?? null,
+            'partners' => $partenaires ?? null,
             'transforms' => $transforms ?? null,
             'metas' => $metas,
             'tax' => $this->taxRepository->findOneBy([])
@@ -214,6 +202,7 @@ class CatalogController extends AbstractController
             'occasions' => $occasions,
             'occasions_totales' => $donneesFromDatabases,
             'metas' => $metas,
+            // 'delivery' => null,
             'titreDeLaPage' => $choices['twig']['titleH1'],
             'form' => $form,
             'tax' => $this->taxRepository->findOneBy([]),
@@ -224,6 +213,8 @@ class CatalogController extends AbstractController
     #[Route('/jeu-occasion/{reference_occasion}/{editor_slug}/{boite_slug}', name: 'occasion')]
     public function occasion($reference_occasion, Security $security, $editor_slug): Response
     {
+
+        $delivery = null;
 
         $occasion = $this->occasionRepository->findOneBy(
             [
@@ -239,11 +230,7 @@ class CatalogController extends AbstractController
 
         $user = $security->getUser();
 
-        if(!$user){
-
-            $delivery = null;
-
-        }else{
+        if($user){
 
             $deliveryAdresse = $this->addressRepository->findOneBy(['user' => $user, 'isFacturation' => false]);
 

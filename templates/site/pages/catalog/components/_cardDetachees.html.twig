@@ -1,10 +1,10 @@
 
 {# si c'est un occasion passe en parametre #}
 
-    {% set boite = product.boite %}
+    {% set boite = product %}
     {% set card_item = product %}
     {% set setEntityId = product.id %}
-    {% set entityNameController = 'Occasion' %}
+    {% set entityNameController = 'Boite' %}
 
 
     <div id="{{ setEntityId }}" class="card_ d-flex flex-wrap h-100">
@@ -13,18 +13,9 @@
         </div>
         <p class="info_photo col-12 text-center">Photo non contractuelle</p>
         <div class="card_boite_name">{{ boite.name | raw }}</div>
-        <div class="col-12 px-0">
-            {% include "components/catalog/_players&age.html.twig" with {'item': boite } %}
-        </div>
-        <div class="col-12 px-0 mb-2">
-            {% include "components/catalog/_durationOfTheGame.html.twig" with {'item': boite } %}
-        </div>
         <div class="col-12 d-flex flex-wrap justify-content-around align-items-center mb-1 px-0">
-            <div class="col-6 p-0 text-orange">
-                {% include "components/occasion/_display_occasion_price.html.twig" with {'product': product, 'tax': tax} %}
-            </div>
-            <div class="col-6 d-flex justify-content-end p-0">
-                {% include "site/pages/catalog/components/_cardOccasion_button.html.twig" with {'item': card_item }%}
+            <div class="d-flex mt-4">
+                {% include "site/pages/catalog/components/_cardDetachees_button.html.twig" with {'item': card_item }%}
             </div>
             <div class="col-12 d-flex justify-content-center mt-2">
                 {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': entityNameController} %}

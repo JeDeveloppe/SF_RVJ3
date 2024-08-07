@@ -46,7 +46,7 @@ class InitDataBase1 extends Command
         $this->userService->initForProd_adminUser($io);
 
         //ON INJECTE les parametres des documents
-        // $this->documentParametreService->initDocumentParametre($io);
+        $this->documentParametreService->initDocumentParametre($io);
 
         // on importe les clients
         $this->userService->importClients($io);

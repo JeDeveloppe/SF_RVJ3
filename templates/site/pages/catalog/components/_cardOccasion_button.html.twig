@@ -1,7 +1,6 @@
 {% if is_granted('ROLE_USER') %}
 
-    {% if occasions is defined or occasion is defined %}
-
+    {% if delivery is defined %}
         {% if delivery is null %}
 
             <a class="btn btn-dark mt-2" href="{{ path('member_adresses') }}"><i class="fas fa-lightbulb text-info mr-1"></i> Pensez à renseigner une adresse de livraison...</a>
@@ -14,18 +13,19 @@
 
             {% else %}
 
-            <a class="btn btn-orange mt-2" href="{{ path('member_adresses') }}"><i class="fas fa-lightbulb text-info mr-1"></i> Vous semblez être trop loin pour un retrait...</a>
+                <a class="btn btn-orange mt-2" href="{{ path('member_adresses') }}"><i class="fas fa-lightbulb text-info mr-1"></i> Vous semblez être trop loin pour un retrait...</a>
 
             {% endif %}
 
         {% endif %}
-
     {% else %}
-        <a class="btn btn-orange mt-3" href="{{ path('catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.slug , 'editorSlug': boite.editor.slug  }) }}">Voir les pièces disponibles</a>
+
+        <a href="{{ path('occasion', {'reference_occasion': occasion.reference, 'editor_slug': occasion.boite.editor.slug, 'boite_slug': occasion.boite.slug | lower }) }}" class="btn btn-dark mt-3 mb-2 ">Détails</a>
+        
     {% endif %}
 
 {% else %}
 
-    <a href="{{ path('app_login') }}" class="btn btn-orange mt-3 mb-2 ">Merci de vous identifier</a>
+    <a href="{{ path('app_login') }}" class="btn btn-dark mt-3 mb-2 ">S'identifier</a>
     
 {% endif %}

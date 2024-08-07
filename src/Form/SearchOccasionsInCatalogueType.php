@@ -57,7 +57,7 @@ class SearchOccasionsInCatalogueType extends AbstractType
                 'multiple' => true,
             ])
             ->add('age_start', ChoiceType::class, [
-                'label' => 'Âge minimum:',
+                'label' => 'Âge:',
                 'attr' => [
                     'class' => 'form-control'
                 ],

@@ -7,62 +7,46 @@
     <h1 class="col-12 text-center mt-5">Catalogue des <span class="text-purple">pièces détachées</span></h1>
     <div class="col-12 text-center small mb-5 fst-italic">(Catalogue des boites dont le service possède des pièces)</div>
 
-    {% include "components/forms/_search_boite.html.twig" %}
-
-    {% if search is not null %}
-        <div class="row">
-            <div class="col-12 text-start text-decoration-underline h4">Votre recherche: <span class="text-danger">{{ search | raw }}</span></div>
-        </div>
-    {% endif %}
-
-    {% if boites | length > 0 %}
     {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+    {% set conjugaison_boite = "boite" %}
 
-        <div class="row justify-content-around">
-        
-            {% for boite in boites %}  
-
-                {% include "components/catalog/_card.html.twig" with { 'product': boite,  'tax': tax } %}
-
-            {% endfor %}
-
-        </div>
-        
-        <div class="row mt-5">
-            <div class="col-12 d-flex justify-content-center">
-                {{ knp_pagination_render(boites, 'components/_pagination.html.twig') }}
+        <div class="row justify-content-around py-5 bg-white">
+            <!-- left column / searchs -->
+            <div class="col-12 d-flex flex-wrap justify-content-center">
+                    <div class="col-12 d-flex justify-content-center">
+                        {% include "components/forms/_search_boite.html.twig" %}
+                    </div>
+                    <div class="col-6 text-center">
+                        {% if boites | length > 1 %}
+                            {% set conjugaison_boite = "boites" %}
+                        {% endif %}
+                        {{ boites | length }} {{ conjugaison_boite }} en ligne.
+                    </div>
             </div>
-        </div>
+            <!--  results -->
+            <div class="col-12 d-flex flex-wrap justify-content-around justify-content-md-start align-items-stretch my-4">
+            
+                <!-- results > 0 -->
+                {% if boites | length > 0 %}
+        
+                    {% for boite in boites %}  
+                                    
+                        <div class="col-9 col-sm-6 col-md-4 col-xl-3 mx-md-0 p-1">
+                            {% include "site/pages/catalog/components/_cardDetachees.html.twig" with { 'product': boite, 'tax': tax } %}
+                        </div>
 
+                    {% endfor %}
 
-        <div class="row mb-5 justify-content-start">
-            <div class="col-12 text-center">
-                {% if boites_totales | length > 1 %}
-                    {% set conjugaison_boite = "boites" %}
+                    <div class="col-11 d-flex justify-content-center my-5">
+                        {{ knp_pagination_render(boites, 'components/_pagination.html.twig') }}
+                    </div>
+
                 {% else %}
-                    {% set conjugaison_boite = "boite" %}
-                {% endif %}
-                {{ boites_totales | length }} {{ conjugaison_boite }} en ligne.
-            </div>
-        </div>
-
-    {% else %}
-
-        <div class="row justify-content-center my-5">
-
-            <div class="col-11 text-center">
-                <p class="h2">Nous n'avons pas de jeux en stock pour le moment.</p>
-                <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.facebook.com/refaitesvosjeux/" target="_blank">Facebook !</a></p>    
-            </div>
-            {% if partenaires | length > 0 %}
-                <p class="h5 mt-5 col-12 text-center">Ou tenter votre chance chez l'un de nos partenaires:</p>
-
-                {% for partner in partenaires %}
-
-                    {% include "site/pages/partners/_card_partner.html.twig" %}
                     
-                {% endfor %}
-            {% endif %}
-        </div>
-    {% endif %}
+                    <!-- result == 0 -->
+                    {% include "site/pages/catalog/components/_emptyResultsDisplayPartners.html.twig" with {'partners': partners } %}
+
+                {% endif %}
+            </div>
+
 {% endblock %}

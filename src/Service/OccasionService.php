@@ -37,11 +37,11 @@ class OccasionService
 
         $conditions = [
             [
-                'name' => 'BON',
+                'name' => 'BON ÉTAT',
                 'color' => $green
             ],
             [
-                'name' => 'MOYEN',
+                'name' => 'ÉTAT MOYEN',
                 'color' => $orange
             ],
             [
@@ -251,7 +251,7 @@ class OccasionService
             if($i > 1){
                 $an = ' ans';
             }
-            $ageChoices['A partir de '.$i.$an] = $i;
+            $ageChoices[$i.$an] = $i;
         }
         $choices['form_options'] = $ageChoices;
         $choices['start_and_end_ages'] = $agesByCategory;

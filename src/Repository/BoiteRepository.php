@@ -50,7 +50,7 @@ class BoiteRepository extends ServiceEntityRepository
     public function findBoitesWhereThereIsItems()
     {
 
-        return $this->createQueryBuilder('b')
+        $results =  $this->createQueryBuilder('b')
             ->where('b.isOnline = :true')
             ->join('b.itemsOrigine', 'i')
             ->andWhere('i.stockForSale > :minimum')
@@ -60,6 +60,18 @@ class BoiteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+
+        $donnees = [];
+
+        foreach($results as $donneesFromDatabase){
+            if(count($donneesFromDatabase->getItemsOrigine()) > 0 OR count($donneesFromDatabase->getItemsSecondaire()) > 0){
+
+                array_push($donnees,$donneesFromDatabase);
+
+            }
+        }
+
+        return $donnees;
     }
 
 

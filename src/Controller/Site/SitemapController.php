@@ -65,10 +65,10 @@ class SitemapController extends AbstractController
         }
 
         //?liste des boites pour articles (v3)
-        $boites = $this->boiteRepository->findBy(['isOnline' => true]);
+        $boites = $this->boiteRepository->findBoitesWhereThereIsItems();
         foreach($boites as $boite){
             $urls[] = [                
-                'loc'        => $this->generateUrl('catalogue_pieces_detachees_demande', ['id' => $boite->getId(), 'slug' => $boite->getSlug(), 'editorSlug' => $boite->getEditor()->getSlug()]),
+                'loc'        => $this->generateUrl('catalogue_pieces_detachees_demande', ['id' => $boite->getId(), 'slug' => $boite->getSlug(), 'editorSlug' => strtolower($boite->getEditor()->getSlug())]),
                 'lastmod'    => $occasion->getBoite()->getCreatedAt()->format('Y-m-d'),
                 'changefreq' => "monthly",
                 'priority'   => 0.8
