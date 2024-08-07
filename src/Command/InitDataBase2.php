@@ -72,35 +72,35 @@ class InitDataBase2 extends Command
 
         $io = new SymfonyStyle($input,$output);
 
-        // //on importe les partenaires
-        // $this->partnerService->importPartenaires($io);
+        //on importe les partenaires
+        $this->partnerService->importPartenaires($io);
 
-        // //on importe les adresses (facturation et livraison)
-        // $this->adresseService->importAdresses($io);
+        //on importe les adresses (facturation et livraison)
+        $this->adresseService->importAdresses($io);
 
-        // //on creer le nombre de joueurs
-        // $this->playerService->addplayers($io);
+        //on creer le nombre de joueurs
+        $this->playerService->addplayers($io);
 
-        // //on importe les boites
-        // $this->boiteService->importBoites($io);
+        //on importe les boites
+        $this->boiteService->importBoites($io);
 
-        // //on genere les editeurs de facon distinct
-        // $this->editorService->addEditorsInDatabase($io);
+        //on genere les editeurs de facon distinct
+        $this->editorService->addEditorsInDatabase($io);
 
-        // //on importe le detail des boites
-        // $this->boiteService->importPieces($io);
+        //on importe le detail des boites
+        $this->boiteService->importPieces($io);
 
-        // //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
-        // $this->userService->createUndefinedUser($io);
-        // $this->boiteService->createUndefinedBoite($io);
-        // $this->adresseService->createRetredAddress($io);
-        // $this->shippingMethodService->createShippingMethode($io);
+        //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
+        $this->userService->createUndefinedUser($io);
+        $this->boiteService->createUndefinedBoite($io);
+        $this->adresseService->createRetredAddress($io);
+        $this->shippingMethodService->createShippingMethode($io);
 
-        // //on cree les conditions des occasions
+        //on cree les conditions des occasions
         $this->occasionService->addConditions($io);
 
-        // //on cree les MOYENS DE PAIEMENT
-        // $this->meansOffPayementService->addMoyens($io);
+        //on cree les MOYENS DE PAIEMENT
+        $this->meansOffPayementService->addMoyens($io);
 
         //on importe les jeux complet
         $this->occasionService->importOccasions($io);

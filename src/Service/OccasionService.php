@@ -251,7 +251,7 @@ class OccasionService
             if($i > 1){
                 $an = ' ans';
             }
-            $ageChoices[$i.$an] = $i;
+            $ageChoices['A partir de '.$i.$an] = $i;
         }
         $choices['form_options'] = $ageChoices;
         $choices['start_and_end_ages'] = $agesByCategory;

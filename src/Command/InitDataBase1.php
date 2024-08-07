@@ -52,11 +52,11 @@ class InitDataBase1 extends Command
         $this->userService->importClients($io);
 
         //on importe les departementss
-        // $this->departmentService->importDepartements($io);
+        $this->departmentService->importDepartements($io);
 
         //on importe les villes francaises
-        // $this->cityService->importCitiesOfFrance($io);
-        // $this->cityService->importCitiesOfBelgique($io);
+        $this->cityService->importCitiesOfFrance($io);
+        $this->cityService->importCitiesOfBelgique($io);
 
         return Command::SUCCESS;
     }
