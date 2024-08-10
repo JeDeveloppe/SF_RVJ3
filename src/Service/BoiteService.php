@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use App\Repository\BoiteRepository;
+use App\Repository\DurationOfGameRepository;
 use App\Repository\NumbersOfPlayersRepository;
 use App\Repository\UserRepository;
 use App\Service\UtilitiesService;
@@ -22,7 +23,8 @@ class BoiteService
         private UserRepository $userRepository,
         private UtilitiesService $utilitiesService,
         private NumbersOfPlayersRepository $numbersOfPlayersRepository,
-        private SluggerInterface $sluggerInterface
+        private SluggerInterface $sluggerInterface,
+        private DurationOfGameRepository $durationOfGameRepository
         ){
     }
 

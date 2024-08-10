@@ -147,12 +147,16 @@ class CatalogController extends AbstractController
     public function catalogueOccasions(Request $request, $category = NULL): Response
     {
 
-        $choices = $this->occasionService->returnAgesChoicesAndPageTitle($category);
+        //values for form / query in repository etc...
+        $choices = $this->occasionService->returnOptionsForFormAndTitleForOccasionCatalogByCategory($category);
 
+        //génération du form avec les options
         $form = $this->createForm(SearchOccasionsInCatalogueType::class, null,
             [
                 'method' => 'GET',
-                'category' => $category,
+                'agesOptions' => $choices['ages_options_for_form'],
+                'playersOptions' => $choices['players_options_for_form'],
+                'durationsOptions' => $choices['durations_options_for_form'],
             ]);
         $form->handleRequest($request);
 
@@ -161,27 +165,16 @@ class CatalogController extends AbstractController
 
             $search = $form->get('search')->getData();
             $phrase = str_replace(" ","%",$search);
-            $age_start = $form->get('age_start')->getData() ?? $choices['start_and_end_ages']['start'];
+            $age_start = $form->get('age_start')->getData();
             $age_end = $choices['start_and_end_ages']['end'];
-            $players = $form->get('playerMin')->getData() ?? [];
-            $durations_choices = $form->get('duration')->getData() ?? [];
+            $players = $form->get('playerMin')->getData();
+            $durations = $form->get('duration')->getData();
 
-            if(count($durations_choices) > 0){
-
-                $durations = [];
-                foreach($durations_choices as $duration_choice){
-                    $durations[] = $this->durationOfGameRepository->findOneBy(['name' => $duration_choice]);
-                }
-
-            }else{
-
-                $durations = [];
-            }
 
             //TODO à montrer et activer si ok Antoine
-            $this->catalogueService->saveQueryInDataBase($request, $phrase, $age_start, $players);
+            // $this->catalogueService->saveQueryInDataBase($request, $getValues['phrase'], $getValues['age_start'], $getValues['players']);
 
-            $donneesFromDatabases = $this->occasionRepository->searchOccasionsByNameOrEditorInCatalogue($phrase, $age_start, $age_end, $players, $durations);
+            $donneesFromDatabases = $this->occasionRepository->searchOccasionsByNameOrEditorInCatalogue($phrase, $age_start, $age_end, $players, $durations, $choices);
 
         }else{
 
@@ -219,7 +212,7 @@ class CatalogController extends AbstractController
         $occasion = $this->occasionRepository->findOneBy(
             [
                 'isOnline' => true,
-                'reference' => $reference_occasion
+                'reference' => $reference_occasion,
             ]);
 
         if(!$occasion){
@@ -241,6 +234,7 @@ class CatalogController extends AbstractController
             }else{
 
                 $collectionPoint = $this->collectionPointRepository->findOneCollectionPointForOccasionBuy();
+
                 $kmsBetweenCollectionPointAndDeliveryAdress = $this->adresseService->get_distance_from_collectePoint($collectionPoint, $deliveryAdresse);
                 
                 $setting = $this->siteSettingRepository->findOneBy([]);

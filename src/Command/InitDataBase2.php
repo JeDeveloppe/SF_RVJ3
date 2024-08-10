@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Service\AdresseService;
 use App\Service\AmbassadorService;
 use App\Service\BoiteService;
+use App\Service\CollectionPointService;
 use App\Service\ColorService;
 use App\Service\DeliveryService;
 use App\Service\DiscountService;
@@ -58,7 +59,8 @@ class InitDataBase2 extends Command
             private DeliveryService $deliveryService,
             private DiscountService $discountService,
             private UserService $userService,
-            private AmbassadorService $ambassadorService
+            private AmbassadorService $ambassadorService,
+            private CollectionPointService $collectionPointService
         )
     {
         parent::__construct();
@@ -95,6 +97,7 @@ class InitDataBase2 extends Command
         $this->boiteService->createUndefinedBoite($io);
         $this->adresseService->createRetredAddress($io);
         $this->shippingMethodService->createShippingMethode($io);
+        $this->collectionPointService->addCollectionPoint($io);
 
         //on cree les conditions des occasions
         $this->occasionService->addConditions($io);

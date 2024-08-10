@@ -25,10 +25,6 @@ class SearchOccasionsInCatalogueType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
-        $category = $options['category'];
-
-        [$playerChoices,$ageChoices,$durationsChoices] = $this->formOccasionChoices($category);
-
         $builder
             ->add('search', TextType::class, [
                 'label' => 'Je recherche:',
@@ -43,7 +39,7 @@ class SearchOccasionsInCatalogueType extends AbstractType
                 'attr' => [
                     'class' => 'form-control'
                 ],
-                'choices' => $playerChoices,
+                'choices' => $options['playersOptions'],
                 'expanded' => true,
                 'multiple' => true,
             ])
@@ -52,7 +48,7 @@ class SearchOccasionsInCatalogueType extends AbstractType
                 'attr' => [
                     'class' => 'form-control'
                 ],
-                'choices' => $durationsChoices,
+                'choices' => $options['durationsOptions'],
                 'expanded' => true,
                 'multiple' => true,
             ])
@@ -62,7 +58,7 @@ class SearchOccasionsInCatalogueType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'required' => false,
-                'choices' => $ageChoices,
+                'choices' => $options['agesOptions'],
                 'placeholder' => '- Tous les âges -',
             ]);
     }
@@ -70,28 +66,10 @@ class SearchOccasionsInCatalogueType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'category' => null
+            'agesOptions' => null,
+            'playersOptions' => null,
+            'durationsOptions' => null,
             // Configure your form options here
         ]);
-    }
-
-    public function formOccasionChoices($category)
-    {
-        $playerChoices = [];
-        $playersChecked = $this->numbersOfPlayersRepository->findBy(['isInOccasionFormSearch' => true],['orderOfAppearance' => 'ASC']);
-
-        foreach($playersChecked as $playerChecked){
-            $playerChoices[$playerChecked->getName()] = $playerChecked->getName();
-        }
-
-        $choices = $this->occasionService->returnAgesChoicesAndPageTitle($category);
-
-        $durations = [];
-        $durationsChecked = $this->durationOfGameRepository->findBy([],['name' => 'ASC']);
-        foreach($durationsChecked as $durationChecked){
-            $durations[$durationChecked->getName()] = $durationChecked->getName();
-        }
-
-        return [$playerChoices,$choices['form_options'],$durations];
     }
 }

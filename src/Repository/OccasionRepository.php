@@ -21,64 +21,61 @@ class OccasionRepository extends ServiceEntityRepository
         parent::__construct($registry, Occasion::class);
     }
 
-    public function searchOccasionsByNameOrEditorInCatalogue(string $phrase, int $age_start, int $age_end, array $players, array $durations): array
+    public function searchOccasionsByNameOrEditorInCatalogue(
+        string $searchName,
+        int $ageStart = null,
+        int $ageEnd = null,
+        array $players,
+        array $durations,
+        array $choices): array
     {
 
-        $signe_players = "IN (:players)";
-        $value_players = $players;
         if(count($players) == 0){
-            $signe_players = ">= (:players)";
-            $value_players = 0;
+            $players = [];
+            foreach($choices['players_options_for_form'] as $choice){
+                $players[] = $choice;
+            }
         }
-        //s'il n'y une durée de partie
-        if(count($durations) > 0){
 
-            $query =  $this->createQueryBuilder('o')
-                ->join('o.boite','b')
-                ->join('b.editor','e')
-                ->orWhere('b.name LIKE :phrase')
-                ->orWhere('e.name LIKE :phrase')
-                ->andWhere('b.playersMin '.$signe_players)
-                ->andWhere('b.durationGame IN (:durations)')
-                ->andWhere('b.age = :age_start')
-                ->andWhere('b.age <= :age_end')
-                ->andWhere('o.isOnline = :online')
-                ->setParameters([
-                    'phrase' => '%'.$phrase.'%',
-                    'age_start' => $age_start,
-                    'age_end' => $age_end,
-                    'players' => $value_players,
-                    'durations' => $durations,
-                    'online' =>  true,
-                ])
-                ->orderBy('b.id', 'DESC')
-                ->getQuery()
-                ->getResult()
-            ;
+        if(count($durations) == 0){
+            foreach($choices['durations_options_for_form'] as $choice){
+                $durations[] = $choice;
+            }
+        }
 
+        if($ageStart > 0){
+            $signe_age = "= :age_start";
+            $value_age = $ageStart;
         }else{
+            $signe_age = ">= :age_start";
+            $value_age = 0;
+        }
 
+        //s'il n'y une durée de partie
             $query =  $this->createQueryBuilder('o')
                 ->join('o.boite','b')
                 ->join('b.editor','e')
-                ->orWhere('b.name LIKE :phrase')
-                ->orWhere('e.name LIKE :phrase')
-                ->andWhere('b.playersMin '.$signe_players)
-                ->andWhere('b.age = :age_start')
+                ->join('b.durationGame','d')
+                ->where('b.name LIKE :searchName')
+                ->orWhere('e.name LIKE :searchName')
+                ->andWhere('b.playersMin IN (:players)')
+                ->andWhere('b.playersMax IN (:players)')
+                ->andWhere('d.name IN (:durations)')
+                ->andWhere('b.age '.$signe_age)
                 ->andWhere('b.age <= :age_end')
                 ->andWhere('o.isOnline = :online')
                 ->setParameters([
-                    'phrase' => '%'.$phrase.'%',
-                    'age_start' => $age_start,
-                    'age_end' => $age_end,
-                    'players' => $value_players,
+                    'searchName' => '%'.$searchName.'%',
+                    'players' => $players,
+                    'durations' => $durations,
+                    'age_start' => $value_age,
+                    'age_end' => $ageEnd,
                     'online' =>  true,
                 ])
                 ->orderBy('b.id', 'DESC')
                 ->getQuery()
                 ->getResult()
             ;
-        }
 
         return $query;
     }
@@ -96,7 +93,7 @@ class OccasionRepository extends ServiceEntityRepository
                 'age_end' => $age_end,
                 'online' =>  true,
             ])
-            ->orderBy('b.id', 'ASC')
+            ->orderBy('b.id', 'DESC')
             ->getQuery()
             ->getResult()
         ;

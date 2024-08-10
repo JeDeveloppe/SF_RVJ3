@@ -6,10 +6,12 @@ use League\Csv\Reader;
 use App\Entity\Occasion;
 use App\Entity\MovementOccasion;
 use App\Entity\ConditionOccasion;
+use App\Repository\BoiteRepository;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\BoiteRepository;
+use App\Repository\DurationOfGameRepository;
 use App\Repository\MovementOccasionRepository;
+use App\Repository\NumbersOfPlayersRepository;
 use App\Repository\ConditionOccasionRepository;
 use App\Repository\OffSiteOccasionSaleRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -23,7 +25,9 @@ class OccasionService
         private EntityManagerInterface $em,
         private OffSiteOccasionSaleRepository $offSiteOccasionSaleRepository,
         private BoiteRepository $boiteRepository,
-        private UtilitiesService $utilitiesService
+        private UtilitiesService $utilitiesService,
+        private DurationOfGameRepository $durationOfGameRepository,
+        private NumbersOfPlayersRepository $numbersOfPlayersRepository
     )
     {
     }
@@ -201,7 +205,7 @@ class OccasionService
         return $value;
     }
 
-    public function returnAgesChoicesAndPageTitle(string $category = null):array
+    public function returnOptionsForFormAndTitleForOccasionCatalogByCategory(string $category = null):array
     {
 
         switch($category){
@@ -227,7 +231,7 @@ class OccasionService
                 $agesByCategory = [
                     'start' => 7,
                     'end' => 99
-                ];
+                ]; //TODO Antoine
                 $twig = [
                     'titleH1' => '<h1 class="col-11 text-center">Jeux tout <span class="text-purple">puplic</span></h1>'
                 ]; //TODO Antoine
@@ -245,6 +249,7 @@ class OccasionService
 
         //calcul
         $choices = [];
+
         $ageChoices = [];
         for($i = $agesByCategory['start']; $i <= $agesByCategory['end']; $i++){
             $an = ' an';
@@ -252,8 +257,24 @@ class OccasionService
                 $an = ' ans';
             }
             $ageChoices['A partir de '.$i.$an] = $i;
+            $agesForSearch[] = $i;
         }
-        $choices['form_options'] = $ageChoices;
+
+        $durations = [];
+        $durationsChecked = $this->durationOfGameRepository->findBy([],['name' => 'ASC']);
+        foreach($durationsChecked as $durationChecked){
+            $durations[$durationChecked->getName()] = $durationChecked->getName();
+        }
+
+        $playerChoices = [];
+        $playersChecked = $this->numbersOfPlayersRepository->findBy(['isInOccasionFormSearch' => true],['orderOfAppearance' => 'ASC']);
+        foreach($playersChecked as $playerChecked){
+            $playerChoices[$playerChecked->getName()] = $playerChecked->getName();
+        }
+
+        $choices['ages_options_for_form'] = $ageChoices;
+        $choices['durations_options_for_form'] = $durations;
+        $choices['players_options_for_form'] = $playerChoices;
         $choices['start_and_end_ages'] = $agesByCategory;
         $choices['twig'] = $twig;
 
