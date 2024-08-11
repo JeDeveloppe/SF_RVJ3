@@ -48,34 +48,33 @@ class OccasionRepository extends ServiceEntityRepository
             $value_age = $ageStart;
         }else{
             $signe_age = ">= :age_start";
-            $value_age = 0;
+            $value_age = $choices['start_and_end_ages']['start'];
         }
 
-        //s'il n'y une durée de partie
-            $query =  $this->createQueryBuilder('o')
-                ->join('o.boite','b')
-                ->join('b.editor','e')
-                ->join('b.durationGame','d')
-                ->where('b.name LIKE :searchName')
-                ->orWhere('e.name LIKE :searchName')
-                ->andWhere('b.playersMin IN (:players)')
-                ->andWhere('b.playersMax IN (:players)')
-                ->andWhere('d.name IN (:durations)')
-                ->andWhere('b.age '.$signe_age)
-                ->andWhere('b.age <= :age_end')
-                ->andWhere('o.isOnline = :online')
-                ->setParameters([
-                    'searchName' => '%'.$searchName.'%',
-                    'players' => $players,
-                    'durations' => $durations,
-                    'age_start' => $value_age,
-                    'age_end' => $ageEnd,
-                    'online' =>  true,
-                ])
-                ->orderBy('b.id', 'DESC')
-                ->getQuery()
-                ->getResult()
-            ;
+        $query =  $this->createQueryBuilder('o')
+            ->join('o.boite','b')
+            ->join('b.editor','e')
+            ->join('b.durationGame','d')
+            ->where('b.name LIKE :searchName')
+            ->orWhere('e.name LIKE :searchName')
+            ->andWhere('b.playersMin IN (:players)')
+            ->andWhere('b.playersMax IN (:players)')
+            ->andWhere('d.name IN (:durations)')
+            ->andWhere('b.age '.$signe_age)
+            ->andWhere('b.age <= :age_end')
+            ->andWhere('o.isOnline = :online')
+            ->setParameters([
+                'searchName' => '%'.$searchName.'%',
+                'players' => $players,
+                'durations' => $durations,
+                'age_start' => $value_age,
+                'age_end' => $ageEnd,
+                'online' =>  true,
+            ])
+            ->orderBy('b.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
 
         return $query;
     }

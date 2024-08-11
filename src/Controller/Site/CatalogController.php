@@ -160,7 +160,6 @@ class CatalogController extends AbstractController
             ]);
         $form->handleRequest($request);
 
-
         if($form->isSubmitted() && $form->isValid()) {
 
             $search = $form->get('search')->getData();
@@ -169,7 +168,6 @@ class CatalogController extends AbstractController
             $age_end = $choices['start_and_end_ages']['end'];
             $players = $form->get('playerMin')->getData();
             $durations = $form->get('duration')->getData();
-
 
             //TODO à montrer et activer si ok Antoine
             // $this->catalogueService->saveQueryInDataBase($request, $getValues['phrase'], $getValues['age_start'], $getValues['players']);
