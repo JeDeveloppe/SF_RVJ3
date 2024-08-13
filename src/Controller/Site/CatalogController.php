@@ -170,9 +170,9 @@ class CatalogController extends AbstractController
             $durations = $form->get('duration')->getData();
 
             //TODO à montrer et activer si ok Antoine
-            // $this->catalogueService->saveQueryInDataBase($request, $getValues['phrase'], $getValues['age_start'], $getValues['players']);
+            //$this->catalogueService->saveQueryInDataBase($request, $phrase, $age_start, $players, $durations);
 
-            $donneesFromDatabases = $this->occasionRepository->searchOccasionsByNameOrEditorInCatalogue($phrase, $age_start, $age_end, $players, $durations, $choices);
+            $donneesFromDatabases = $this->occasionRepository->searchOccasionsInCatalogue($phrase, $age_start, $age_end, $players, $durations, $choices);
 
         }else{
 

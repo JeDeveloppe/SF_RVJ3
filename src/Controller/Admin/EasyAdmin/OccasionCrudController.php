@@ -11,16 +11,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use Symfony\Component\HttpFoundation\RequestStack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
 class OccasionCrudController extends AbstractCrudController
 {   
@@ -43,6 +44,7 @@ class OccasionCrudController extends AbstractCrudController
         [$disabled, $disabledAfterBilling] = $this->utilitiesService->easyAdminLogicWhenBilling($this->requestStack, $this->occasionRepository);
 
         return [
+            FormField::addTab('Détails de l\'occasion'),
             IdField::new('id')->onlyWhenUpdating()->setDisabled(true),
             ImageField::new('boite.image')
                 ->setBasePath($this->getParameter('app.path.boites_images'))
@@ -61,10 +63,6 @@ class OccasionCrudController extends AbstractCrudController
                 )
                 ->setDisabled($disabled)
                 ->onlyWhenCreating(),
-            AssociationField::new('boite')
-                ->setLabel('Dépend de la boite<br/>(id-rvj2-nom-editeur-année)')
-                ->setDisabled($disabled)
-                ->onlyWhenUpdating()->onlyOnIndex(),
             TextField::new('reference')->setLabel('Référence')->setDisabled(true),
             TextField::new('information')
                 ->setLabel('Information sur l\'occasion')
@@ -125,7 +123,13 @@ class OccasionCrudController extends AbstractCrudController
             BooleanField::new('isNew')
                 ->setLabel('Est neuf')
                 ->onlyOnForms()
-                ->setDisabled($disabledAfterBilling)
+                ->setDisabled($disabledAfterBilling),
+
+            FormField::addTab('Dépend de la boite'),
+            AssociationField::new('boite')
+                ->setColumns(12)
+                ->setDisabled($disabled)->renderAsEmbeddedForm()
+                ->onlyWhenUpdating(),
         ];
     }
 

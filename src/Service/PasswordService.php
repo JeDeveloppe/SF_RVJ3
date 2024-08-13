@@ -30,7 +30,7 @@ class PasswordService
         $this->em->persist($resetPassword);
         $this->em->flush();
 
-        $this->mailService->sendMail($resetPassword->getEmail(),'Lien pour le changement de votre mot de passe', 'reset_password', $donnees, null, false);
+        $this->mailService->sendMail(true, $resetPassword->getEmail(),'Lien pour le changement de votre mot de passe', 'reset_password', $donnees, null, false);
     }
 
 }

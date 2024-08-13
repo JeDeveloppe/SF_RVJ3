@@ -13,6 +13,7 @@ use App\Repository\DocumentRepository;
 use App\Repository\SiteSettingRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 //email changement statut du document aussi
@@ -28,41 +29,51 @@ class MailService
         ){
     }
 
-    public function sendMail($recipient, $subject, $template, array $donnees = null, $replyTo = null, string $dnsCommande = null){
+    public function sendMail(bool $allwaysSend, $recipient, $subject, $template, array $donnees = null, $replyTo = null, string $dnsCommande = null){
 
         $siteSettings = $this->siteSettingRepository->findOneBy([]);
 
         //? parametre du site envoi des emails bloque si besoin de mettre a jour des statut ou autre
-        if($siteSettings->getBlockEmailSending() == false){
+        if($allwaysSend == false){
+            
+            //send nothing
 
-            if(is_null($donnees)){
-                $donnees = [];
-            }
+        }else{
 
-            $legales = $this->legalInformationRepository->findOneBy([]);
+            //send something if blockEmailSending param is false
+            if($siteSettings->getBlockEmailSending() == false)
+            {
 
-            $mail = (new TemplatedEmail())
-                ->from(new Address($legales->getEmailCompany(), $legales->getCompanyName()))
-                ->to($recipient)
-                ->replyTo($replyTo ? $replyTo : 'noreply@refaitesvosjeux.fr')
-                ->subject($subject)
-                ->htmlTemplate('email/templates/'.$template.'.html.twig')
-                ->context($donnees);
-
-            try{
-                //?utilisation de la boite email spéciale COMMANDES
-                if($dnsCommande == true){
-
-                    $mail->getHeaders()->addTextHeader('X-Transport', 'commande');
+                if(is_null($donnees)){
+                    $donnees = [];
                 }
-                $this->mailer->send($mail);
-            } catch (TransportExceptionInterface $e) {
-                dump($e->getDebug());
+
+                $legales = $this->legalInformationRepository->findOneBy([]);
+
+                $mail = (new TemplatedEmail())
+                    ->from(new Address($legales->getEmailCompany(), $legales->getCompanyName()))
+                    ->to($recipient)
+                    ->replyTo($replyTo ? $replyTo : 'noreply@refaitesvosjeux.fr')
+                    ->subject($subject)
+                    ->htmlTemplate('email/templates/'.$template.'.html.twig')
+                    ->context($donnees);
+
+                try{
+                    //?utilisation de la boite email spéciale COMMANDES
+                    if($dnsCommande == true){
+
+                        $mail->getHeaders()->addTextHeader('X-Transport', 'commande');
+                    }
+                    $this->mailer->send($mail);
+                } catch (TransportExceptionInterface $e) {
+                    dump($e->getDebug());
+                }
             }
         }
     }
 
-    public function reminderQuotes(DateTimeImmutable $now){
+    public function reminderQuotes(DateTimeImmutable $now)
+    {
 
         $documents = $this->documentRepository->findByDevisToReminder($now);
 

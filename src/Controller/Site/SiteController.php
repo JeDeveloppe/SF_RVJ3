@@ -121,6 +121,7 @@ class SiteController extends AbstractController
             $legales = $this->legalInformationRepository->findOneBy([]);
 
             $this->mailService->sendMail(
+                true,
                 $legales->getEmailCompany(),
                 "Message du site en date du ".(new DateTimeImmutable('now'))->format('d-m-Y').": ".$form->get('sujet')->getData(),
                 'contact',

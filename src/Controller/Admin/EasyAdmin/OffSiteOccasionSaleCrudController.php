@@ -122,7 +122,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des mouvements d\'occasions')
             ->setPageTitle('new', 'Nouveau mouvement d\'un occasion')
             ->setPageTitle('edit', 'Édition d\'un mouvement occasion')
-            ->setDefaultSort(['createdAt' => 'DESC'])
+            ->setDefaultSort(['id' => 'DESC'])
             ->setEntityLabelInSingular('Nouveau mouvement')
         ;
     }

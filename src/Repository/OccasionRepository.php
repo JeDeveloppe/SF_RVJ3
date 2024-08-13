@@ -21,7 +21,7 @@ class OccasionRepository extends ServiceEntityRepository
         parent::__construct($registry, Occasion::class);
     }
 
-    public function searchOccasionsByNameOrEditorInCatalogue(
+    public function searchOccasionsInCatalogue(
         string $searchName,
         int $ageStart = null,
         int $ageEnd = null,
@@ -36,7 +36,6 @@ class OccasionRepository extends ServiceEntityRepository
                 $players[] = $choice;
             }
         }
-
         if(count($durations) == 0){
             foreach($choices['durations_options_for_form'] as $choice){
                 $durations[] = $choice;
@@ -58,7 +57,7 @@ class OccasionRepository extends ServiceEntityRepository
             ->where('b.name LIKE :searchName')
             ->orWhere('e.name LIKE :searchName')
             ->andWhere('b.playersMin IN (:players)')
-            ->andWhere('b.playersMax IN (:players)')
+            ->orWhere('b.playersMax IN (:players)')
             ->andWhere('d.name IN (:durations)')
             ->andWhere('b.age '.$signe_age)
             ->andWhere('b.age <= :age_end')

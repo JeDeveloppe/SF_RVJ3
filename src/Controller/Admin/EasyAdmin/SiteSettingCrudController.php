@@ -3,10 +3,13 @@
 namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\SiteSetting;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
 class SiteSettingCrudController extends AbstractCrudController
 {
@@ -27,5 +30,25 @@ class SiteSettingCrudController extends AbstractCrudController
                 ->setFormTypeOptions(['attr' => ['placeholder' => '(laisser vide pour désactiver)']]),
             IntegerField::new('distanceMaxForOccasionBuy','Distance Max vente Occasion (en kms)')
         ];
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->showEntityActionsInlined()
+            ->setPageTitle('index', 'Liste des réglages du site')
+            ->setPageTitle('new', 'Nouveau réglage')
+            ->setPageTitle('edit', 'Édition d\'un réglage')
+        ;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        
+        return $actions
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
+            ->setPermission(Action::NEW, 'ROLE_ADMIN');
+        
     }
 }

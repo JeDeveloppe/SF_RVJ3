@@ -32,6 +32,9 @@ class CatalogOccasionSearch
     #[ORM\ManyToOne(inversedBy: 'catalogOccasionSearches')]
     private ?User $user = null;
 
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $durations = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +108,18 @@ class CatalogOccasionSearch
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getDurations(): ?array
+    {
+        return $this->durations;
+    }
+
+    public function setDurations(?array $durations): static
+    {
+        $this->durations = $durations;
 
         return $this;
     }

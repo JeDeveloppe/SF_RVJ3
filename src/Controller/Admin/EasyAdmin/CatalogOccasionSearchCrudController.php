@@ -27,6 +27,7 @@ class CatalogOccasionSearchCrudController extends AbstractCrudController
             TextField::new('phrase','Recherche'),
             IntegerField::new('age','A partir de (âge)'),
             ArrayField::new('players','Nbr de Joueurs mini'),
+            ArrayField::new('durations','Temps de jeu'),
             AssociationField::new('user','Utilisateur'),
             DateTimeField::new('createdAt','Date')->setFormat('dd.MM.yyyy')->setTimezone('Europe/Paris')
         ];
@@ -47,6 +48,7 @@ class CatalogOccasionSearchCrudController extends AbstractCrudController
         return $filters
             ->add('age')
             ->add('players')
+            ->add('durations')
             ->add('phrase')
         ;
     }

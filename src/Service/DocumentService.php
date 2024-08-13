@@ -436,7 +436,7 @@ class DocumentService
         // Instantiate Dompdf with our options
         $dompdf = new Dompdf($pdfOptions);
 
-        $html = $this->twig->render('pdf/_document.html.twig', [
+        $html = $this->twig->render('pdf/document.html.twig', [
             'document' => $document,
             'legales' => $legales,
             'results' => $results
@@ -473,6 +473,7 @@ class DocumentService
         $this->em->flush();
 
         $this->mailService->sendMail(
+            false,
             $document->getUser()->getEmail(),
             'Suivi de votre document '.$document->getBillNumber(),
             'changement_statut',

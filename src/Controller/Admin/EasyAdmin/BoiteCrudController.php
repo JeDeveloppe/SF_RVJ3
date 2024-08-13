@@ -52,7 +52,7 @@ class BoiteCrudController extends AbstractCrudController
         return [
             FormField::addTab('Général'),
             IdField::new('rvj2id')->setDisabled(true)->onlyWhenUpdating(),
-            IdField::new('id')->setDisabled(true)->onlyWhenUpdating(),
+            IdField::new('id')->setDisabled(true),
             ImageField::new('image')
                 ->setBasePath($this->getParameter('app.path.boites_images'))
                 ->onlyOnIndex()
@@ -138,7 +138,7 @@ class BoiteCrudController extends AbstractCrudController
                         ->where('entity.isInOccasionFormSearch = :true')
                         ->setParameter('true', true)
                         ->orderBy('entity.orderOfAppearance', 'ASC'))
-                ->onlyOnForms()
+                // ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
             AssociationField::new('playersMax')
@@ -150,7 +150,7 @@ class BoiteCrudController extends AbstractCrudController
                         ->setParameter('true', true)
                         ->orderBy('entity.orderOfAppearance', 'ASC'))
                 ->setLabel('Jusqu\'à (joueurs)')
-                ->onlyOnForms()
+                // ->onlyOnForms()
                 ->setRequired(true)
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),
@@ -164,12 +164,12 @@ class BoiteCrudController extends AbstractCrudController
 
             FormField::addTab('Occasion / Articles')->setPermission('ROLE_BENEVOLE'),
             BooleanField::new('isOccasion')
-                ->setLabel('Disponilbe en occasion')
+                ->setLabel('Disponible en occasion')
                 ->onlyOnIndex()
                 ->renderAsSwitch(false)
                 ->setPermission('ROLE_ADMIN'),
             BooleanField::new('isOccasion')
-                ->setLabel('Disponilbe en occasion')
+                ->setLabel('Disponible en occasion')
                 ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN'),
             IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms(),
@@ -187,8 +187,8 @@ class BoiteCrudController extends AbstractCrudController
 
             
             FormField::addTab('Ventes')->setPermission('ROLE_ADMIN'),
-            AssociationField::new('documentLines')->onlyOnIndex()->setPermission('ROLE_ADMIN'),
-            CollectionField::new('documentLines')
+            AssociationField::new('documentLines', 'Nbr de ventes')->onlyOnIndex()->setPermission('ROLE_ADMIN'),
+            CollectionField::new('documentLines', 'Les ventes')
                 ->setTemplatePath('admin/fields/documentLines.html.twig')
                 ->setDisabled(true)
                 ->onlyOnForms()
@@ -239,6 +239,7 @@ class BoiteCrudController extends AbstractCrudController
     {
         return $filters
             ->add('age')
+            ->add('isOccasion')
             ->add('editor')
         ;
     }

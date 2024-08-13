@@ -207,8 +207,8 @@ class DashboardController extends AbstractDashboardController
         $resetPasswords = $this->resetPasswordRepository->findBy(['isUsed' => false]);
         $statusToBeTraitedDailys = $this->documentStatusRepository->findStatusIsTraitedDaily();
 
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');        
-        yield MenuItem::linkToRoute('SITE','fa-solid fa-shop','app_home');
+        yield MenuItem::linkToDashboard('Dashboard ADMIN', 'fa fa-home');        
+        yield MenuItem::linkToRoute('retour au SITE','fa-solid fa-shop','app_home');
 
 
         yield MenuItem::section('Traitements quotidien:')->setPermission('ROLE_ADMIN');
@@ -220,9 +220,9 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Gestion des boites:')->setPermission('ROLE_BENEVOLE');
         yield MenuItem::linkToCrud('Boites', 'fas fa-list', Boite::class)->setPermission('ROLE_BENEVOLE');
-        yield MenuItem::linkToCrud('Éditeurs', 'fas fa-list', Editor::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Joueurs', 'fas fa-list', NumbersOfPlayers::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Durée des parties', 'fas fa-list', DurationOfGame::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des éditeurs', 'fas fa-list', Editor::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des joueurs', 'fas fa-list', NumbersOfPlayers::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Liste des durées des parties', 'fas fa-list', DurationOfGame::class)->setPermission('ROLE_ADMIN');
         
         yield MenuItem::section('Gestion des articles:')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Groupe d\'articles', 'fas fa-list', ItemGroup::class)->setPermission('ROLE_ADMIN');
@@ -233,8 +233,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Gestion des occasions:')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('RESERVER DES OCCASIONS','fa-solid fa-hand', Reserve::class)->setPermission('ROLE_ADMIN')
             ->setBadge(count($this->reserveRepository->findAll()),'warning');
-        yield MenuItem::linkToCrud('Liste des occasions', 'fas fa-list', Occasion::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Ventes / dons', 'fas fa-list', OffSiteOccasionSale::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Occasions', 'fas fa-list', Occasion::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Vendre / Donner', 'fas fa-list', OffSiteOccasionSale::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Types de mouvement', 'fa-solid fa-gear', MovementOccasion::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Liste des états (pièces, boite, règle)', 'fa-solid fa-gear', ConditionOccasion::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Liste des recherches', 'fa-solid fa-magnifying-glass', CatalogOccasionSearch::class)->setPermission('ROLE_ADMIN');
@@ -247,7 +247,7 @@ class DashboardController extends AbstractDashboardController
         // yield MenuItem::linkToCrud('Lignes documents', 'fas fa-list', DocumentLine::class);
         yield MenuItem::linkToCrud('Liste des paiements', 'fas fa-list', Payment::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Status des documents', 'fa-solid fa-gear', DocumentStatus::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Paramètres généraux', 'fa-solid fa-gear', DocumentParametre::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Paramètres des documents', 'fa-solid fa-gear', DocumentParametre::class)->setPermission('ROLE_ADMIN');
         // yield MenuItem::linkToCrud('Liste des totaux', 'fas fa-list', DocumentLineTotals::class)->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Gestion des utilisateurs:')->setPermission('ROLE_ADMIN');
@@ -271,10 +271,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Liste des médias', 'fas fa-list', Media::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Paramètre des badges', 'fa-solid fa-gear', BadgeForMediaTimeline::class)->setPermission('ROLE_ADMIN');
 
-        yield MenuItem::section('Légale:')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Informations', 'fa-solid fa-gear', LegalInformation::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Taxes', 'fa-solid fa-gear', Tax::class)->setPermission('ROLE_ADMIN');
-
         yield MenuItem::section('Paramètres géographiques:')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Villes', 'fas fa-list', City::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Departements', 'fas fa-list', Department::class)->setPermission('ROLE_ADMIN');
@@ -284,7 +280,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Moyens de paiement', 'fas fa-list', MeansOfPayement::class)->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Paramètres du site:')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Réglages', 'fas fa-gear', SiteSetting::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Infos légales', 'fa-solid fa-gear', LegalInformation::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Taxes', 'fa-solid fa-gear', Tax::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Vacances, foires, etc...', 'fas fa-gear', SiteSetting::class)->setPermission('ROLE_ADMIN');
 
     }
 }

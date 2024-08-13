@@ -21,7 +21,7 @@ class CatalogueService
         ){
     }
 
-    public function saveQueryInDataBase(Request $request, string $phrase, int $age, array $players)
+    public function saveQueryInDataBase(Request $request, string $phrase, int $age, array $players, array $durations)
     {
         if(!$request->query->getInt('page')){
             $requestMaxToSave = 100; //TODO Antoine
@@ -30,6 +30,7 @@ class CatalogueService
                     ->setToken($this->utilitiesService->generateRandomString())
                     ->setAge($age)
                     ->setPlayers($players)
+                    ->setDurations($durations)
                     ->setCreatedAt(new DateTimeImmutable('now'))
                     ->setUser($this->security->getUser());
             $this->em->persist($data);
