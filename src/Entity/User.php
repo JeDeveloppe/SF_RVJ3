@@ -370,7 +370,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString()
     {
-        return $this->accountnumber.' # '.$this->email;
+        return $this->nickname ?? $this->nickname :: $this->accountnumber;
     }
 
     /**

@@ -42,18 +42,42 @@ class UserCrudController extends AbstractCrudController
         return [
 
             FormField::addTab('Infos générales'),
-            IdField::new('rvj2id')->setLabel('Rvj2Id')->setDisabled(true)->onlyOnForms(),
-            IdField::new('id')->setLabel('Identifiant RVJ3')->setDisabled(true)->onlyOnForms(),
+            TextField::new('accountnumber','Numéro client')
+                ->setDisabled(true)
+                ->setColumns(6),
             AssociationField::new('level')
                 ->setLabel('Role')
-                ->setPermission('ROLE_ADMIN')
+                ->setPermission('ROLE_SUPER_ADMIN')
+                ->setColumns(6)
                 ->setFormTypeOptions(['attr' => ['placeholder' => 'Choisir un rôle']]),
-            TextField::new('email')->setLabel('Adresse email')->setDisabled(true),
-            TextField::new('nickname')->setLabel('Pseudo (pour les admins)')->onlyOnForms()->setFormTypeOptions(['attr' => ['placeholder' => 'Uniquement pour un admin...']]),
-            TelephoneField::new('phone')->setLabel('Téléphone')->onlyOnForms(),
-            DateTimeField::new('createdAt')->setLabel('Date d\'inscription')->setFormat('dd.MM.yyyy')->setDisabled(true),
-            DateTimeField::new('lastvisite')->setLabel('Dernière visite')->setFormat('dd.MM.yyyy')->setDisabled(true),
-            DateTimeField::new('membership')->setLabel('Abonnement jusqu\'au')->setFormat('dd.MM.yyyy')->onlyOnForms()->setDisabled(true),
+            TextField::new('email')
+                ->setLabel('Adresse email')
+                ->setColumns(6)
+                ->setDisabled(true),
+            TextField::new('nickname')
+                ->setLabel('Pseudo (pour les admins)')
+                ->onlyOnForms()
+                ->setColumns(6)
+                ->setFormTypeOptions(['attr' => ['placeholder' => 'Uniquement pour un admin...']]),
+            TelephoneField::new('phone')
+                ->setLabel('Téléphone')
+                ->setColumns(6)
+                ->onlyOnForms(),
+            DateTimeField::new('membership')
+                ->setLabel('Abonnement jusqu\'au')
+                ->setFormat('dd.MM.yyyy')->onlyOnForms()
+                ->setDisabled(true)
+                ->setColumns(6),
+            DateTimeField::new('createdAt')
+                ->setLabel('Date d\'inscription')
+                ->setFormat('dd.MM.yyyy')
+                ->setDisabled(true)
+                ->setColumns(4),
+            DateTimeField::new('lastvisite')
+                ->setLabel('Dernière visite')
+                ->setFormat('dd.MM.yyyy')
+                ->setDisabled(true)
+                ->setColumns(4),
 
             FormField::addTab('Adresses'),
             AssociationField::new('addresses')->setLabel('Adresses')->onlyOnIndex()->setColumns(12),
@@ -61,9 +85,9 @@ class UserCrudController extends AbstractCrudController
             ArrayField::new('addresses')->setLabel('Adresses')->onlyOnForms()->setDisabled(true),
             
             FormField::addTab('Documents'),
-            AssociationField::new('documents')->setLabel('Documents')->onlyOnIndex(),
-            CollectionField::new('documents')->setLabel('Documents')->onlyOnForms()->setDisabled(true),
-            CollectionField::new('documents')->setLabel('Documents')->onlyOnDetail(),
+            AssociationField::new('documents')->onlyOnIndex(),
+            CollectionField::new('documents')->onlyOnForms()->setDisabled(true),
+            CollectionField::new('documents')->onlyOnDetail(),
             // CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twig')->setDisabled(true)->onlyOnDetail(),
         ];
     }
