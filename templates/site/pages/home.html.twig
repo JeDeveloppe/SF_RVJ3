@@ -5,7 +5,7 @@
 {% block body %}
 
 
-<div class="row justify-content-center align-items-center my-5">
+<div class="row justify-content-center align-items-center py-5">
     <div class="col-12 col-md-6 col-lg-5 d-flex flex-column pt-3">
         <h1 class="col-12">
             Craquez pour nos<br/>
@@ -17,7 +17,7 @@
         </div>
         <div class="col-12 d-flex justify-content-around mt-3">
             <a class="btn btn-dark" href="{{ path('app_catalogue_occasions', {'category': null}) }}">Acheter un jeu</a>
-            <a class="btn btn-light flex-column" href="{{ path('app_catalogue_pieces_detachees') }}">
+            <a class="btn btn-light flex-column" href="#">
             Completer un jeu</br>
             <small>Livraison possible</small>
             </a>
@@ -31,10 +31,10 @@
 
 <div id="index_info_separator" class="row">
     <ul class="col-12 d-flex flex-column flex-md-row justify-content-around align-items-center">
-        <li>//TODO Jeux bons pour la planète</li>
-        <li>//TODO Jeux à prix solidaire</li>
+        <li>Jeux bons pour la planète</li>
+        <li>Jeux à prix solidaire</li>
         <li>Jeux vérifiés et nettoyés avec soin</li>
-        <li>//TODO Un projet en faveur du lien social</li>
+        <li>Un projet en faveur du lien social</li>
     </ul>
 </div>
 
@@ -60,7 +60,6 @@
         <div class="col-12 card card_index_info_catalogue">
             <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_tout_public.png') }}" alt="Lot de jeux tout public">
             <div class="card-body">
-            {# //TODO tout public = tous les jeux ? #}
                 <div class="card-title text-center"><a href="{{ path('app_catalogue_occasions', {'category': 'jeux-tout-public'}) }}">Tout public <i class="fa-solid fa-right-long"></i></a></div>
                 <p class="card-text text-center">A partir de 7 ans</p>
             </div>
@@ -86,7 +85,7 @@
     <div class="col-12 mt-4 text-center">
         <img class="index_chess" src="{{ asset('build/images/design/trace_and_chess.png') }}" alt="catalogue des pièces détachées">
     </div>
-    <a class="btn btn-light mt-3 d-flex flex-column" href="{{ path('app_catalogue_pieces_detachees') }}">
+    <a class="btn btn-light mt-3 d-flex flex-column" href="#">
         Completer un jeu</br>
         <small>Livraison possible</small>
     </a>

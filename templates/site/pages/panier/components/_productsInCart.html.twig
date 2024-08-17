@@ -14,15 +14,15 @@
 
                 <!-- item_panier_details -->
                 <div class="col-11 col-md-7">
-                    <div class="col-12 text-right"><a href="{{ path('panier_delete_item', {'item_id': panier.id }) }}"><i class="fa-solid fa-xmark text-orange fa-2x" alt="supprimer du panier"></i></a></div>
+                    <div class="col-12 text-end"><a href="{{ path('panier_delete_item', {'item_id': panier.id }) }}"><i class="fa-solid fa-xmark text-yellow fa-2x" alt="supprimer du panier"></i></a></div>
                     <div class="col-12 occasion_detail_editor">{{ panier.occasion.boite.editor }}</div>
-                    <div class="col-12">{{ panier.occasion.boite.name }}</div>
+                    <div class="col-12">{{ panier.occasion.boite.name | raw }}</div>
                     <div class="col-12 d-flex flex-wrap flex-column justify-content-around mt-3 px-0">
                         <div class="col-12">État de la boite: <i class="fa-solid fa-circle" style="color: {{ panier.occasion.boxCondition.color }};width:5px;height:5px;"></i></div>
                         <div class="col-12">État du matériel: <i class="fa-solid fa-circle" style="color: {{ panier.occasion.equipmentCondition.color }};width:5px;height:5px;"></i></div>
                         <div class="col-12">Règle du jeu: <i class="fa-solid fa-circle" style="color: {{ panier.occasion.gameRule.color }};width:5px;height:5px;"></i></div>
                     </div>
-                    <div class="col-12 mt-3 text-right text-orange">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': panier.occasion,'tax': allCartValues['tax']} %}</div>
+                    <div class="col-12 mt-3 text-end text-yellow">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': panier.occasion,'tax': allCartValues['tax']} %}</div>
                     <div class="col-12 d-flex justify-content-around mt-2">{% include "components/catalog/_shop_and_no_transport_logos.html.twig" %}</div>
                 </div>
             </div>

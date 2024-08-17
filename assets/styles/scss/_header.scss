@@ -4,19 +4,15 @@ nav {
 }
 #cart_link{
     position: relative;
-    margin-top: 40%;
 }
 
 #cart_link_logo{
-
-    position: absolute;
-    top: 0;
-    left: 0;
+    margin-top: 5%;
 }
 #cart_link_value{
     position: absolute;
-    top: -40%;
-    left: 120%;
+    top: 0;
+    left: 90%;
     border-radius: 50%;
     background: #FEC538;
     width: 20px;
@@ -31,20 +27,8 @@ nav {
     transform: scale(1.2);
 }
 
-#header_info {
-    background: #5F4ECB 0% 0% no-repeat padding-box;
-    width: 100%;
-}
-
-.btn-link-donner-ses-jeux {
-    background: #FEC538 0% 0% no-repeat padding-box;
-    border-radius: 24px;
-}
-
 #logoNav {
-    right: 0;
-    padding: 5% 5%;
-
+    padding: 1% 1%;
 }
 
 #logoNav img {
@@ -57,7 +41,6 @@ nav {
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {
     #logoNav {
-        padding: 4% 4%;
         display: none;
     }
 
@@ -69,7 +52,6 @@ nav {
 // Medium devices (tablets, 768px and up)
 @media (min-width: 768px) {
     #logoNav {
-        padding: 3% 3%;
         display: block;
     }
 
@@ -85,7 +67,6 @@ nav {
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
     #logoNav {
-        padding: 3% 3%;
         left: 0;
     }
 

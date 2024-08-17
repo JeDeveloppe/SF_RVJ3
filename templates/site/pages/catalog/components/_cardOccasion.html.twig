@@ -11,7 +11,6 @@
         <div class="card_div_img">
             <img class="card_catalog_img" src="{{ vich_uploader_asset(boite, 'imageFile') }}" alt="Image de la boite de jeu {{ boite.name }} - {{ boite.editor }}"/><br/>
         </div>
-        <p class="info_photo col-12 text-center">Photo non contractuelle</p>
         <div class="card_boite_name">{{ boite.name | raw }}</div>
         <div class="col-12 px-0">
             {% include "components/catalog/_players&age.html.twig" with {'item': boite } %}
@@ -20,7 +19,7 @@
             {% include "components/catalog/_durationOfTheGame.html.twig" with {'item': boite } %}
         </div>
         <div class="col-12 d-flex flex-wrap justify-content-around align-items-center mb-1 px-0">
-            <div class="col-6 p-0 text-orange">
+            <div class="col-6 p-0 text-yellow">
                 {% include "components/occasion/_display_occasion_price.html.twig" with {'product': product, 'tax': tax} %}
             </div>
             <div class="col-6 d-flex justify-content-end p-0">

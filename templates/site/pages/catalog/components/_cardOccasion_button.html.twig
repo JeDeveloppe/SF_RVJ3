@@ -3,7 +3,7 @@
     {% if delivery is defined %}
         {% if delivery is null %}
 
-            <a class="btn btn-dark mt-2" href="{{ path('member_adresses') }}"><i class="fas fa-lightbulb text-info mr-1"></i> Pensez à renseigner une adresse de livraison...</a>
+            <a class="btn btn-dark mt-2" href="{{ path('member_adresses') }}"><i class="fas fa-lightbulb text-info me-1"></i> Pensez à renseigner une adresse de livraison...</a>
 
         {% else %}
 
@@ -13,7 +13,7 @@
 
             {% else %}
 
-                <a class="btn btn-orange mt-2" href="{{ path('member_adresses') }}"><i class="fas fa-lightbulb text-info mr-1"></i> Vous semblez être trop loin pour un retrait...</a>
+                <a class="btn btn-yellow mt-2" href="{{ path('member_adresses') }}"><i class="fas fa-lightbulb text-info me-1"></i> Vous semblez être trop loin pour un retrait...</a>
 
             {% endif %}
 

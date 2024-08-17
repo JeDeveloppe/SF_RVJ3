@@ -230,7 +230,7 @@ class OccasionService
             case 'jeux-tout-public': //? pareil que la navbar et le footer
                 $agesByCategory = [
                     'start' => 7,
-                    'end' => 99
+                    'end' => 11
                 ]; //TODO Antoine
                 $twig = [
                     'titleH1' => '<h1 class="col-11 text-center">Jeux tout <span class="text-purple">puplic</span></h1>'
@@ -256,7 +256,7 @@ class OccasionService
             if($i > 1){
                 $an = ' ans';
             }
-            $ageChoices['A partir de '.$i.$an] = $i;
+            $ageChoices['Dès '.$i.$an] = $i;
             $agesForSearch[] = $i;
         }
 

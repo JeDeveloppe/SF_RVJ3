@@ -1,14 +1,10 @@
 {% include "components/forms/_display_form_errors.html.twig" %}
 
     {{ form_start(form) }}
-        <div class="col-10 col-sm-10 col-md-12 px-0 d-flex flex-column flex-wrap justify-content-around">
+        <div class="col-10 col-sm-10 col-md-12 px-2 d-flex flex-column flex-wrap justify-content-around">
             <div class="col-10 col-sm-8 col-md-12 col-xl-10 mb-3">
                 <label class="label_in_occasion_search_form">{{ form_label(form.search) }}</label>
                 {{ form_widget(form.search) }}
-            </div>
-            <div class="col-7 col-sm-6 col-md-12 col-xl-10 mb-3">
-                <label class="label_in_occasion_search_form">{{ form_label(form.age_start) }}</label>
-                {{ form_widget(form.age_start) }}
             </div>
             <div class="col-11 mb-3">
                 <label class="label_in_occasion_search_form">{{ form_label(form.playerMin) }}</label>
@@ -21,14 +17,25 @@
                     {% endfor %}
                 </ul>
             </div>
+            <div class="col-7 col-sm-6 col-md-12 col-xl-10 mb-3">
+                <label class="label_in_occasion_search_form">{{ form_label(form.age_start) }}</label>
+                <ul class="d-flex flex-wrap justify-content-start px-0 col-12">
+                    {% for age in form.age_start %}
+                        <li class="list-unstyled col-6 col-md-11  my-1 d-flex flex-wrap justify-content-center align-items-center">
+                            <div class="d-flex justify-content-end align-items-center li_durations">{{ form_widget(age) }}</div>
+                            <span class="col-9 li_durations_label">{{ form_label(age) }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
             <div class="col-11 mb-3">
                 <label class="label_in_occasion_search_form">{{ form_label(form.duration) }}</label>
                 <ul class="d-flex flex-wrap justify-content-start px-0 col-12">
                     {% for time in form.duration %}
-                            <li class="list-unstyled col-6 col-md-11 p-0 my-1 d-flex flex-wrap justify-content-center align-items-center">
-                                <div class="d-flex justify-content-end align-items-center li_durations">{{ form_widget(time) }}</div>
-                                <span class="col-9 li_durations_label">{{ form_label(time) }}</span>
-                            </li>
+                        <li class="list-unstyled col-6 col-md-11 p-0 my-1 d-flex flex-wrap justify-content-center align-items-center">
+                            <div class="d-flex justify-content-end align-items-center li_durations">{{ form_widget(time) }}</div>
+                            <span class="col-9 li_durations_label">{{ form_label(time) }}</span>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -37,7 +44,7 @@
                 <div class="input-group-append text-center col-12">
                     <div class="btn-group" role="group">
                         <button type="submit" class="btn btn-dark">Chercher</button>
-                        <a href="{{ currentPath }}" type="button" class="btn btn-orange">Reset</a>
+                        <a href="{{ currentPath }}" type="button" class="btn btn-yellow">Reset</a>
                     </div>
                 </div>
             </div>

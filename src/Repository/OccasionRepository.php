@@ -23,7 +23,7 @@ class OccasionRepository extends ServiceEntityRepository
 
     public function searchOccasionsInCatalogue(
         string $searchName,
-        int $ageStart = null,
+        array $ageStarts = null,
         int $ageEnd = null,
         array $players,
         array $durations,
@@ -42,12 +42,10 @@ class OccasionRepository extends ServiceEntityRepository
             }
         }
 
-        if($ageStart > 0){
-            $signe_age = "= :age_start";
-            $value_age = $ageStart;
-        }else{
-            $signe_age = ">= :age_start";
-            $value_age = $choices['start_and_end_ages']['start'];
+        if(count($ageStarts) == 0){
+            foreach($choices['ages_options_for_form'] as $choice){
+                $ageStarts[] = $choice;
+            }
         }
 
         $query =  $this->createQueryBuilder('o')
@@ -59,15 +57,13 @@ class OccasionRepository extends ServiceEntityRepository
             ->andWhere('b.playersMin IN (:players)')
             ->orWhere('b.playersMax IN (:players)')
             ->andWhere('d.name IN (:durations)')
-            ->andWhere('b.age '.$signe_age)
-            ->andWhere('b.age <= :age_end')
+            ->andWhere('b.age IN (:ageStarts)')
             ->andWhere('o.isOnline = :online')
             ->setParameters([
                 'searchName' => '%'.$searchName.'%',
                 'players' => $players,
                 'durations' => $durations,
-                'age_start' => $value_age,
-                'age_end' => $ageEnd,
+                'ageStarts' => $ageStarts,
                 'online' =>  true,
             ])
             ->orderBy('b.id', 'DESC')

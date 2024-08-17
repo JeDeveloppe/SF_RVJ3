@@ -12,6 +12,7 @@ use App\Service\DiscountService;
 use App\Service\DocumentLigneService;
 use App\Service\DocumentService;
 use App\Service\DocumentStatusService;
+use App\Service\DurationOfGameService;
 use App\Service\EditorService;
 use App\Service\EnvelopeService;
 use App\Service\ShippingMethodService;
@@ -60,7 +61,8 @@ class InitDataBase2 extends Command
             private DiscountService $discountService,
             private UserService $userService,
             private AmbassadorService $ambassadorService,
-            private CollectionPointService $collectionPointService
+            private CollectionPointService $collectionPointService,
+            private DurationOfGameService $durationOfGameService
         )
     {
         parent::__construct();
@@ -75,32 +77,35 @@ class InitDataBase2 extends Command
         $io = new SymfonyStyle($input,$output);
 
         //on importe les partenaires
-        $this->partnerService->importPartenaires($io);
+        // $this->partnerService->importPartenaires($io);
 
-        //on importe les adresses (facturation et livraison)
-        $this->adresseService->importAdresses($io);
+        // //on importe les adresses (facturation et livraison)
+        // $this->adresseService->importAdresses($io);
 
-        //on creer le nombre de joueurs
-        $this->playerService->addplayers($io);
+        // //on creer le nombre de joueurs
+        // $this->playerService->addplayers($io);
 
-        //on importe les boites
-        $this->boiteService->importBoites($io);
+        //on cree les temps de jeux
+        $this->durationOfGameService->addDurations($io);
 
-        //on genere les editeurs de facon distinct
-        $this->editorService->addEditorsInDatabase($io);
+        // //on importe les boites
+        // $this->boiteService->importBoites($io);
 
-        //on importe le detail des boites
-        $this->boiteService->importPieces($io);
+        // //on genere les editeurs de facon distinct
+        // $this->editorService->addEditorsInDatabase($io);
 
-        //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
-        $this->userService->createUndefinedUser($io);
-        $this->boiteService->createUndefinedBoite($io);
-        $this->adresseService->createRetredAddress($io);
-        $this->shippingMethodService->createShippingMethode($io);
-        $this->collectionPointService->addCollectionPoint($io);
+        // //on importe le detail des boites
+        // $this->boiteService->importPieces($io);
 
-        //on cree les conditions des occasions
-        $this->occasionService->addConditions($io);
+        // //on cree utilisateur undefini, adresse de retrait COOP, methodes de retrait
+        // $this->userService->createUndefinedUser($io);
+        // $this->boiteService->createUndefinedBoite($io);
+        // $this->adresseService->createRetredAddress($io);
+        // $this->shippingMethodService->createShippingMethode($io);
+        // $this->collectionPointService->addCollectionPoint($io);
+
+        // //on cree les conditions des occasions
+        // $this->occasionService->addConditions($io);
 
         //on cree les MOYENS DE PAIEMENT
         $this->meansOffPayementService->addMoyens($io);

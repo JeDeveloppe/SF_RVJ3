@@ -82,7 +82,7 @@
     text-transform: uppercase;
 }
 
-.li_players > input[type="checkbox"], .li_durations > input[type="checkbox"]{
+.li_players > input[type="checkbox"], .li_durations > input[type="checkbox"], .li_ages  > input[type="checkbox"]{
     /* Add if not using autoprefixer */
     -webkit-appearance: none;
     /* Remove most all native input styles */
@@ -101,13 +101,13 @@
     z-index: 1;
 }
 
-.li_players_label{
+.li_players_label, .li_ages_label{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -35%);
 }
 
-.li_players > input[type="checkbox"]::before, .li_durations > input[type="checkbox"]::before {
+.li_players > input[type="checkbox"]::before, .li_durations > input[type="checkbox"]::before, .li_ages > input[type="checkbox"]::before {
     content: "";
     width: 100%;
     clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
@@ -119,6 +119,6 @@
     background-color: var(--purple);
 }
 
-.li_players > input[type="checkbox"]:checked::before, .li_durations > input[type="checkbox"]:checked::before {
+.li_players > input[type="checkbox"]:checked::before, .li_durations > input[type="checkbox"]:checked::before, .li_ages > input[type="checkbox"]:checked::before {
     transform: scale(1);
 }

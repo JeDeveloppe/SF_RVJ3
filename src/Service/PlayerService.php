@@ -20,7 +20,7 @@ class PlayerService
 
         $players = [];
 
-        for($i = 1; $i < 13; $i++){
+        for($i = 1; $i < 7; $i++){
             $players[] = [
                 'name' => $i,
                 'key' => $i,

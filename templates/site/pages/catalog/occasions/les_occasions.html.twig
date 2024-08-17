@@ -24,10 +24,10 @@
                 <!-- left column / result > 0 -->
                 {% if occasions | length > 0 %}
 
-                    {% set jeu_dispo = 'jeu disponible' %}
+                    {% set jeu_dispo = 'jeu d\'occasion disponible' %}
 
                     {% if occasions | length > 1 %}
-                        {% set jeu_dispo = 'jeux disponibles' %}
+                        {% set jeu_dispo = 'jeux d\'occasion disponibles' %}
                     {% endif %}
 
                         <div class="col-12 font-weight-bolder mb-3">{{ occasions_totales | length }} {{ jeu_dispo }}.</div>

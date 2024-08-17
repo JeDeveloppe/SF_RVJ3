@@ -1,81 +1,75 @@
 {% set bg_white_if_route_not_app_home = 'bg-white' %}
 {% if app.request.get('_route') == 'app_home'  %}
-  {% set bg_white_if_route_not_app_home = '' %}
+  {% set bg_white_if_route_not_app_home = 'bg-secondary' %}
 {% endif %}
 
-<div class="row {{ bg_white_if_route_not_app_home }}">
-  <ul id="header_info" class="d-flex justify-content-center justify-content-md-end py-2 text-uppercase display-6">
-    <li class="list-unstyled">
-      <a class="p-4 text-white text-decoration-none small" href="{{ path('app_who_are_we') }}">L'association</a>
+<div class="row {{ bg_white_if_route_not_app_home }} sticky-top my-0">
+  <ul class="d-flex justify-content-around align-items-center justify-content-md-end py-2 text-uppercase bg-purple col-12 m-0">
+    <li class="list-unstyled mx-2">
+      <a class="text-white text-decoration-none small" href="{{ path('app_who_are_we') }}">L'association</a>
     </li>
-    <li class="list-unstyled">
-      <a class="p-4 text-white text-decoration-none small" href="{{ path('app_prestations') }}">Prestations</a>
+    <li class="list-unstyled mx-2">
+      <a class="text-white text-decoration-none small" href="{{ path('app_prestations') }}">Prestations</a>
     </li>
-    <li class="list-unstyled">
-      <a class="p-4 text-white text-decoration-none small" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur·rice</a>
+    <li class="list-unstyled mx-2">
+      <a class="text-white text-decoration-none small" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur·rice</a>
     </li>
   </ul>
-  <nav class="navbar navbar-expand-md {{ bg_white_if_route_not_app_home }}" data-bs-theme="light">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-around" id="navbarColor02">
-        <a id="logoNav" href="{{ path('app_home') }}">
-          <img src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo de Refaites vos jeux">
-        </a>
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': null }) }}">Tous les jeux</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}">Enfants</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}">Initié·es</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" href="{{ path('app_catalogue_pieces_detachees') }}">Pièces détachées</a>
-          </li>
-          <li class="nav-item btn-link-donner-ses-jeux">
-            <a class="nav-link text-dark" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ms-auto me-4">
-          {% if is_granted('ROLE_USER') %}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{ path('member') }}">Espace membre</a>
-                <div class="dropdown-divider"></div>
-                {% if is_granted('ROLE_BENEVOLE') %}
-                  <a class="dropdown-item" href="{{ path('admin') }}"><i class="fa-solid fa-lock text-primary"></i> ADMINISTRATION</a>
-                {% endif %}
-                <a class="dropdown-item" href="{{ path('logout') }}"><i class="fa-solid fa-power-off text-danger"></i> Déconnexion</a>
-              </div>
-            </li>
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="{{ path('app_login') }}"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
-            </li>
-              <li class="nav-item">
-              <a class="nav-link text-dark" href="{{ path('app_register') }}"><i class="fa-solid fa-user-plus"></i></a>
-            </li>
-          {% endif %}
-          <li class="nav-item mr-5">
-            {% if is_granted('ROLE_USER') %}
-              {% if app.user.paniers | length > 0 %}
-                <a id="cart_link" class="nav-link text-dark" href="{{ path('panier_start') }}">
-                  <img id="cart_link_logo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier">
-                  <span id="cart_link_value">{{ app.user.paniers | length }}</span>
-                </a>
-              {% else %}
-                <a id="cart_link" href="#" class="nav-link text-dark"><img id="cart_link_logo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier"></a>
-              {% endif %}
+  <div class="col-12 d-flex justify-content-around align-items-center py-0 my-0 {{ bg_white_if_route_not_app_home }}">
+    <a class="d-flex justify-content-start align-items-start" id="logoNav" href="{{ path('app_home') }}">
+      <img src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo de Refaites vos jeux">
+    </a>
+    <ul class="p-0 m-0 pt-3 pb-2 d-flex flex-wrap flex-column flex-md-row justify-content-around align-items-center">
+      <li class="list-unstyled mx-2">
+        <a class="text-dark" href="{{ path('app_catalogue_occasions', {'category': 'tous-les-jeux' }) }}">Tous les jeux</a>
+      </li>
+      <li class="list-unstyled mx-2">
+        <a class="text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}">Enfants</a>
+      </li>
+      <li class="list-unstyled mx-2">
+        <a class="text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-tout-public'}) }}">Tout public</a>
+      </li>
+      <li class="list-unstyled mx-2">
+        <a class="text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}">Initié·es</a>
+      </li>
+      <li class="list-unstyled mx-2">
+        <a class="text-dark" href="{{ path('app_catalogue_pieces_detachees') }}">Pièces détachées</a>
+      </li>
+      <li class="list-unstyled mx-2">
+        <a class="btn btn-yellow" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
+      </li>
+    </ul>
+    <ul class="col-2 p-0 my-0 d-flex flex-column flex-sm-row">
+      {% if is_granted('ROLE_USER') %}
+        <li class="list-unstyled dropdown col p-0 m-0 text-end">
+          <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{{ path('member') }}">Espace membre</a>
+            <div class="dropdown-divider"></div>
+            {% if is_granted('ROLE_BENEVOLE') %}
+              <a class="dropdown-item" href="{{ path('admin') }}"><i class="fa-solid fa-lock text-primary"></i> ADMINISTRATION</a>
             {% endif %}
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+            <a class="dropdown-item" href="{{ path('logout') }}"><i class="fa-solid fa-power-off text-danger"></i> Déconnexion</a>
+          </div>
+        </li>
+        <li class="list-unstyled col p-0 m-0 d-flex justify-content-center justify-content-sm-start align-items-center mt-4 mt-sm-0">
+          {% set cartLinkActiveOrNot = "pe-none" %} 
+          {% if app.user.paniers | length > 0 %}
+            {% set cartLinkActiveOrNot = ""  %}
+          {% endif %}
+          <a id="cart_link" class="text-dark {{ cartLinkActiveOrNot }}" href="{{ path('panier_start') }}">
+            <img id="cart_link_logo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier">
+            <span id="cart_link_value">{{ app.user.paniers | length }}</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="list-unstyled">
+          <a class="text-dark" href="{{ path('app_login') }}"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
+        </li>
+        <li class="list-unstyled">
+          <a class="text-dark" href="{{ path('app_register') }}"><i class="fa-solid fa-user-plus"></i></a>
+        </li>
+      {% endif %}
+    </ul>
   </div>
+</div>

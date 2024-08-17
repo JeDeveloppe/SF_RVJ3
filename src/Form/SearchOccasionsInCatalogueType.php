@@ -53,13 +53,13 @@ class SearchOccasionsInCatalogueType extends AbstractType
                 'multiple' => true,
             ])
             ->add('age_start', ChoiceType::class, [
-                'label' => 'Âge:',
+                'label' => 'Âge minimum:',
                 'attr' => [
                     'class' => 'form-control'
                 ],
-                'required' => false,
                 'choices' => $options['agesOptions'],
-                'placeholder' => '- Tous les âges -',
+                'expanded' => true,
+                'multiple' => true,
             ]);
     }
 

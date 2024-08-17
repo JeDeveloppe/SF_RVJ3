@@ -1,7 +1,7 @@
 <div class="row justify-content-around my-5 ">
     <div class="card col-11 shadow border p-2">
         <h5 class="text-purple">Facturation</h5>
-        <div class="col-12 text-right">
+        <div class="col-12 text-end">
             {{ billingAddress.organization }}<br/>
             {{ billingAddress.lastname }} {{ billingAddress.firstname }}<br/>
             {{ billingAddress.street }} <br/>
@@ -17,7 +17,7 @@
                 Livraison à:
             {% endif %}
         </h5>
-        <div class="col-12 text-right">
+        <div class="col-12 text-end">
             {{ deliveryAddress.organization ? deliveryAddress.organization : '' }}<br/>
             {% if deliveryAddress.lastname is not null %}
                 {{ deliveryAddress.lastname ? deliveryAddress.lastname : '' }} {{ deliveryAddress.firstname ? deliveryAddress.firstname : '' }}<br/>

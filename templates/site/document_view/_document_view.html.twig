@@ -34,7 +34,7 @@
                 {% endif %}
             </div>
             <div class="col-11 d-flex justify-content-around mt-4">
-                <a href="{{ path('member_historique') }}" class="btn btn-outline-dark"><i class="fa-solid fa-backward-step mr-1"></i> Précédent</a>
+                <a href="{{ path('member_historique') }}" class="btn btn-outline-dark"><i class="fa-solid fa-backward-step me-1"></i> Précédent</a>
             </div>
         </div>
         <div class="col-11 mt-3 mt-md-0 col-md-5 d-flex justify-content-around">
@@ -47,7 +47,7 @@
         <div class="col-5">
             <div class="card col-11 shadow border p-2">
                 <h5 class="text-purple">Facturation</h5>
-                <div class="col-12 text-right">
+                <div class="col-12 text-end">
                     {% set facturations = document.billingAddress|split('<br/>') %}
                         {% for facturation in facturations %}
                             {{ facturation }}<br/>
@@ -62,7 +62,7 @@
                         Livraison à:
                     {% endif %}
                 </h5>
-                <div class="col-12 text-right">
+                <div class="col-12 text-end">
                     {% set deliveries = document.deliveryAddress|split('<br/>') %}
                     {% for delivery in deliveries %}
                         {{ delivery }}<br/>
@@ -75,24 +75,24 @@
             <table class="table table-striped align-middle px-0">
                 <tr>
                     <td class="col-8">Sous-total articles:</td>
-                    <td class="text-right">{{ ((document.documentLineTotals.itemsPriceWithoutTax + document.documentLineTotals.boitesPriceWithoutTax) * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
+                    <td class="text-end">{{ ((document.documentLineTotals.itemsPriceWithoutTax + document.documentLineTotals.boitesPriceWithoutTax) * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
                 </tr>
                 {% if document.documentLineTotals.discountonpurchase != 0 %}
                     <tr>
                         <td>
                             Remise sur les articles:
                         </td>
-                        <td class="text-right align-middle"> - {{ (document.documentLineTotals.discountonpurchase * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
+                        <td class="text-end align-middle"> - {{ (document.documentLineTotals.discountonpurchase * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
                     </tr>
                 {% endif %}
                 <tr>
                     <td>Sous-total occasions:</td>
-                    <td class="text-right">{{ (document.documentLineTotals.occasionsPriceWithoutTax * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
+                    <td class="text-end">{{ (document.documentLineTotals.occasionsPriceWithoutTax * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
                 </tr>
                 {% if document.documentLineTotals.voucherDiscountValueUsed != 0 %}
                     <tr>
                         <td>Code de réduction:</td>
-                        <td class="text-right align-middle">{{ (document.documentLineTotals.voucherDiscountValueUsed * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
+                        <td class="text-endgn-middle">{{ (document.documentLineTotals.voucherDiscountValueUsed * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
                     </tr>
                 {% endif %}
                 <tr>
@@ -102,7 +102,7 @@
                                 <small>(poid total: {{ document.documentLineTotals.boitesWeigth }} g)</small>
                             {% endif %}
                         </td>
-                        <td class="align-middle text-right">
+                        <td class="align-middle text-end">
                             0.00 €
                         </td>
                     {% else %}
@@ -111,7 +111,7 @@
                                 <small>(poid total: {{ document.documentLineTotals.boitesWeigth }} g)</small>
                             {% endif %}
                         </td>
-                        <td class="align-middle text-right">
+                        <td class="align-middle text-end">
                             {{ (document.deliveryPriceExcludingTax * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €
                         </td>
                     {% endif %}
@@ -123,16 +123,16 @@
                             <br/>Abonnement jusqu'au {{ app.user.membership | date('d-m-Y') }}
                         {% endif %}
                     </td>
-                    <td class="text-right">{{ (document.cost * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
+                    <td class="text-end">{{ (document.cost * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
                 </tr>
 
                     <tr>
                         <td>Total HT:</td>
-                        <td class="text-right">{{ (document.totalExcludingTax / 100) | number_format(2, '.', ',') }} €</td>
+                        <td class="text-end">{{ (document.totalExcludingTax / 100) | number_format(2, '.', ',') }} €</td>
                     </tr>
                     <tr>
                         <td>TVA:</td>
-                        <td class="text-right">
+                        <td class="text-end">
                         {% if document.totalExcludingTax * ( 1 + (document.taxRateValue / 100)) - document.totalExcludingTax == 0 %}
                             0.00 €
                         {% else %}
@@ -142,7 +142,7 @@
 
                 <tr>
                     <td>Total à payer TTC:</td>
-                    <td class="text-right font-weight-bolder">
+                    <td class="text-end font-weight-bolder">
                             {{ (document.totalExcludingTax * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} € TTC
                     </td>
                 </tr>
