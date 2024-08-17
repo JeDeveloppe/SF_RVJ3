@@ -275,6 +275,7 @@ class OccasionService
         $choices['ages_options_for_form'] = $ageChoices;
         $choices['durations_options_for_form'] = $durations;
         $choices['players_options_for_form'] = $playerChoices;
+        $choices['players_in_database'] = $this->numbersOfPlayersRepository->findAll();
         $choices['start_and_end_ages'] = $agesByCategory;
         $choices['twig'] = $twig;
 

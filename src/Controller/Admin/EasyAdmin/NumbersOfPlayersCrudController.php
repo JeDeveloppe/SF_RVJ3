@@ -23,7 +23,6 @@ class NumbersOfPlayersCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name')->setLabel('A partir de ... joueur(s)'),
-            TextField::new('keyword')->setLabel('keyword dataBase (u1 et u2)')->setPermission('ROLE_SUPER_ADMIN'),
             AssociationField::new('boitesMin')->setLabel('Nombre de boites(min)')->setDisabled(true)->onlyOnIndex(),
             AssociationField::new('boitesMax')->setLabel('Nombre de boites(max)')->setDisabled(true)->onlyOnIndex(),
             BooleanField::new('isInOccasionFormSearch')->setLabel('Actif dans les selects <br/>(+ sur le site)'),

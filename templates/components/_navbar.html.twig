@@ -63,10 +63,10 @@
           </a>
         </li>
       {% else %}
-        <li class="list-unstyled">
+        <li class="list-unstyled dropdown col p-0 m-0 text-center">
           <a class="text-dark" href="{{ path('app_login') }}"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
         </li>
-        <li class="list-unstyled">
+        <li class="list-unstyled col p-0 m-0 d-flex justify-content-center justify-content-sm-start align-items-center mt-4 mt-sm-0">
           <a class="text-dark" href="{{ path('app_register') }}"><i class="fa-solid fa-user-plus"></i></a>
         </li>
       {% endif %}

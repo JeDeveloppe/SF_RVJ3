@@ -135,8 +135,8 @@ class BoiteCrudController extends AbstractCrudController
                 ->setQueryBuilder(
                     fn(QueryBuilder $queryBuilder) => 
                     $queryBuilder
-                        ->where('entity.isInOccasionFormSearch = :true')
-                        ->setParameter('true', true)
+                        // ->where('entity.isInOccasionFormSearch = :true')
+                        // ->setParameter('true', true)
                         ->orderBy('entity.orderOfAppearance', 'ASC'))
                 // ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN')
@@ -146,8 +146,8 @@ class BoiteCrudController extends AbstractCrudController
                 ->setQueryBuilder(
                     fn(QueryBuilder $queryBuilder) => 
                     $queryBuilder
-                        ->where('entity.isInOccasionFormSearch = :true')
-                        ->setParameter('true', true)
+                        // ->where('entity.isInOccasionFormSearch = :true')
+                        // ->setParameter('true', true)
                         ->orderBy('entity.orderOfAppearance', 'ASC'))
                 ->setLabel('Jusqu\'à (joueurs)')
                 // ->onlyOnForms()

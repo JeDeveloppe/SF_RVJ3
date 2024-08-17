@@ -27,6 +27,7 @@ use App\Repository\CatalogOccasionSearchRepository;
 use App\Repository\DurationOfGameRepository;
 use App\Service\CatalogueService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CatalogController extends AbstractController
 {
@@ -147,6 +148,8 @@ class CatalogController extends AbstractController
     public function catalogueOccasions(Request $request, $category = NULL): Response
     {
 
+        $metas['description'] = 'Catalogue complet des jeux d\'occasion disponiblent en retrait sur Caen.';
+
         //values for form / query in repository etc...
         $choices = $this->occasionService->returnOptionsForFormAndTitleForOccasionCatalogByCategory($category);
 
@@ -160,7 +163,8 @@ class CatalogController extends AbstractController
             ]);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        // if($form->isSubmitted() && $form->isValid()) {
+        if($request->get('ajax')) {
 
             $search = $form->get('search')->getData();
             $phrase = str_replace(" ","%",$search);
@@ -173,7 +177,7 @@ class CatalogController extends AbstractController
             //$this->catalogueService->saveQueryInDataBase($request, $phrase, $age_start, $players, $durations);
 
             $donneesFromDatabases = $this->occasionRepository->searchOccasionsInCatalogue($phrase, $age_start, $age_end, $players, $durations, $choices);
-
+        
         }else{
 
             //on cherche l'ensemble du catalogue
@@ -186,19 +190,35 @@ class CatalogController extends AbstractController
             $request->query->getInt('page', 1), /*page number*/
             12, /*limit per page*/
         );
+    
 
-        $metas['description'] = 'Catalogue complet des jeux d\'occasion disponiblent en retrait sur Caen.';
+        if($request->get('ajax')) {
 
-        return $this->render('site/pages/catalog/occasions/les_occasions.html.twig', [
-            'occasions' => $occasions,
-            'occasions_totales' => $donneesFromDatabases,
-            'metas' => $metas,
-            // 'delivery' => null,
-            'titreDeLaPage' => $choices['twig']['titleH1'],
-            'form' => $form,
-            'tax' => $this->taxRepository->findOneBy([]),
-            'partners' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true]),
-        ]);
+            return new JsonResponse([
+                'content' => $this->renderView('site/pages/catalog/occasions/_occasions_fetched.html.twig', [
+                    'occasions' => $occasions,
+                    'occasions_totales' => $donneesFromDatabases,
+                    'metas' => $metas,
+                    'titreDeLaPage' => $choices['twig']['titleH1'],
+                    'form' => $form,
+                    'tax' => $this->taxRepository->findOneBy([]),
+                    'partners' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true]),
+                ])
+            ]);
+
+        }else{
+
+            return $this->render('site/pages/catalog/occasions/les_occasions.html.twig', [
+                'occasions' => $occasions,
+                'occasions_totales' => $donneesFromDatabases,
+                'metas' => $metas,
+                'titreDeLaPage' => $choices['twig']['titleH1'],
+                'form' => $form,
+                'tax' => $this->taxRepository->findOneBy([]),
+                'partners' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true]),
+            ]);
+
+        }
     }
 
     #[Route('/jeu-occasion/{reference_occasion}/{editor_slug}/{boite_slug}', name: 'occasion')]

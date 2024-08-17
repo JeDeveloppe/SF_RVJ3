@@ -26,12 +26,13 @@ class UserType extends AbstractType
                 ]
             ])
             // ->add('roles')
-
             ->add('phone', TelType::class, [
                 'label' => 'Téléphone:',
                 'attr' => [
-                    'class' => 'form-control mb-3'
-                ]
+                    'class' => 'form-control mb-3',
+                    'placeholder' => 'Téléphone'
+                ],
+
             ])
             ->add('country', EntityType::class, [
                 'label' => 'Pays:',

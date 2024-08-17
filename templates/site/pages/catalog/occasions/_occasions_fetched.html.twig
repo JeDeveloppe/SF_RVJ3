@@ -1,0 +1,30 @@
+
+        <!-- left column / result > 0 -->
+        {% if occasions | length > 0 %}
+
+            {% set jeu_dispo = 'jeu d\'occasion disponible' %}
+
+            {% if occasions | length > 1 %}
+                {% set jeu_dispo = 'jeux d\'occasion disponibles' %}
+            {% endif %}
+
+                <div class="col-12 font-weight-bolder mb-3">{{ occasions_totales | length }} {{ jeu_dispo }}.</div>
+
+                {% for key,occasion in occasions %}  
+
+                    <div class="col-9 col-sm-6 col-lg-4 mx-md-0 p-1">
+                        {% include "site/pages/catalog/components/_cardOccasion.html.twig" with { 'product': occasion, 'tax': tax } %}
+                    </div>
+
+                {% endfor %}
+
+                <div class="col-12 my-5">
+                    {{ knp_pagination_render(occasions, 'components/_pagination.html.twig') }}
+                </div>
+
+        {% else %}
+
+            <!-- left column / result == 0 -->
+            {% include "site/pages/catalog/components/_emptyResultsDisplayPartners.html.twig" with {'partners': partners } %}
+            
+        {% endif %}

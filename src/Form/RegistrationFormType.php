@@ -27,21 +27,21 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control mb-3'
                 ] 
             ])
-            ->add('phone', TelType::class, [
-                'label' => 'Téléphone:',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Téléphone obligatoire !',
-                    ]),
-                    new Regex([
-                        'pattern' => '/^[0-9]\d*$/',
-                        'message' => 'Téléphone: que des chiffres...'
-                    ])
-                ],
-                'attr' => [
-                    'class' => 'form-control mb-3'
-                ]
-            ])
+            // ->add('phone', TelType::class, [
+            //     'label' => 'Téléphone:',
+            //     'constraints' => [
+            //         new NotBlank([
+            //             'message' => 'Téléphone obligatoire !',
+            //         ]),
+            //         new Regex([
+            //             'pattern' => '/^[0-9]\d*$/',
+            //             'message' => 'Téléphone: que des chiffres...'
+            //         ])
+            //     ],
+            //     'attr' => [
+            //         'class' => 'form-control mb-3'
+            //     ]
+            // ])
             ->add('country', EntityType::class, [
                 'label' => 'Pays:',
                 'class' => Country::class,
