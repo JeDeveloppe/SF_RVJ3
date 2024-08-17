@@ -10,10 +10,10 @@
                 <label class="label_in_occasion_search_form">{{ form_label(form.playerMin) }}</label>
                 <ul class="d-flex flex-wrap justify-content-start px-0 col-12">
                     {% for player in form.playerMin %}
-                            <li class="list-unstyled col-2 col-md-3 col-xl-2 p-0 my-1 d-flex flex-wrap justify-content-center align-items-center">
-                                <div class="d-flex justify-content-center align-items-center li_players position-relative">{{ form_widget(player) }}</div>
-                                <span class="col-6 d-flex justify-content-center align-items-center li_players_label p-0 position-absolute">{{ form_label(player) }}</span>
-                            </li>
+                        <li class="list-unstyled col-2 p-0 my-1 d-flex flex-wrap justify-content-center align-items-center">
+                            <div class="d-flex justify-content-center align-items-center li_players">{{ form_widget(player) }}</div>
+                            <span class="li_players_label">{{ form_label(player) }}</span>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -21,9 +21,9 @@
                 <label class="label_in_occasion_search_form">{{ form_label(form.age_start) }}</label>
                 <ul class="d-flex flex-wrap justify-content-start px-0 col-12">
                     {% for age in form.age_start %}
-                        <li class="list-unstyled col-6 col-md-11  my-1 d-flex flex-wrap justify-content-center align-items-center">
-                            <div class="d-flex justify-content-end align-items-center li_durations">{{ form_widget(age) }}</div>
-                            <span class="col-9 li_durations_label">{{ form_label(age) }}</span>
+                        <li class="list-unstyled col-6 col-md-11 p-0 my-1 d-flex flex-wrap justify-content-center align-items-center">
+                            <div class="d-flex justify-content-end align-items-center li_ages">{{ form_widget(age) }}</div>
+                            <span class="col-9 li_ages_label ps-2">{{ form_label(age) }}</span>
                         </li>
                     {% endfor %}
                 </ul>
@@ -34,7 +34,7 @@
                     {% for time in form.duration %}
                         <li class="list-unstyled col-6 col-md-11 p-0 my-1 d-flex flex-wrap justify-content-center align-items-center">
                             <div class="d-flex justify-content-end align-items-center li_durations">{{ form_widget(time) }}</div>
-                            <span class="col-9 li_durations_label">{{ form_label(time) }}</span>
+                            <span class="col-9 li_durations_label ps-2">{{ form_label(time) }}</span>
                         </li>
                     {% endfor %}
                 </ul>

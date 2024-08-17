@@ -221,7 +221,7 @@ class OccasionService
             case 'jeux-pour-initie-es': //? pareil que la navbar et le footer
                 $agesByCategory = [
                     'start' => 12,
-                    'end' => 99
+                    'end' => 12
                 ];
                 $twig = [
                     'titleH1' => '<h1 class="col-11 text-center">Jeux pour <span class="text-purple">initié·es</span></h1>'
@@ -239,7 +239,7 @@ class OccasionService
             default:
                 $agesByCategory = [
                     'start' => 1,
-                    'end' => 99
+                    'end' => 12
                 ];
                 $twig = [
                     'titleH1' => '<h1 class="col-11 text-center">Tous les <span class="text-purple">jeux</span></h1>'
@@ -247,7 +247,7 @@ class OccasionService
                 break;
         }
 
-        //calcul
+        //choix du form occasion
         $choices = [];
 
         $ageChoices = [];
@@ -269,7 +269,7 @@ class OccasionService
         $playerChoices = [];
         $playersChecked = $this->numbersOfPlayersRepository->findBy(['isInOccasionFormSearch' => true],['orderOfAppearance' => 'ASC']);
         foreach($playersChecked as $playerChecked){
-            $playerChoices[$playerChecked->getName()] = $playerChecked->getName();
+            $playerChoices[$playerChecked->getKeyword()] = $playerChecked->getName();
         }
 
         $choices['ages_options_for_form'] = $ageChoices;

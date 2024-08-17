@@ -83,10 +83,10 @@ class InitDataBase2 extends Command
         // $this->adresseService->importAdresses($io);
 
         // //on creer le nombre de joueurs
-        // $this->playerService->addplayers($io);
+        $this->playerService->addplayers($io);
 
         //on cree les temps de jeux
-        $this->durationOfGameService->addDurations($io);
+        //$this->durationOfGameService->addDurations($io);
 
         // //on importe les boites
         // $this->boiteService->importBoites($io);
