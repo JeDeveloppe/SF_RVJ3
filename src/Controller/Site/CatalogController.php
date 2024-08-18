@@ -195,7 +195,7 @@ class CatalogController extends AbstractController
         if($request->get('ajax')) {
 
             return new JsonResponse([
-                'content' => $this->renderView('site/pages/catalog/occasions/_occasions_fetched.html.twig', [
+                'content' => $this->renderView('site/pages/catalog/components/_display_occasions_results.html.twig', [
                     'occasions' => $occasions,
                     'occasions_totales' => $donneesFromDatabases,
                     'metas' => $metas,
