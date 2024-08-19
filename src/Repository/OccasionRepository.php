@@ -30,6 +30,7 @@ class OccasionRepository extends ServiceEntityRepository
         array $choices): array
     {
 
+
         if(count($players) == 0){
             $players = [];
             foreach($choices['players_options_for_form'] as $choice){
@@ -63,7 +64,7 @@ class OccasionRepository extends ServiceEntityRepository
             ->where('b.name LIKE :searchName')
             ->orWhere('e.name LIKE :searchName')
             ->andWhere('b.playersMin IN (:players)')
-            ->orWhere('b.playersMax IN (:players)')
+            // ->orWhere('b.playersMax IN (:players)')
             ->andWhere('d.name IN (:durations)')
             ->andWhere('b.age IN (:ageStarts)')
             ->andWhere('o.isOnline = :online')

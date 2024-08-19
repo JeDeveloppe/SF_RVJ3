@@ -11,7 +11,8 @@
     {% else %}
         <!-- pas de foire en cours -->
         <div class="row justify-content-around py-4">
-            {{ titreDeLaPage | raw }}
+            <div class="col-11 text-center small mb-2">{{ breadcrumb | raw }}</div>
+            <h1 class="col-11 text-center">{{ titreDeLaPage | raw }}</h1>
         </div>
         <div class="row justify-content-around py-5 bg-white">
             <!-- left column / searchs -->
@@ -24,7 +25,10 @@
             </div>
         </div>
 
+    {% include "components/_separateur_wave.html.twig" %}
+
     {% endif %}
+
 {% endblock %}
 
 {% block javascript %}
@@ -33,16 +37,16 @@
 
         let FormOccasion = document.getElementById('search_occasions_in_catalogue');
 
+        //left search
         document.querySelectorAll('#search_occasions_in_catalogue input').forEach(input => {
             input.addEventListener('change', () => {
-                let Form = new FormData(FormOccasion);
+                let FormOpions = new FormData(FormOccasion);
 
                 //on recupere les donnees
                 let Params = new URLSearchParams();
 
-                Form.forEach((value, key) => {
+                FormOpions.forEach((value, key) => {
                     Params.append(key, value);
-                    console.log(Params.toString())
                 })
 
                 //on recupere url active
@@ -64,6 +68,8 @@
                 }).catch(e => alert(e))
             })
         });
+
+        // search_occasion_name_or_editor_in_catalogue
 
     }
 </script>

@@ -1,0 +1,14 @@
+{% include "components/forms/_display_form_errors.html.twig" %}
+
+    {{ form_start(formNameOrEditor, {'attr': {'id': 'search_occasion_name_or_editor_in_catalogue' }}) }}
+        <div class="col-11 offset-lg-3 col-lg-9 bg-secondary">
+            <div class="input-group position-relative">
+                {{ form_widget(formNameOrEditor.search, {'attr': {'id': 'search_occasion_name_or_editor_in_catalogue_input' }}) }}
+                <span class="input-group-append valid_button">
+                    <button class="btn" type="submit">
+                        <i class="fa fa-search text-dark"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    {{ form_end(formNameOrEditor) }}

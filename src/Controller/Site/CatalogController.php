@@ -14,6 +14,7 @@ use App\Repository\AddressRepository;
 use App\Repository\PartnerRepository;
 use App\Repository\OccasionRepository;
 use App\Form\SearchBoiteInCatalogueType;
+use App\Form\SearchOccasionNameOrEditorInCatalogueType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SiteSettingRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -163,15 +164,19 @@ class CatalogController extends AbstractController
             ]);
         $form->handleRequest($request);
 
-        // if($form->isSubmitted() && $form->isValid()) {
-        if($request->get('ajax')) {
+        //génération du form recherche name or editor
+        $formNameOrEditor = $this->createForm(SearchOccasionNameOrEditorInCatalogueType::class, null, ['method' => 'GET',]);
+        $formNameOrEditor->handleRequest($request);
 
-            $search = $form->get('search')->getData();
+        // if($form->isSubmitted() && $form->isValid()) {
+        if($form->isSubmitted() OR $formNameOrEditor->isSubmitted() && $formNameOrEditor->isValid()) {
+
+            $search = $formNameOrEditor->get('search')->getData() ?? '';
             $phrase = str_replace(" ","%",$search);
-            $age_start = $form->get('age_start')->getData();
+            $age_start = $form->get('age_start')->getData() ?? [];
             $age_end = $choices['start_and_end_ages']['end'];
-            $players = $form->get('playerMin')->getData();
-            $durations = $form->get('duration')->getData();
+            $players = $form->get('playerMin')->getData() ?? [];
+            $durations = $form->get('duration')->getData() ?? [];
 
             //TODO à montrer et activer si ok Antoine
             //$this->catalogueService->saveQueryInDataBase($request, $phrase, $age_start, $players, $durations);
@@ -191,8 +196,9 @@ class CatalogController extends AbstractController
             12, /*limit per page*/
         );
     
-
-        if($request->get('ajax')) {
+ 
+        //si url contient ajax et surtout ne contient pas page
+        if($request->get('ajax') && !$request->get('page')) {
 
             return new JsonResponse([
                 'content' => $this->renderView('site/pages/catalog/components/_display_occasions_results.html.twig', [
@@ -200,7 +206,9 @@ class CatalogController extends AbstractController
                     'occasions_totales' => $donneesFromDatabases,
                     'metas' => $metas,
                     'titreDeLaPage' => $choices['twig']['titleH1'],
+                    'breadcrumb' => $choices['twig']['breadcrumb'],
                     'form' => $form,
+                    'formNameOrEditor' => $formNameOrEditor,
                     'tax' => $this->taxRepository->findOneBy([]),
                     'partners' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true]),
                 ])
@@ -213,7 +221,9 @@ class CatalogController extends AbstractController
                 'occasions_totales' => $donneesFromDatabases,
                 'metas' => $metas,
                 'titreDeLaPage' => $choices['twig']['titleH1'],
+                'breadcrumb' => $choices['twig']['breadcrumb'],
                 'form' => $form,
+                'formNameOrEditor' => $formNameOrEditor,
                 'tax' => $this->taxRepository->findOneBy([]),
                 'partners' => $this->partnerRepository->findBy(['isOnline' => true, 'isDisplayOnCatalogueWhenSearchIsNull' => true]),
             ]);

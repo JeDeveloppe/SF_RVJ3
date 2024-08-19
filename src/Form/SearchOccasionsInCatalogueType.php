@@ -26,14 +26,14 @@ class SearchOccasionsInCatalogueType extends AbstractType
     {
 
         $builder
-            ->add('search', TextType::class, [
-                'label' => 'Je recherche:',
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'Un jeu, un éditeur...',
-                    'class' => 'form-control'
-                ]
-            ])
+            // ->add('search', TextType::class, [
+            //     'label' => 'Je recherche:',
+            //     'required' => false,
+            //     'attr' => [
+            //         'placeholder' => 'Un jeu, un éditeur...',
+            //         'class' => 'form-control'
+            //     ]
+            // ])
             ->add('playerMin', ChoiceType::class, [
                 'label' => 'Nombre de joueur(s):',
                 'attr' => [

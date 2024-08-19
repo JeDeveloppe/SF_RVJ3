@@ -8,7 +8,12 @@
                 {% set jeu_dispo = 'jeux d\'occasion disponibles' %}
             {% endif %}
 
-                <div class="col-12 font-weight-bolder mb-3">{{ occasions_totales | length }} {{ jeu_dispo }}.</div>
+                <div class="col-12 d-flex flex-wrap justify-content-around align-items-center">
+                    <div class="col-12 col-lg-6 font-weight-bolder mb-3">{{ occasions_totales | length }} {{ jeu_dispo }}.</div>
+                    <div class="col-12 col-lg-6 mb-3 text-end pe-2">
+                        {% include "site/pages/catalog/components/_search_occasion_name_or_editor.html.twig" %}
+                    </div>
+                </div>
 
                 {% for key,occasion in occasions %}  
 

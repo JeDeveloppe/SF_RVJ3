@@ -215,7 +215,8 @@ class OccasionService
                     'end' => 6
                 ];
                 $twig = [
-                    'titleH1' => '<h1 class="col-11 text-center">Jeux pour <span class="text-purple">enfants</span></h1>'
+                    'titleH1' => 'Jeux pour <span class="text-purple">enfants</span>',
+                    'breadcrumb' => '<span class="text-purple">Tous les jeux</span> > Enfants'
                 ]; //TODO Antoine
                 break;
             case 'jeux-pour-initie-es': //? pareil que la navbar et le footer
@@ -224,7 +225,8 @@ class OccasionService
                     'end' => 12
                 ];
                 $twig = [
-                    'titleH1' => '<h1 class="col-11 text-center">Jeux pour <span class="text-purple">initié·es</span></h1>'
+                    'titleH1' => 'Jeux pour <span class="text-purple">initié·es</span>',
+                    'breadcrumb' => '<span class="text-purple">Tous les jeux</span> > Initié·es'
                 ]; //TODO Antoine
                 break;
             case 'jeux-tout-public': //? pareil que la navbar et le footer
@@ -233,7 +235,8 @@ class OccasionService
                     'end' => 11
                 ]; //TODO Antoine
                 $twig = [
-                    'titleH1' => '<h1 class="col-11 text-center">Jeux tout <span class="text-purple">puplic</span></h1>'
+                    'titleH1' => 'Jeux tout <span class="text-purple">puplic</span>',
+                    'breadcrumb' => '<span class="text-purple">Tous les jeux</span> > Tout public'
                 ]; //TODO Antoine
                 break;
             default:
@@ -242,7 +245,8 @@ class OccasionService
                     'end' => 12
                 ];
                 $twig = [
-                    'titleH1' => '<h1 class="col-11 text-center">Tous les <span class="text-purple">jeux</span></h1>'
+                    'titleH1' => 'Tous les <span class="text-purple">jeux</span>',
+                    'breadcrumb' => ''
                 ]; //TODO Antoine
                 break;
         }

@@ -4,7 +4,7 @@
 {% endif %}
 
 <div class="row {{ bg_white_if_route_not_app_home }} sticky-top my-0">
-  <ul class="d-flex justify-content-around align-items-center justify-content-md-end py-2 text-uppercase bg-purple col-12 m-0">
+  <ul class="d-flex justify-content-around align-items-center justify-content-md-end pt-2 text-uppercase bg-purple col-12 m-0">
     <li class="list-unstyled mx-2">
       <a class="text-white text-decoration-none small" href="{{ path('app_who_are_we') }}">L'association</a>
     </li>
@@ -15,11 +15,11 @@
       <a class="text-white text-decoration-none small" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur·rice</a>
     </li>
   </ul>
-  <div class="col-12 d-flex justify-content-around align-items-center py-0 my-0 {{ bg_white_if_route_not_app_home }}">
-    <a class="d-flex justify-content-start align-items-start" id="logoNav" href="{{ path('app_home') }}">
+  <div class="col-12 d-flex justify-content-around align-items-strecht py-0 my-0 {{ bg_white_if_route_not_app_home }}">
+    <a class="d-flex justify-content-start align-items-center" id="logoNav" href="{{ path('app_home') }}">
       <img src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo de Refaites vos jeux">
     </a>
-    <ul class="p-0 m-0 pt-3 pb-2 d-flex flex-wrap flex-column flex-md-row justify-content-around align-items-center">
+    <ul class="m-0 d-flex flex-wrap flex-column flex-md-row justify-content-around align-items-center py-2">
       <li class="list-unstyled mx-2">
         <a class="text-dark text-decoration-none" href="{{ path('app_catalogue_occasions', {'category': 'tous-les-jeux' }) }}">Tous les jeux</a>
       </li>
@@ -39,9 +39,9 @@
         <a class="btn btn-yellow" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
       </li>
     </ul>
-    <ul class="col-2 p-0 my-0 d-flex flex-column flex-sm-row">
+    <ul class="col-2 p-0 my-0 d-flex flex-column flex-sm-row justify-content-center">
       {% if is_granted('ROLE_USER') %}
-        <li class="list-unstyled dropdown col p-0 m-0 text-end">
+        <li class="list-unstyled dropdown col p-0 m-0 text-end d-flex justify-content-center align-items-center">
           <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="{{ path('member') }}">Espace membre</a>
@@ -52,7 +52,7 @@
             <a class="dropdown-item" href="{{ path('logout') }}"><i class="fa-solid fa-power-off text-danger"></i> Déconnexion</a>
           </div>
         </li>
-        <li class="list-unstyled col p-0 m-0 d-flex justify-content-center justify-content-sm-start align-items-center mt-4 mt-sm-0">
+        <li class="list-unstyled col p-0 m-0 d-flex justify-content-center justify-content-sm-start align-items-center">
           {% set cartLinkActiveOrNot = "pe-none" %} 
           {% if app.user.paniers | length > 0 %}
             {% set cartLinkActiveOrNot = ""  %}
@@ -66,7 +66,7 @@
         <li class="list-unstyled dropdown col p-0 m-0 text-center">
           <a class="text-dark" href="{{ path('app_login') }}"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
         </li>
-        <li class="list-unstyled col p-0 m-0 d-flex justify-content-center justify-content-sm-start align-items-center mt-4 mt-sm-0">
+        <li class="list-unstyled col p-0 m-0 d-flex justify-content-center justify-content-sm-start align-items-center">
           <a class="text-dark" href="{{ path('app_register') }}"><i class="fa-solid fa-user-plus"></i></a>
         </li>
       {% endif %}
