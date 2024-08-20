@@ -7,7 +7,8 @@
     {% set entityNameController = 'Occasion' %}
 
 
-    <div id="{{ setEntityId }}" class="card_ d-flex flex-wrap h-100">
+    <div id="{{ setEntityId }}" class="card_ d-flex flex-wrap h-100 mx-2 position-relative">
+        <a href="{{ path('occasion', {'reference_occasion': occasion.reference, 'editor_slug': occasion.boite.editor.slug, 'boite_slug': occasion.boite.slug | lower }) }}" class="_card_full_button"></a>
         <div class="card_div_img">
             <img class="card_catalog_img" src="{{ vich_uploader_asset(boite, 'imageFile') }}" alt="Image de la boite de jeu {{ boite.name }} - {{ boite.editor }}"/><br/>
         </div>
@@ -18,16 +19,20 @@
         <div class="col-12 px-0 mb-2">
             {% include "components/catalog/_durationOfTheGame.html.twig" with {'item': boite } %}
         </div>
-        <div class="col-12 d-flex flex-wrap justify-content-around align-items-center mb-1 px-0">
-            <div class="col-6 p-0 text-yellow">
+        <div class="col-12 d-flex flex-wrap justify-content-around align-items-center mb-3 px-0">
+            <div class="col-6 p-0 text-orange fw-bold">
                 {% include "components/occasion/_display_occasion_price.html.twig" with {'product': product, 'tax': tax} %}
             </div>
-            <div class="col-6 d-flex justify-content-end p-0">
+            <div class="col-6 d-flex justify-content-end">
+                <a class="btn btn-dark _card_button_link_add_in_cart d-flex justify-content-center align-items-center text-white" href="{{ path('panier_add_occasion', {'occasion_id': occasion.id }) }}">
+                    <img src="{{ asset('build/images/design/catalogs/cart.svg') }}" alt="Logo accès panier">
+                </a>
+            </div>
+
+            {# <div class="col-6 d-flex justify-content-end p-0">
                 {% include "site/pages/catalog/components/_cardOccasion_button.html.twig" with {'item': card_item }%}
-            </div>
-            <div class="col-12 d-flex justify-content-center mt-2">
-                {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': entityNameController} %}
-            </div>
+            </div> #}
+            {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': entityNameController} %}
         </div>
     </div>
 

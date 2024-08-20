@@ -94,6 +94,28 @@
     padding: 0 5%;
 }
 
+._card_full_button{
+    background: transparent;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    z-index: 1;
+}
+
+._card_button_link_add_in_cart{
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    z-index: 2;
+}
+._card_button_link_add_in_cart:hover{
+    opacity: 0.8;
+    scale: 1.1;
+}
+
 .card_ > .info_photo {
     font-size: 10px;
 }
