@@ -57,3 +57,28 @@ function getCookie(cname) {
   return "";
 }
 // End CookieBand effect 
+
+//header effect
+let scrollFromTop = document.documentElement.scrollTop;
+
+document.addEventListener("scroll", scrollFunction);
+
+function scrollFunction() {
+  let currentScroll = document.documentElement.scrollTop;
+  let nav_header = document.getElementById("nav_header");
+  let pre_header = document.getElementById("pre_header");
+
+  if(currentScroll < 50) {
+
+    nav_header.classList.remove("py-0");
+    nav_header.classList.add("py-3");
+
+  }else{
+
+    nav_header.classList.remove("py-3");
+    nav_header.classList.add("py-0");
+
+  }
+}
+
+// End Header effect

@@ -4,7 +4,7 @@
 {% endif %}
 
 <div class="row {{ bg_white_if_route_not_app_home }} sticky-top my-0">
-  <ul class="d-flex justify-content-around align-items-center justify-content-md-end pt-2 text-uppercase bg-purple col-12 m-0">
+  <ul id="pre_header" class="d-flex justify-content-around align-items-center justify-content-md-end pt-2 text-uppercase bg-purple col-12 m-0">
     <li class="list-unstyled mx-2">
       <a class="text-white text-decoration-none small" href="{{ path('app_who_are_we') }}">L'association</a>
     </li>
@@ -15,7 +15,7 @@
       <a class="text-white text-decoration-none small" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur·rice</a>
     </li>
   </ul>
-  <div class="col-12 d-flex justify-content-around align-items-strecht py-0 my-0 {{ bg_white_if_route_not_app_home }}">
+  <div id="nav_header" class="col-12 d-flex justify-content-around align-items-strecht py-3 my-0 {{ bg_white_if_route_not_app_home }}">
     <a class="d-flex justify-content-start align-items-center" id="logoNav" href="{{ path('app_home') }}">
       <img src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo de Refaites vos jeux">
     </a>
