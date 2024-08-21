@@ -14,7 +14,7 @@
     --bs-red: #dc3545;
     --bs-orange: #FFA83E;
     --bs-yellow: #FEC538;
-    --bs-green: #198754;
+    --bs-green: #1DBA9D;
     --bs-teal: #00BB9D;
     --bs-cyan: #0dcaf0;
     --bs-white: #fff;
@@ -8347,6 +8347,10 @@ fieldset:disabled .btn {
 
 .bg-white {
     background-color: #fff !important
+}
+
+.bg-green {
+    background-color: var(--bs-green) !important
 }
 
 .bg-transparent {
