@@ -14,7 +14,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DocumentParametreRepository;
 use App\Repository\LevelRepository;
+use App\Repository\PanierRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserService
@@ -30,7 +32,9 @@ class UserService
         private PartnerRepository $partnerRepository,
         private DocumentParametreRepository $documentParametreRepository,
         private Security $security,
-        private LevelRepository $levelRepository
+        private PanierRepository $panierRepository,
+        private LevelRepository $levelRepository,
+        private RequestStack $requestStack
         ){
     }
 
@@ -306,4 +310,20 @@ class UserService
         return $user;
 
     }
+
+    // public function transformPaniersCreatedWhitoutUserToNewUserLogged(User $newUser, array $paniersInSession)
+    // {
+
+    //     $session = $this->requestStack->getSession();
+
+    //     dd($paniersInSession);
+
+    //     foreach($paniers as $panier_ligne){
+    //         $panier_ligne->setUser($newUser)->setTokenSession($session->get('tokenSession'));
+    //         $this->em->persist($panier_ligne);
+    //     }
+
+    //     $this->em->flush();
+
+    // }
 }

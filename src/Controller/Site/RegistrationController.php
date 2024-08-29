@@ -6,6 +6,7 @@ use App\Entity\User;
 use DateTimeImmutable;
 use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
+use App\Service\UserService;
 use App\Service\UtilitiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +27,7 @@ class RegistrationController extends AbstractController
         UserAuthenticatorInterface $userAuthenticator,
         UserAuthenticator $authenticator,
         EntityManagerInterface $entityManager,
+        UserService $userService,
         UtilitiesService $utilitiesService): Response
     {
         $user = new User();
@@ -53,6 +55,10 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
+
+            $userService->transformPaniersCreatedWhitoutUserToNewUserLogged($user);
+
+
             $user->setAccountnumber($utilitiesService->generateAccountNumber($user->getId()));
             $entityManager->persist($user);
             $entityManager->flush();

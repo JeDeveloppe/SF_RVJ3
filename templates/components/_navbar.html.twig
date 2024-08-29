@@ -2,7 +2,6 @@
 {% if app.request.get('_route') == 'app_home'  %}
   {% set bg_white_if_route_not_app_home = 'bg-secondary' %}
 {% endif %}
-
 <div class="row {{ bg_white_if_route_not_app_home }} sticky-top my-0">
   <ul id="pre_header" class="d-flex justify-content-around align-items-center justify-content-md-end pt-2 text-uppercase bg-purple col-12 m-0">
     <li class="list-unstyled mx-2">
@@ -52,24 +51,24 @@
             <a class="dropdown-item" href="{{ path('logout') }}"><i class="fa-solid fa-power-off text-danger"></i> Déconnexion</a>
           </div>
         </li>
-        <li class="list-unstyled col p-0 pe-sm-2 m-0 d-flex justify-content-center justify-content-sm-start align-items-center">
-          {% set cartLinkActiveOrNot = "pe-none" %} 
-          {% if app.user.paniers | length > 0 %}
-            {% set cartLinkActiveOrNot = ""  %}
-          {% endif %}
-          <a id="cart_link" class="text-dark {{ cartLinkActiveOrNot }}" href="{{ path('panier_start') }}">
-            <img id="cart_link_logo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier">
-            <span id="cart_link_value">{{ app.user.paniers | length }}</span>
-          </a>
-        </li>
       {% else %}
         <li class="list-unstyled dropdown col p-0 pe-sm-2 m-0 d-flex justify-content-center justify-content-sm-end align-items-center">
           <a class="text-dark" href="{{ path('app_login') }}"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
         </li>
+      {% endif %}
+        <li class="list-unstyled col p-0 pe-sm-2 m-0 d-flex justify-content-center justify-content-sm-start align-items-center">
+          <a id="cart_link" class="text-dark" href="{{ path('panier_start') }}">
+            <img id="cart_link_logo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier">
+            {% set countPanier = 0 %}
+            {% for categorie in app.session.get('paniers') %}
+              {% set countPanier = countPanier + categorie | length %}
+            {% endfor %}
+            <span id="cart_link_value">{{ countPanier  }}</span>
+          </a>
+        </li>
         <li class="list-unstyled col p-0 m-0 d-flex justify-content-center justify-content-sm-start align-items-center">
           <a class="text-dark" href="{{ path('app_register') }}"><i class="fa-solid fa-user-plus"></i></a>
         </li>
-      {% endif %}
     </ul>
   </div>
 </div>

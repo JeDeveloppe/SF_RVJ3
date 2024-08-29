@@ -42,6 +42,9 @@ class Panier
     #[ORM\Column(nullable: true)]
     private ?int $unitPriceExclusingTax = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $tokenSession = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -158,5 +161,17 @@ class Panier
     public function __toString()
     {
         return $this->id;
+    }
+
+    public function getTokenSession(): ?string
+    {
+        return $this->tokenSession;
+    }
+
+    public function setTokenSession(?string $tokenSession): static
+    {
+        $this->tokenSession = $tokenSession;
+
+        return $this;
     }
 }

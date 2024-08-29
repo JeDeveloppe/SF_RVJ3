@@ -8,8 +8,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\CatalogOccasionSearchRepository;
+use App\Repository\OccasionRepository;
+use App\Repository\PanierRepository;
 use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CatalogueService
 {
@@ -17,7 +20,10 @@ class CatalogueService
         private UtilitiesService $utilitiesService,
         private Security $security,
         private EntityManagerInterface $em,
-        private CatalogOccasionSearchRepository $catalogOccasionSearchRepository
+        private CatalogOccasionSearchRepository $catalogOccasionSearchRepository,
+        private OccasionRepository $occasionRepository,
+        private RequestStack $requestStack,
+        private PanierRepository $panierRepository
         ){
     }
 
@@ -41,5 +47,19 @@ class CatalogueService
                 $this->em->flush();
             }
         }
+    }
+
+    public function returnOccasionsWithoutOccasionsInCart(array $donneesFromDatabases)
+    {
+   
+            $session = $this->requestStack->getSession();
+            $paniersInSession = $session->get('paniers');
+     
+            $occasions_from_panier = [];
+            foreach($paniersInSession['occasions'] as $key => $panierInSession){
+                $occasions_from_panier[] = $this->occasionRepository->findOneBy(['id' => $key]);
+            }
+
+        return array_diff($donneesFromDatabases, $occasions_from_panier);
     }
 }

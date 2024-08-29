@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Panier;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -73,24 +74,28 @@ class UtilitiesService
         $ht * (1 + ($tax / 100));
     }
 
-    public function totauxItems($items)
+    public function totauxByPanierGroup($items)
     {
 
         $totaux = [];
         $price = 0;
         $weigth = 0;
 
+
         foreach($items as $item){
 
             //en fonction du calcul voulu des articles ou occasions
             if(!empty($item->getOccasion())){
-                $weigth += $item->getOccasion()->getBoite()->getWeigth();  
+                $weigth += $item->getOccasion()->getBoite()->getWeigth(); 
+
             }else{
+                
                 $weigth += $item->getItem()->getWeigth() * $item->getQte();  
             }
 
             $price += $item->getPriceWithoutTax();
         }
+        
 
         $totaux['price'] = $price;
         $totaux['weigth'] = $weigth;
@@ -195,5 +200,16 @@ class UtilitiesService
 
         return $accountTag.$zeros.$id;
 
+    }
+
+    public function countNumberOfProductsInSessionCart(array $paniersInSession)
+    {
+
+        $count = 0;
+        foreach($paniersInSession as $panier) {
+            $count += count($panier);
+        }
+
+        return $count;
     }
 }

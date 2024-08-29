@@ -185,8 +185,8 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin/traitement-quotidien/devis', name: 'admin_traited_daily_devis')]
     public function devisTraitedDaily(): Response
     {
-        $entityDevisWithoutPrice = $this->documentStatusRepository->findOneBy(['action' => 'DEVIS_WITHOUT_PRICE']);
-        $entityDevisWithPrice = $this->documentStatusRepository->findOneBy(['action' => 'NO_PAID']);
+        $entityDevisWithoutPrice = $this->documentStatusRepository->findOneBy(['action' => $_ENV['DEVIS_WITHOUT_PRICE_LABEL']]);
+        $entityDevisWithPrice = $this->documentStatusRepository->findOneBy(['action' => $_ENV['DEVIS_NO_PAID_LABEL']]);
 
         $devisWithoutPrice = $this->documentRepository->findBy(['documentStatus' => $entityDevisWithoutPrice]);
         $devisWithPrice = $this->documentRepository->findBy(['documentStatus' => $entityDevisWithPrice, 'isDeleteByUser' => false]);

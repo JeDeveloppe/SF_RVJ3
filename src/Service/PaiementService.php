@@ -206,7 +206,7 @@ class PaiementService
 
 
 
-        $result = $this->client->request('POST', 'https://api.helloasso.com/v5/organizations/refaites-vos-jeux/checkout-intents',
+        $result = $this->client->request('POST', $_ENV['HELLO_ASSO_URL_API'],
         [
             'headers' => [
                 'Accept' => 'application/json',
@@ -386,7 +386,7 @@ class PaiementService
     public function helloAssoAuth()
     {
 
-        $response = $this->client->request('POST', 'https://api.helloasso.com/oauth2/token', [
+        $response = $this->client->request('POST', $_ENV['HELLO_ASSO_URL_TOKEN'], [
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded'
             ],

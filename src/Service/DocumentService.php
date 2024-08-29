@@ -163,11 +163,11 @@ class DocumentService
 
         if(count($panierParams['panier_boites']) > 0){
 
-            $actionToSearch = 'DEVIS_WITHOUT_PRICE'; //? doit etre comme Service / importV2 / CreationDocumentStatusService
+            $actionToSearch = $_ENV['DEVIS_WITHOUT_PRICE_LABEL']; //? doit etre comme Service / importV2 / CreationDocumentStatusService
 
         }else{
 
-            $actionToSearch = 'NO_PAID'; //? doit etre comme Service / importV2 / CreationDocumentStatusService
+            $actionToSearch = $_ENV['DEVIS_NO_PAID_LABEL']; //? doit etre comme Service / importV2 / CreationDocumentStatusService
         }
 
         $document

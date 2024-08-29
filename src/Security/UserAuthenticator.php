@@ -2,7 +2,10 @@
 
 namespace App\Security;
 
+use App\Repository\PanierRepository;
 use App\Repository\UserRepository;
+use App\Service\UserService;
+use App\Service\UtilitiesService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -28,7 +31,10 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
         private UserRepository $userRepository,
-        private EntityManagerInterface $entityManagerInterface
+        private EntityManagerInterface $entityManagerInterface,
+        private PanierRepository $panierRepository,
+        private UserService $userService,
+        private UtilitiesService $utilitiesService
         )
     {
     }
@@ -59,11 +65,13 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
         //? On enregistre la dernière connexion
         $user = $this->userRepository->findOneBy(['email' => $request->getSession()->get(Security::LAST_USERNAME)]);
 
+
         if($user){
 
             $user->setLastvisite(new DateTimeImmutable('now'));
             $this->entityManagerInterface->persist($user);
             $this->entityManagerInterface->flush();
+
         }
 
         // For example:

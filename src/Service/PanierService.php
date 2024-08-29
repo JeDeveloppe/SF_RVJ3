@@ -2,21 +2,24 @@
 
 namespace App\Service;
 
+use App\Entity\Occasion;
+use App\Entity\User;
 use App\Entity\Panier;
-use App\Entity\ShippingMethod;
 use DateTimeImmutable;
+use App\Entity\ShippingMethod;
+use App\Repository\TaxRepository;
 use App\Repository\ItemRepository;
 use App\Repository\PanierRepository;
 use App\Repository\DeliveryRepository;
 use App\Repository\DiscountRepository;
-use App\Repository\DocumentParametreRepository;
 use App\Repository\OccasionRepository;
-use App\Repository\ShippingMethodRepository;
-use App\Repository\SiteSettingRepository;
-use App\Repository\TaxRepository;
-use App\Repository\VoucherDiscountRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\SiteSettingRepository;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Repository\ShippingMethodRepository;
+use App\Repository\VoucherDiscountRepository;
+use App\Repository\DocumentParametreRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class PanierService
@@ -35,42 +38,28 @@ class PanierService
         private DocumentParametreRepository $documentParametreRepository,
         private Security $security,
         private RequestStack $request,
+        private UserRepository $userRepository,
         private VoucherDiscountRepository $voucherDiscountRepository
         ){
     }
 
-    public function addOccasionInCart($occasion_id,$user)
+    public function addOccasionInCart(int $occasion_id, int $qte)
     {
 
         $occasion = $this->occasionRepository->findOneBy(['id' => $occasion_id, 'isOnline' => true]);
 
         if(!$occasion){
 
-            $reponse = ['warning', 'Occasion inconnu ou déjà réservé dans un panier !'];
+            $reponse = ['warning', 'Occasion inconnu ou déjà réservé !'];
 
         }else{
 
-            //?en fonction du prix s'il est remisé ou pas
-            if($occasion->getDiscountedPriceWithoutTax() > 0){
-                $price = $occasion->getDiscountedPriceWithoutTax();
-            }else{
-                $price = $occasion->getPriceWithoutTax();
-            }
+            $session = $this->request->getSession();
 
-            //?on crée la ligne du panier
-            $panier = new Panier();
-            $panier->setOccasion($occasion)
-                ->setCreatedAt( new DateTimeImmutable('now'))
-                ->setUser($user)
-                ->setPriceWithoutTax($price);
-            $this->em->persist($panier);
+            $paniers = $session->get('paniers', []);
+            $paniers['occasions'][$occasion_id] = $qte;
 
-            //?on met l'occasion hors ligne
-            $occasion->setIsOnline(false);
-            $this->em->persist($occasion);
-
-            //?on sauvegarde le tout
-            $this->em->flush();
+            $session->set('paniers', $paniers);
 
             $reponse = ['success', 'Occasion ajouté au panier'];
         }
@@ -78,36 +67,25 @@ class PanierService
         return $reponse;
     }
 
-    public function deleteItemInCart($item_id,$user)
+    public function deleteCartLine(string $category, int $cart_id)
     {
+        $user = $this->security->getUser();
+        $session = $this->request->getSession();
+        $paniersInSession = $session->get('paniers');
+        $panier = null;
 
-        $panier = $this->panierRepository->findOneBy(['id' => $item_id, 'user' => $user]);
+        $panier = $paniersInSession[$category];
 
-        if(!$panier){
+        if(is_null($panier)){
 
             $reponse = ['warning', 'Ligne de panier inconnue !'];
 
         }else{
 
-            if(!empty($panier->getOccasion())){
-                //?on récupère l'occasion
-                $occasion = $panier->getOccasion();
-                //?on remet en ligne l'occasion
-                $occasion->setIsOnline(true);
-                $this->em->persist($occasion);
-            }else if(!empty($panier->getItem())){
-                //?on récupère l'article
-                $item = $panier->getItem();
-                //?on remet les articles en ligne
-                $item->setStockForSale($item->getStockForSale() + $panier->getQte());
-                $this->em->persist($item);
-            }
-
-            //? on supprime la ligne du panier
-            $this->em->remove($panier);
-
-            //?on sauvegarde le tout
-            $this->em->flush();
+            //? ON MET A JOUR LA SESSION
+            unset($paniersInSession[$category][$cart_id]);
+            //on remet en memoire
+            $session->set('paniers', $paniersInSession);
 
             $reponse = ['success', 'Ligne supprimée du panier'];
         }
@@ -169,19 +147,34 @@ class PanierService
         return $reponse;
     }
 
-    public function calculateAllCart($user)
+    public function calculateAllCart($paniers)
     {
         $session = $this->request->getSession();
+        $user = $this->security->getUser();
         $shippingMethod = $this->shippingMethodRepository->findOneById($session->get('shippingMethodId'));
         $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
-        $responses = [];
-        //? calcul de la remise sur les articles
-        $responses['remises']['volume'] = $this->calculateRemise($this->panierRepository->findBy(['user' => $user]));
-        
-        $responses['shippingMethod'] = $shippingMethod;
-        $responses['panier_occasions'] = $this->panierRepository->findOccasionsByUser($user);
-        $responses['panier_boites'] = $this->panierRepository->findBoitesByUser($user);
-        $responses['panier_items'] = $this->panierRepository->findItemsByUser($user);
+        $now = new DateTimeImmutable('now');
+
+        $responses = $this->separateBoitesItemsAndOccasion($paniers);
+
+        if($user){
+            $responses['preparationHt'] = $docParams->getPreparation();
+            // $responses['panier_occasions'] = $this->panierRepository->findOccasionsByUser($user);
+            // $responses['panier_boites'] = $this->panierRepository->findBoitesByUser($user);
+            // $responses['panier_items'] = $this->panierRepository->findItemsByUser($user);
+
+            //gestion membership au niveau du panier
+            if($user->getMembership() > $now){
+                $responses['preparationHt'] = 0;
+            }
+
+        }else{
+
+            $responses['preparationHt'] = $docParams->getPreparation();
+            $responses['remises']['volume'] = $this->calculateRemise($paniers);
+
+        }
+
         $responses['tax'] = $this->taxRepository->findOneBy([]);
         $responses['remises']['voucher']['voucherMax'] = 0;
         $responses['remises']['voucher']['actif'] = false;
@@ -193,18 +186,8 @@ class PanierService
             $responses['remises']['voucher']['actif'] = true;
         }
 
-        $now = new DateTimeImmutable('now');
 
-        //gestion membership au niveau du panier
-        if($user->getMembership() > $now){
 
-            $responses['preparationHt'] = 0;
-
-        }else{
-
-            $responses['preparationHt'] = $docParams->getPreparation();
-
-        }
         
 
         //?action sur le bouton payer / demande de devis du panier
@@ -215,13 +198,17 @@ class PanierService
             $responses['redirectAfterSubmitPanierForPaiement'] = false;
         }
 
-        $responses['totauxItems'] = $this->utilitiesService->totauxItems($responses['panier_items']);
-        $responses['totauxOccasions'] = $this->utilitiesService->totauxItems($responses['panier_occasions']);
-        $responses['totauxBoites'] = $this->utilitiesService->totauxItems($responses['panier_boites']);
+        $responses['totauxItems'] = $this->utilitiesService->totauxByPanierGroup($responses['panier_items']);
+        $responses['totauxOccasions'] = $this->utilitiesService->totauxByPanierGroup($responses['panier_occasions']);
+        $responses['totauxBoites'] = $this->utilitiesService->totauxByPanierGroup($responses['panier_boites']);
 
         $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
         $weigthPanier = $responses['weigthPanier'];
 
+        //? calcul de la remise sur les articles
+        $responses['remises']['volume'] = $this->calculateRemise($this->panierRepository->findBy(['user' => $user]));
+
+        $responses['shippingMethod'] = $shippingMethod;
 
         if(is_null($shippingMethod)){
 
@@ -235,7 +222,7 @@ class PanierService
 
         $responses['remises']['volume']['remiseDeQte'] = round($responses['totauxItems']['price'] * $responses['remises']['volume']['value'] / 100);
         
-        // $sousTotalItemHTAfterRemiseVolume = $responses['totauxItems']['price'] - $responses['remises']['volume']['remiseDeQte'];
+        $sousTotalItemHTAfterRemiseVolume = $responses['totauxItems']['price'] - $responses['remises']['volume']['remiseDeQte'];
         $totalHTItemsAndBoite = round(($responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price']) - $responses['remises']['volume']['remiseDeQte']);
 
         //? calcule de la remise sur les articles
@@ -248,6 +235,7 @@ class PanierService
             $responses['remises']['voucher']['used'] = $totalHTItemsAndBoite;
             $responses['remises']['voucher']['voucherRemaining'] = $diff * -1; // reste à utilisé du bon
         }
+
 
 
         $responses['totalPanierHt'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']) - $responses['remises']['volume']['remiseDeQte'] - $responses['remises']['voucher']['used'];
@@ -327,5 +315,71 @@ class PanierService
         $result = $delivery->getPriceExcludingTax();
 
         return $result;
+    }
+
+    public function separateBoitesItemsAndOccasion(array $paniers)
+    {
+
+        //responses['panier_boites'], $responses['panier_items'], $responses['panier_occasions']
+
+        $responses['panier_occasions'] = [];
+        $responses['panier_items'] = [];
+        $responses['panier_boites'] = [];
+
+        foreach($paniers as $panier){
+            if(!is_null($panier->getOccasion())){
+                $responses['panier_occasions'][] = $panier;
+            }
+
+            if(!is_null($panier->getItem())){
+                $responses['panier_items'][] = $panier;
+            }
+
+            if(!is_null($panier->getBoite())){
+                $responses['panier_boites'][] = $panier;
+            }
+
+        }
+
+        return $responses;
+    }
+
+    public function returnArrayPaniersEntitiesFromPanierSession(array $paniersInSession)
+    {
+
+        foreach($paniersInSession as $categorie =>  $products){
+
+            if($categorie == 'occasions'){
+
+                foreach($products as $occasion_id => $qte){
+                    $occasion = $this->occasionRepository->findOneBy(['id' => $occasion_id]);
+
+                    //?en fonction du prix s'il est remisé ou pas
+                    if($occasion->getDiscountedPriceWithoutTax() > 0){
+
+                        $price = $occasion->getDiscountedPriceWithoutTax();
+
+                    }else{
+
+                        $price = $occasion->getPriceWithoutTax();
+                    }
+
+                    //?on crée la ligne du panier
+                    $panier = new Panier();
+                    $panier->setOccasion($occasion)
+                        ->setCreatedAt( new DateTimeImmutable('now'))
+                        ->setPriceWithoutTax($price)
+                        ->setQte($qte);
+                    // $this->em->persist($panier);
+
+                    $paniers[] = $panier;
+                }
+            }
+            if($categorie == 'items'){
+                //TODO items
+            }
+        }
+
+        return $paniers;
     }
 }

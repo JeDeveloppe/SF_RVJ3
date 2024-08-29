@@ -3264,6 +3264,18 @@ fieldset:disabled .btn {
     opacity: 90%;
 }
 
+.btn-purple{
+    color: var(--bs-white);
+    background-color: var(--bs-purple);
+    border-color: var(--bs-purple)
+  }
+.btn-purple:hover {
+    color: var(--bs-dark);
+    background-color: var(--bs-purple);
+    border-color: var(--bs-purple);
+    opacity: 90%;
+}
+
 .btn-success {
     color: #fff;
     background-color: #198754;

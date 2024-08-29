@@ -44,12 +44,12 @@ class DocumentStatusService
         ];
         $statusDocuments[] = [
             'name' => $_ENV['DOCUMENT_STATUS_NO_PAID'], 
-            'action' => 'NO_PAID',
+            'action' => $_ENV['DEVIS_NO_PAID_LABEL'],
             'isTreatedDaily' => false
         ];
         $statusDocuments[] = [
             'name' => $_ENV['DOCUMENT_STATUS_QUOTE_WAITING_FOR_PRICE'], 
-            'action' => 'DEVIS_WITHOUT_PRICE',
+            'action' => $_ENV['DEVIS_WITHOUT_PRICE_LABEL'],
             'isTreatedDaily' => false
         ];
 

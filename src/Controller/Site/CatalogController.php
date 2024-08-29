@@ -181,8 +181,9 @@ class CatalogController extends AbstractController
             //TODO à montrer et activer si ok Antoine
             //$this->catalogueService->saveQueryInDataBase($request, $phrase, $age_start, $players, $durations);
 
+
             $donneesFromDatabases = $this->occasionRepository->searchOccasionsInCatalogue($phrase, $age_start, $age_end, $players, $durations, $choices);
-        
+            //TODO acces session ou database pour supprimer occas dans paniers
         }else{
 
             //on cherche l'ensemble du catalogue
@@ -190,8 +191,10 @@ class CatalogController extends AbstractController
 
         }
 
+        $diff = $this->catalogueService->returnOccasionsWithoutOccasionsInCart($donneesFromDatabases);
+
         $occasions = $this->paginator->paginate(
-            $donneesFromDatabases, /* query NOT result */
+            $diff, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
             12, /*limit per page*/
         );

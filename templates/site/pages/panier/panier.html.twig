@@ -7,7 +7,6 @@
 
 {% include "site/pages/panier/components/_header_panier.html.twig" with {'page': 'panier'} %}
 
-
 <div class="row justify-content-center bg-white py-5 align-items-start">
     <!-- partie panier -->
     <div class="col-11 col-md-8 col-lg-6 d-flex flex-wrap">
@@ -19,9 +18,18 @@
         <h3 class="col-12 px-0">Récapitulatif</h3>
             <div class="col-12 card rounded-4 p-0">
                 {% include "site/pages/panier/components/_recapitulatif.html.twig" with {'displayOccasions': true, 'displayItems': true, 'displayVoucher': true, 'displayShippingMethod': true, 'javascript': true } %}
-                <div class="col-11 d-flex justify-content-end my-2">
-                    <a id="button_next" class="btn btn-yellow" href="{{ path('panier_addresses') }}">Choisir les adresses <i class="fa-solid fa-forward-step ms-2"></i></a>
-                </div>
+                {% if app.user.email is defined %}
+                    <div class="col-11 d-flex justify-content-end my-2">
+                        <a id="button_next" class="btn btn-yellow" href="{{ path('panier_addresses') }}">Choisir les adresses <i class="fa-solid fa-forward-step ms-2"></i></a>
+                    </div>
+                {% else %}
+                    <div class="col-11 d-flex justify-content-end my-2">
+                        <div id="button_next"  class="btn-group" role="group" aria-label="Basic example">
+                            <a href="{{ path('app_login') }}" class="btn btn-yellow">Se connecter</a>
+                            <a href="{{ path('app_register') }}" class="btn btn-purple">S'inscrire</a>
+                        </div>
+                    </div>                 
+                {% endif %}
             </div>
     </div>
 </div>
