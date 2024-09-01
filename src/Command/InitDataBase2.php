@@ -40,7 +40,7 @@ class InitDataBase2 extends Command
     public function __construct(
             private AdresseService $adresseService,
             private BoiteService $boiteService,
-            private OffSiteOccasionSaleService $offSiteOccasionSaleServiceService,
+            private OffSiteOccasionSaleService $offSiteOccasionSaleService,
             private MeansOffPayementService $meansOffPayementService,
             private ShippingMethodService $shippingMethodService,
             private DocumentLigneService $documentLigneService,
@@ -114,7 +114,7 @@ class InitDataBase2 extends Command
         $this->occasionService->importOccasions($io);
 
         //on cree les mouvements des occasions
-        $this->offSiteOccasionSaleServiceService->importMouvementsOccasions($io);
+        $this->offSiteOccasionSaleService->importMouvementsOccasions($io);
 
         //on met a jour les occasions avec les mouvements
         $this->occasionService->updateOccasionMouvement($io);

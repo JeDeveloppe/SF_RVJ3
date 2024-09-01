@@ -3,14 +3,14 @@
   {% set bg_white_if_route_not_app_home = 'bg-secondary' %}
 {% endif %}
 <div class="row {{ bg_white_if_route_not_app_home }} sticky-top my-0">
-  <ul id="pre_header" class="d-flex justify-content-around align-items-center justify-content-md-end pt-2 text-uppercase bg-purple col-12 m-0">
-    <li class="list-unstyled mx-2">
-      <a class="text-white text-decoration-none small" href="{{ path('app_who_are_we') }}">L'association</a>
+  <ul id="pre_header" class="d-flex justify-content-around align-items-center justify-content-md-end text-uppercase bg-purple col-12 py-2">
+    <li class="list-unstyled mx-4 text-center">
+      <a class="text-white text-decoration-none small" href="{{ path('app_support_us') }}">Soutenir l'association</a>
     </li>
-    <li class="list-unstyled mx-2">
+    <li class="list-unstyled mx-4 text-center">
       <a class="text-white text-decoration-none small" href="{{ path('app_prestations') }}">Prestations</a>
     </li>
-    <li class="list-unstyled mx-2">
+    <li class="list-unstyled mx-4 text-center">
       <a class="text-white text-decoration-none small" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur·rice</a>
     </li>
   </ul>

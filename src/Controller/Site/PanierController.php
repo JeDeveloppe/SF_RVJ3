@@ -231,6 +231,7 @@ class PanierController extends AbstractController
         
         //?on genere un mega tableau d'entités Panier()
         $paniers = $this->panierService->returnArrayPaniersEntitiesFromPanierSession($session->get('paniers'));
+
         $billingAddressId = $session->get('billingAddressId');
         $deliveryAddressId = $session->get('deliveryAddressId');
         $shippingMethodId = $session->get('shippingMethodId');

@@ -164,21 +164,12 @@
     {# PARTIE BOUTONS #}
     {% if document.billNumber is null %}
         <div class="row py-5 bg-white">
-            <div class="col-6 d-flex flex-column justify-content-center align-items-center">
-                <a href="{{ path('paiement', {'tokenDocument': document.token}) }}" class="btn btn-success btn-lg" >Payer </a>
-                <div class="col-6 mt-4 text-center pb-3">
-                    avec {% include "components/paiement/_logo_paiement_with.html.twig" %}
-                </div>
+            <div class="col-6 d-flex flex-row justify-content-center align-items-center">
+                    {% include "site/pages/panier/components/_acceptCartForm.html.twig" %}
             </div>
-            {# <div class="col-6 d-flex justify-content-around">
-                <a href="{{ path('paiement', {'tokenDocument': document.token}) }}" class="btn btn-success" >Payer avec {{ app.request.server.get('PAIEMENT_MODULE') }}</a><br/><br/>
-                
-                {% include "components/paiement/_logo_paiement_with.html.twig" %}
-
-            </div> #}
 
             {% if app.user is not null and app.user.password == document.user.password %}
-                <div class="ccol-10 col-xl-2 mx-auto text-center">
+                <div class="col-6 text-center">
                     <a href="{{ path('member_delete_document', {'tokenDocument': document.token}) }}" class="btn btn-outline-danger" >Annuler le devis</a>
                 </div>
             {% endif %}

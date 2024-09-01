@@ -18,7 +18,6 @@ use App\Entity\DocumentLineTotals;
 use App\Repository\ItemRepository;
 use App\Repository\UserRepository;
 use App\Entity\Returndetailstostock;
-use App\Entity\ShippingMethod;
 use App\Repository\AddressRepository;
 use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
@@ -35,6 +34,7 @@ use App\Repository\LegalInformationRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use App\Repository\DocumentParametreRepository;
+use App\Repository\OffSiteOccasionSaleRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -65,7 +65,8 @@ class DocumentService
         private CollectionPointRepository $collectionPointRepository,
         private VoucherDiscountRepository $voucherDiscountRepository,
         private DocumentsendingRepository $documentsendingRepository,
-        private TaxRepository $taxRepository
+        private TaxRepository $taxRepository,
+        private OffSiteOccasionSaleRepository $offSiteOccasionSaleRepository
         ){
     }
 
@@ -245,8 +246,14 @@ class DocumentService
                 ->setDocument($document)
                 ->setPriceExcludingTax($panier->getPriceWithoutTax());
                 $this->em->persist($documentLine);
+
+            if(!is_null($panier->getOccasion())){
+                $occasion = $panier->getOccasion();
+                $occasion->setIsOnline(false);
+                $this->em->persist($occasion);
+            }
         }
-        //on met en BDD les differentes lignes
+        //on met en BDD les differentes lignes et les occasions en hors ligne
         $this->em->flush();
 
         //on supprimer chaque panier de la BDD

@@ -78,21 +78,16 @@ class PaiementController extends AbstractController
             $response = $this->paiementService->paiementSuccessWithHelloAsso($tokenDocument);
             
             //si on a bien vérifié le paiement
-            if(array_key_exists('paiement', $response)){
+            if($response['paiement'] == true)
+            {
                 return $this->render('site/pages/paiement/success.html.twig', [
                     'token' => $tokenDocument,
                 ]);
+
             }else{
-                // $this->addFlash('warning', $response['messageFlash']);
-                if($response['redirectMethod'] == 'url'){
 
-                    return $this->redirect($response['route']);
+                return $this->redirectToRoute($response['route']);
 
-                }else{
-                    
-                    return $this->redirectToRoute($response['route']);
-
-                }
             }
         
         }else{

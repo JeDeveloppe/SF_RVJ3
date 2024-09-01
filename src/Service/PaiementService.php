@@ -21,6 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -41,7 +42,8 @@ class PaiementService
         private DocumentStatusRepository $documentStatusRepository,
         private UrlMatcherInterface $urlMatcherInterface,
         private HttpClientInterface $client,
-        private UtilitiesService $utilitiesService
+        private UtilitiesService $utilitiesService,
+        private RequestStack $requestStack
         ){
     }
 
@@ -388,7 +390,8 @@ class PaiementService
 
         $response = $this->client->request('POST', $_ENV['HELLO_ASSO_URL_TOKEN'], [
             'headers' => [
-                'Content-Type' => 'application/x-www-form-urlencoded'
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'accept' => 'application/json',
             ],
             'body' => [
                 'client_id' => $_ENV['HELLO_ASSO_CLIENT_ID'],
@@ -400,6 +403,7 @@ class PaiementService
         $content = $response->toArray();
 
         return $content['access_token'];
+
     }
 
     public function checkIfDocumentExistInDatabase(string $token):Document
@@ -490,16 +494,24 @@ class PaiementService
     {
         $document = $this->documentRepository->findOneBy(['token' => $tokenDocument]);
         $response = [];
+        
+        $session = $this->requestStack->getSession();
+
+        //on reset les paniers
+        $paniers['occasions'] = [];
+        $paniers['items'] = [];
+        $paniers['boites'] = [];
+        $session->set('paniers', $paniers);
+        $response['paiement'] = false;
 
         if(!$document){
             //pas de devis
             $response['messageFlash'] = 'Document inconnu!';
-            $response['redirectMethod'] = 'route';
             $response['route'] = 'app_home';
 
         }else if(!is_null($document->getBillNumber())){
             //document deja facturé
-            $response['paiement'] = 'Document déjà payé!';
+            $response['paiement'] = true;
 
         }else if(is_null($document->getBillNumber())){
 
@@ -509,7 +521,7 @@ class PaiementService
 
             $payment = $document->getPayment();
 
-            $result = $this->client->request('GET', 'https://api.helloasso.com/v5/organizations/refaites-vos-jeux/checkout-intents/'.$payment->getTokenPayment(),
+            $result = $this->client->request('GET', $_ENV['HELLO_ASSO_URL_API'].'/'.$payment->getTokenPayment(),
             [
                 'headers' => [
                     'Accept' => 'application/json',
@@ -527,7 +539,8 @@ class PaiementService
                 $order = $content['order'];
                 
                 //paiement accepter
-                if($order['payments'][0]['state'] == "Authorized"){
+                if($order['payments'][0]['state'] == "Authorized")
+                {
                     $response['paiement'] = true;
                     //il faut transformer la date du paiement en timestamp
                     $timestampFromPayment = strtotime($order['payments'][0]['date']);
@@ -544,12 +557,11 @@ class PaiementService
                     $this->em->persist($document);
                     $this->em->flush();
 
-                    $response['paiement'] = 'Document payé!';
                 }
 
             }else{
+                
                 //pas d'enregistrement
-                $response['redirectMethod'] = 'url';
                 $response['route'] = $content['redirectUrl'];
             }
 

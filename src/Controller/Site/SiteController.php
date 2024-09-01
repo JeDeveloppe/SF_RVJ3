@@ -4,6 +4,7 @@ namespace App\Controller\Site;
 
 use DateTimeImmutable;
 use App\Form\ContactType;
+use App\Form\AcceptCartType;
 use App\Service\MailService;
 use App\Service\UserService;
 use App\Entity\ResetPassword;
@@ -22,10 +23,10 @@ use Symfony\Component\Form\FormError;
 use App\Repository\DocumentRepository;
 use App\Repository\AmbassadorRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Form\EmailForSendResetPasswordType;
-use App\Repository\CollectionPointRepository;
 use App\Repository\DocumentLineRepository;
+use App\Form\EmailForSendResetPasswordType;
 use App\Repository\ResetPasswordRepository;
+use App\Repository\CollectionPointRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -115,7 +116,8 @@ class SiteController extends AbstractController
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
         $metas['description'] = 'Si vous avez la moindre question sur le site, une demande de partenariat ou autre, n\'hésitez pas !';
-    
+        $legales = $this->legalInformationRepository->findOneBy([]);
+
         if($form->isSubmitted() && $form->isValid()) {
     
             $legales = $this->legalInformationRepository->findOneBy([]);
@@ -140,7 +142,8 @@ class SiteController extends AbstractController
     
         return $this->render('site/pages/contact/contact.html.twig', [
             'form' => $form->createView(),
-            'metas' => $metas
+            'metas' => $metas,
+            'legales' => $legales
         ]);
     }
 
@@ -295,39 +298,14 @@ class SiteController extends AbstractController
 
     }
 
-    #[Route('/nous-soutenir', name: 'app_support_us')]
+    #[Route('/soutenir-association', name: 'app_support_us')]
     public function supportUs(Request $request): Response
     {
 
         $metas['description'] = 'Que vous soyez un particulier, un professionnel du monde du jeu ou du réemploi, ce projet a besoin de vous pour se pérenniser et se développer.';
 
-        $supports = [
-            [
-                'text' => 'Acheter des jeux',
-                'link' => 'app_buy_games'
-            ],
-            [
-                'text' => 'Donner ses jeux',
-                'link' => 'app_give_your_games'
-            ],
-            [
-                'text' => 'Devenir ambassadeur / trice',
-                'link' => 'app_became_ambassador'
-            ],
-            [
-                'text' => 'Faire un don',
-                'link' => 'app_make_donation'
-            ],
-            [
-                'text' => 'A faire',
-                'link' => 'app_buy_games'
-            ]
-        ];
-
-
-        return $this->render('site/project/nous_soutenir/nous_soutenir.html.twig', [
+        return $this->render('site/pages/association/nous_soutenir.html.twig', [
             'metas' => $metas,
-            'supports' => $supports,
         ]);
 
     }
@@ -335,6 +313,7 @@ class SiteController extends AbstractController
     #[Route('/document/{tokenDocument}', name: 'document_view')]
     public function lectureDevis(
         $tokenDocument,
+        Request $request
         ): Response
     {
 
@@ -346,9 +325,18 @@ class SiteController extends AbstractController
 
         }else{
 
+            $acceptCartForm = $this->createForm(AcceptCartType::class);
+            $acceptCartForm->handleRequest($request);
+
+            if($acceptCartForm->isSubmitted() && $acceptCartForm->isValid())
+            {
+                return $this->redirectToRoute('paiement', ['tokenDocument' => $document->getToken()]);
+            }
+            
             $results = $this->documentService->generateValuesForDocument($document);
             return $this->render('site/document_view/_document_view.html.twig', [
                 'document' => $document,
+                'acceptCartForm' => $acceptCartForm,
                 'docLines' => $results,
                 'tva' => $results['tauxTva']
             ]);

@@ -17,7 +17,7 @@ class ContactType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Votre adresse email:',
+                'label' => 'Email:',
                 'required' => true,
                 'attr' => ['class' => 'form-control mb-3'],
             ]) //TODO sujets Antoine
@@ -32,24 +32,20 @@ class ContactType extends AbstractType
                     'PRESTATION'      => 'PRESTATION',
                     'AUTRE' => 'AUTRE'
                 ],
-                'placeholder' => 'Choisir...',
+                'placeholder' => 'Séléctionner...',
                 'required' => true,
                 'attr' => ['class' => 'form-control mb-3'],
             ])
             ->add('message', TextareaType::class, [
                 'label' => 'Votre message:',
                 'required' => true,
-                'attr' => ['class' => 'form-control mb-5'],
+                'attr' => ['class' => 'form-control mb-5', 'rows' => 4],
             ])
             ->add('captcha', Recaptcha3Type::class, [
                 'constraints' => new Recaptcha3(),
                 'action_name' => 'homepage',
                 // 'script_nonce_csp' => $nonceCSP,
                 'locale' => 'fr',
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Envoyer votre message',
-                'attr' => ['class' => 'btn btn-success mx-auto'],
             ])
         ;
     }
