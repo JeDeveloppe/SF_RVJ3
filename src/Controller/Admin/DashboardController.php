@@ -91,11 +91,12 @@ class DashboardController extends AbstractDashboardController
         $now = new DateTimeImmutable('now');
         $setting = $this->siteSettingRepository->findOneBy([]);
 
-        //relance email des devis
-        $this->mailService->reminderQuotes($now);
-
         //remise en stock des items / boite supérieur à X jours dans les devis non payés
         $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
+
+        //relance email des devis
+        $this->documentService->reminderQuotes($now);
+
 
         $itemsWithStockIsNull = $this->itemRepository->findByStockForSaleIsNull();
 
@@ -174,7 +175,6 @@ class DashboardController extends AbstractDashboardController
                 ];
         }
         
-
         return $this->render('admin/traited_daily_commands.html.twig', [
             'datas' => $datas,
             'status' => $status,

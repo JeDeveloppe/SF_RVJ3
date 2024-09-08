@@ -183,7 +183,7 @@ class CatalogController extends AbstractController
 
 
             $donneesFromDatabases = $this->occasionRepository->searchOccasionsInCatalogue($phrase, $age_start, $age_end, $players, $durations, $choices);
-            //TODO acces session ou database pour supprimer occas dans paniers
+
         }else{
 
             //on cherche l'ensemble du catalogue

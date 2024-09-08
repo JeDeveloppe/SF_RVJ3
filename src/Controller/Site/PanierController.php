@@ -2,8 +2,6 @@
 
 namespace App\Controller\Site;
 
-use App\Entity\Panier;
-use DateTimeImmutable;
 use App\Form\VoucherType;
 use App\Form\ShippingType;
 use App\Form\AcceptCartType;
@@ -83,7 +81,6 @@ class PanierController extends AbstractController
             $shippingMethodRetraitInCaen = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']);
             $session->set('shippingMethodeId', $shippingMethodRetraitInCaen->getId());
         }
-
         $shippingForm = $this->createForm(ShippingType::class, null, ['occasionInPanier' => $allCartValues['panier_occasions']]);
         $shippingForm->handleRequest($request);
 
@@ -284,16 +281,17 @@ class PanierController extends AbstractController
     }
 
     #[Route('/panier/ajout-occasion/{occasion_id}/{qte}/', name: 'panier_add_occasion')]
-    public function addOccasion($occasion_id, $qte): Response
+    public function addOccasion(Request $request, $occasion_id, $qte): Response
     {
 
         $reponse = $this->panierService->addOccasionInCart($occasion_id, $qte);
 
         $this->addFlash($reponse[0], $reponse[1]);
 
-        //TODO redirect -2 René
+        //TODO redirect -2 René?
+        return $this->redirect($request->headers->get('referer'));
 
-        return $this->redirectToRoute('app_catalogue_occasions');
+        // return $this->redirectToRoute('app_catalogue_occasions');
     }
 
     #[Route('/panier/ajout-demande/{boite}', name: 'panier_add_demande')]

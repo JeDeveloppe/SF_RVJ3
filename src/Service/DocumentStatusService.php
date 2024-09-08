@@ -40,7 +40,7 @@ class DocumentStatusService
         $statusDocuments[] = [
             'name' => $_ENV['DOCUMENT_STATUS_INDEFINED'], 
             'action' => 'UNKNOWN',
-            'isTreatedDaily' => true
+            'isTreatedDaily' => false
         ];
         $statusDocuments[] = [
             'name' => $_ENV['DOCUMENT_STATUS_NO_PAID'], 

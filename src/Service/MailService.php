@@ -29,7 +29,8 @@ class MailService
         ){
     }
 
-    public function sendMail(bool $allwaysSend, $recipient, $subject, $template, array $donnees = null, $replyTo = null, string $dnsCommande = null){
+    public function sendMail(bool $allwaysSend, string  $recipient,string $subject,string $template, array $donnees, $replyTo, string $dnsCommande)
+    {
 
         $siteSettings = $this->siteSettingRepository->findOneBy([]);
 
@@ -40,7 +41,7 @@ class MailService
         $legales = $this->legalInformationRepository->findOneBy([]);
 
         //? parametre du site envoi des emails bloque si besoin de mettre a jour des statut ou autre
-        if($allwaysSend == true){
+        if($allwaysSend == true || $siteSettings->getBlockEmailSending() == false){
             
             $mail = (new TemplatedEmail())
             ->from(new Address($legales->getEmailCompany(), $legales->getCompanyName()))
@@ -61,65 +62,7 @@ class MailService
                 dump($e->getDebug());
             }
 
-        }else{
-
-            //send something if blockEmailSending param is false
-            if($siteSettings->getBlockEmailSending() == false)
-            {
-
-                $mail = (new TemplatedEmail())
-                    ->from(new Address($legales->getEmailCompany(), $legales->getCompanyName()))
-                    ->to($recipient)
-                    ->replyTo($replyTo ? $replyTo : 'noreply@refaitesvosjeux.fr')
-                    ->subject($subject)
-                    ->htmlTemplate('email/templates/'.$template.'.html.twig')
-                    ->context($donnees);
-
-                try{
-                    //?utilisation de la boite email spéciale COMMANDES
-                    if($dnsCommande == true){
-
-                        $mail->getHeaders()->addTextHeader('X-Transport', 'commande');
-                    }
-                    $this->mailer->send($mail);
-                } catch (TransportExceptionInterface $e) {
-                    dump($e->getDebug());
-                }
-            }
         }
     }
 
-    public function reminderQuotes(DateTimeImmutable $now)
-    {
-
-        $documents = $this->documentRepository->findByDevisToReminder($now);
-
-        foreach($documents as $document){
-
-            //on cherche les parametres des documents
-            $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
-            $legales = $this->legalInformationRepository->findOneBy([]);
-
-            $endDevis = $now->add(new DateInterval('P'.$docParams->getDelayBeforeDeleteDevis().'D'));
-            $document->setEndOfQuoteValidation($endDevis)->setIsQuoteReminder(true);
-            $this->em->persist($document);
-
-            $this->sendMail(
-                $document->getUser()->getEmail(),
-                'Devis '.$document->getQuoteNumber().' en attente...',
-                'reminder_quote',
-                [
-                    'document' => $document,
-                    'endDevis' => $document->getEndOfQuoteValidation(),
-                    'docParams' => $docParams,
-                    'legales' => $legales
-                ],
-                null,
-                false
-            );
-
-        }
-
-        $this->em->flush();
-    }
 }

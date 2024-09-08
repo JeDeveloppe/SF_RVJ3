@@ -671,4 +671,38 @@ class DocumentService
 
         return $document;
     }
+
+    public function reminderQuotes(DateTimeImmutable $now)
+    {
+
+        $documents = $this->documentRepository->findByDevisToReminder($now);
+        //on cherche les parametres des documents
+        $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
+        $legales = $this->legalInformationRepository->findOneBy([]);
+
+        foreach($documents as $document){
+
+            $endDevis = $now->add(new DateInterval('P'.$docParams->getDelayBeforeDeleteDevis().'D'));
+            $document->setEndOfQuoteValidation($endDevis)->setIsQuoteReminder(true);
+            $this->em->persist($document);
+
+            $this->mailService->sendMail(
+                false,
+                $document->getUser()->getEmail(),
+                'Devis '.$document->getQuoteNumber().' en attente...',
+                'reminder_quote',
+                [
+                    'document' => $document,
+                    'endDevis' => $document->getEndOfQuoteValidation(),
+                    'docParams' => $docParams,
+                    'legales' => $legales
+                ],
+                null,
+                false
+            );
+
+        }
+
+        $this->em->flush();
+    }
 }

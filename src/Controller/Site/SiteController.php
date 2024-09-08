@@ -35,7 +35,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SiteController extends AbstractController
 {
@@ -53,7 +53,8 @@ class SiteController extends AbstractController
         private PartnerService $partnerService,
         private PartnerRepository $partnerRepository,
         private AmbassadorService $ambassadorService,
-        private AmbassadorRepository $ambassadorRepository
+        private AmbassadorRepository $ambassadorRepository,
+        private UrlGeneratorInterface $urlGeneratorInterface
     )
     {
     }
@@ -304,8 +305,39 @@ class SiteController extends AbstractController
 
         $metas['description'] = 'Que vous soyez un particulier, un professionnel du monde du jeu ou du réemploi, ce projet a besoin de vous pour se pérenniser et se développer.';
 
+        $donnees[] = [
+            'title' => 'DEVENIR BÉNÉVOLE',
+            'description' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet consectetur adipiscing elit edum.',
+            'img' => 'IMG20240517105745.png',
+            'link' => $this->urlGeneratorInterface->generate('app_contact'),
+            'button_text' => 'NOUS CONTACTER'
+        ];
+        $donnees[] = [
+                'title' => 'DONNER SES JEUX',
+                'description' => "Le service récupère les jeux complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…).", //TODO
+                'img' => 'IMG20240513152149b.png',
+                'link' => $this->urlGeneratorInterface->generate('app_give_your_games'),
+                'button_text' => 'DONNER SES JEUX'
+        ];
+        $donnees[] = [
+            'title' => 'DEVENIR AMBASSADEUR·ICE',
+            'description' => "Vous souhaitez contribuer activement au projet porté par l’association ? Particuliers ou structures… où que vous soyez en France, collectez des jeux près de chez vous et faites-les nous parvenir !",
+            'img' => 'Collecte Ad Normandie 2023.png',
+            'link' => $this->urlGeneratorInterface->generate('app_became_ambassador'),
+            'button_text' => 'DEVENIR AMBASSADEUR·ICE'
+        ];
+        $donnees[] = [
+            'title' => 'NOUS SOUTENIR FINANCIÈREMENT',
+            'description' => "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet consectetur adipiscing elit edum", //TODO
+            'img' => 'cropped-view-of-female-hand-putting-red-heart-in-b-2023-11-27-05-08-19-utc.png',
+            'link' => 'https://www.helloasso.com/associations/refaites-vos-jeux/formulaires/1',
+            'button_text' => 'FAIRE UN DON'
+        ];
+
+
         return $this->render('site/pages/association/nous_soutenir.html.twig', [
             'metas' => $metas,
+            'donnees' => $donnees
         ]);
 
     }

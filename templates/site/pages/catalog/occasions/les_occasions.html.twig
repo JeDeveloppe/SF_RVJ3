@@ -68,7 +68,25 @@
             })
         });
 
-        // search_occasion_name_or_editor_in_catalogue
+        let cards = document.querySelectorAll('.card_columns');
+        const cardsArray = [...cards];
+
+        function inCartAnimations(card){
+
+            card.classList.add('scale-out-center');
+            setTimeout(() => {}, "500");
+        }
+
+        cardsArray.forEach(card => {
+
+            let link_add_cart = card.children[0].children[5].children[1].lastElementChild;
+
+
+            link_add_cart.addEventListener('click', (e) => inCartAnimations(card));
+
+        });
+
+
 
     }
 </script>

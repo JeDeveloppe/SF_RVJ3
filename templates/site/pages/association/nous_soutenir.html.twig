@@ -4,16 +4,18 @@
 
 {% block body %}
 
-<div class="row justify-content-around align-items-center my-5">
-    <div class="col-11 col-md-4 d-flex flex-column justify-content-around pt-3">
+<div class="row justify-content-center align-items-center my-5">
+    <div class="col-11 col-md-6 d-flex flex-column justify-content-around pt-3">
         <h1 class="col-11">
             <span class="text-purple">Soutenir</span> l'association
         </h1>
-        <div class="col-11">//TODO Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+        <div class="col-11">
+            Refaites Vos Jeux, c’est une équipe de bénévoles soucieux de favoriser le réemploi des jeux et le lien social depuis 2020. L’équipe s’affaire tous les jours pour collecter, trier et valoriser les dons faits par les particuliers ou les structures (près de 230 jeux par mois !). L’association propose également différentes prestations : animation de jeux vintage, inventaire des stocks de jeux, formation…
+        </div>
 
         <div class="col-11 d-flex justify-content-around mt-3">
-            <a class="btn btn-dark" href="{{ path('app_prestations') }}#id_animations">Animations</a>
-            <a class="btn btn-yellow" href="{{ path('app_prestations') }}#id_inventaires">Inventaires</a>
+            <a class="btn btn-dark" href="{{ path('app_support_us') }}#id_missions">Missions</a>
+            <a class="btn btn-yellow" href="{{ path('app_support_us') }}#id_support">Nous soutenir</a>
         </div>
 
     </div>
@@ -22,53 +24,67 @@
     </div>
 </div>
 
-<div class="row justify-content-center align-items-center bg-white py-5">
-    <h2 id="id_animations" class="col-11 text-center">
-        <span class="text-purple">Animations</span> et ateliers
+<div id="id_missions" class="row justify-content-center align-items-center bg-white py-5">
+    <h2 class="col-12 text-center">
+        Nos <span class="text-purple">missions</span>
     </h2>
-    <div class="col-12 d-flex flex-wrap justify-content-around justify-content-md-center mt-4 align-items-center">
-        <div class="col-11 col-sm-6 col-md-5 col-lg-4">
-            <div class="card card_collectons py-4 border-0 bg-white">
-                <div class="col-12 card_collectons_img">
-                    <img src="{{ asset('build/images/design/prestations/animation_vintage.png') }}" alt="Lot de jeux récoltés">
-                </div>
-                <h4 class="text-center mt-4">Animation jeux vintage</h5>
-                <div class="card-body">
-                    <div class="card-text">
-                        Replongez dans vos souvenirs d’enfance avec nos malles de jeux vintage !
-                        Retrouvez les grands classiques complétés par nos soins : Qui est-ce ?, Piège !, Dix de chute, le cochon qui rit….
-                        Vous ne vous rappelez plus très bien des règles ? Un membre de l’association sera là pour vous les réexpliquer !
-                        Cette animation est une belle occasion de partage et de transmission. Parce que ces jeux ont une histoire, parents et grands-parents auront plaisir à les faire découvrir à leurs enfants et petits-enfants.
-                    </div>
-                    <div class="card-text font-weight-bolder text-center mt-3">60 € / heure</div>
-                    <div class="card-text small text-center">Hors frais de déplacement : 0,40€/km</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-11 mt-3 col-sm-6 col-md-5 mt-md-0 col-lg-4">
-            <div class="card card_collectons py-4 border-0 bg-white">
-                <div class="col-12 card_collectons_img">
-                    <img src="{{ asset('build/images/design/prestations/atelier_sensibilisation.png') }}" alt="Lot de jeux non récoltés">
-                </div>
-                <h4 class="text-center mt-4">Atelier sensibilisation</h5>
-                <div class="card-body">
-                    <div class="card-text">
-                        Vous organisez un événement autour du développement durable ?
-                        L’association propose de tenir un stand pour sensibiliser le public aux questions liées à la sobriété et à la réduction des déchets.
-                        Ces thèmes seront abordés à travers le jeu, de sa fabrication à son traitement en tant que déchet.
-                        Un atelier manuel sera également proposé. Enfants comme adultes pourront repartir avec un porte-cartes qu’ils auront fabriqué à partir d’éléments de jeux de récupération.
-                        Activité accessible dès 6 ans, le tout dans une ambiance ludique !
-                    </div>
-                    <div class="card-text font-weight-bolder text-center mt-3">60 € / heure</div>
-                    <div class="card-text text-center small">Hors frais de déplacement : 0,40€/km</div>
-                </div>
-            </div>
-        </div>
+    <div class="col-11 text-center fw-bolder">
+        Chaque année en France, près de 100 000 tonnes de jouets sont jetées !
     </div>
-    <h2 class="col-11 text-center text-yellow mt-3">NOS ANIMATIONS VOUS INTÉRESSENT ?</h2>
-    <div class="col-11 text-center">//TODO Contactez-nous pour lorem ipsum dolor sit amet consectetur adipiscing elit edum.</div>
-    <div class="col-12 mt-4 d-flex justify-content-around">
-        <a class="btn btn-dark" href="{{ path('app_contact') }}">nous contacter</a>
+    <div class="col-11 col-md-8 text-justify mt-2">
+        C’est de cette volonté d’agir contre le gaspillage et pour l’environnement que Refaites Vos Jeux est née en septembre 2020, avant d’obtenir le statut associatif en 2023. À travers son action, l’association souhaite sensibiliser les particuliers et les professionnels aux enjeux liés à la sobriété et à la réduction des déchets. Actuellement, l’équipe n’est composée que de bénévoles. À moyen terme, l’association espère pouvoir créer un ou plusieurs postes salariés et s’inscrire pleinement dans les valeurs de l’Économie Sociale et Solidaire.
+    </div>
+
+    <div class="col-12 d-flex flex-wrap justify-content-around justify-content-md-center mt-4 align-items-center">
+        <div class="col-9 mt-3 mt-md-0 col-sm-6 col-md-5 col-lg-4">
+            <div class="card card_collectons py-4 border-0 bg-white">
+                <div class="col-12 card_collectons_img">
+                    <img src="{{ asset('build/images/design/association/Groupe de masques 17.png') }}" alt="Lot de jeux récoltés">
+                </div>
+                <h4 class="text-center mt-4">VENTE DE JEUX</h5>
+                <div class="card-body">
+                    <div class="card-text">
+                        Les jeux collectés sont, pour la plupart, complétés grâce à notre stock de jeux incomplets. Ils sont alors remis en vente à prix solidaires (maximum 50 % du prix d’un jeu neuf) ou donnés à des associations.
+                    </div>
+                    <div class="card-text text-center mt-3">
+                        <a class="btn btn-dark" href="{{ path('app_catalogue_occasions') }}">ACHETER UN JEU</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-9 col-sm-6 col-md-5 col-lg-4">
+            <div class="card card_collectons py-4 border-0 bg-white">
+                <div class="col-12 card_collectons_img">
+                    <img src="{{ asset('build/images/design/association/colorful-game-pieces-with-dice-on-board-2023-11-27-05-32-20-utc.png') }}" alt="Lot de jeux récoltés">
+                </div>
+                <h4 class="text-center mt-4">VENTE DE PIÈCES DÉTACHÉES</h5>
+                <div class="card-body">
+                    <div class="card-text">
+                        Certaines pièces détachées sont proposées à la vente à l’unité et permettent aux particuliers et aux professionnels de compléter leurs jeux. L’inventaire est encore en cours, le catalogue se remplira bientôt !
+                    </div>
+                    <div class="card-text text-center mt-3">
+                        <a class="btn btn-dark" href="{{ path('app_catalogue_pieces_detachees') }}">VISITER LA BOUTIQUE</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-9 mt-3 col-sm-6 col-md-5 mt-md-0 col-lg-4">
+            <div class="card card_collectons py-4 border-0 bg-white">
+                <div class="col-12 card_collectons_img">
+                    <img src="{{ asset('build/images/design/association/450900705_1106120011238310_5624333892940681501_n.png') }}" alt="Lot de jeux non récoltés">
+                </div>
+                <h4 class="text-center mt-4">PRESTATIONS</h5>
+                <div class="card-body">
+                    <div class="card-text">
+                        //TODO
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.
+                    </div>
+                    <div class="card-text text-center mt-3">
+                        <a class="btn btn-dark" href="{{ path('app_prestations') }}">VOIR NOS PRESTATIONS</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -76,46 +92,29 @@
 
 
 <div class="row justify-content-around py-5 bg-white">
-    <h2 id="id_inventaires" class="col-12 text-center"><span class="text-purple">Inventaire </span> de jeux</h2>
+    <h2 id="id_inventaires" class="col-12 text-center">Comment <span class="text-purple">nous soutenir ?</span></h2>
     <div class="col-11 col-lg-6 text-center">
-        Vous faites partie d’une structure et vous avez une armoire remplie de jeux en souffrance ?<br/><b>Nous proposons 2 formules :</b>
-    </div>
-    <div class="col-11 d-flex flex-wrap justify-content-around align-items-center">
-        <div class="col-12 col-md-6 col-lg-5 d-flex justify-content-around align-items-center">
-            <img src="{{ asset('build/images/design/prestations/etagere_jeux.png') }}" alt="Image étagère pleine">
-        </div>
-        <div class="col-12 mt-3 col-md-6 col-lg-5 mt-md-0 py-4">
-            <h3 class="col-12">INVENTAIRE</h3>
-            <div class="col-12">
-                Nous venons faire l’inventaire de vos jeux sur place et les trions en 3 catégories : complets / incomplets mais jouables (pièces ou règles du jeu manquantes) / incomplets et non jouables. Si besoin, les boîtes de jeux sont réparées et les petites pièces mises en sachet pour limiter les risques de perte.
-            </div>
-            <div class="col-12 py-2"><b>1€ / jeu</b></div>
-            <div class="col-12 small">Hors frais de déplacement : 0,40€ / km</div>
-            <h3 class="col-12 mt-3">INVENTAIRE + COMPLÉTION</h3>
-            <div class="col-12">
-                En plus de l’inventaire, nous complétons les jeux lorsque c’est possible. Cela concerne les jeux dont moins de 30% des pièces sont manquantes et pour lesquels nous possédons les pièces détachées. Nous vous envoyons également les règles du jeu manquantes par mail.
-            </div>
-            <div class="col-12 py-2"><b>1,5€ / jeu</b></div>
-            <div class="col-12 small">Pièces détachées incluses - Hors frais de déplacement : 0,40€ / km</div>
-        </div>
-    </div>
-    <h2 class="col-11 text-center text-yellow mt-5">NOS INVENTAIRES VOUS INTÉRESSENT ?</h2>
-    <div class="col-11 text-center">//TODO Contactez-nous pour lorem ipsum dolor sit amet consectetur adipiscing elit edum.</div>
-    <div class="col-12 mt-4 d-flex justify-content-around">
-        <a class="btn btn-dark" href="{{ path('app_contact') }}">nous contacter</a>
+        Que vous soyez un particulier, un professionnel du monde du jeu ou du réemploi, ce projet a besoin de vous pour se pérenniser et se développer.
     </div>
 </div>
 
-<div class="row justify-content-around py-5">
-    <h2 class="col-12 text-center">UN PROJET EN PARTICULIER ?</h2>
-    <div class="col-md-5 text-center">
-            Vous souhaitez mettre en place un projet particulier ?<br/>
-            Journée de formation, team building…<br/>
-            Nous étudierons toutes vos propositions !
-    </div>
-    <div class="col-12 mt-4 d-flex justify-content-around">
-        <a class="btn btn-yellow" href="{{ path('app_contact') }}">nous contacter</a>
-    </div>
+<div class="row justify-content-center align-item-center bg-white py-3">
+    {% for donnee in donnees %}
+        <div class="col-10 col-sm-6 col-md-5 mb-5 px-2 px-lg-5">
+            <div class="card card_ h-100 p-0">
+                <img src="{{ asset('build/images/design/association/' ~ donnee.img ~ '') }}" alt="">
+                <div class="card-body bg-secondary d-flex flex-column justify-content-between">
+                    <p class="card-title py-2 h3 text-orange text-center">{{ donnee.title }}</p>
+                    <p class="card-text">{{ donnee.description }}</p>
+                    <div class="col-12 d-flex justify-content-center mt-auto">
+                        <a class="btn btn-dark text-uppercase" href="{{ donnee.link }}">{{ donnee.button_text }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 </div>
+
+{% include "components/_separateur_wave.html.twig" %}
 
 {% endblock %}

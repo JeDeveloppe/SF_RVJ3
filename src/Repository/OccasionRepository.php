@@ -30,13 +30,14 @@ class OccasionRepository extends ServiceEntityRepository
         array $choices): array
     {
 
-
         if(count($players) == 0){
             $players = [];
             foreach($choices['players_options_for_form'] as $choice){
                 $players[] = $choice;
             }
-        }elseif(count($players) == 1 && $players[0] == 6){
+        }
+        
+        if(count($players) == 1 && $players[0] == 6){
             $players = [];
             foreach($choices['players_in_database'] as $choice){
                 if($choice->getName() > 5){
@@ -79,7 +80,7 @@ class OccasionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
-
+        
         return $query;
     }
 

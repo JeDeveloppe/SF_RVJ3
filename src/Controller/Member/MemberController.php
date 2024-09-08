@@ -45,7 +45,7 @@ class MemberController extends AbstractController
 
         //relance email des devis
         $now = new DateTimeImmutable('now');
-        $this->mailService->reminderQuotes($now);
+        $this->documentService->reminderQuotes($now);
         //on supprime les document trop vieu non relancer
         $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
@@ -74,7 +74,7 @@ class MemberController extends AbstractController
 
         //relance email des devis
         $now = new DateTimeImmutable('now');
-        $this->mailService->reminderQuotes($now);
+        $this->documentService->reminderQuotes($now);
         //on supprime les document trop vieu non relancer
         $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
