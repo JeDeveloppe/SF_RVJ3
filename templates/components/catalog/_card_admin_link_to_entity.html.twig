@@ -1,11 +1,9 @@
 {% if is_granted('ROLE_ADMIN') %}
-    <div class="col-12 d-flex justify-content-center mt-2">
-        <a class="btn btn-dark col-4 mt-1 text-center" target="_blank" href="{{ ea_url()
-            .setController('App\\Controller\\Admin\\EasyAdmin\\'~ entityNameInController ~'CrudController')
-            .setAction('edit')
-            .setEntityId(setEntityId)
-        }}">
-        <i class="fa-solid fa-gear"></i>
-        </a>
-    </div>
+    <a class="_card_button_link_to_entity btn btn-dark d-flex justify-content-center align-items-center text-white me-2" target="_blank" href="{{ ea_url()
+        .setController('App\\Controller\\Admin\\EasyAdmin\\'~ entityNameInController ~'CrudController')
+        .setAction('edit')
+        .setEntityId(setEntityId)
+    }}">
+    <i class="fa-solid fa-gear"></i>
+    </a>
 {% endif %}

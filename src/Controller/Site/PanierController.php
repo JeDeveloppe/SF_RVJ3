@@ -289,7 +289,8 @@ class PanierController extends AbstractController
         $this->addFlash($reponse[0], $reponse[1]);
 
         //TODO redirect -2 René?
-        return $this->redirect($request->headers->get('referer'));
+        return $this->redirect($request->query->get('backUrl'));
+        // return $this->redirect($request->headers->get('referer'));
 
         // return $this->redirectToRoute('app_catalogue_occasions');
     }

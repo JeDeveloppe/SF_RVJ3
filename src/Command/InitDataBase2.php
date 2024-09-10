@@ -77,13 +77,13 @@ class InitDataBase2 extends Command
         $io = new SymfonyStyle($input,$output);
 
         //on importe les partenaires
-        $this->partnerService->importPartenaires($io);
+        // $this->partnerService->importPartenaires($io);
 
-        //on importe les adresses (facturation et livraison)
-        $this->adresseService->importAdresses($io);
+        // //on importe les adresses (facturation et livraison)
+        // $this->adresseService->importAdresses($io);
 
-        //on creer le nombre de joueurs
-        $this->playerService->addplayers($io);
+        // //on creer le nombre de joueurs
+        // $this->playerService->addplayers($io);
 
         //on cree les temps de jeux
         $this->durationOfGameService->addDurations($io);

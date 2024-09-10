@@ -123,6 +123,25 @@ class OccasionRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findUniqueOccasionByRefrenceWhenIsOnLineAndSlugIsOk(string $occasionReference, string $boiteSlug)
+    {
+
+        return $this->createQueryBuilder('o')
+        ->join('o.boite','b')
+        ->where('b.slug = :slug')
+        ->andWhere('o.reference = :occasionReference')
+        ->andWhere('o.isOnline = :online')
+        ->setParameters([
+            'slug' => $boiteSlug,
+            'occasionReference' => $occasionReference,
+            'online' =>  true,
+        ])
+        ->getQuery()
+        ->getSingleResult()
+        ;
+
+    }
+
 //    /**
 //     * @return Occasion[] Returns an array of Occasion objects
 //     */

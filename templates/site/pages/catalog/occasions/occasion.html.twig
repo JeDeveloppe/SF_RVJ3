@@ -10,6 +10,9 @@
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 {% block body %}
 
+    {% set setEntityId = occasion.id %}
+    {% set entityNameController = 'Occasion' %}
+
 		<div class="row py-2 py-lg-3">
 			<div class="col-12 col-md-6 ps-5 d-flex">
 				{% if app.request.headers.get('referer') is null %}
@@ -49,8 +52,8 @@
 					<h1 class="col-12 occasion_detail_name">{{ occasion.boite.name | raw }}</h1>
 					{% include "components/catalog/_occasion_details.html.twig"  with { 'occasion': occasion } %}
 					{# on inclus le bouton ajout au panier #}
-					<div class="col-12 d-flex my-2 justify-content-around">
-						{% include "site/pages/catalog/components/_cardOccasion_button.html.twig" with {'item': occasion}%}
+					<div class="col-12 d-flex my-2 justify-content-center">
+                		{% include "site/pages/catalog/components/_cardOccasion_button_add_cart.html.twig" with {'entityNameInController': entityNameController, 'buttonLength': 'full' } %}
 					</div>
 					<div class="col-12 d-flex justify-content-around mt-2 mb-5">
 						{% include "components/catalog/_shop_and_no_transport_logos.html.twig" %}

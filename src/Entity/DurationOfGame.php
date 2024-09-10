@@ -21,6 +21,9 @@ class DurationOfGame
     #[ORM\OneToMany(mappedBy: 'durationGame', targetEntity: Boite::class)]
     private Collection $boites;
 
+    #[ORM\Column]
+    private ?int $orderOfAppearance = null;
+
     public function __construct()
     {
         $this->boites = new ArrayCollection();
@@ -76,5 +79,17 @@ class DurationOfGame
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function getOrderOfAppearance(): ?int
+    {
+        return $this->orderOfAppearance;
+    }
+
+    public function setOrderOfAppearance(int $orderOfAppearance): static
+    {
+        $this->orderOfAppearance = $orderOfAppearance;
+
+        return $this;
     }
 }

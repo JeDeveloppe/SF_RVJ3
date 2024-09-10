@@ -29,6 +29,7 @@ use App\Repository\DurationOfGameRepository;
 use App\Service\CatalogueService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CatalogController extends AbstractController
 {
@@ -50,7 +51,8 @@ class CatalogController extends AbstractController
         private EntityManagerInterface $em,
         private Security $security,
         private CatalogueService $catalogueService,
-        private DurationOfGameRepository $durationOfGameRepository
+        private DurationOfGameRepository $durationOfGameRepository,
+        private RequestStack $requestStack
     )
     {
     }
@@ -235,20 +237,16 @@ class CatalogController extends AbstractController
     }
 
     #[Route('/jeu-occasion/{reference_occasion}/{editor_slug}/{boite_slug}', name: 'occasion')]
-    public function occasion($reference_occasion, Security $security, $editor_slug): Response
+    public function occasion($reference_occasion, Security $security, $boite_slug): Response
     {
 
         $delivery = null;
 
-        $occasion = $this->occasionRepository->findOneBy(
-            [
-                'isOnline' => true,
-                'reference' => $reference_occasion,
-            ]);
+        $occasion = $this->occasionRepository->findUniqueOccasionByRefrenceWhenIsOnLineAndSlugIsOk($reference_occasion, $boite_slug);
 
         if(!$occasion){
 
-            $this->addFlash('warning', 'Jeux non disponible ou inconnu !');
+            $this->addFlash('warning', 'Jeu non disponible ou inconnu !');
             return $this->redirectToRoute('app_catalogue_occasions');
         }
 

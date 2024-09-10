@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
 class DurationOfGameCrudController extends AbstractCrudController
 {
@@ -22,6 +23,7 @@ class DurationOfGameCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name', 'Texte affiché'),
+            IntegerField::new('orderOfAppearance', 'Ordre affichage' )
         ];
     }
 

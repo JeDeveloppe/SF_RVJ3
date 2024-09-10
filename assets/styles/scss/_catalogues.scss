@@ -106,13 +106,13 @@
     z-index: 1;
 }
 
-._card_button_link_add_in_cart{
+._card_button_link_add_in_cart, ._card_button_link_to_entity{
     width: 36px;
     height: 36px;
     border-radius: 10px;
     z-index: 2;
 }
-._card_button_link_add_in_cart:hover{
+._card_button_link_add_in_cart:hover, ._card_button_link_to_entity:hover{
     opacity: 0.8;
     scale: 1.1;
 }

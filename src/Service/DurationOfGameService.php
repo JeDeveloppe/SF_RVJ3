@@ -19,20 +19,37 @@ class DurationOfGameService
     public function addDurations(SymfonyStyle $io)
     {
 
-        $durations = ['- de 30 minutes', '30 à 45 minutes', '45 à 60 minutes', '+ de 60 minutes', 'Non indiquée'];
+        $durations = [
+            [
+                'duration' => '- de 30 minutes',
+                'orderOfAppearance' => 1
+            ],
+            [
+                'duration' => '30 à 60 minutes',
+                'orderOfAppearance' => 2
+            ],
+            [
+                'duration' => '+ de 60 minutes',
+                'orderOfAppearance' => 3
+            ],
+            [
+                'duration' => $_ENV['DURATION_OF_GAME_NO_TIME'],
+                'orderOfAppearance' => 4
+            ]
+        ];
 
         $io->progressStart(count($durations));
         foreach($durations as $durationArray){
 
             $io->progressAdvance();
 
-            $duration = $this->durationOfGameRepository->findOneBy(['name' => $durationArray]);
+            $duration = $this->durationOfGameRepository->findOneBy(['name' => $durationArray['duration']]);
 
             if(!$duration){
                 $duration = new DurationOfGame();
             }
 
-            $duration->setName($durationArray);
+            $duration->setName($durationArray['duration'])->setOrderOfAppearance($durationArray['orderOfAppearance']);
             $this->em->persist($duration);
 
         }

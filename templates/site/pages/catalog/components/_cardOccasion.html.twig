@@ -5,7 +5,7 @@
     {% set card_item = product %}
     {% set setEntityId = product.id %}
     {% set entityNameController = 'Occasion' %}
-
+    
 
     <div id="{{ setEntityId }}" class="card_ d-flex flex-wrap h-100 mx-2 position-relative">
         <a href="{{ path('occasion', {'reference_occasion': occasion.reference, 'editor_slug': occasion.boite.editor.slug, 'boite_slug': occasion.boite.slug | lower }) }}" class="_card_full_button"></a>
@@ -24,15 +24,12 @@
                 {% include "components/occasion/_display_occasion_price.html.twig" with {'product': product, 'tax': tax} %}
             </div>
             <div class="col-6 d-flex justify-content-end">
-                <a class="btn btn-dark _card_button_link_add_in_cart d-flex justify-content-center align-items-center text-white" href="{{ path('panier_add_occasion', {'occasion_id': occasion.id, 'qte': 1 }) }}">
-                    <img src="{{ asset('build/images/design/catalogs/cart.svg') }}" alt="Logo accès panier">
-                </a>
+                {% include "site/pages/catalog/components/_cardOccasion_button_add_cart.html.twig" with {'entityNameInController': entityNameController, 'buttonLength': 'small'} %}
             </div>
 
             {# <div class="col-6 d-flex justify-content-end p-0">
                 {% include "site/pages/catalog/components/_cardOccasion_button.html.twig" with {'item': card_item }%}
             </div> #}
-            {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': entityNameController} %}
         </div>
     </div>
 
