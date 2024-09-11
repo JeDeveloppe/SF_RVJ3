@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Color;
 use App\Entity\DurationOfGame;
+use App\Repository\BoiteRepository;
 use App\Repository\DurationOfGameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -12,7 +13,8 @@ class DurationOfGameService
 {
     public function __construct(
         private EntityManagerInterface $em,
-        private DurationOfGameRepository $durationOfGameRepository
+        private DurationOfGameRepository $durationOfGameRepository,
+        private BoiteRepository $boiteRepository
         ){
     }
 
@@ -58,4 +60,17 @@ class DurationOfGameService
         $io->success('Créations terminée');
     }
 
+    public function addAleatoireDurationsToBoites(SymfonyStyle $io)
+    {
+        $durations = $this->durationOfGameRepository->findAll();
+
+        $boites = $this->boiteRepository->findAll();
+
+        foreach($boites as $boite){
+            $boite->setDurationGame($durations[array_rand($durations,1)]);
+            $this->em->persist($boite);
+        }
+
+        $this->em->flush();
+    }
 }
