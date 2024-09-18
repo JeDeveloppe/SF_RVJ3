@@ -109,7 +109,7 @@ class OccasionRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('o')
             ->join('o.boite','b')
             ->where('o.isOnline = :online')
-            ->andWhere('b.age >= :age')
+            ->andWhere('b.age = :age')
             ->andWhere('o.id != :occasionId')
             ->setParameters([
                 'occasionId' => $occasion->getId(),

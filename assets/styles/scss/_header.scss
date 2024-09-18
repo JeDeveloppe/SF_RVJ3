@@ -34,7 +34,7 @@ nav {
 }
 
 #logoNav img {
-    scale: 1;
+    scale: 0.8;
 }
 
 // X-Small devices (portrait phones, less than 576px)
@@ -45,20 +45,12 @@ nav {
     #logoNav {
         display: none;
     }
-
-    #logoNav img {
-        scale: 1;
-    }
 }
 
 // Medium devices (tablets, 768px and up)
 @media (min-width: 768px) {
     #logoNav {
         display: block;
-    }
-
-    #logoNav img {
-        scale: 1;
     }
 
     .div_ambassadeur_img img {
@@ -73,21 +65,15 @@ nav {
     }
 
     #logoNav img {
-        scale: 1;
         opacity: 1;
     }
 }
 
 // X-Large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) {
-    #logoNav img {
-        scale: 1;
-    }
 }
 
 // XX-Large devices (larger desktops, 1400px and up)
 @media (min-width: 1400px) {
-    #logoNav img {
-        scale: 1;
-    }
+
 }

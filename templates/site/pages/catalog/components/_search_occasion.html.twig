@@ -39,13 +39,11 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-12 text-center">
-                {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
-                <div class="input-group-append text-center col-12">
-                    <div class="btn-group" role="group">
-                        {# <button type="submit" class="btn btn-dark">Chercher</button> #}
-                        <a href="{{ currentPath }}" type="button" class="btn btn-yellow">Remise à zéro</a>
-                    </div>
+            <div class="input-group-append col-12">
+                <div class="btn-group" role="group">
+                    {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+                    {# <button type="submit" class="btn btn-dark">Chercher</button> #}
+                    <a href="{{ currentPath }}" type="button" class="btn btn-light">Effacer les filtres</a>
                 </div>
             </div>
         </div>

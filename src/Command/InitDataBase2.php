@@ -89,13 +89,15 @@ class InitDataBase2 extends Command
         // $this->durationOfGameService->addDurations($io);
 
         //on importe les boites
-        // $this->boiteService->importBoites($io);
+        $this->boiteService->importBoites($io);
+        dd('STOP');
+        $this->boiteService->updateBoitesWithDuration($io);
 
         //SI ON EST EN DEV on génére de facon aléatoire la duree des parties aux boites
         if($_ENV['APP_ENV'] == 'dev' or $_ENV['APP_ENV'] == 'DEV'){
             $this->durationOfGameService->addAleatoireDurationsToBoites($io);
         }
-
+dd('STOP');
         //on genere les editeurs de facon distinct
         $this->editorService->addEditorsInDatabase($io);
 

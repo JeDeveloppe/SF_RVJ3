@@ -1,8 +1,8 @@
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 
 <div class="col-12 d-flex flex-column mt-2">
-    {% include "components/catalog/_durationOfTheGame.html.twig" with {'item': occasion.boite }%}
     {% include "components/catalog/_players&age.html.twig" with {'item': occasion.boite }%}
+    {% include "components/catalog/_durationOfTheGame.html.twig" with {'item': occasion.boite }%}
     {% if 'panier' not in currentPath %}
         {% if occasion.boite.linktopresentationvideo is not null %}
                 <a class="text-decoration-none" href="{{ occasion.boite.linktopresentationvideo }}" target="_blank"><i class="fa-solid fa-video"></i> Voir la vidéo de présentation.</a>

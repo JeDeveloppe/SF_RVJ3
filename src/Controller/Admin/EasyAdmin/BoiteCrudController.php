@@ -157,7 +157,6 @@ class BoiteCrudController extends AbstractCrudController
             AssociationField::new('durationGame')
                 ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
                 ->setLabel('Durée de la partie')
-                ->onlyOnForms()
                 ->setRequired(true)
                 ->setPermission('ROLE_ADMIN')
                 ->setColumns(6),

@@ -13,11 +13,11 @@
     <span class="span_players_ages">
         {% if item.playersMin.name == item.playersMax.name %}
 
-            Uniquement {{ item.playersMin.name }} {{ dataJoueur }} | Dès {{ item.age }} {{ dataAge }}
+            {{ item.playersMin.name }} {{ dataJoueur }} | Dès {{ item.age }} {{ dataAge }}
             
         {% else %}
 
-            De {{ item.playersMin.name }} à {{ item.playersMax.name }} joueurs | Dès {{ item.age }} {{ dataAge }}
+            {{ item.playersMin.name }} à {{ item.playersMax.name }} joueurs | Dès {{ item.age }} {{ dataAge }}
             
         {% endif %}
     </span>

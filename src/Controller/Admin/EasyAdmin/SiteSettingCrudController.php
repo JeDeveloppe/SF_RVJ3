@@ -28,7 +28,7 @@ class SiteSettingCrudController extends AbstractCrudController
             TextareaField::new('fairday')
                 ->setLabel('Texte pour les foires:')
                 ->setFormTypeOptions(['attr' => ['placeholder' => '(laisser vide pour désactiver)']]),
-            IntegerField::new('distanceMaxForOccasionBuy','Distance Max vente Occasion (en kms)')
+            IntegerField::new('distanceMaxForOccasionBuy','Distance Max vente Occasion (en kms)'),
         ];
     }
 

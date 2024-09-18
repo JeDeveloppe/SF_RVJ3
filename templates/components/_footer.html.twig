@@ -1,16 +1,19 @@
 <footer class="row mt-auto bg-white pt-4 justify-content-start justify-content-md-around">
-	<div class="col-12 col-sm-6 col-lg-3 d-flex flex-row flex-sm-column justify-content-around align-items-center">
+	<div class="col-12 col-sm-6 col-lg-3 d-flex flex-row flex-sm-column justify-content-around align-items-start">
 		<img id="logoInFooter" class="img-fluid col-5 col-sm-6" src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo Refaites vos jeux" loading="lazy"/>
-		<div id="logoInFooter_text" class="col-6 col-sm-11">Refaites Vos Jeux oeuvre pour le réemploi des jeux et le lien social.</div>
+		<div id="logoInFooter_text" class="col-6 col-sm-9">Refaites Vos Jeux oeuvre pour le réemploi des jeux et le lien social.</div>
 	</div>
-	<div class="col-12 text-center col-sm-6 text-lg-left col-lg-3 mb-0">
+	<div class="col-12 col-sm-6 text-lg-left col-lg-3 mb-0">
 		<h5 class="">Boutique</h5>
 		<ul class="list-unstyled">
 			<li class="">
-				<a href="{{ path('app_catalogue_occasions', {'category': 'tous-les-jeux'}) }}" class="text-black text-decoration-none">Jeux d'occasion</a>
+				<a href="{{ path('app_catalogue_occasions', {'category': 'tous-les-jeux'}) }}" class="text-black text-decoration-none">Tous les jeux</a>
 			</li>
 			<li class="">
 				<a href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}" class="text-black text-decoration-none">Jeux pour enfants</a>
+			</li>
+			<li class="">
+				<a href="{{ path('app_catalogue_occasions', {'category': 'jeux-tout-public'}) }}" class="text-black text-decoration-none">Jeux tout public</a>
 			</li>
 			<li class="">
 				<a href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}" class="text-black text-decoration-none">Jeux pour initié·es</a>
@@ -20,11 +23,11 @@
 			</li>
 		</ul>
 	</div>
-	<div class="col-12 text-center col-sm-6 text-lg-left col-lg-3 my-0 my-sm-4 my-lg-0">
-		<h5 class="">A propos</h5>
+	<div class="col-12 col-sm-6 text-lg-left col-lg-3 my-0 my-sm-4 my-lg-0">
+		<h5 class="">À propos</h5>
 		<ul class="list-unstyled">
 			<li class="">
-				<a href="{{ path('app_who_are_we') }}" class="text-black text-decoration-none">L'association</a>
+				<a href="{{ path('app_support_us') }}" class="text-black text-decoration-none">Soutenir l'association</a>
 			</li>
 			<li class="">
 				<a href="{{ path('app_prestations') }}" class="text-black text-decoration-none">Nos prestations</a>
@@ -35,12 +38,12 @@
 			<li class="">
 				<a href="{{ path('app_give_your_games') }}" class="text-black text-decoration-none">Donner ses jeux</a>
 			</li>
-			<li class="">
+			<li class="d-none">
 				<a href="{{ path('app_partenaires') }}" class="text-black text-decoration-none">//TODO or not ? Partenaires</a>
 			</li>
 		</ul>
 	</div>
-	<div class="col-12 text-center col-sm-6 text-lg-left col-lg-3 my-0 my-sm-4 my-lg-0">
+	<div class="col-12 col-sm-6 text-lg-left col-lg-3 my-0 my-sm-4 my-lg-0">
 		<h5 class="">Et plus encore...</h5>
 		<ul class="list-unstyled">
 			<li class="">

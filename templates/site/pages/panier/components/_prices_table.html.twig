@@ -1,8 +1,11 @@
 <table class="table table-striped align-middle px-0">
-    <tr>
-        <td class="col-8">Sous-total articles:</td>
-        <td class="text-end">{{ (allCartValues['totauxItems']['price'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
-    </tr>
+
+    {% if allCartValues['totauxItems']['price'] > 0 %}
+        <tr>
+            <td class="col-8">Sous-total articles:</td>
+            <td class="text-end">{{ (allCartValues['totauxItems']['price'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
+        </tr>
+    {% endif %}
     {% if allCartValues['remises'].volume.actif == true %}
         <tr>
             <td>

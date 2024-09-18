@@ -308,6 +308,21 @@ class PanierService
         }
     }
 
+    public function checkIfAllCartObjectsAreOnLine(array $carts)
+    {
+        $allOnLine = 0;
+        foreach($carts as $cart){
+            if(!is_null($cart->getOccasion()) && $cart->getOccasion()->getIsOnline() == false){
+                $allOnLine += 1;
+            }
+            if(!is_null($cart->getItem()) && $cart->getItem()->getStockForSale() > 0){
+                $allOnLine += 1;
+            }
+        }
+
+        return $allOnLine;
+    }
+
     public function returnDeliveryCost(ShippingMethod $shipping, int $weigthPanier)
     {
 

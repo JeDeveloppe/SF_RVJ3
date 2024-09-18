@@ -82,6 +82,9 @@ class LegalInformation
     #[ORM\Column(length: 255)]
     private ?string $publicationManagerLastName = null;
 
+    #[ORM\Column(length: 18)]
+    private ?string $phoneCompany = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -347,6 +350,18 @@ class LegalInformation
     public function setPublicationManagerLastName(string $publicationManagerLastName): static
     {
         $this->publicationManagerLastName = $publicationManagerLastName;
+
+        return $this;
+    }
+
+    public function getPhoneCompany(): ?string
+    {
+        return $this->phoneCompany;
+    }
+
+    public function setPhoneCompany(string $phoneCompany): static
+    {
+        $this->phoneCompany = $phoneCompany;
 
         return $this;
     }

@@ -61,6 +61,8 @@ class CatalogController extends AbstractController
     public function cataloguePiecesDetachees(Request $request): Response
     {
 
+        $siteSetting = $this->siteSettingRepository->findOneBy([]);
+
         $form = $this->createForm(SearchBoiteInCatalogueType::class);
         $form->handleRequest($request);
 
@@ -198,7 +200,7 @@ class CatalogController extends AbstractController
         $occasions = $this->paginator->paginate(
             $diff, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            12, /*limit per page*/
+            24, /*limit per page*/
         );
     
  

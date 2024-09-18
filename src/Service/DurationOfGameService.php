@@ -23,15 +23,15 @@ class DurationOfGameService
 
         $durations = [
             [
-                'duration' => '- de 30 minutes',
+                'duration' => 'Moins de 30 min',
                 'orderOfAppearance' => 1
             ],
             [
-                'duration' => '30 à 60 minutes',
+                'duration' => '30 à 60 min',
                 'orderOfAppearance' => 2
             ],
             [
-                'duration' => '+ de 60 minutes',
+                'duration' => 'Plus de 60 min',
                 'orderOfAppearance' => 3
             ],
             [

@@ -41,39 +41,39 @@ class OccasionService
 
         $conditions = [
             [
-                'name' => 'BON ÉTAT',
+                'name' => 'Bon',
                 'color' => $green
             ],
             [
-                'name' => 'ÉTAT MOYEN',
+                'name' => 'Moyen',
                 'color' => $orange
             ],
             [
-                'name' => 'ORIGINALE',
+                'name' => 'Originale',
                 'color' => $green
             ],
             [
-                'name' => 'SUR LA BOITE',
+                'name' => 'Sur la boite',
                 'color' => $green
             ],
             [
-                'name' => 'IMPRIMÉE',
+                'name' => 'Imprimée',
                 'color' => $green
             ],
             [
-                'name' => 'COMME NEUF',
+                'name' => 'Comme neuf',
                 'color' => $green
             ],
             [
-                'name' => 'SANS',
+                'name' => 'Sans',
                 'color' => $red
             ],
             [
-                'name' => 'NEUF',
+                'name' => 'Neuf',
                 'color' => $green
             ],
             [
-                'name' => 'NEUVE',
+                'name' => 'Neuve',
                 'color' => $green
             ]
             ];
@@ -215,7 +215,7 @@ class OccasionService
                     'end' => 6
                 ];
                 $twig = [
-                    'titleH1' => 'Jeux pour <span class="text-purple">enfants</span>',
+                    'titleH1' => 'Jeux pour enfants',
                     'breadcrumb' => '<span class="text-purple">Tous les jeux</span> > Enfants'
                 ]; //TODO Antoine
                 break;
@@ -225,7 +225,7 @@ class OccasionService
                     'end' => 12
                 ];
                 $twig = [
-                    'titleH1' => 'Jeux pour <span class="text-purple">initié·es</span>',
+                    'titleH1' => 'Jeux pour initié·es',
                     'breadcrumb' => '<span class="text-purple">Tous les jeux</span> > Initié·es'
                 ]; //TODO Antoine
                 break;
@@ -235,7 +235,7 @@ class OccasionService
                     'end' => 11
                 ]; //TODO Antoine
                 $twig = [
-                    'titleH1' => 'Jeux tout <span class="text-purple">puplic</span>',
+                    'titleH1' => 'Jeux tout puplic',
                     'breadcrumb' => '<span class="text-purple">Tous les jeux</span> > Tout public'
                 ]; //TODO Antoine
                 break;
@@ -245,7 +245,7 @@ class OccasionService
                     'end' => 12
                 ];
                 $twig = [
-                    'titleH1' => 'Tous les <span class="text-purple">jeux</span>',
+                    'titleH1' => 'Tous les jeux',
                     'breadcrumb' => ''
                 ]; //TODO Antoine
                 break;

@@ -52,6 +52,7 @@ class LegalInformationService
                 ->setPublicationManagerFirstName('Antoine')
                 ->setPublicationManagerLastName('GALLÉE')
                 ->setSiretCompany('88847646200013')
+                ->setPhoneCompany('06.33.10.93.54')
                 ->setEmailCompany('contact@refaitesvosjeux.fr')
                 ->setFullUrlCompany('http://www.refaitesvosjeux.fr')
                 ->setCountryCompany($this->countryRepository->findOneBy(['isocode' => 'FR']))

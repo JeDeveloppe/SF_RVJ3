@@ -249,12 +249,19 @@ class PanierController extends AbstractController
         $acceptCartForm = $this->createForm(AcceptCartType::class);
         $acceptCartForm->handleRequest($request);
 
-        //toutes les infos du panier sont là
+        //? toutes les infos du panier sont là
         $allCartValues = $this->panierService->calculateAllCart($paniers);
+
+        //?on verifie que tous est dispo à la vente sinon retour au debut du panier
+        $allOnLine = $this->panierService->checkIfAllCartObjectsAreOnLine($paniers);
+        if($allOnLine > 0){
+            $this->addFlash('warning', 'Panier modifié car un ou des objets ne sont plus disponiblent ! ');
+            return $this->redirectToRoute('panier_start');
+        }
 
         if($acceptCartForm->isSubmitted() && $acceptCartForm->isValid())
         {
-            //on vérifie si on a bien toutes les variables pour enregistrer le document
+            //?on vérifie si on a bien toutes les variables pour enregistrer le document
             $this->panierService->checkSessionForSaveInDatabase($session);
 
             //? sauvegarde document dans BDD avec articles, boites, etc... en fonction du Type DEVIS ou COMMANDE
@@ -288,11 +295,15 @@ class PanierController extends AbstractController
 
         $this->addFlash($reponse[0], $reponse[1]);
 
-        //TODO redirect -2 René?
-        return $this->redirect($request->query->get('backUrl'));
-        // return $this->redirect($request->headers->get('referer'));
+        if($request->query->get('returnInCatalog')){
 
-        // return $this->redirectToRoute('app_catalogue_occasions');
+            return $this->redirect($request->query->get('returnInCatalog'));
+
+        }else{
+
+            return $this->redirect($request->headers->get('referer'));
+        }
+
     }
 
     #[Route('/panier/ajout-demande/{boite}', name: 'panier_add_demande')]

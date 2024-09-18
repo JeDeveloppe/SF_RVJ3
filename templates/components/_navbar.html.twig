@@ -14,11 +14,11 @@
       <a class="text-white text-decoration-none small" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur·rice</a>
     </li>
   </ul>
-  <div id="nav_header" class="col-12 d-flex justify-content-around align-items-strecht py-3 my-0 {{ bg_white_if_route_not_app_home }}">
+  <div class="col-12 d-flex justify-content-around align-items-strecht {{ bg_white_if_route_not_app_home }}">
     <a class="d-flex justify-content-start align-items-center" id="logoNav" href="{{ path('app_home') }}">
       <img src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo de Refaites vos jeux">
     </a>
-    <ul class="m-0 d-flex flex-wrap flex-column flex-md-row justify-content-around align-items-center py-2">
+    <ul class="m-0 d-flex flex-wrap flex-column flex-md-row justify-content-around align-items-center">
       <li class="list-unstyled mx-2">
         <a class="text-dark text-decoration-none" href="{{ path('app_catalogue_occasions', {'category': 'tous-les-jeux' }) }}">Tous les jeux</a>
       </li>
@@ -31,8 +31,8 @@
       <li class="list-unstyled mx-2">
         <a class="text-dark text-decoration-none" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}">Initié·es</a>
       </li>
-      <li class="list-unstyled mx-2">
-        <a class="text-dark text-decoration-none" href="{{ path('app_catalogue_pieces_detachees') }}">Pièces détachées</a>
+      <li class="list-unstyled mx-2 border-start border-2 ps-2 border-yellow">
+        <a class="text-dark text-decoration-none"  href="{{ path('app_home') }}#piecesDetachees">Pièces détachées</a>
       </li>
       <li class="list-unstyled mx-2">
         <a class="btn btn-yellow" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
@@ -40,7 +40,7 @@
     </ul>
     <ul class="col-2 p-0 my-0 d-flex flex-column flex-sm-row justify-content-center">
       {% if is_granted('ROLE_USER') %}
-        <li class="list-unstyled dropdown col p-0 pe-sm-2 m-0 d-flex justify-content-center justify-content-sm-end align-items-center">
+        <li class="list-unstyled dropdown col-12 p-0 pe-sm-2 m-0 d-flex justify-content-center justify-content-sm-end align-items-center">
           <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="{{ path('member') }}">Espace membre</a>
