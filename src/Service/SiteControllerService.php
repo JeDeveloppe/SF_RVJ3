@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Service;
+
+use Symfony\Component\Routing\RouterInterface;
+
+class SiteControllerService
+{
+    public function __construct(
+        private RouterInterface $routerInterface
+        ){
+    }
+
+    public function pagePrestations()
+    {
+        $siteControllerServiceContent = [
+            'header_h1_no_purple'=> 'Nos',
+            'header_h1_purple' => 'prestations',
+            'header_description' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', //TODO
+            'dark_button_link' => $this->routerInterface->generate('app_prestations'),
+            'dark_button_link_archor' => '#id_animations',
+            'dark_button_text' => 'Animations',
+            'yellow_button_link' => $this->routerInterface->generate('app_prestations'),
+            'yellow_button_link_archor' => '#id_inventaires',
+            'yellow_button_text' => 'Inventaires',
+            'img_asset' => 'prestations/prestation_header.png',
+            'img_alt' => 'Image de pièces au détail'
+        ];
+
+        return $siteControllerServiceContent;
+    }
+
+    public function pageNousSoutenir()
+    {
+        $siteControllerServiceContent = [
+            'header_h1_no_purple'=> 'Soutenir',
+            'header_h1_purple' => 'l\'association',
+            'header_description' => 'Refaites Vos Jeux, c’est une équipe de bénévoles soucieux de favoriser le réemploi des jeux et le lien social depuis 2020. L’équipe s’affaire tous les jours pour collecter, trier et valoriser les dons faits par les particuliers ou les structures (près de 230 jeux par mois !). L’association propose également différentes prestations : animation de jeux vintage, inventaire des stocks de jeux, formation…',
+            'dark_button_link' => $this->routerInterface->generate('app_support_us'),
+            'dark_button_link_archor' => '#id_missions',
+            'dark_button_text' => 'Missions',
+            'yellow_button_link' => $this->routerInterface->generate('app_support_us'),
+            'yellow_button_link_archor' => '#id_support',
+            'yellow_button_text' => 'Nous soutenir',
+            'img_asset' => 'prestations/prestation_header.png', //TODO
+            'img_alt' => 'Image de pièces au détail' //TODO
+        ];
+
+        return $siteControllerServiceContent;
+    }
+
+    public function pageDevenirAmbassadeur()
+    {
+        $siteControllerServiceContent = [
+            'header_h1_no_purple'=> 'Devenir',
+            'header_h1_purple' => 'ambassadeur·rice',
+            'header_description' => 'Vous souhaitez contribuer activement au projet porté par l’association ? Particuliers ou structures… où que vous soyez en France, collectez des jeux près de chez vous et faites-les nous parvenir !',
+            'dark_button_link' => $this->routerInterface->generate('app_became_ambassador'),
+            'dark_button_link_archor' => '#organiserCollecte',
+            'dark_button_text' => 'Organiser une collecte',
+            'img_asset' => 'ambassadeur/devenir_ambassadeur.png',
+            'img_alt' => 'Image devenir ambassadeur·rice'
+        ];
+
+        return $siteControllerServiceContent;
+    }
+
+    public function pageDonnerSesJeux()
+    {
+        $siteControllerServiceContent = [
+            'header_h1_no_purple'=> 'Donner',
+            'header_h1_purple' => 'ses jeux',
+            'header_description' => 'L’association récupère les jeux de société complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…). Nous récupérons également les puzzles complets et les jeux éducatifs en boîte carton (pour apprendre à lire, compter…), qu’ils soient complets ou incomplets.',
+            'dark_button_link' => $this->routerInterface->generate('app_give_your_games'),
+            'dark_button_link_archor' => '#carte-des-points-de-collecte',
+            'dark_button_text' => 'Trouvez un point de collecte',
+            'img_asset' => 'donner_jeux/donner_piece_de_jeux.png',
+            'img_alt' => 'Image donner des pièces de jeux'
+        ];
+
+        return $siteControllerServiceContent;
+    }
+
+}

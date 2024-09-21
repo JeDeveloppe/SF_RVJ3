@@ -4,25 +4,7 @@
 
 {% block body %}
 
-<div class="row justify-content-center align-items-center my-5">
-    <div class="col-11 col-md-6 d-flex flex-column justify-content-around pt-3">
-        <h1 class="col-11">
-            <span class="text-purple">Soutenir</span> l'association
-        </h1>
-        <div class="col-11">
-            Refaites Vos Jeux, c’est une équipe de bénévoles soucieux de favoriser le réemploi des jeux et le lien social depuis 2020. L’équipe s’affaire tous les jours pour collecter, trier et valoriser les dons faits par les particuliers ou les structures (près de 230 jeux par mois !). L’association propose également différentes prestations : animation de jeux vintage, inventaire des stocks de jeux, formation…
-        </div>
-
-        <div class="col-11 d-flex justify-content-around mt-3">
-            <a class="btn btn-dark" href="{{ path('app_support_us') }}#id_missions">Missions</a>
-            <a class="btn btn-yellow" href="{{ path('app_support_us') }}#id_support">Nous soutenir</a>
-        </div>
-
-    </div>
-    <div class="col-11 mt-3 mt-md-0 col-md-4 d-flex justify-content-around">
-        <img src="{{ asset('build/images/design/prestations/prestation_header.png') }}" alt="Image de pièces au détail">
-    </div>
-</div>
+{% include "site/pages/components/_row_page_header.html.twig" with {'siteControllerServiceContent': siteControllerServiceContent } %}
 
 <div id="id_missions" class="row justify-content-center align-items-center bg-white py-5">
     <h2 class="col-12 text-center">

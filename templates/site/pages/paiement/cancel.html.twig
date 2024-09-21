@@ -5,7 +5,7 @@
 {% block body %}
 
     <div class="row justify-content-center py-5 bg-white">
-        <h1 class="col-12 text-center">PAIEMENT ANNULÉ</h1>
+        <h1 class="col-12 text-center text-md-start">PAIEMENT ANNULÉ</h1>
         <p class="col-12 lead text-center">Quelque chose ne s'est pas déroulé correctement ou vous avez annulé la transaction!</p>
         <div class="col-4 mt-5 d-flex justify-content-around">
             <a href="{{ path('paiement', {'tokenDocument': token}) }}" class="btn btn-success" >Relancer le paiement !</a>

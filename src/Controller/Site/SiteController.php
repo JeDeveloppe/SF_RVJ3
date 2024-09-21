@@ -29,6 +29,7 @@ use App\Repository\ResetPasswordRepository;
 use App\Repository\CollectionPointRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
+use App\Service\SiteControllerService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,7 +55,8 @@ class SiteController extends AbstractController
         private PartnerRepository $partnerRepository,
         private AmbassadorService $ambassadorService,
         private AmbassadorRepository $ambassadorRepository,
-        private UrlGeneratorInterface $urlGeneratorInterface
+        private UrlGeneratorInterface $urlGeneratorInterface,
+        private SiteControllerService $siteControllerService
     )
     {
     }
@@ -180,11 +182,13 @@ class SiteController extends AbstractController
         
         return $this->render('site/pages/ambassadeur/devenir_ambassadeur.html.twig', [
             'metas' => $metas,
+            'siteControllerServiceContent' => $this->siteControllerService->pageDevenirAmbassadeur()
+
         ]);
 
     }
 
-    #[Route('/projet/nous-soutenir/devenir-ambassadeur-ambassadrice/quide', name: 'app_download_ambassador_quide')]
+    #[Route('/devenir-ambassadeur-rice/quide', name: 'app_download_ambassador_quide')]
     public function downloadQuide()
     {
         // load the file from the filesystem
@@ -207,30 +211,30 @@ class SiteController extends AbstractController
         }
     }
 
-    #[Route('/projet/nous-soutenir/acheter-des-jeux', name: 'app_buy_games')]
-    public function buyGames(): Response
-    {
+    // #[Route('/projet/nous-soutenir/acheter-des-jeux', name: 'app_buy_games')]
+    // public function buyGames(): Response
+    // {
         
-        $metas['description'] = "L’association recompose des jeux complets d’occasion à partir de plusieurs boîtes incomplètes.";
+    //     $metas['description'] = "L’association recompose des jeux complets d’occasion à partir de plusieurs boîtes incomplètes.";
         
-        return $this->render('site/project/nous_soutenir/acheter-des-jeux.html.twig', [
-            'metas' => $metas,
-        ]);
+    //     return $this->render('site/project/nous_soutenir/acheter-des-jeux.html.twig', [
+    //         'metas' => $metas,
+    //     ]);
 
-    }
+    // }
 
-    #[Route('/projet/nous-soutenir/adherer-a-l-association', name: 'app_adherer')]
-    public function adherer(): Response
-    {
+    // #[Route('/projet/nous-soutenir/adherer-a-l-association', name: 'app_adherer')]
+    // public function adherer(): Response
+    // {
 
-        $metas['description'] = 'Adhérer à l’association, c’est soutenir un projet à visée écologique et sociale.';
+    //     $metas['description'] = 'Adhérer à l’association, c’est soutenir un projet à visée écologique et sociale.';
         
-        return $this->render('site/project/nous_soutenir/adherer.html.twig', [
-            'metas' => $metas,            
-            'legales' => $this->legalInformationRepository->findOneBy([])
-        ]);
+    //     return $this->render('site/project/nous_soutenir/adherer.html.twig', [
+    //         'metas' => $metas,            
+    //         'legales' => $this->legalInformationRepository->findOneBy([])
+    //     ]);
 
-    }
+    // }
 
     #[Route('/nos-prestations', name: 'app_prestations')]
     public function prestations(Request $request): Response
@@ -241,31 +245,32 @@ class SiteController extends AbstractController
         return $this->render('site/pages/prestations/nos_prestations.html.twig', [
             'metas' => $metas,            
             'legales' => $this->legalInformationRepository->findOneBy([]),
+            'siteControllerServiceContent' => $this->siteControllerService->pagePrestations()
         ]);
 
     }
 
-    #[Route('/projet/nous-soutenir/faire-un-don', name: 'app_make_donation')]
-    public function makeDonation(Request $request): Response
-    {
+    // #[Route('/projet/nous-soutenir/faire-un-don', name: 'app_make_donation')]
+    // public function makeDonation(Request $request): Response
+    // {
         
-        $form = $this->createForm(AddressForDonationType::class);
-        $form->handleRequest($request);
+    //     $form = $this->createForm(AddressForDonationType::class);
+    //     $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+    //     if($form->isSubmitted() && $form->isValid()) {
             
-            throw new \Exception('Traitement du formulaire non codé !');
-        }
+    //         throw new \Exception('Traitement du formulaire non codé !');
+    //     }
 
-        $metas['description'] = 'Vous souhaitez soutenir financièrement le projet ?';
+    //     $metas['description'] = 'Vous souhaitez soutenir financièrement le projet ?';
         
-        return $this->render('site/project/nous_soutenir/faire-un-don.html.twig', [
-            'metas' => $metas,            
-            'legales' => $this->legalInformationRepository->findOneBy([]),
-            'form' => $form
-        ]);
+    //     return $this->render('site/project/nous_soutenir/faire-un-don.html.twig', [
+    //         'metas' => $metas,            
+    //         'legales' => $this->legalInformationRepository->findOneBy([]),
+    //         'form' => $form
+    //     ]);
 
-    }
+    // }
 
     #[Route('/donner-ses-jeux', name: 'app_give_your_games')]
     public function giveYourGames(Request $request): Response
@@ -281,29 +286,31 @@ class SiteController extends AbstractController
             'metas' => $metas,
             'legales' => $this->legalInformationRepository->findOneBy([]),
             'donnees' => $donnees,
-            'ambassadors' => $ambassadors
+            'ambassadors' => $ambassadors,
+            'siteControllerServiceContent' => $this->siteControllerService->pageDonnerSesJeux()
         ]);
 
     }
 
-    #[Route('/projet/nous-soutenir/organiser-une-collecte-de-jeux', name: 'app_organize_collection')]
-    public function organizeCollection(): Response
-    {
+    // #[Route('/projet/nous-soutenir/organiser-une-collecte-de-jeux', name: 'app_organize_collection')]
+    // public function organizeCollection(): Response
+    // {
         
-        $metas['description'] = "Vous souhaitez organiser une collecte de jeux ? L’association vous accompagne dans la mise en place de ce projet.";
+    //     $metas['description'] = "Vous souhaitez organiser une collecte de jeux ? L’association vous accompagne dans la mise en place de ce projet.";
         
-        return $this->render('site/project/nous_soutenir/organiser-une-collecte.html.twig', [
-            'metas' => $metas,
-            'legales' => $this->legalInformationRepository->findOneBy([])
-        ]);
+    //     return $this->render('site/project/nous_soutenir/organiser-une-collecte.html.twig', [
+    //         'metas' => $metas,
+    //         'legales' => $this->legalInformationRepository->findOneBy([])
+    //     ]);
 
-    }
+    // }
 
     #[Route('/soutenir-association', name: 'app_support_us')]
     public function supportUs(Request $request): Response
     {
 
         $metas['description'] = 'Que vous soyez un particulier, un professionnel du monde du jeu ou du réemploi, ce projet a besoin de vous pour se pérenniser et se développer.';
+
 
         $donnees[] = [
             'title' => 'DEVENIR BÉNÉVOLE',
@@ -337,7 +344,8 @@ class SiteController extends AbstractController
 
         return $this->render('site/pages/association/nous_soutenir.html.twig', [
             'metas' => $metas,
-            'donnees' => $donnees
+            'donnees' => $donnees,
+            'siteControllerServiceContent' => $this->siteControllerService->pageNousSoutenir()
         ]);
 
     }

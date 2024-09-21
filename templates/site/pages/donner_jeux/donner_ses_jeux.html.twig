@@ -6,23 +6,7 @@
 
 <div class="js-locations" data-locations="{{ donnees }}"></div>
 
-<div class="row justify-content-around align-items-center my-5">
-    <div class="col-11 col-md-5 d-flex flex-column justify-content-around pt-3">
-        <h1 class="col-11 display-2">
-            <span class="text-purple">Donner</span> ses jeux
-        </h1>
-        <div class="col-11">
-            L’association récupère les jeux de société complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…). Nous récupérons également les puzzles complets et les jeux éducatifs en boîte carton (pour apprendre à lire, compter…), qu’ils soient complets ou incomplets.
-        </div>
-        <div class="col-11 mt-5">
-            <a class="btn btn-dark" href="{{ path('app_give_your_games') }}#carte-des-points-de-collecte">Trouvez un point de collecte</a>
-        </div>
-
-    </div>
-    <div class="col-11 mt-3 mt-md-0 col-md-5 d-flex justify-content-around">
-        <img src="{{ asset('build/images/design/donner_jeux/donner_piece_de_jeux.png') }}" alt="Image donner pièce de jeux">
-    </div>
-</div>
+{% include "site/pages/components/_row_page_header.html.twig" with {'siteControllerServiceContent': siteControllerServiceContent } %}
 
 <div id="carte-des-points-de-collecte" class="row justify-content-center align-items-center bg-white py-5">
     <h2 class="col-11 text-center ">

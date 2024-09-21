@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>REFAITES VOS JEUX | {% block title %}{% endblock %}</title>
+        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>REFAITES VOS JEUX | {% block title %}{% endblock %}</title>
         <meta name="msapplication-TileColor" content="#da532c">
         <meta name="theme-color" content="#ffffff">
         {% include "site/googleAnalytics/googleAnalytics.html.twig" %}
@@ -29,9 +29,8 @@
         
     </head>
     <body>
-
-        <div class="container-fluid">
-
+        <div class="container">
+        
             {% include "components/_cookies_alert.html.twig" %}
 
             {% include "components/sharing/facebook/fb_root.html.twig" %}
@@ -45,7 +44,6 @@
             {% block body %}{% endblock %}
 
             {% include "components/_footer.html.twig" %}
-
         </div>
 
         {{ encore_entry_script_tags('site') }}

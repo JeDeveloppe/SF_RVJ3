@@ -87,7 +87,7 @@ class SitemapController extends AbstractController
         // }
 
         $response = new Response(
-            $this->renderView('sitemap/sitemap.html.twig', [
+            $this->renderView('site/sitemap/sitemap.html.twig', [
                 'urls'     => $urls,
                 'hostname' => $hostname
             ]),

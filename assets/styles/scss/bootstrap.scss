@@ -87,37 +87,37 @@ h6 {
     line-height: 1.2
 }
 
-.h1,h1 {
-    font-size: calc(1.375rem + 3vw)
+.h1, h1 {
+    font-size: calc(2.375rem + 3vw)
 }
 
 @media (min-width:1200px) {
 
     .h1,h1 {
-        font-size: 2.5rem
+        font-size: 3.5rem
     }
 }
 
 .h2,h2 {
-    font-size: calc(1.325rem + .9vw)
+    font-size: calc(2.325rem + .9vw)
 }
 
 @media (min-width:1200px) {
 
     .h2,h2 {
-        font-size: 2rem
+        font-size: 3rem
     }
 }
 
 .h3,h3 {
-    font-size: calc(1.3rem + .6vw)
+    font-size: calc(2.3rem + .6vw)
 }
 
 @media (min-width:1200px) {
 
     .h3,
     h3 {
-        font-size: 1.75rem
+        font-size: 2.75rem
     }
 }
 

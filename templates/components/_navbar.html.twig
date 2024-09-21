@@ -2,45 +2,47 @@
 {% if app.request.get('_route') == 'app_home'  %}
   {% set bg_white_if_route_not_app_home = 'bg-secondary' %}
 {% endif %}
-<div class="row {{ bg_white_if_route_not_app_home }} sticky-top my-0">
-  <ul id="pre_header" class="d-flex justify-content-around align-items-center justify-content-md-end text-uppercase bg-purple col-12 py-2">
-    <li class="list-unstyled mx-4 text-center">
+
+<div class="d-none d-md-block sticky-top p-0">
+  <ul class="d-flex justify-content-end col-12 bg-purple text-uppercase py-1 m-0">
+    <li class="list-unstyled px-2">
       <a class="text-white text-decoration-none small" href="{{ path('app_support_us') }}">Soutenir l'association</a>
     </li>
-    <li class="list-unstyled mx-4 text-center">
+    <li class="list-unstyled px-2">
       <a class="text-white text-decoration-none small" href="{{ path('app_prestations') }}">Prestations</a>
     </li>
-    <li class="list-unstyled mx-4 text-center">
+    <li class="list-unstyled px-2">
       <a class="text-white text-decoration-none small" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur·rice</a>
     </li>
   </ul>
-  <div class="col-12 d-flex justify-content-around align-items-strecht {{ bg_white_if_route_not_app_home }}">
-    <a class="d-flex justify-content-start align-items-center" id="logoNav" href="{{ path('app_home') }}">
+  </div>
+  <div class="col-12 d-flex flex-wrap justify-content-around align-items-center {{ bg_white_if_route_not_app_home }} sticky-top">
+    <a class="col-2 d-flex justify-content-center align-items-center" id="logoNav" href="{{ path('app_home') }}">
       <img src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo de Refaites vos jeux">
     </a>
-    <ul class="m-0 d-flex flex-wrap flex-column flex-md-row justify-content-around align-items-center">
-      <li class="list-unstyled mx-2">
+    <ul class="col-8 d-flex flex-wrap justify-content-around align-items-center">
+      <li class="list-unstyled px-2">
         <a class="text-dark text-decoration-none" href="{{ path('app_catalogue_occasions', {'category': 'tous-les-jeux' }) }}">Tous les jeux</a>
       </li>
-      <li class="list-unstyled mx-2">
+      <li class="list-unstyled px-2">
         <a class="text-dark text-decoration-none" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}">Enfants</a>
       </li>
-      <li class="list-unstyled mx-2">
+      <li class="list-unstyled px-2">
         <a class="text-dark text-decoration-none" href="{{ path('app_catalogue_occasions', {'category': 'jeux-tout-public'}) }}">Tout public</a>
       </li>
-      <li class="list-unstyled mx-2">
+      <li class="list-unstyled px-2">
         <a class="text-dark text-decoration-none" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}">Initié·es</a>
       </li>
-      <li class="list-unstyled mx-2 border-start border-2 ps-2 border-yellow">
+      <li class="list-unstyled px-2 border-start border-2 ps-2 border-yellow">
         <a class="text-dark text-decoration-none"  href="{{ path('app_home') }}#piecesDetachees">Pièces détachées</a>
       </li>
-      <li class="list-unstyled mx-2">
+      <li class="list-unstyled px-2">
         <a class="btn btn-yellow" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
       </li>
     </ul>
-    <ul class="col-2 p-0 my-0 d-flex flex-column flex-sm-row justify-content-center">
+    <ul class="col-2 d-flex">
       {% if is_granted('ROLE_USER') %}
-        <li class="list-unstyled dropdown col-12 p-0 pe-sm-2 m-0 d-flex justify-content-center justify-content-sm-end align-items-center">
+        <li class="list-unstyled dropdown col-6 d-flex justify-content-center align-items-center">
           <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="{{ path('member') }}">Espace membre</a>
@@ -52,11 +54,11 @@
           </div>
         </li>
       {% else %}
-        <li class="list-unstyled dropdown col p-0 pe-sm-2 m-0 d-flex justify-content-center justify-content-sm-end align-items-center">
+        <li class="list-unstyled dropdown col-6">
           <a class="text-dark" href="{{ path('app_login') }}"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
         </li>
       {% endif %}
-        <li class="list-unstyled col p-0 pe-sm-2 m-0 d-flex justify-content-center justify-content-sm-start align-items-center">
+        <li class="list-unstyled col-6 d-flex justify-content-center align-items-center">
           <a id="cart_link" class="text-dark" href="{{ path('panier_start') }}">
             <img id="cart_link_logo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier">
             {% set countPanier = 0 %}
@@ -68,4 +70,3 @@
         </li>
     </ul>
   </div>
-</div>
