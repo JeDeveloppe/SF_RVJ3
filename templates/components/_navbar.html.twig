@@ -1,72 +1,87 @@
 {% set bg_white_if_route_not_app_home = 'bg-white' %}
-{% if app.request.get('_route') == 'app_home'  %}
+{# {% if app.request.get('_route') == 'app_home'  %}
   {% set bg_white_if_route_not_app_home = 'bg-secondary' %}
-{% endif %}
+{% endif %} #}
 
 <div class="d-none d-md-block sticky-top p-0">
-  <ul class="d-flex justify-content-end col-12 bg-purple text-uppercase py-1 m-0">
-    <li class="list-unstyled px-2">
-      <a class="text-white text-decoration-none small" href="{{ path('app_support_us') }}">Soutenir l'association</a>
-    </li>
-    <li class="list-unstyled px-2">
-      <a class="text-white text-decoration-none small" href="{{ path('app_prestations') }}">Prestations</a>
-    </li>
-    <li class="list-unstyled px-2">
-      <a class="text-white text-decoration-none small" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur·rice</a>
-    </li>
-  </ul>
-  </div>
-  <div class="col-12 d-flex flex-wrap justify-content-around align-items-center {{ bg_white_if_route_not_app_home }} sticky-top">
-    <a class="col-2 d-flex justify-content-center align-items-center" id="logoNav" href="{{ path('app_home') }}">
-      <img src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo de Refaites vos jeux">
-    </a>
-    <ul class="col-8 d-flex flex-wrap justify-content-around align-items-center">
-      <li class="list-unstyled px-2">
-        <a class="text-dark text-decoration-none" href="{{ path('app_catalogue_occasions', {'category': 'tous-les-jeux' }) }}">Tous les jeux</a>
-      </li>
-      <li class="list-unstyled px-2">
-        <a class="text-dark text-decoration-none" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}">Enfants</a>
-      </li>
-      <li class="list-unstyled px-2">
-        <a class="text-dark text-decoration-none" href="{{ path('app_catalogue_occasions', {'category': 'jeux-tout-public'}) }}">Tout public</a>
-      </li>
-      <li class="list-unstyled px-2">
-        <a class="text-dark text-decoration-none" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}">Initié·es</a>
-      </li>
-      <li class="list-unstyled px-2 border-start border-2 ps-2 border-yellow">
-        <a class="text-dark text-decoration-none"  href="{{ path('app_home') }}#piecesDetachees">Pièces détachées</a>
-      </li>
-      <li class="list-unstyled px-2">
-        <a class="btn btn-yellow" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
-      </li>
-    </ul>
-    <ul class="col-2 d-flex">
-      {% if is_granted('ROLE_USER') %}
-        <li class="list-unstyled dropdown col-6 d-flex justify-content-center align-items-center">
-          <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="{{ path('member') }}">Espace membre</a>
-            <div class="dropdown-divider"></div>
-            {% if is_granted('ROLE_BENEVOLE') %}
-              <a class="dropdown-item" href="{{ path('admin') }}"><i class="fa-solid fa-lock text-primary"></i> ADMINISTRATION</a>
-            {% endif %}
-            <a class="dropdown-item" href="{{ path('logout') }}"><i class="fa-solid fa-power-off text-danger"></i> Déconnexion</a>
-          </div>
-        </li>
-      {% else %}
-        <li class="list-unstyled dropdown col-6">
-          <a class="text-dark" href="{{ path('app_login') }}"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
-        </li>
-      {% endif %}
-        <li class="list-unstyled col-6 d-flex justify-content-center align-items-center">
-          <a id="cart_link" class="text-dark" href="{{ path('panier_start') }}">
-            <img id="cart_link_logo" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier">
-            {% set countPanier = 0 %}
-            {% for categorie in app.session.get('paniers') %}
-              {% set countPanier = countPanier + categorie | length %}
-            {% endfor %}
-            <span id="cart_link_value">{{ countPanier  }}</span>
-          </a>
-        </li>
-    </ul>
-  </div>
+	<ul class="d-flex justify-content-end col-12 bg-purple text-uppercase py-1 m-0">
+		<li class="list-unstyled px-2">
+			<a class="text-white text-decoration-none small" href="{{ path('app_support_us') }}">Soutenir l'association</a>
+		</li>
+		<li class="list-unstyled px-2">
+			<a class="text-white text-decoration-none small" href="{{ path('app_prestations') }}">Prestations</a>
+		</li>
+		<li class="list-unstyled px-2">
+			<a class="text-white text-decoration-none small" href="{{ path('app_became_ambassador') }}">Devenir ambassadeur·rice</a>
+		</li>
+	</ul>
+</div>
+<nav class="navbar navbar-expand-lg navbar-light sticky-top {{ bg_white_if_route_not_app_home }}">
+	<a class="navbar-brand" id="logoNav" href="{{ path('app_home') }}">
+		<img src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo de Refaites vos jeux">
+	</a>
+	<button class="navbar-toggler me-auto ms-2" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNavDropdown">
+		<ul class="navbar-nav mx-auto">
+			<li class="nav-item">
+				<a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': 'tous-les-jeux' }) }}">Tous les jeux</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}">Enfants</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-tout-public'}) }}">Tout public</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}">Initié·es</a>
+			</li>
+			<li class="nav-item border-start border-2 ps-2 border-yellow">
+				<a class="nav-link text-dark" href="{{ path('app_home') }}#piecesDetachees">Pièces détachées</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link text-dark btn btn-yellow" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
+			</li>
+		</ul>
+	</div>
+	<div class="mt-2">
+		<ul class="d-flex list-unstyled">
+			{% if is_granted('ROLE_USER') %}
+				<li class="dropdown d-flex align-items-center">
+					<a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
+					<div class="dropdown-menu dropdown-menu-end">
+						<a class="dropdown-item" href="{{ path('member') }}">Espace membre</a>
+						<div class="dropdown-divider"></div>
+						{% if is_granted('ROLE_BENEVOLE') %}
+							<a class="dropdown-item" href="{{ path('admin') }}">
+								<i class="fa-solid fa-lock text-primary"></i>
+								ADMINISTRATION</a>
+						{% endif %}
+						<a class="dropdown-item" href="{{ path('logout') }}">
+							<i class="fa-solid fa-power-off text-danger"></i>
+							Déconnexion</a>
+					</div>
+				</li>
+			{% else %}
+				<li class="dropdown d-flex align-items-center">
+					<a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('build/images/design/nav/user.svg') }}" alt="Logo d'accès espace membre"></a>
+					<div class="dropdown-menu dropdown-menu-end">
+						<a class="dropdown-item" href="{{ path('app_login') }}">Me connecter</a>
+						<a class="dropdown-item" href="{{ path('app_register') }}">M'inscrire</a>
+					</div>
+				</li>
+			{% endif %}
+			<li class="nav-item d-flex align-items-center">
+				<a id="cart_link" class="nav-link" href="{{ path('panier_start') }}">
+					<img id="cart_link_logo" class="position-relative" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier">
+					{% set countPanier = 0 %}
+					{% for categorie in app.session.get('paniers') %}
+						{% set countPanier = countPanier + categorie | length %}
+					{% endfor %}
+					<span id="cart_link_value">{{ countPanier  }}</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+</nav>

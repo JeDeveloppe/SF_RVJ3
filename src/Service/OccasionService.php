@@ -265,7 +265,7 @@ class OccasionService
         }
 
         $durations = [];
-        $durationsChecked = $this->durationOfGameRepository->findBy([],['orderOfAppearance' => 'ASC']);
+        $durationsChecked = $this->durationOfGameRepository->findBy(['displayInForm' => true],['orderOfAppearance' => 'ASC']);
         foreach($durationsChecked as $durationChecked){
             $durations[$durationChecked->getName()] = $durationChecked->getName();
         }

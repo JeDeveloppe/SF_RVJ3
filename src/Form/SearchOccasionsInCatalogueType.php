@@ -7,11 +7,8 @@ use App\Repository\NumbersOfPlayersRepository;
 use App\Service\OccasionService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Validator\Constraints as Assert;
 
 class SearchOccasionsInCatalogueType extends AbstractType
 {
@@ -26,14 +23,6 @@ class SearchOccasionsInCatalogueType extends AbstractType
     {
 
         $builder
-            // ->add('search', TextType::class, [
-            //     'label' => 'Je recherche:',
-            //     'required' => false,
-            //     'attr' => [
-            //         'placeholder' => 'Un jeu, un éditeur...',
-            //         'class' => 'form-control'
-            //     ]
-            // ])
             ->add('playerMin', ChoiceType::class, [
                 'label' => 'Nombre de joueur(s):',
                 'attr' => [

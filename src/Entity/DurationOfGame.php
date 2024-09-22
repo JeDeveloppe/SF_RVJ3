@@ -24,6 +24,9 @@ class DurationOfGame
     #[ORM\Column]
     private ?int $orderOfAppearance = null;
 
+    #[ORM\Column]
+    private ?bool $displayInForm = null;
+
     public function __construct()
     {
         $this->boites = new ArrayCollection();
@@ -89,6 +92,18 @@ class DurationOfGame
     public function setOrderOfAppearance(int $orderOfAppearance): static
     {
         $this->orderOfAppearance = $orderOfAppearance;
+
+        return $this;
+    }
+
+    public function isDisplayInForm(): ?bool
+    {
+        return $this->displayInForm;
+    }
+
+    public function setDisplayInForm(bool $displayInForm): static
+    {
+        $this->displayInForm = $displayInForm;
 
         return $this;
     }

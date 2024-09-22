@@ -34,7 +34,7 @@
 
             {% include "components/sharing/facebook/fb_root.html.twig" %}
                 
-            {# {% include "components/_navbar.html.twig" %} #}
+            {% include "components/_navbar.html.twig" %}
 
             {% if marquee is not null %}
                 {% include "components/_marquee.html.twig" %}
@@ -42,7 +42,7 @@
 
             {% include "components/_flash_message.html.twig" %}
 
-            {% block body %}{% endblock %}
+                {% block body %}{% endblock %}
 
             {% include "components/_footer.html.twig" %}
 

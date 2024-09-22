@@ -110,8 +110,7 @@
 }
 
 ._card_button_link_add_in_cart, ._card_button_link_to_entity{
-    width: 36px;
-    height: 36px;
+    max-width: 90%;
     border-radius: 10px;
     z-index: 2;
 }

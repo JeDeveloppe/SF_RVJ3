@@ -24,19 +24,23 @@ class DurationOfGameService
         $durations = [
             [
                 'duration' => 'Moins de 30 min',
-                'orderOfAppearance' => 1
+                'orderOfAppearance' => 1,
+                'displayInForm' => true
             ],
             [
                 'duration' => '30 à 60 min',
-                'orderOfAppearance' => 2
+                'orderOfAppearance' => 2,
+                'displayInForm' => true
             ],
             [
                 'duration' => 'Plus de 60 min',
-                'orderOfAppearance' => 3
+                'orderOfAppearance' => 3,
+                'displayInForm' => true
             ],
             [
                 'duration' => $_ENV['DURATION_OF_GAME_NO_TIME'],
-                'orderOfAppearance' => 4
+                'orderOfAppearance' => 4,
+                'displayInForm' => false
             ]
         ];
 
@@ -51,7 +55,7 @@ class DurationOfGameService
                 $duration = new DurationOfGame();
             }
 
-            $duration->setName($durationArray['duration'])->setOrderOfAppearance($durationArray['orderOfAppearance']);
+            $duration->setName($durationArray['duration'])->setOrderOfAppearance($durationArray['orderOfAppearance'])->setDisplayInForm($durationArray['displayInForm']);
             $this->em->persist($duration);
 
         }

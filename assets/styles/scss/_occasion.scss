@@ -132,7 +132,18 @@
     scale: 1.2;
 }
 
-.li_players > input[type="checkbox"]::before, .li_durations > input[type="checkbox"]::before, .li_ages > input[type="checkbox"]::before {
+.li_players > input[type="checkbox"]::before {
+    content: "";
+    width: 100%;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform: scale(0);
+    transform-origin: center;
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--form-control-color);
+    /* Windows High Contrast Mode */
+    background-color: var(--bs-yellow);
+}
+.li_durations > input[type="checkbox"]::before, .li_ages > input[type="checkbox"]::before {
     content: "";
     width: 100%;
     // clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
@@ -148,5 +159,5 @@
     transform: scale(1);
 }
 .li_durations > input[type="checkbox"]:checked::before, .li_ages > input[type="checkbox"]:checked::before {
-    transform: scale(0.7);
+    transform: scale(0.8);
 }
