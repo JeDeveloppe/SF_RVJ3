@@ -66,6 +66,7 @@ class LegalInformationService
                 ->setWebmasterLastName('WETTA')
                 ->setTax($this->taxRepository->findOneBy(['value' => 0]))
                 ->setIsOnline(true)
+                ->setWebdesigner('Juliette Thevenot')
                 ->setUpdatedBy($this->userRepository->findOneBy(['email' => $_ENV['ADMIN_EMAIL']]))
                 ->setUpdatedAt(new DateTimeImmutable('now'));
     

@@ -4,57 +4,47 @@
 
 {% block body %}
 
-    <div class="row justify-content-around align-items-center my-5">
-        <div class="col-11 col-md-6 d-flex flex-column justify-content-around pt-3">
-            <h1 class="col-12 text-center text-md-start">">Mentions <span class="text-purple">légales</span></h1>
-
-            <div class="col-11">Conformément aux dispositions des articles 6-III et 19 de la Loi n° 2004-575 du 21 juin 2004 pour la Confiance dans l’économie numérique et de la protection des données (RGPD) de l’Union européenne (UE), nous portons à la connaissance des utilisateurs et visiteurs du site {{ legales.fullUrlCompany }} les informations suivantes :</div>
-
-            <div class="col-11 mt-2">
-                <h3>Informations légales</h3>
-                    <p>
-                    Propriétaire du site : {{ legales.companyName }}<br />
-                    Adresse de courrier électronique : {{ legales.emailCompany }}<br />
-                    Adresse : {{ legales.streetCompany }} {{ legales.postalCodeCompany }} {{ legales.cityCompany }}<br />
-                    Hébergeur du site: {{ legales.hostName }} {{ legales.hostStreet }} {{ legales.hostPostalCode }} {{ legales.hostCity }}<br/>
-                    </p>
-                    <p>
-                    Créateur du site: {{ legales.webmasterCompanyName }}<br />
-                    <i class="fas fa-pen"></i> Webmaster : {{ legales.webmasterLastName }} {{ legales.webmasterFistName }}
-                    </p>
-            </div>
-
-        </div>
-        <div class="col-11 mt-3 mt-md-0 col-md-4 d-flex justify-content-around">
-        //TODO
-            <img src="{{ asset('build/images/design/prestations/prestation_header.png') }}" alt="Image de pièces au détail">
-        </div>
+    <div class="row g-0 justify-content-around align-items-center py-4">
+        <h1 class="col-12 text-center">Mentions légales</h1>
+        <div class="col-12 small text-center">Date de dernière mise à jour : {{ legales.updatedAt | date('d-m-Y') }}</div>
     </div>
 
-    <div class="row py-5 bg-white">
+    <div class="row g-0 py-5 bg-white justify-content-around">
 
-        <div class="col-12 mt-4">
+        <div class="col-12 px-5 col-md-8 mt-2">
+            <h3 class="text-purple">Informations légales</h4>
+                <p>
+                    <span class="fw-bolder">Propriétaire du site :</span> {{ legales.companyName }}<br />
+                    <span class="fw-bolder">Contact :</span> {{ legales.emailCompany }}<br />
+                    <span class="fw-bolder">Adresse :</span> {{ legales.streetCompany }} {{ legales.postalCodeCompany }} {{ legales.cityCompany }}<br />
+                    <span class="fw-bolder">Hébergeur du site:</span> {{ legales.hostName }} {{ legales.hostStreet }} {{ legales.hostPostalCode }} {{ legales.hostCity }}<br/>
+                    <span class="fw-bolder">Développement & webmaster:</span> {{ legales.webmasterCompanyName }}<br />
+                    <span class="fw-bolder">Webdesign :</span> {{ legales.webmasterLastName }} {{ legales.webmasterFistName }}
+                </p>
+        </div>
+
+        <div class="col-12 px-5 col-md-8 mt-4">
             <h2 id="cgu" class="col-12 text-center mb-3"><span class="text-purple">Conditions générales</span> d’utilisation<br/>du site et des <span class="text-purple">services proposés</span></h2>
 
-            L’utilisation du site {{ legales.fullUrlCompany }} implique l’acceptation pleine et entière des conditions générales d’utilisation décrites ci-aprés. <i class="fas fa-server text-gray fa-2x"></i><br/>
+            L’utilisation du site {{ legales.fullUrlCompany }} implique l’acceptation pleine et entière des conditions générales d’utilisation décrites ci-aprés.<br/>
             Ces conditions d’utilisation sont susceptibles d’être modifiées ou complétées à tout moment, sans préavis, aussi les utilisateurs du site {{ legales.fullUrlCompany }} sont invités à les consulter de manière régulière. {{ legales.fullUrlCompany }} est par principe accessible aux utilisateurs 24/24h, 7/7j, sauf interruption, programmée ou non, pour les besoins de sa maintenance ou cas de force majeure. En cas d’impossibilité d’accès au service, {{ legales.fullUrlCompany }} s’engage à faire son maximum afin de rétablir l’accès au service et s’efforcera alors de communiquer préalablement aux utilisateurs les dates et heures de l’intervention. N’étant soumis qu’à une obligation de moyen, {{ legales.fullUrlCompany }} ne saurait être tenu pour responsable de tout dommage, quelle qu’en soit la nature, résultant d’une indisponibilité du service.
 
             Le site {{ legales.fullUrlCompany }} est mis à jour régulièrement par le proprietaire du site. De la même façon, les mentions légales peuvent être modifiées à tout moment, sans préavis et s’imposent à l’utilisateur sans réserve. L’utilisateur est réputé les accepter sans réserve et s’y référer régulièrement pour prendre connaissance des modifications.
             Le site {{ legales.fullUrlCompany }} se réserve aussi le droit de céder, transférer, ce sans préavis les droits et/ou obligations des présentes CGU et mentions légales. En continuant à utiliser les services du site {{ legales.fullUrlCompany }} , l’utilisateur reconnaît accepter les modifications des conditions générales qui seraient intervenues.
         </div>
 
-        <div class="col-12 mt-4">
-            <h3>Description des <span class="text-purple">services fournis</span></h3>
+        <div class="col-12 px-5 col-md-8 mt-4">
+            <h4 class="text-purple">Description des <span class="text-purple">services fournis</span></h4>
 
             Le site {{ legales.fullUrlCompany }} a pour objet de fournir une information concernant l’ensemble des activités de la société.
             Le proprietaire du site s’efforce de fournir sur le site {{ legales.fullUrlCompany }} des informations aussi précises que possible. Toutefois, il ne pourra être tenue responsable des omissions, des inexactitudes et des carences dans la mise à jour, qu’elles soient de son fait ou du fait des tiers partenaires qui lui fournissent ces informations.
             Tous les informations proposées sur le site {{ legales.fullUrlCompany }} sont données à titre indicatif, sont non exhaustives, et sont susceptibles d’évoluer. Elles sont données sous réserve de modifications ayant été apportées depuis leur mise en ligne.
         </div>
 
-        <div class="col-12 mt-4">
-            <h3>Limites de <span class="text-purple">responsabilité</span></h3>
+        <div class="col-12 px-5 col-md-8 mt-4">
+            <h4 class="text-purple">Limites de <span class="text-purple">responsabilité</span></h4>
 
-            Le site {{ legales.fullUrlCompany }} utilise les technologies PHP <a href="https://www.php.net/manual/fr/intro-whatis.php" target="_blank"><i class="fab fa-php fa-2x text-primary"></i></a> et Javascript <a href="https://developer.mozilla.org/fr/docs/Learn/JavaScript/First_steps/What_is_JavaScript" target="_blank"><i class="fab fa-js fa-2x text-warning"></i></a> avec le framework <i class="fa-brands fa-2x fa-symfony"></i>.<br />
+            Le site {{ legales.fullUrlCompany }} utilise les technologies PHP <a href="https://www.php.net/manual/fr/intro-whatis.php" target="_blank"></a> et Javascript <a href="https://developer.mozilla.org/fr/docs/Learn/JavaScript/First_steps/What_is_JavaScript" target="_blank"></a> avec le framework Symfony.<br />
             Le site {{ legales.fullUrlCompany }} ne saurait être tenu responsable des erreurs typographiques ou inexactitudes apparaissant sur le service, ou de quelque dommage subi résultant de son utilisation. L’utilisateur reste responsable de son équipement et de son utilisation, de même il supporte seul les coûts directs ou indirects suite à sa connexion à Internet.
 
             L’utilisateur du site {{ legales.fullUrlCompany }} s’engage à accéder à celui-ci en utilisant un matériel récent, ne contenant pas de virus et avec un navigateur de dernière génération mise à jour.
@@ -64,16 +54,16 @@
             Il est ici rappelé que le développeur du site {{ legales.fullUrlCompany }} garde trace de l’adresse mail, et de l’adresse IP de l’utilisateur. En conséquence, il doit être conscient qu’en cas d’injonction de l’autorité judiciaire il peut être retrouvé et poursuivi.
         </div>
 
-        <div class="col-12 mt-4">
-            <h3>Propriété intellectuelle <span class="text-purple">et contrefaçons</span></h3>
+        <div class="col-12 px-5 col-md-8 mt-4">
+            <h4 class="text-purple">Propriété intellectuelle <span class="text-purple">et contrefaçons</span></h4>
 
             Le proprietaire du site est propriétaire des droits de propriété intellectuelle ou détient les droits d’usage sur tous les éléments accessibles sur le site, notamment les textes, images, graphismes, logo, icônes, sons, logiciels…
             Toute reproduction, représentation, modification, publication, adaptation totale ou partielle des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable à l’email : {{ legales.emailCompany }}
             Toute exploitation non autorisée du site ou de l’un quelconque de ces éléments qu’il contient sera considérée comme constitutive d’une contrefaçon et poursuivie conformément aux dispositions des articles L.335-2 et suivants du Code de Propriété Intellectuelle.
         </div>
 
-        <div class="col-12 mt-4">
-            <h3>Liens hypertextes <span class="text-purple">et cookies</span> <i class="fas fa-link text-primary"></i> <i class="fas fa-cookie text-brown"></i></h3>
+        <div class="col-12 px-5 col-md-8 mt-4">
+            <h4 class="text-purple">Liens hypertextes <span class="text-purple">et cookies</span></h4>
 
             Le site {{ legales.fullUrlCompany }} contient un certain nombre de liens hypertextes vers d’autres sites (partenaires, informations …) mis en place avec l’autorisation du proprietaire du site . Cependant, le proprietaire du site n’a pas la possibilité de vérifier le contenu des sites ainsi visités et décline donc toute responsabilité de ce fait quand aux risques éventuels de contenus illicites.
 
@@ -87,14 +77,14 @@
                 </ul>
         </div>
 
-        <div class="col-12 mt-4">
-            <h3>Droit applicable et <span class="text-purple">attribution de juridiction</span> <i class="fas fa-balance-scale text-dark"></i></h3>
+        <div class="col-12 px-5 col-md-8 mt-4">
+            <h4 class="text-purple">Droit applicable et attribution de juridiction</h4>
 
             Tout litige en relation avec l’utilisation du site {{ legales.fullUrlCompany }} est soumis au droit français. L’utilisateur ainsi que {{ legales.fullUrlCompany }} acceptent de se soumettre à la compétence exclusive des tribunaux Français en cas de litige.
         </div>
 
-        <div class="col-12 mt-4">
-            <h3>Protection des biens et des personnes – <span class="text-purple">gestion des données personnelles</span></h3>
+        <div class="col-12 px-5 col-md-8 mt-4">
+            <h4 class="text-purple">Protection des biens et des personnes – gestion des données personnelles</h4>
 
             {{ legales.companyName }} s'engage à ce que la collecte et le traitement de vos données, effectués à partir du site {{ legales.fullUrlCompany }}, soient conformes au règlement général sur la protection des données (RGPD) et à la loi Informatique et Libertés.
 

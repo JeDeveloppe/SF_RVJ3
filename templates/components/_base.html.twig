@@ -29,22 +29,22 @@
         
     </head>
     <body>
-        <div class="container">
         
             {% include "components/_cookies_alert.html.twig" %}
 
             {% include "components/sharing/facebook/fb_root.html.twig" %}
                 
-            {% include "components/_navbar.html.twig" %}
+            {# {% include "components/_navbar.html.twig" %} #}
 
-            {% include "components/_marquee.html.twig" %}
+            {% if marquee is not null %}
+                {% include "components/_marquee.html.twig" %}
+            {% endif %}
 
             {% include "components/_flash_message.html.twig" %}
 
             {% block body %}{% endblock %}
 
             {% include "components/_footer.html.twig" %}
-        </div>
 
         {{ encore_entry_script_tags('site') }}
 

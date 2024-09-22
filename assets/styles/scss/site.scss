@@ -13,10 +13,6 @@
 @import '_toast.scss';
 @import '_member.scss';
 
-html{
-  scroll-behavior: smooth;
-}
-
 img{
   max-width: 100%;
 }
@@ -24,6 +20,7 @@ img{
 body{
   background-color: var(--bs-secondary)  !important;
   font-family: 'Nunito', sans-serif !important;
+  max-width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6, .h2, .h3, .h1, .h4, .h5{
@@ -39,13 +36,13 @@ h5{
 }
 
 .spanEnCours{
-        position: absolute;
-        left: 50%;
-        top: 58%;
-        transform: translate(-50%);
-        color: var(--yellow);
-        -webkit-animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) 1s both;
-	        animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) 1s both;
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  transform: translate(-50%);
+  color: var(--yellow);
+  -webkit-animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) 1s both;
+    animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) 1s both;
 }
 @-webkit-keyframes tracking-in-expand {
         0% {

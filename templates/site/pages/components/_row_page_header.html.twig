@@ -1,5 +1,5 @@
-<div class="row justify-content-around align-items-start my-5">
-    <div class="col-12 col-md-4 d-flex flex-column justify-content-around pt-3">
+<div class="row g-0 justify-content-around align-items-start my-5">
+    <div class="col-11 col-md-4 d-flex flex-column justify-content-around pt-3 mb-5 mb-md-0">
         <h1 class="col-12 text-center text-md-start">
             {{ siteControllerServiceContent.header_h1_no_purple }} <span class="text-purple">{{ siteControllerServiceContent.header_h1_purple }}</span>
         </h1>
@@ -11,9 +11,8 @@
                 <a class="btn btn-yellow ms-2" href="{{ siteControllerServiceContent.yellow_button_link }}{{ siteControllerServiceContent.yellow_button_link_archor }}">{{siteControllerServiceContent.yellow_button_text}}</a>
             {% endif %}
         </div>
-
     </div>
-    <div class="col-11 mt-3 mt-md-0 col-md-4 d-flex justify-content-around">
+    <div class="col-9 col-md-4 d-flex justify-content-around">
         <img src="{{ asset('build/images/design/' ~ siteControllerServiceContent.img_asset ~ '') }}" alt="{{ siteControllerServiceContent.img_alt }}">
     </div>
 </div>

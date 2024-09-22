@@ -85,6 +85,9 @@ class LegalInformation
     #[ORM\Column(length: 18)]
     private ?string $phoneCompany = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $webdesigner = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -362,6 +365,18 @@ class LegalInformation
     public function setPhoneCompany(string $phoneCompany): static
     {
         $this->phoneCompany = $phoneCompany;
+
+        return $this;
+    }
+
+    public function getWebdesigner(): ?string
+    {
+        return $this->webdesigner;
+    }
+
+    public function setWebdesigner(string $webdesigner): static
+    {
+        $this->webdesigner = $webdesigner;
 
         return $this;
     }
