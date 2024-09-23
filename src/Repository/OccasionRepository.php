@@ -65,7 +65,7 @@ class OccasionRepository extends ServiceEntityRepository
             ->where('b.name LIKE :searchName')
             ->orWhere('e.name LIKE :searchName')
             ->andWhere('b.playersMin IN (:players)')
-            // ->orWhere('b.playersMax IN (:players)')
+            // ->orWhere('b.playersMax >= (:players)')
             ->andWhere('d.name IN (:durations)')
             ->andWhere('b.age IN (:ageStarts)')
             ->andWhere('o.isOnline = :online')

@@ -13,6 +13,15 @@
 @import '_toast.scss';
 @import '_member.scss';
 
+//placeholder color
+::placeholder,
+:-ms-input-placeholder,
+::-ms-input-placeholder,
+:-moz-placeholder {
+  font-size: 1.6em;
+}
+//placeholder color
+
 img{
   max-width: 100%;
 }
