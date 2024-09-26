@@ -22,7 +22,7 @@
                                 <div class="timeline-heading">
                                 <h5 class="timeline-title"><span class="text-purple">{{ media.title }}</span></h5>
                                 <p>
-                                    <small class="text-muted">
+                                    <small class="text-gray-dark">
                                     <i class="fa fa-clock-o"></i>
                                     Publié le {{ media.publishedAt | date('d F Y') |format_datetime('full','none',locale='fr') }}
                                     </small>
@@ -32,7 +32,7 @@
                                 {% if media.description is not null %}
                                     {{ media.description }}
                                 {% endif %}
-                                <p class="text-end mt-2"><a href="{{ media.link }}" target="_blank" class="text-decoration-none text-dark">Lire l'article</a></p>
+                                <p class="text-end mt-2 small"><a href="{{ media.link }}" target="_blank" class="text-decoration-none text-purple">Lire l'article</a></p>
                                 </div>
                             </div>
                         </li>

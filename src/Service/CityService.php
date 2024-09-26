@@ -11,6 +11,7 @@ use App\Repository\CountryRepository;
 use App\Repository\DepartmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CityService
 {
@@ -18,7 +19,8 @@ class CityService
         private EntityManagerInterface $em,
         private CityRepository $cityRepository,
         private DepartmentRepository $departmentRepository,
-        private CountryRepository $countryRepository
+        private CountryRepository $countryRepository,
+        private SluggerInterface $sluggerInterface
         ){
     }
 
@@ -48,7 +50,7 @@ class CityService
 
     private function readCsvFileFrance(): Reader
     {
-        $csv = Reader::createFromPath('%kernel.root.dir%/../import/_table_villes_france_free.csv','r');
+        $csv = Reader::createFromPath('%kernel.root.dir%/../import/citiesFR.csv','r');
         $csv->setHeaderOffset(0);
 
         return $csv;
@@ -56,19 +58,22 @@ class CityService
 
     private function createOrUpdateCityFrance(array $arrayVille): City
     {
-        $city = $this->cityRepository->findOneBy(['id' => $arrayVille['ville_id'], 'country' => $this->countryRepository->findOneBy(['isocode' => 'FR'])]);
+        $city = $this->cityRepository->findOneBy(['inseeCode' => $arrayVille['insee_code'], 'country' => $this->countryRepository->findOneBy(['isocode' => 'FR'])]);
 
         if(!$city){
             $city = new City();
         }
 
-        $city->setName($arrayVille['ville_nom'])
-        ->setLatitude($arrayVille['lat'])
-        ->setLongitude($arrayVille['lng'])
-        ->setPostalcode($arrayVille['ville_code_postal'])
-        ->setDepartment($this->departmentRepository->findOneBy(['name' => $arrayVille['ville_departement']]) ?? $this->departmentRepository->findOneBy(['id' => 14]))
+        // id,department_code,insee_code,zip_code,name,slug,gps_lat,gps_lng
+
+        $city->setName($arrayVille['name'])
+        ->setLatitude($arrayVille['gps_lat'])
+        ->setLongitude($arrayVille['gps_lng'])
+        ->setPostalcode($arrayVille['zip_code'])
+        ->setSlug($this->sluggerInterface->slug($arrayVille['name']))
+        ->setDepartment($this->departmentRepository->findOneBy(['code' => $arrayVille['department_code']]))
         ->setCountry($this->countryRepository->findOneBy(['isocode' => 'FR']))
-        ->setRvj2Id($arrayVille['ville_id']);
+        ->setInseeCode($arrayVille['insee_code']);
 
         return $city;
     }
@@ -99,7 +104,7 @@ class CityService
     //lecture des fichiers exportes dans le dossier import
     private function readCsvFileBergique(): Reader
     {
-        $csv = Reader::createFromPath('%kernel.root.dir%/../import/_table_villes_belgique_free.csv','r');
+        $csv = Reader::createFromPath('%kernel.root.dir%/../import/citiesBE.csv','r');
         $csv->setHeaderOffset(0);
 
         return $csv;
@@ -107,7 +112,7 @@ class CityService
 
     private function createOrUpdateCityBelgique(array $arrayVille): City
     {
-        $city = $this->cityRepository->findOneBy(['id' => $arrayVille['ville_id'], 'country' => $this->countryRepository->findOneBy(['isocode' => 'BE'])]);
+        $city = $this->cityRepository->findOneBy(['postalcode' => $arrayVille['ville_code_postal'], 'name' => $arrayVille['ville_nom'],  'country' => $this->countryRepository->findOneBy(['isocode' => 'BE'])]);
 
         if(!$city){
             $city = new City();
@@ -117,7 +122,9 @@ class CityService
         ->setLatitude($arrayVille['lat'])
         ->setLongitude($arrayVille['lng'])
         ->setPostalcode($arrayVille['ville_code_postal'])
-        ->setDepartment($this->departmentRepository->findOneBy(['name' => $arrayVille['province']]) ?? $this->departmentRepository->findOneBy(['id' => 14]))
+        ->setInseeCode($arrayVille['ville_code_postal'])
+        ->setSlug($this->sluggerInterface->slug($arrayVille['ville_nom']))
+        ->setDepartment($this->departmentRepository->findOneBy(['name' => $arrayVille['province']]))
         ->setCountry($this->countryRepository->findOneBy(['isocode' => 'BE']))
         ->setRvj2Id($arrayVille['ville_id']);
 

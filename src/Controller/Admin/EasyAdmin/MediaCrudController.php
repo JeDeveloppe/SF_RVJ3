@@ -38,9 +38,10 @@ class MediaCrudController extends AbstractCrudController
             DateTimeField::new('publishedAt')->setLabel('Date de publication:')->setRequired(true),
             AssociationField::new('badge')->setLabel('Badge:'),
             TextField::new('title')->setLabel('Titre:')->setRequired(true),
+            TextField::new('autor')->setLabel('Auteur:')->setRequired(true),
             TextareaField::new('description')->setLabel('Une petite description non obligatoire...'),
             TextField::new('link')->setLabel('Lien de la page:')->onlyOnForms()->setRequired(true),
-            BooleanField::new('isOnLine')->setLabel('En ligne:')
+            BooleanField::new('isOnLine')->setLabel('Afficher:')
         ];
     }
     

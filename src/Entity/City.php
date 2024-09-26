@@ -53,6 +53,12 @@ class City
     #[ORM\OneToMany(mappedBy: 'City', targetEntity: Ambassador::class)]
     private Collection $ambassadors;
 
+    #[ORM\Column]
+    private ?string $inseeCode = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
     public function __construct()
     {
         $this->partners = new ArrayCollection();
@@ -302,6 +308,30 @@ class City
                 $ambassador->setCity(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getInseeCode(): ?string
+    {
+        return $this->inseeCode;
+    }
+
+    public function setInseeCode(string $inseeCode): static
+    {
+        $this->inseeCode = $inseeCode;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }

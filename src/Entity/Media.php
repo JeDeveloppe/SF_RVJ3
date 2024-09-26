@@ -40,6 +40,9 @@ class Media
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $autor = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +140,18 @@ class Media
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getAutor(): ?string
+    {
+        return $this->autor;
+    }
+
+    public function setAutor(string $autor): static
+    {
+        $this->autor = $autor;
 
         return $this;
     }

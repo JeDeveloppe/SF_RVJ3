@@ -25,16 +25,15 @@ class CityCrudController extends AbstractCrudController
             // AssociationField::new('country')
             //     ->setLabel('voir')
             //     ->renderAsEmbeddedForm(),
-            AssociationField::new('department')
-                ->setLabel('Département')
-                // ->setFormTypeOptions(['placeholder' => 'Sélectionner un département...'])
-                ->renderAsEmbeddedForm(),
             TextField::new('name')->setLabel('Nom'),
             IntegerField::new('postalcode')->setLabel('Code postal'),
             TextField::new('latitude')->setLabel('Latitude')->onlyOnForms(),
             TextField::new('longitude')->setLabel('Longitude')->onlyOnForms(),
             AssociationField::new('addresses')->setLabel('Nbre d\'adresses')->onlyOnIndex(),
             AssociationField::new('partners')->setLabel('Nbre de partenaires')->onlyOnIndex(),
+            AssociationField::new('department')
+            ->setLabel('Département'),
+            AssociationField::new('country'),
         ];
     }
 

@@ -36,12 +36,16 @@ class Country
     #[ORM\Column]
     private ?bool $actifInInscriptionForm = null;
 
+    #[ORM\OneToMany(mappedBy: 'country', targetEntity: Granderegion::class)]
+    private Collection $granderegions;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->departments = new ArrayCollection();
         $this->cities = new ArrayCollection();
         $this->legalInformation = new ArrayCollection();
+        $this->granderegions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -206,6 +210,36 @@ class Country
     public function setIsActifInInscriptionForm(bool $actifInInscriptionForm): static
     {
         $this->actifInInscriptionForm = $actifInInscriptionForm;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Granderegion>
+     */
+    public function getGranderegions(): Collection
+    {
+        return $this->granderegions;
+    }
+
+    public function addGranderegion(Granderegion $granderegion): static
+    {
+        if (!$this->granderegions->contains($granderegion)) {
+            $this->granderegions->add($granderegion);
+            $granderegion->setCountry($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGranderegion(Granderegion $granderegion): static
+    {
+        if ($this->granderegions->removeElement($granderegion)) {
+            // set the owning side to null (unless already changed)
+            if ($granderegion->getCountry() === $this) {
+                $granderegion->setCountry(null);
+            }
+        }
 
         return $this;
     }

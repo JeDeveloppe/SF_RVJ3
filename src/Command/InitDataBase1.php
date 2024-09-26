@@ -2,10 +2,12 @@
 
 namespace App\Command;
 
+use App\Service\AmbassadorService;
 use App\Service\CityService;
 use App\Service\CountryService;
 use App\Service\DepartmentService;
 use App\Service\DocumentParametreService;
+use App\Service\GranderegionService;
 use App\Service\LevelService;
 use App\Service\UserService;
 use Symfony\Component\Console\Command\Command;
@@ -24,7 +26,9 @@ class InitDataBase1 extends Command
             private DocumentParametreService $documentParametreService,
             private DepartmentService $departmentService,
             private CityService $cityService,
-            private LevelService $levelService
+            private LevelService $levelService,
+            private GranderegionService $granderegionService,
+            private AmbassadorService $ambassadorService
         )
     {
         parent::__construct();
@@ -39,24 +43,32 @@ class InitDataBase1 extends Command
         $io = new SymfonyStyle($input,$output);
         
         // creation PAYS name/isocode
-        $this->countryService->addCountries();
+        // $this->countryService->addCountries();
         
         //ON CREE OU ON MET A JOUR L'ADMIN
-        $this->levelService->addLevels($io);
-        $this->userService->initForProd_adminUser($io);
+        // $this->levelService->addLevels($io);
+        // $this->userService->initForProd_adminUser($io);
 
         //ON INJECTE les parametres des documents
-        $this->documentParametreService->initDocumentParametre($io);
+        // $this->documentParametreService->initDocumentParametre($io);
 
         // on importe les clients
-        $this->userService->importClients($io);
+        // $this->userService->importClients($io);
 
-        //on importe les departementss
-        $this->departmentService->importDepartements($io);
+        // //on importe les regions / departements / villes FRANCE
+        // $this->granderegionService->importRegionsFrancaise($io);
+        // $this->departmentService->importDepartementsFrancais($io);
+        // $this->cityService->importCitiesOfFrance($io);
 
-        //on importe les villes francaises
-        $this->cityService->importCitiesOfFrance($io);
+        // //on injecte les ambassadeurs
+        // $this->ambassadorService->importAmbassadors($io);
+
+        //on importe les regions / departements / villes BELGE
+        $this->granderegionService->importRegionsBelge($io);
+        $this->departmentService->importDepartementsBelge($io);
         $this->cityService->importCitiesOfBelgique($io);
+        dd('STOP');
+        
 
         return Command::SUCCESS;
     }

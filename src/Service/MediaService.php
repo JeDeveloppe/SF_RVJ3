@@ -67,6 +67,7 @@ class MediaService
     
         $media
             ->setTitle($arrayMedia['titre'])
+            ->setAutor($arrayMedia['titre'])
             ->setDescription($arrayMedia['content'])
             ->setBadge($badge)
             ->setCreatedAt(new DateTimeImmutable('now'))

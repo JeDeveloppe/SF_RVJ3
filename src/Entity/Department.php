@@ -25,6 +25,16 @@ class Department
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: City::class)]
     private Collection $cities;
 
+    #[ORM\Column(length: 255)]
+    private ?string $code = null;
+
+    #[ORM\ManyToOne(inversedBy: 'departments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Granderegion $grandeRegion = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
     public function __construct()
     {
         $this->cities = new ArrayCollection();
@@ -91,6 +101,42 @@ class Department
 
     public function __toString()
     {
-        return $this->id;
+        return $this->name;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): static
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function getGrandeRegion(): ?Granderegion
+    {
+        return $this->grandeRegion;
+    }
+
+    public function setGrandeRegion(?Granderegion $grandeRegion): static
+    {
+        $this->grandeRegion = $grandeRegion;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
     }
 }

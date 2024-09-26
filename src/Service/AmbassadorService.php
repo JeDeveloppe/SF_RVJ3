@@ -6,6 +6,7 @@ use App\Entity\Ambassador;
 use League\Csv\Reader;
 use App\Repository\AmbassadorRepository;
 use App\Repository\CityRepository;
+use App\Repository\DepartmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -14,7 +15,8 @@ class AmbassadorService
     public function __construct(
         private AmbassadorRepository $ambassadorRepository,
         private EntityManagerInterface $em,
-        private CityRepository $cityRepository
+        private CityRepository $cityRepository,
+        private DepartmentRepository $departmentRepository
         ){
     }
 
@@ -162,7 +164,7 @@ class AmbassadorService
             ->setPrivatelastname($arrayAmbassador['Nom'])
             ->setPrivatephone($arrayAmbassador['Phone'])
             ->setPrivatestreet("A compléter")
-            ->setPrivatecity($this->cityRepository->findOneBy(['department' => str_replace(' ','-',$arrayAmbassador['Dept']), 'name' => $arrayAmbassador['Ville']]) ?? $this->cityRepository->findOneBy(['department' => '14', 'name' => 'CAEN']))
+            ->setPrivatecity($this->cityRepository->findOneBy(['name' => str_replace(' ','-',$arrayAmbassador['Ville'])])  ?? $this->cityRepository->findOneBy(['name' => 'Caen']))
             ->setOnTheCarte(false)
             ->setColisSend((int)$arrayAmbassador['NbColis'] ?? 0);
 
@@ -173,7 +175,7 @@ class AmbassadorService
             ->setLastname($arrayAmbassador['Nom'])
             ->setPhone($arrayAmbassador['Phone'])
             ->setStreet("A compléter")
-            ->setCity($this->cityRepository->findOneBy(['department' => str_replace(' ','-',$arrayAmbassador['Dept']), 'name' => $arrayAmbassador['Ville']])  ?? $this->cityRepository->findOneBy(['department' => '14', 'name' => 'CAEN']))
+            ->setCity($this->cityRepository->findOneBy(['name' => str_replace(' ','-',$arrayAmbassador['Ville'])])  ?? $this->cityRepository->findOneBy(['name' => 'Caen']))
             ->setOnTheCarte(true);
         }
 

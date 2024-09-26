@@ -88,7 +88,7 @@ class PartnerService
                 ->setIsOnLine($online)
                 ->setIsDisplayOnCatalogueWhenSearchIsNull(true)
                 ->setRvj2id($arrayPartenaire['idPartenaire'])
-                ->setCity($this->cityRepository->findOneBy(['rvj2id' => $arrayPartenaire['id_villes_free']]) ?? $this->cityRepository->findOneBy(['rvj2id' => 1]));
+                ->setCity($this->cityRepository->findOneBy(['id' => $arrayPartenaire['id_villes_free']]) ?? $this->cityRepository->findOneBy(['id' => 5022]));
 
         return $partenaire;
 

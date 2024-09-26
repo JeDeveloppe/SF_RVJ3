@@ -22,7 +22,8 @@ class DepartmentCrudController extends AbstractCrudController
     {
         return [
             AssociationField::new('country')->setLabel('Pays')->setFormTypeOptions(['placeholder' => 'Sélectionner un pays...']),
-            TextField::new('name')->setLabel('Numéro de département / nom'),
+            TextField::new('name')->setLabel('Nom'),
+            TextField::new('code')->setLabel('Num / nom'),
             AssociationField::new('cities')->setLabel('Nombre de villes')->onlyOnIndex()
         ];
     }

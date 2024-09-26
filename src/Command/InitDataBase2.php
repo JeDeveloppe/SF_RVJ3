@@ -60,7 +60,6 @@ class InitDataBase2 extends Command
             private DeliveryService $deliveryService,
             private DiscountService $discountService,
             private UserService $userService,
-            private AmbassadorService $ambassadorService,
             private CollectionPointService $collectionPointService,
             private DurationOfGameService $durationOfGameService
         )
@@ -157,9 +156,6 @@ dd('STOP');
 
         //on injecte les groups pour les items
         $this->itemGroupService->addItemGroups($io);
-
-        //on injecte les ambassadeurs
-        $this->ambassadorService->importAmbassadors($io);
 
         return Command::SUCCESS;
     }
