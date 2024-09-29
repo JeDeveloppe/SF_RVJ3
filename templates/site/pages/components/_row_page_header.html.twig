@@ -1,4 +1,4 @@
-<div class="row g-0 justify-content-around align-items-center my-5">
+<div class="row g-0 justify-content-center align-items-center my-5">
     <div class="col-10 col-md-5 d-flex flex-column justify-content-around pt-3 mb-5 mb-md-0">
         <h1 class="col-12 text-center text-md-start">
             {{ siteControllerServiceContent.header_h1_no_purple }} <span class="text-purple">{{ siteControllerServiceContent.header_h1_purple }}</span>
@@ -12,7 +12,7 @@
             {% endif %}
         </div>
     </div>
-    <div class="col-5 col-md-4 d-flex justify-content-around align-items-center">
+    <div class="col-5 offset-md-1 col-md-4 d-flex justify-content-around align-items-center">
         <img src="{{ asset('build/images/design/' ~ siteControllerServiceContent.img_asset ~ '') }}" alt="{{ siteControllerServiceContent.img_alt }}">
     </div>
 </div>

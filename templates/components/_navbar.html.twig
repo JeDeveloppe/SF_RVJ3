@@ -79,7 +79,9 @@
 					{% for categorie in app.session.get('paniers') %}
 						{% set countPanier = countPanier + categorie | length %}
 					{% endfor %}
-					<span id="cart_link_value">{{ countPanier  }}</span>
+					{% if countPanier > 0 %}
+						<span id="cart_link_value">{{ countPanier  }}</span>
+					{% endif %}
 				</a>
 			</li>
 		</ul>

@@ -42,7 +42,13 @@
     max-height: 200px;
 }
 
-.card-img-top-index {
-    margin: auto;
-    max-width: 80%;
+.index_card_full_button{
+    background: transparent;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    z-index: 1;
 }

@@ -10,6 +10,7 @@
     --bs-blue: #0d6efd;
     --bs-indigo: #6610f2;
     --bs-purple: #5F49CE;
+    --bs-light-purple: #8F75DB;
     --bs-pink: #d63384;
     --bs-red: #dc3545;
     --bs-orange: #FFA83E;
@@ -8326,6 +8327,9 @@ fieldset:disabled .btn {
 
 .bg-purple{
     background-color: var(--bs-purple) !important
+}
+.bg-light-purple{
+    background-color: var(--bs-light-purple) !important
 }
 
 .bg-secondary {

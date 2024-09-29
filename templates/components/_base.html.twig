@@ -30,6 +30,8 @@
     </head>
     <body>
         
+        <div class="container-xl g-0">
+
             {% include "components/_cookies_alert.html.twig" %}
 
             {% include "components/sharing/facebook/fb_root.html.twig" %}
@@ -46,6 +48,7 @@
 
             {% include "components/_footer.html.twig" %}
 
+        </div>
         {{ encore_entry_script_tags('site') }}
 
         {% block javascript %}{% endblock %}
