@@ -15,6 +15,7 @@ import './bootstrap.js';
 
 require('bootstrap');
 
+
 // SEO skill
 document.querySelector('meta[property~="og:title"]').setAttribute("content",document.title);
 document.querySelector('meta[name="description"]').setAttribute("content",document.querySelector('meta[property~="og:description"]').content);

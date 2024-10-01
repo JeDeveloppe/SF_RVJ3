@@ -42,7 +42,7 @@
 
 @media (prefers-reduced-motion:no-preference) {
     :root {
-        scroll-behavior: smooth
+        scroll-behavior: smooth;
     }
 }
 
@@ -55,7 +55,7 @@ body {
     color: #212529;
     background-color: #fff;
     -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: transparent
+    -webkit-tap-highlight-color: transparent;
 }
 
 hr {
@@ -638,7 +638,7 @@ progress {
     padding-right: var(--bs-gutter-x, .75rem);
     padding-left: var(--bs-gutter-x, .75rem);
     margin-right: auto;
-    margin-left: auto
+    margin-left: auto;
 }
 
 @media (min-width:576px) {

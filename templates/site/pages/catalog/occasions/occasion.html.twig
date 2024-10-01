@@ -13,7 +13,7 @@
     {% set setEntityId = occasion.id %}
     {% set entityNameController = 'Occasion' %}
 
-		<div class="row py-2 py-lg-3">
+		<div class="row g-0 py-2 py-lg-3">
 			<div class="col-12 col-md-6 ps-5 d-flex">
 				{% if app.request.headers.get('referer') is null %}
 					<a class="btn btn-secondary" href="{{ path('app_catalogue_occasions', {'category': null}) }}#{{ occasion.id }}">Retour au catalogue général</a>
@@ -24,7 +24,7 @@
 		</div>
 
 		<!-- BLOC PRESENTATION DU JEU  -->
-		<div class="row justify-content-center bg-white">
+		<div class="row g-0 justify-content-center bg-white">
 			<div class="col-10 col-md-6 col-xl-5 d-flex justify-content-center align-items-center">
 				<div class="col-12 col-md-6 text-center p-0">
 					<div class="divImgPresentation mt-1">
@@ -63,7 +63,7 @@
 
 		{% include "components/_separateur_wave.html.twig" %}
 
-		<div class="row justify-content-around bg-white pb-5">
+		<div class="row g-0 justify-content-around bg-white pb-5">
 			<h3 class="col-11 my-4 ">Ces jeux pourraient <span class="text-purple">vous plaire</span></h3>
 			{% for firstElement in firstElements %} 
 			    <div class="col-8 col-sm-6 col-lg-3 mx-md-0 px-3 px-md-5 px-lg-1 my-3"> 

@@ -175,15 +175,33 @@ class SiteController extends AbstractController
 
     }
 
-    #[Route('/devenir-ambassadeur-rice', name: 'app_became_ambassador')]
-    public function becameAmbassador(Request $request): Response
+    #[Route('/organiser-une-collecte', name: 'app_organize_a_collection')]
+    public function organizeCollection(Request $request): Response
     {
-        $metas['description'] = "Vous souhaitez contribuer activement au projet porté par l’association mais vous n’êtes pas sur Caen ?";
-        
-        return $this->render('site/pages/ambassadeur/devenir_ambassadeur.html.twig', [
-            'metas' => $metas,
-            'siteControllerServiceContent' => $this->siteControllerService->pageDevenirAmbassadeur()
+        $metas['description'] = "Vous souhaitez contribuer activement au projet porté par l’association ? Particuliers, structures, écoles, entreprises… où que vous soyez en France, collectez des jeux près de chez vous et faites-les nous parvenir !";
+        $legales = $this->legalInformationRepository->findOneBy([]);
 
+        $steps[] = [
+            'title' => 'Complétez le formulaire',
+            'description' => 'Vous pouvez le scanner ou le prendre en photo avant de nous l\'envoyer par mail : '.$legales->getEmailCompany()
+        ];
+        $steps[] = [
+            'title' => 'Collectez les jeux',
+            'description' => 'Nous vous enverrons des documents pour que vous puissiez présenter la démarche autour de vous.'
+        ];
+        $steps[] = [
+            'title' => 'Pesez votre colis',
+            'description' => 'Pesez votre colis et envoyez-nous un mail avec le poids. Nous vous envoyons alors le bon de livraison à imprimer et à coller sur le carton.'
+        ];
+        $steps[] = [
+            'title' => 'Envoyez gratuitement les jeux',
+            'description' => 'Et voilà, le tour est joué ! L’envoi des jeux se fait via Mondial Relay. Les frais de port sont pris en charge par l’association.'
+        ];
+
+        return $this->render('site/pages/collecte/organiser_une_collecte.twig', [
+            'metas' => $metas,
+            'siteControllerServiceContent' => $this->siteControllerService->pageOganizeCollection(),
+            'steps' => $steps
         ]);
 
     }
@@ -311,6 +329,30 @@ class SiteController extends AbstractController
 
         $metas['description'] = 'Que vous soyez un particulier, un professionnel du monde du jeu ou du réemploi, ce projet a besoin de vous pour se pérenniser et se développer.';
 
+        $missions[] = [
+            'img' => 'Groupe de masques 17.png',
+            'img_alt' => 'boites de jeux',
+            'title' => 'VENTE DE JEUX',
+            'text' => 'Les jeux collectés sont, pour la plupart, complétés grâce à notre stock de jeux incomplets. Ils sont alors remis en vente à prix solidaires (maximum 50 % du prix d’un jeu neuf) ou donnés à des associations.',
+            'btn_link' => $this->urlGeneratorInterface->generate('app_catalogue_occasions'),
+            'btn_text' => 'ACHETER UN JEU'
+        ];
+        $missions[] = [
+            'img' => 'colorful-game-pieces-with-dice-on-board-2023-11-27-05-32-20-utc.png',
+            'img_alt' => 'Pièces détachées',
+            'title' => 'VENTE DE PIÈCES DÉTACHÉES',
+            'text' => 'Certaines pièces détachées sont proposées à la vente à l’unité et permettent aux particuliers et aux professionnels de compléter leurs jeux. L’inventaire est encore en cours, le catalogue se remplira bientôt !',
+            'btn_link' => $this->urlGeneratorInterface->generate('app_catalogue_pieces_detachees'),
+            'btn_text' => 'VISITER LA BOUTIQUE'
+        ];
+        $missions[] = [
+            'img' => '450900705_1106120011238310_5624333892940681501_n.png',
+            'img_alt' => 'Créations originales',
+            'title' => 'PRESTATIONS',
+            'text' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.', //TODO
+            'btn_link' => $this->urlGeneratorInterface->generate('app_prestations'),
+            'btn_text' => 'VOIR NOS PRESTATIONS'
+        ];
 
         $donnees[] = [
             'title' => 'DEVENIR BÉNÉVOLE',
@@ -330,7 +372,7 @@ class SiteController extends AbstractController
             'title' => 'DEVENIR AMBASSADEUR·ICE',
             'description' => "Vous souhaitez contribuer activement au projet porté par l’association ? Particuliers ou structures… où que vous soyez en France, collectez des jeux près de chez vous et faites-les nous parvenir !",
             'img' => 'Collecte Ad Normandie 2023.png',
-            'link' => $this->urlGeneratorInterface->generate('app_became_ambassador'),
+            'link' => $this->urlGeneratorInterface->generate('app_organize_a_collection'),
             'button_text' => 'DEVENIR AMBASSADEUR·ICE'
         ];
         $donnees[] = [
@@ -345,6 +387,7 @@ class SiteController extends AbstractController
         return $this->render('site/pages/association/nous_soutenir.html.twig', [
             'metas' => $metas,
             'donnees' => $donnees,
+            'missions' => $missions,
             'siteControllerServiceContent' => $this->siteControllerService->pageNousSoutenir()
         ]);
 

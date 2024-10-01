@@ -1,7 +1,7 @@
 
 @import 'bootstrap.scss';
 @import 'footer.scss';
-@import '_ambassadeur.scss';
+@import '_collecte.scss';
 @import '_cookies.scss';
 @import '_catalogues.scss';
 @import '_header.scss';
@@ -24,6 +24,10 @@
 
 img{
   max-width: 100%;
+}
+
+html{
+  scroll-padding-top: 100px;
 }
 
 body{

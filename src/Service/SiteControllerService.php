@@ -37,10 +37,10 @@ class SiteControllerService
             'header_h1_purple' => 'l\'association',
             'header_description' => 'Refaites Vos Jeux, c’est une équipe de bénévoles soucieux de favoriser le réemploi des jeux et le lien social depuis 2020. L’équipe s’affaire tous les jours pour collecter, trier et valoriser les dons faits par les particuliers ou les structures (près de 230 jeux par mois !). L’association propose également différentes prestations : animation de jeux vintage, inventaire des stocks de jeux, formation…',
             'dark_button_link' => $this->routerInterface->generate('app_support_us'),
-            'dark_button_link_archor' => '#id_missions',
+            'dark_button_link_archor' => '#missions',
             'dark_button_text' => 'Missions',
             'yellow_button_link' => $this->routerInterface->generate('app_support_us'),
-            'yellow_button_link_archor' => '#id_support',
+            'yellow_button_link_archor' => '#support_us',
             'yellow_button_text' => 'Nous soutenir',
             'img_asset' => 'prestations/prestation_header.png', //TODO
             'img_alt' => 'Image de pièces au détail' //TODO
@@ -49,17 +49,17 @@ class SiteControllerService
         return $siteControllerServiceContent;
     }
 
-    public function pageDevenirAmbassadeur()
+    public function pageOganizeCollection()
     {
         $siteControllerServiceContent = [
-            'header_h1_no_purple'=> 'Devenir',
-            'header_h1_purple' => 'ambassadeur·rice',
-            'header_description' => 'Vous souhaitez contribuer activement au projet porté par l’association ? Particuliers ou structures… où que vous soyez en France, collectez des jeux près de chez vous et faites-les nous parvenir !',
-            'dark_button_link' => $this->routerInterface->generate('app_became_ambassador'),
+            'header_h1_no_purple'=> 'Organiser',
+            'header_h1_purple' => 'une collecte',
+            'header_description' => 'Vous souhaitez contribuer activement au projet porté par l’association ? Particuliers, structures, écoles, entreprises… où que vous soyez en France, <b>collectez des jeux près de chez vous et faites-les nous parvenir !</b>',
+            'dark_button_link' => $this->routerInterface->generate('app_organize_a_collection'),
             'dark_button_link_archor' => '#organiserCollecte',
             'dark_button_text' => 'Organiser une collecte',
-            'img_asset' => 'ambassadeur/devenir_ambassadeur.png',
-            'img_alt' => 'Image devenir ambassadeur·rice'
+            'img_asset' => 'collecte/loveCollection.png',
+            'img_alt' => 'Organiser une collecte'
         ];
 
         return $siteControllerServiceContent;

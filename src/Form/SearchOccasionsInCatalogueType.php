@@ -24,7 +24,7 @@ class SearchOccasionsInCatalogueType extends AbstractType
 
         $builder
             ->add('playerMin', ChoiceType::class, [
-                'label' => 'Nombre de joueur(s):',
+                'label' => 'Nombre de joueur(s)',
                 'attr' => [
                     'class' => 'form-control'
                 ],
@@ -33,7 +33,7 @@ class SearchOccasionsInCatalogueType extends AbstractType
                 'multiple' => true,
             ])
             ->add('duration',  ChoiceType::class, [
-                'label' => 'Durée de la partie:',
+                'label' => 'Durée de la partie',
                 'attr' => [
                     'class' => 'form-control'
                 ],
@@ -42,7 +42,7 @@ class SearchOccasionsInCatalogueType extends AbstractType
                 'multiple' => true,
             ])
             ->add('age_start', ChoiceType::class, [
-                'label' => 'Âge minimum:',
+                'label' => 'Âge minimum',
                 'attr' => [
                     'class' => 'form-control'
                 ],
