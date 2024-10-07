@@ -110,9 +110,12 @@
 }
 
 ._card_button_link_add_in_cart, ._card_button_link_to_entity{
-    max-width: 90%;
     border-radius: 10px;
     z-index: 2;
+    width: 36px;
+    height: 36px;
+    background-color: #1C1D3D;
+    color: #fff;
 }
 ._card_button_link_add_in_cart:hover, ._card_button_link_to_entity:hover{
     opacity: 0.8;

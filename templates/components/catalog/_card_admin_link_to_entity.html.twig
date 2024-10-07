@@ -1,5 +1,5 @@
 {% if is_granted('ROLE_ADMIN') %}
-    <a class="_card_button_link_to_entity btn btn-dark d-flex justify-content-center align-items-center text-white me-2" target="_blank" href="{{ ea_url()
+    <a class="_card_button_link_to_entity d-flex justify-content-center align-items-center me-2 text-decoration-none" target="_blank" href="{{ ea_url()
         .setController('App\\Controller\\Admin\\EasyAdmin\\'~ entityNameInController ~'CrudController')
         .setAction('edit')
         .setEntityId(setEntityId)

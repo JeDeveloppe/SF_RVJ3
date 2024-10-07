@@ -61,6 +61,8 @@ class CatalogController extends AbstractController
     public function cataloguePiecesDetachees(Request $request): Response
     {
 
+        return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees');
+
         $siteSetting = $this->siteSettingRepository->findOneBy([]);
 
         $form = $this->createForm(SearchBoiteInCatalogueType::class);
@@ -115,6 +117,8 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-pieces-detachees/{editorSlug}/{id}/{slug}', name: 'catalogue_pieces_detachees_demande')]
     public function cataloguePiecesDetacheesDemande($id, $slug, $editorSlug, Request $request): Response
     {
+
+        return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees');
 
         $boite = $this->boiteRepository->findOneBy(['id' => $id, 'slug' => $slug, 'editor' => $this->editorRepository->findOneBy(['slug' => $editorSlug]), 'isOnline' => true]);
 

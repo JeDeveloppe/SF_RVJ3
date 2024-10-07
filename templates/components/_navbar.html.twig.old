@@ -3,7 +3,7 @@
   {% set bg_white_if_route_not_app_home = 'bg-secondary' %}
 {% endif %}
 
-<nav class="navbar navbar-expand-lg navbar-light sticky-top pt-4 pt-lg-0 {{ bg_white_if_route_not_app_home }}">
+<nav class="navbar navbar-expand-lg navbar-light pt-4 pt-lg-0 {{ bg_white_if_route_not_app_home }}">
 	<a class="navbar-brand" id="logoNav" href="{{ path('app_home') }}">
 		<img src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo Refaites vos jeux">
 	</a>

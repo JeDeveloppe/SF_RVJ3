@@ -58,3 +58,22 @@ function getCookie(cname) {
   return "";
 }
 // End CookieBand effect 
+
+
+//menu effect for display or not menu user when collapsed
+let menu_user_cart = document.getElementById('menu_user_cart');
+let navbar_button = document.getElementById('navbar_button');
+let logoNav = document.getElementById('logoNav');
+
+navbar_button.addEventListener('click', displayMenuUserCart);
+
+function displayMenuUserCart(){
+    if(navbar_button.getAttribute('aria-expanded') === "true"){
+      menu_user_cart.style.opacity = 0;
+      logoNav.style.opacity = 0;
+    }else{
+      menu_user_cart.style.opacity = 1;
+      logoNav.style.opacity = 1;
+    }
+}
+//menu effect for display or not menu user when collapsed

@@ -3251,7 +3251,8 @@ fieldset:disabled .btn {
 .btn-yellow {
     color: var(--bs-dark);
     background-color: var(--bs-yellow);
-    border-color: var(--bs-yellow)
+    border-color: var(--bs-yellow);
+    box-sizing: border-box;
   }
 .btn-yellow:hover {
     color: #fff;
@@ -4534,7 +4535,7 @@ fieldset:disabled .btn {
 
 .navbar-nav .nav-link {
     padding-right: 0;
-    padding-left: 0
+    padding-left: 0;
 }
 
 .navbar-nav .dropdown-menu {
@@ -4556,8 +4557,8 @@ fieldset:disabled .btn {
     padding: .25rem .75rem;
     font-size: 1.25rem;
     line-height: 1;
-    background-color: transparent;
-    border: 1px solid transparent;
+    background-color: var(--bs-light-purple);
+    border: 1px solid lightgray;
     border-radius: .25rem;
     transition: box-shadow .15s ease-in-out
 }
