@@ -48,7 +48,7 @@ class CityService
         $io->success('Importation terminée');
     }
 
-    private function readCsvFileFrance(): Reader
+    private function readCsvFileFrance_1(): Reader
     {
         $csv = Reader::createFromPath('%kernel.root.dir%/../import/citiesFR.csv','r');
         $csv->setHeaderOffset(0);

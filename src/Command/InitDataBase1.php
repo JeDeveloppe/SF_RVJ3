@@ -42,33 +42,31 @@ class InitDataBase1 extends Command
 
         $io = new SymfonyStyle($input,$output);
         
-        // creation PAYS name/isocode
+        // //creation PAYS name/isocode
         // $this->countryService->addCountries();
         
-        //ON CREE OU ON MET A JOUR L'ADMIN
+        // //ON CREE OU ON MET A JOUR L'ADMIN
         // $this->levelService->addLevels($io);
         // $this->userService->initForProd_adminUser($io);
 
-        //ON INJECTE les parametres des documents
+        // //ON INJECTE les parametres des documents
         // $this->documentParametreService->initDocumentParametre($io);
 
-        // on importe les clients
+        // //on importe les clients
         // $this->userService->importClients($io);
 
-        // //on importe les regions / departements / villes FRANCE
+        //on importe les regions / departements / villes FRANCE
         // $this->granderegionService->importRegionsFrancaise($io);
         // $this->departmentService->importDepartementsFrancais($io);
-        // $this->cityService->importCitiesOfFrance($io);
+        $this->cityService->importCitiesOfFrance($io);
 
-        // //on injecte les ambassadeurs
-        // $this->ambassadorService->importAmbassadors($io);
+        //on injecte les ambassadeurs
+        $this->ambassadorService->importAmbassadors($io);
 
         //on importe les regions / departements / villes BELGE
         $this->granderegionService->importRegionsBelge($io);
         $this->departmentService->importDepartementsBelge($io);
         $this->cityService->importCitiesOfBelgique($io);
-        dd('STOP');
-        
 
         return Command::SUCCESS;
     }

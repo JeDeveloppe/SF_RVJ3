@@ -76,27 +76,27 @@ class InitDataBase2 extends Command
         $io = new SymfonyStyle($input,$output);
 
         //on importe les partenaires
-        // $this->partnerService->importPartenaires($io);
+        $this->partnerService->importPartenaires($io);
 
-        // //on importe les adresses (facturation et livraison)
-        // $this->adresseService->importAdresses($io);
+        //on importe les adresses (facturation et livraison)
+        $this->adresseService->importAdresses($io);
 
-        // //on creer le nombre de joueurs
-        // $this->playerService->addplayers($io);
+        //on creer le nombre de joueurs
+        $this->playerService->addplayers($io);
 
         //on cree les temps de jeux
-        // $this->durationOfGameService->addDurations($io);
+        $this->durationOfGameService->addDurations($io);
 
         //on importe les boites
         $this->boiteService->importBoites($io);
-        dd('STOP');
+
         $this->boiteService->updateBoitesWithDuration($io);
 
         //SI ON EST EN DEV on génére de facon aléatoire la duree des parties aux boites
         if($_ENV['APP_ENV'] == 'dev' or $_ENV['APP_ENV'] == 'DEV'){
             $this->durationOfGameService->addAleatoireDurationsToBoites($io);
         }
-dd('STOP');
+
         //on genere les editeurs de facon distinct
         $this->editorService->addEditorsInDatabase($io);
 
