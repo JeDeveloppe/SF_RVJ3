@@ -70,10 +70,8 @@ navbar_button.addEventListener('click', displayMenuUserCart);
 function displayMenuUserCart(){
     if(navbar_button.getAttribute('aria-expanded') === "true"){
       menu_user_cart.style.opacity = 0;
-      logoNav.style.opacity = 0;
     }else{
       menu_user_cart.style.opacity = 1;
-      logoNav.style.opacity = 1;
     }
 }
 //menu effect for display or not menu user when collapsed

@@ -1,0 +1,29 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+{% dump(field.value) %}
+{% if ea.crud.currentAction == 'detail' %}
+    <table class="table align-middle">
+        <tr>
+            <th>Boite</th>
+            <th>Référence</th>
+            <th class="text-center">Prix HT</th>
+        </tr>
+        {% for value in field.value %}
+            <tr>
+                <td>
+                    {{ value.boite.name }} - {{ value.boite.editor }} - {{ value.boite.year }}
+                    <ul>
+                        <li>État de la boite : {{ value.boxCondition }}</li>
+                        <li>État du matériel : {{ value.equipmentCondition }}</li>
+                        <li>Règle du jeu : {{ value.gameRule }}</li>
+                    </ul>
+                </td>
+                <td>{{ value.reference }}</td>
+                <td class="text-center">{{ (value.priceWithoutTax) / 100 |number_format(2, '.', ',') }} €</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span class="badge badge-secondary">{{ field.formattedValue }}</span>
+{% endif %}

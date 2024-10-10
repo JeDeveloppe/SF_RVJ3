@@ -13,10 +13,10 @@
     <div class="col-12 d-flex flex-wrap justify-content-around justify-content-md-center mt-4 align-items-center">
         <div class="col-11 col-sm-6 col-md-5 col-lg-4">
             <div class="card card_collectons py-4 border-0 bg-white">
-                <div class="col-12 card_collectons_img">
+                <div class="col-12 d-flex justify-content-center align-items-center">
                     <img src="{{ asset('build/images/design/prestations/animation_vintage.png') }}" alt="Lot de jeux récoltés">
                 </div>
-                <h4 class="text-center mt-4">Animation jeux vintage</h5>
+                <h3 class="text-center mt-4">Animation jeux vintage</h3>
                 <div class="card-body">
                     <div class="card-text text-center">
                         Replongez dans vos souvenirs d’enfance avec nos malles de jeux vintage !
@@ -31,10 +31,10 @@
         </div>
         <div class="col-11 mt-3 col-sm-6 col-md-5 mt-md-0 col-lg-4">
             <div class="card card_collectons py-4 border-0 bg-white">
-                <div class="col-12 card_collectons_img">
+                <div class="col-12 d-flex justify-content-center align-items-center">
                     <img src="{{ asset('build/images/design/prestations/atelier_sensibilisation.png') }}" alt="Lot de jeux non récoltés">
                 </div>
-                <h4 class="text-center mt-4">Atelier sensibilisation</h5>
+                <h3 class="text-center mt-4">Atelier sensibilisation</h3>
                 <div class="card-body">
                     <div class="card-text text-center">
                         Vous organisez un événement autour du développement durable ?
@@ -59,30 +59,32 @@
 {% include "components/_separateur_wave.html.twig" %}
 
 
-<div class="row justify-content-around py-5 bg-white">
+<div class="row justify-content-around pt-5 bg-white">
     <h2 id="id_inventaires" class="col-12 text-center"><span class="text-purple">Inventaire </span> de jeux</h2>
     <div class="col-11 col-lg-6 text-center">
         Vous faites partie d’une structure et vous avez une armoire remplie de jeux en souffrance ?<br/><b>Nous proposons 2 formules :</b>
     </div>
-    <div class="col-11 d-flex flex-wrap justify-content-center align-items-center">
-        <div class="col-12 col-md-4 d-flex justify-content-around align-items-center">
-            <img src="{{ asset('build/images/design/prestations/etagere_jeux.png') }}" alt="Image étagère pleine">
-        </div>
-        <div class="col-12 mt-3 offset-md-1 col-md-5 mt-md-0 py-4">
-            <h4 class="col-12">INVENTAIRE</h4>
-            <div class="col-12">
-                Nous venons faire l’inventaire de vos jeux sur place et les trions en 3 catégories : complets / incomplets mais jouables (pièces ou règles du jeu manquantes) / incomplets et non jouables. Si besoin, les boîtes de jeux sont réparées et les petites pièces mises en sachet pour limiter les risques de perte.
-            </div>
-            <div class="col-12 py-2 fs-5"><b>1€ / jeu</b></div>
-            <div class="col-12 small opacity-75">Hors frais de déplacement : 0,40€ / km</div>
-            <h4 class="col-12 mt-3">INVENTAIRE + COMPLÉTION</h4>
-            <div class="col-12">
-                En plus de l’inventaire, nous complétons les jeux lorsque c’est possible. Cela concerne les jeux dont moins de 30% des pièces sont manquantes et pour lesquels nous possédons les pièces détachées. Nous vous envoyons également les règles du jeu manquantes par mail.
-            </div>
-            <div class="col-12 py-2 fs-5"><b>1,5€ / jeu</b></div>
-            <div class="col-12 small opacity-75">Pièces détachées incluses - Hors frais de déplacement : 0,40€ / km</div>
-        </div>
+</div>
+<div class="row justify-content-center bg-white">
+    <div class="col-12 col-md-4 d-flex justify-content-around align-items-center">
+        <img src="{{ asset('build/images/design/prestations/etagere_jeux.png') }}" alt="Image étagère pleine">
     </div>
+    <div class="col-12 mt-3 col-md-6 mt-md-0 py-4">
+        <h4 class="col-12">INVENTAIRE</h4>
+        <div class="col-12">
+            Nous venons faire l’inventaire de vos jeux sur place et les trions en 3 catégories : complets / incomplets mais jouables (pièces ou règles du jeu manquantes) / incomplets et non jouables. Si besoin, les boîtes de jeux sont réparées et les petites pièces mises en sachet pour limiter les risques de perte.
+        </div>
+        <div class="col-12 py-2 fs-5"><b>1€ / jeu</b></div>
+        <div class="col-12 small opacity-75">Hors frais de déplacement : 0,40€ / km</div>
+        <h4 class="col-12 mt-3">INVENTAIRE + COMPLÉTION</h4>
+        <div class="col-12">
+            En plus de l’inventaire, nous complétons les jeux lorsque c’est possible. Cela concerne les jeux dont moins de 30% des pièces sont manquantes et pour lesquels nous possédons les pièces détachées. Nous vous envoyons également les règles du jeu manquantes par mail.
+        </div>
+        <div class="col-12 py-2 fs-5"><b>1,5€ / jeu</b></div>
+        <div class="col-12 small opacity-75">Pièces détachées incluses - Hors frais de déplacement : 0,40€ / km</div>
+    </div>
+</div>
+<div class="row justify-content-around pb-5 bg-white">
     <h2 class="col-11 text-center text-yellow mt-5">NOS INVENTAIRES VOUS INTÉRESSENT ?</h2>
     <div class="col-11 text-center">//TODO Contactez-nous pour lorem ipsum dolor sit amet consectetur adipiscing elit edum.</div>
     <div class="col-12 mt-4 d-flex justify-content-around">

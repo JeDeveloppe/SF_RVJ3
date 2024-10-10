@@ -54,7 +54,7 @@ class UserService
             ->setLastvisite(new DateTimeImmutable('now'))
             ->setEmail($_ENV['ADMIN_EMAIL'])
             ->setRoles(['ROLE_SUPER_ADMIN'])
-            ->setNickname('Je Développe')
+            ->setNickname('JeDéveloppe')
             ->setAccountnumber('init')
             ->setLevel($this->levelRepository->findOneBy(['nameInDatabase' => 'ROLE_SUPER_ADMIN' ]))
             ->setPhone($_ENV['ADMIN_PHONE'])

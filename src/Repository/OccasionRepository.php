@@ -62,7 +62,9 @@ class OccasionRepository extends ServiceEntityRepository
             ->join('o.boite','b')
             ->join('b.editor','e')
             ->join('b.durationGame','d')
+            ->join('o.stock','s')
             ->where('b.name LIKE :searchName')
+            ->where('s.name = :stock_name')
             ->orWhere('e.name LIKE :searchName')
             ->andWhere('b.playersMin IN (:players)')
             // ->orWhere('b.playersMax >= (:players)')
@@ -75,6 +77,7 @@ class OccasionRepository extends ServiceEntityRepository
                 'durations' => $durations,
                 'ageStarts' => $ageStarts,
                 'online' =>  true,
+                'stock_name' => 'SUR LE SITE'
             ])
             ->orderBy('b.id', 'DESC')
             ->getQuery()
@@ -89,13 +92,16 @@ class OccasionRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('o')
             ->join('o.boite','b')
+            ->join('o.stock','s')
             ->where('b.age >= :age_start')
+            ->andWhere('s.name = :stock_name')
             ->andWhere('b.age <= :age_end')
             ->andWhere('o.isOnline = :online')
             ->setParameters([
                 'age_start' => $age_start,
                 'age_end' => $age_end,
                 'online' =>  true,
+                'stock_name' => 'SUR LE SITE'
             ])
             ->orderBy('b.id', 'DESC')
             ->getQuery()
@@ -108,13 +114,16 @@ class OccasionRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('o')
             ->join('o.boite','b')
+            ->join('o.stock','s')
             ->where('o.isOnline = :online')
+            ->andWhere('s.name = :stock_name')
             ->andWhere('b.age = :age')
             ->andWhere('o.id != :occasionId')
             ->setParameters([
                 'occasionId' => $occasion->getId(),
                 'age' => $age,
                 'online' =>  true,
+                'stock_name' => 'SUR LE SITE'
             ])
             ->orderBy('o.id', 'ASC')
             ->getQuery()

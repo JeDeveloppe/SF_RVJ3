@@ -89,13 +89,13 @@ h6 {
 }
 
 .h1, h1 {
-    font-size: calc(2.375rem + 3vw)
+    font-size: calc(2.875rem + 3vw)
 }
 
 @media (min-width:1200px) {
 
     .h1,h1 {
-        font-size: 3.5rem
+        font-size: 4rem
     }
 }
 
@@ -3250,6 +3250,7 @@ fieldset:disabled .btn {
 
 .btn-yellow {
     color: var(--bs-dark);
+    padding: 10px 24px 10px 24px;
     background-color: var(--bs-yellow);
     border-color: var(--bs-yellow);
     box-sizing: border-box;
@@ -3500,6 +3501,7 @@ fieldset:disabled .btn {
 
 .btn-dark {
     color: #fff;
+    padding: 10px 24px 10px 24px;
     background-color: #212529;
     border-color: #212529
 }

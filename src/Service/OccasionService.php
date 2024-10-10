@@ -14,6 +14,7 @@ use App\Repository\MovementOccasionRepository;
 use App\Repository\NumbersOfPlayersRepository;
 use App\Repository\ConditionOccasionRepository;
 use App\Repository\OffSiteOccasionSaleRepository;
+use App\Repository\StockRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class OccasionService
@@ -27,7 +28,8 @@ class OccasionService
         private BoiteRepository $boiteRepository,
         private UtilitiesService $utilitiesService,
         private DurationOfGameRepository $durationOfGameRepository,
-        private NumbersOfPlayersRepository $numbersOfPlayersRepository
+        private NumbersOfPlayersRepository $numbersOfPlayersRepository,
+        private StockRepository $stockRepository
     )
     {
     }
@@ -182,8 +184,8 @@ class OccasionService
                 ->setIsOnLine($arrayOccasion['actif'])
                 ->setOffSiteOccasionSale(null)
                 ->setPriceWithoutTax($arrayOccasion['prixHT'])
-                ->setDiscountedPriceWithoutTax($arrayOccasion['ancienPrixHT'])
                 ->setRvj2id($arrayOccasion['idJeuxComplet'])
+                ->setStock($this->stockRepository->findOneBy(['name' => $_ENV['STOCK_NAME_DEFAULT']]))
                 ;
 
                 $this->em->persist($occasion);

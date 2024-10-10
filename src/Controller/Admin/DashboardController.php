@@ -48,6 +48,7 @@ use App\Repository\PanierRepository;
 use App\Entity\BadgeForMediaTimeline;
 use App\Entity\CatalogOccasionSearch;
 use App\Entity\DurationOfGame;
+use App\Entity\Stock;
 use App\Repository\PaymentRepository;
 use App\Repository\ReserveRepository;
 use App\Repository\DocumentRepository;
@@ -238,6 +239,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Types de mouvement', 'fa-solid fa-gear', MovementOccasion::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Liste des états (pièces, boite, règle)', 'fa-solid fa-gear', ConditionOccasion::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Liste des recherches', 'fa-solid fa-magnifying-glass', CatalogOccasionSearch::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Gestion stocks', 'fa-solid fa-gear', Stock::class)->setPermission('ROLE_ADMIN');
+
 
         yield MenuItem::section('Gestion des ambassadeurs')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Liste des ambassadeurs', 'fas fa-list', Ambassador::class)->setPermission('ROLE_ADMIN');

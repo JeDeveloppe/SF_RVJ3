@@ -67,11 +67,15 @@ class Occasion
     #[ORM\Column]
     private ?int $priceWithoutTax = null;
 
-    #[ORM\Column]
-    private ?int $discountedPriceWithoutTax = null;
-
     #[ORM\ManyToOne(inversedBy: 'occasions')]
     private ?Reserve $reserve = null;
+
+    #[ORM\ManyToOne(inversedBy: 'occasions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Stock $stock = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $discountedPriceWithoutTax = null;
 
     public function __construct()
     {
@@ -318,25 +322,6 @@ class Occasion
         return $this;
     }
 
-    public function getDiscountedPriceWithoutTax(): ?int
-    {
-        if($this->discountedPriceWithoutTax == 0){
-
-            return null;
-
-        }else{
-
-            return $this->discountedPriceWithoutTax;
-        }
-    }
-
-    public function setDiscountedPriceWithoutTax(int $discountedPriceWithoutTax): static
-    {
-        $this->discountedPriceWithoutTax = $discountedPriceWithoutTax;
-
-        return $this;
-    }
-
     public function getReserve(): ?Reserve
     {
         return $this->reserve;
@@ -345,6 +330,30 @@ class Occasion
     public function setReserve(?Reserve $reserve): static
     {
         $this->reserve = $reserve;
+
+        return $this;
+    }
+
+    public function getStock(): ?Stock
+    {
+        return $this->stock;
+    }
+
+    public function setStock(?Stock $stock): static
+    {
+        $this->stock = $stock;
+
+        return $this;
+    }
+
+    public function getDiscountedPriceWithoutTax(): ?int
+    {
+        return $this->discountedPriceWithoutTax;
+    }
+
+    public function setDiscountedPriceWithoutTax(?int $discountedPriceWithoutTax): static
+    {
+        $this->discountedPriceWithoutTax = $discountedPriceWithoutTax;
 
         return $this;
     }

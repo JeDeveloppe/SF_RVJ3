@@ -8,9 +8,9 @@ nav {
 
 #menu_user_cart{
     position: absolute;
-    right: 5%;
+    right: 2%;
     top: 15%;
-    transition: all 200ms ease-in;
+    transition: all 0ms ease-in;
 }
 
 #cart_link_logo{
@@ -41,7 +41,6 @@ nav {
     left: 50%;
     transform: translateX(-50%);
     padding-left: 1%;
-    transition: all 200ms ease-in;
 }
 // X-Small devices (portrait phones, less than 576px)
 // No media query for `xs` since this is the default in Bootstrap

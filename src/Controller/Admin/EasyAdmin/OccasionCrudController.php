@@ -98,6 +98,7 @@ class OccasionCrudController extends AbstractCrudController
                 ->setStoredAsCents()
                 ->setCurrency('EUR')
                 ->onlyWhenUpdating(),
+            AssociationField::new('stock'),
             MoneyField::new('priceWithoutTax')
                 ->setLabel('Prix de vente HT')
                 ->setStoredAsCents()
@@ -107,8 +108,7 @@ class OccasionCrudController extends AbstractCrudController
                 ->setLabel('Prix remiser HT')
                 ->setStoredAsCents()
                 ->setCurrency('EUR')
-                ->setDisabled($disabledAfterBilling)
-                ->setFormTypeOptions(['attr' => ['placeholder' => 'Mettre 0 pour aucune remise...']]),
+                ->setDisabled($disabledAfterBilling),
             BooleanField::new('isOnline')
                 ->setLabel('En ligne')
                 ->renderAsSwitch(false)->onlyOnIndex(),

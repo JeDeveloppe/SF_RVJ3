@@ -5,7 +5,7 @@
 {% block body %}
 
 
-<div class="row g-0 justify-content-center align-items-center py-5 mt-4">
+<div class="row g-0 justify-content-center align-items-center py-5">
     <div class="col-12 col-md-6 col-lg-5 d-flex flex-column pt-3">
         <h1 class="col-12 text-center text-md-start">
             Craquez pour nos <span class="text-purple">jeux de société</span> d'occasion !
@@ -13,7 +13,7 @@
         <div class="col-12 mt-4 text-center text-md-start">
             Disponibles en retrait à Caen dans le Calvados.
         </div>
-        <div class="col-12 d-flex justify-content-center justify-content-md-start mt-3 text-uppercase">
+        <div class="col-12 d-flex justify-content-center justify-content-md-start mt-5 text-uppercase">
             <a class="btn btn-dark d-flex align-items-center" href="{{ path('app_catalogue_occasions', {'category': null}) }}">Acheter un jeu</a>
             <a class="ms-3 btn btn-light flex-column" href="{{ path('app_home') }}#piecesDetachees">
             Completer un jeu</br>
@@ -30,20 +30,20 @@
 
 <div class="row g-0 justify-content-around align-items-center bg-yellow py-1">
     <div class="col-6 col-lg-3 d-flex">
-        <img class="col-2 p-2 d-flex justify-content-center align-items-center" src="{{ asset('build/images/design/index/flower_planet.png') }}" alt="Des jeux bons pour la planète" />
-        <div class="col-10 d-flex align-items-center ps-1">Des jeux bons pour la planète</div>
+        <img class="col-3 col-md-2 p-2 d-flex justify-content-center align-items-center" src="{{ asset('build/images/design/index/flower_planet.png') }}" alt="Des jeux bons pour la planète" />
+        <div class="col-9 col-md-8 d-flex align-items-center pe-1">Des jeux bons pour la planète</div>
     </div>
     <div class="col-6 col-lg-3 d-flex">
-        <img class="col-2 p-2 d-flex justify-content-center align-items-center" src="{{ asset('build/images/design/index/flower_low_price.png') }}" alt="Des jeux à prix solidaire" />
-        <div class="col-10 d-flex align-items-center ps-1">Des jeux à prix solidaires</div>
+        <img class="col-3 col-md-2 p-2 d-flex justify-content-center align-items-center" src="{{ asset('build/images/design/index/flower_low_price.png') }}" alt="Des jeux à prix solidaire" />
+        <div class="col-9 col-md-8 d-flex align-items-center pe-1">Des jeux à prix solidaires</div>
     </div>
     <div class="col-6 col-lg-3 d-flex">
-        <img class="col-2 p-2 d-flex justify-content-center align-items-center" src="{{ asset('build/images/design/index/flower_verify.png') }}" alt="Des jeux vérifiés et nettoyés avec soin" />
-        <div class="col-10 d-flex align-items-center ps-1">Des jeux vérifiés et nettoyés avec soin</div>
+        <img class="col-3 col-md-2 p-2 d-flex justify-content-center align-items-center" src="{{ asset('build/images/design/index/flower_verify.png') }}" alt="Des jeux vérifiés et nettoyés avec soin" />
+        <div class="col-9 col-md-8 d-flex align-items-center pe-1">Des jeux vérifiés et nettoyés avec soin</div>
     </div>
     <div class="col-6 col-lg-3 d-flex">
-        <img class="col-2 p-2 d-flex justify-content-center align-items-center" src="{{ asset('build/images/design/index/flower_social.png') }}" alt="Un projet en faveur du lien social" />
-        <div class="col-10 d-flex align-items-center ps-1">Un projet en faveur du lien social</div>
+        <img class="col-3 col-md-2 p-2 d-flex justify-content-center align-items-center" src="{{ asset('build/images/design/index/flower_social.png') }}" alt="Un projet en faveur du lien social" />
+        <div class="col-9 col-md-8 d-flex align-items-center pe-1">Un projet en faveur du lien social</div>
     </div>
 </div>
 
@@ -62,7 +62,10 @@
             <a class="_card_full_button" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}"></a>
             <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_enfant.png') }}" alt="Lot de jeux pour enfants">
             <div class="card-body">
-                <div class="card-title text-center h4 text-purple">Enfants <i class="fa-solid fa-right-long"></i></div>
+                <div class="card-title d-flex justify-content-center align-items-center">
+                    <div class="h4 text-purple">Enfants</div>
+                    <div class="ms-3 text-purple"><i class="fa-solid fa-right-long"></i></div>
+                </div>
                 <p class="card-text text-center">A partir de 2 ans</p>
             </div>
         </div>
@@ -72,7 +75,10 @@
             <a class="_card_full_button" href="{{ path('app_catalogue_occasions', {'category': 'jeux-tout-public'}) }}"></a>
             <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_tout_public.png') }}" alt="Lot de jeux tout public">
             <div class="card-body">
-                <div class="card-title text-center h4 text-purple">Tout public <i class="fa-solid fa-right-long"></i></div>
+                <div class="card-title d-flex justify-content-center align-items-center">
+                    <div class="h4 text-purple">Tout public</div>
+                    <div class="ms-3 text-purple"><i class="fa-solid fa-right-long"></i></div>
+                </div>
                 <p class="card-text text-center">A partir de 7 ans</p>
             </div>
         </div>
@@ -82,7 +88,10 @@
             <a class="_card_full_button" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}"></a>
             <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_inities.png') }}" alt="Lot de jeux pour initiés">
             <div class="card-body">
-                <div class="card-title text-center h4 text-purple">Initié·es <i class="fa-solid fa-right-long"></i></div>
+                <div class="card-title d-flex justify-content-center align-items-center">
+                    <div class="h4 text-purple">Initié·es</div>
+                    <div class="ms-3 text-purple"><i class="fa-solid fa-right-long"></i></div>
+                </div>
                 <p class="card-text text-center">A partir de 12 ans</p>
             </div>
         </div>
@@ -93,7 +102,7 @@
 
 <div id="piecesDetachees" class="row g-0 justify-content-center py-5 bg-white">
     <h2 class="col-12  text-center">
-        Trouvez la pièce <span class="text-purple">manquante !</span>
+        Trouver la pièce <span class="text-purple">manquante !</span>
     </h2>
     <div class="col-12 mt-4 text-center">
         <img class="index_chess" src="{{ asset('build/images/design/index/trace_and_chess.png') }}" alt="Catalogue des pièces détachées">

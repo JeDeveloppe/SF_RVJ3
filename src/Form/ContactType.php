@@ -32,7 +32,7 @@ class ContactType extends AbstractType
                     'PRESTATION'      => 'PRESTATION',
                     'AUTRE' => 'AUTRE'
                 ],
-                'placeholder' => 'Séléctionner...',
+                'placeholder' => 'Sélectionner...',
                 'required' => true,
                 'attr' => ['class' => 'form-control mb-3'],
             ])
