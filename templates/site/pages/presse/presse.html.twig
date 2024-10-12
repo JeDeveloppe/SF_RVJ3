@@ -4,11 +4,11 @@
 
 {% block body %}
 
-    <div class="row justify-content-around align-items-center py-4">
+    <div class="row g-0 justify-content-around align-items-center py-4">
         <h1 class="col-12 text-center"><span class="text-purple">Coin</span> presse</h1>
     </div>
 
-    <div class="row justify-content-center bg-white">
+    <div class="row g-0 justify-content-center bg-white">
         <div class="col-11 col-md-10 my-4">
             <ul class="timeline">
                 {% for key,media in medias %}
@@ -21,11 +21,12 @@
                             <div class="timeline-panel bg-white rounded-2">
                                 <div class="timeline-heading">
                                 <h5 class="timeline-title"><span class="text-purple">{{ media.title }}</span></h5>
-                                <p>
-                                    <small class="text-gray-dark">
+                                <p class="small">
+                                    {{ media.autor }}<br/>
+                                    <span class="text-gray-dark opacity-75">
                                     <i class="fa fa-clock-o"></i>
-                                    Publié le {{ media.publishedAt | date('d F Y') |format_datetime('full','none',locale='fr') }}
-                                    </small>
+                                    {{ media.publishedAt | date('d F Y') |format_datetime('full','none',locale='fr') }}
+                                    </span>
                                 </p>
                                 </div>
                                 <div class="timeline-body text-justify">

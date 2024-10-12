@@ -7,10 +7,10 @@
 {% include "site/pages/components/_row_page_header.html.twig" with {'siteControllerServiceContent': siteControllerServiceContent } %}
 
 <div class="row g-0 justify-content-center align-items-center bg-white py-5">
-    <div class="col-11 mt-3 mt-md-0 col-md-4">
+    <div class="col-11 mt-3 mt-md-0 col-md-4 px-3">
         <img src="{{ asset('build/images/design/collecte/collecte.png') }}" alt="Exemple de collecte">
     </div>
-    <div id="organiserCollecte" class="col-11 col-md-5 d-flex flex-column pt-3 px-0 mt-3 mt-md-0">
+    <div id="organiserCollecte" class="col-11 col-md-5 d-flex flex-column pt-3 ps-2 mt-3 mt-md-0">
         <h2 class="col-12">
             Organiser <span class="text-purple">une collecte</span>
         </h2>
@@ -28,7 +28,7 @@
     </div>
     <div class="col-12 my-5 d-flex justify-content-center">
         <div class="col-11 col-sm-9 col-md-7 col-lg-5 _collecte_card_info d-flex p-3">
-            <div class="col-2 d-flex justify-content-center align-items-center"><i class="fa-solid text-yellow fa-3x fa-circle-info"></i></div>
+            <div class="col-2 d-flex justify-content-center align-items-center"><img src="{{ asset('build/images/design/collecte/info_logo.svg') }}" alt="Logo information attention"></div>
             <div class="col-10"><b>Avant de vous lancer</b>, assurez-vous qu’il n’existe pas près de chez vous des structures de réemploi susceptibles de valoriser ces jeux incomplets.</div>
     </div>
 </div>
@@ -38,36 +38,36 @@
 
 <div class="row g-0 justify-content-center py-5 bg-white">
     <h2 class="col-12 text-center mb-5"><span class="text-purple">Quels jeux</span> collecter ?</h2>
-    <div class="col-11 col-md-6 col-lg-5 px-lg-4">
-        <div class="col-11 mx-auto card_collectons py-4">
-            <div class="col-12 d-flex justify-content-center mb-3">
+    <div class="col-9 col-sm-6 col-lg-5 col-xl-4">
+        <div class="col-11 mx-auto card_collectons h-100">
+            <div class="col-12 d-flex justify-content-center p-4 mb-3">
                 <img class="img_collecte_or_not" src="{{ asset('build/images/design/collecte/collecte_ok.png') }}" alt="Exemple de jeux collectés">
             </div>
             <h4 class="text-center text-yellow pt-3">Nous collectons</h5>
             <div class="card-body">
-                <ul class="list-unstyled ul_collecte_ok">
-                    <li>Jeux de société modernes et anciens</li>
-                    <li>Jeux éducatifs en boîte carton</li>
-                    <li>Pièces détachées (pions, dés, sabliers…)</li>
-                    <li>Puzzles complets</li>
-                    <li>Jeux d’encastrement en bois</li>
-                    <li>Certains jouets : Domino Express, jeux SMARTMAX et GEOMAG</li>
+                <ul class="list-unstyled">
+                    <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ok.svg') }}"> Jeux de société modernes et anciens</li>
+                    <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ok.svg') }}"> Jeux éducatifs en boîte carton</li>
+                    <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ok.svg') }}"> Pièces détachées (pions, dés, sabliers…)</li>
+                    <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ok.svg') }}"> Puzzles complets</li>
+                    <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ok.svg') }}"> Jeux d’encastrement en bois</li>
+                    <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ok.svg') }}"> Certains jouets : Domino Express, jeux SMARTMAX et GEOMAG</li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="col-11 col-md-6 col-lg-5 px-lg-4 mt-3 mt-lg-0">
-        <div class="col-11 mx-auto card_collectons p-4">
-            <div class="col-12 d-flex justify-content-center mb-3">
+    <div class="col-9 col-sm-6 col-lg-5 col-xl-4 mt-5 mt-sm-0 h-100">
+        <div class="col-11 mx-auto card_collectons">
+            <div class="col-12 d-flex justify-content-center p-4 mb-3">
                 <img class="img_collecte_or_not" src="{{ asset('build/images/design/collecte/ko_collecte.png') }}" alt="Exemple de jeux non collectés">
             </div>
             <h4 class="text-center text-yellow pt-3">Nous ne collectons pas</h5>
             <div class="card-body px-4">
-                <ul class="list-unstyled ul_collecte_ko">
-                    <li>Jouets</li>
-                    <li>Puzzles incomplets</li>
-                    <li>Jeux de société de sous-marques ou certains jeux de marques distributeurs (ex : Pavillon)</li>
-                    <li>Certains jeux trop lourds pour envoi ou difficiles à revaloriser. Ex : Trivial Pursuit, In ze boîte, jeux TV (sauf Pyramide)…</li>
+                <ul class="list-unstyled">
+                    <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ko.svg') }}">Jouets</li>
+                    <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ko.svg') }}">Puzzles incomplets</li>
+                    <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ko.svg') }}">Jeux de société de sous-marques ou certains jeux de marques distributeurs (ex : Pavillon)</li>
+                    <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ko.svg') }}">Certains jeux trop lourds pour envoi ou difficiles à revaloriser. Ex : Trivial Pursuit, In ze boîte, jeux TV (sauf Pyramide)…</li>
                 </ul>
             </div>
         </div>

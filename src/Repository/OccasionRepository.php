@@ -64,7 +64,7 @@ class OccasionRepository extends ServiceEntityRepository
             ->join('b.durationGame','d')
             ->join('o.stock','s')
             ->where('b.name LIKE :searchName')
-            ->where('s.name = :stock_name')
+            ->andWhere('s.name = :stock_name')
             ->orWhere('e.name LIKE :searchName')
             ->andWhere('b.playersMin IN (:players)')
             // ->orWhere('b.playersMax >= (:players)')
@@ -87,27 +87,27 @@ class OccasionRepository extends ServiceEntityRepository
         return $query;
     }
 
-    public function searchAllOccasionsByStartAndEndFromCategory(int $age_start, int $age_end): array
-    {
+    // public function searchAllOccasionsByStartAndEndFromCategory(int $age_start, int $age_end): array
+    // {
 
-        return $this->createQueryBuilder('o')
-            ->join('o.boite','b')
-            ->join('o.stock','s')
-            ->where('b.age >= :age_start')
-            ->andWhere('s.name = :stock_name')
-            ->andWhere('b.age <= :age_end')
-            ->andWhere('o.isOnline = :online')
-            ->setParameters([
-                'age_start' => $age_start,
-                'age_end' => $age_end,
-                'online' =>  true,
-                'stock_name' => 'SUR LE SITE'
-            ])
-            ->orderBy('b.id', 'DESC')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
+    //     return $this->createQueryBuilder('o')
+    //         ->join('o.boite','b')
+    //         ->join('o.stock','s')
+    //         ->where('b.age >= :age_start')
+    //         ->andWhere('s.name = :stock_name')
+    //         ->andWhere('b.age <= :age_end')
+    //         ->andWhere('o.isOnline = :online')
+    //         ->setParameters([
+    //             'age_start' => $age_start,
+    //             'age_end' => $age_end,
+    //             'online' =>  true,
+    //             'stock_name' => 'SUR LE SITE'
+    //         ])
+    //         ->orderBy('b.id', 'DESC')
+    //         ->getQuery()
+    //         ->getResult()
+    //     ;
+    // }
 
     public function findAleatoireOccasionsByAgeWhitoutThisOccasion(int $age, Occasion $occasion): array
     {

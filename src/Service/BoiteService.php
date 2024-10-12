@@ -71,23 +71,6 @@ class BoiteService
         $io->success('Importation 3/3 terminée');
     }
 
-    //mise à jour des durées des boites
-    public function updateBoitesWithDuration(SymfonyStyle $io): void
-    {
-        $io->title('Mise à jour des durée des boites');
-        $boites = $this->readCsvFileBoitesWithDuration();
-
-        $io->progressStart(count($boites));
-        foreach($boites as $arrayBoite){
-            $io->progressAdvance();
-            $boite = $this->UpdateBoiteDuration($arrayBoite);
-            $this->em->persist($boite);
-            $this->em->flush($boite);
-        }
-        $io->progressFinish();
-        $io->success('Mise à jour terminée');
-    }
-
     //lecture des fichiers exportes dans le dossier import
     private function readCsvFileCatalogue1_3()
     {
@@ -178,29 +161,16 @@ class BoiteService
             ->setIsOccasion($arrayBoite['isComplet'])
             ->setWeigth($this->nullTo0($arrayBoite['poidBoite']))
             ->setAge((int) $arrayBoite['age'])
-            ->setPlayersMin($this->numbersOfPlayersRepository->findOneBy(['keyword' => (int) $arrayBoite['nbrJoueurs']]) ?? $this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
+            ->setPlayersMin($this->numbersOfPlayersRepository->findOneBy(['keyword' => (int) $arrayBoite['nbrJoueurs']]) ?? $this->numbersOfPlayersRepository->findOneBy(['name' => '-']))
             ->setHtPrice($this->utilitiesService->stringToNull($arrayBoite['prix_HT']))
             ->setCreatedBy($createdBy)
             ->setIsDeee($this->nullToBoolean($arrayBoite['deee']))
             ->setCreatedAt(new DateTimeImmutable($arrayBoite['created_at']))
             ->setIsOnLine($isV3)
-            ->setPlayersMax($this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
+            ->setPlayersMax($this->numbersOfPlayersRepository->findOneBy(['name' => '-']))
             ->setImage($this->constructImagePath($arrayBoite['urlNom'], $arrayBoite['idCatalogue']));
         $boite->setRvj2id($arrayBoite['idCatalogue'])->setUpdatedAt(new DateTimeImmutable('now'));
 
-
-        return $boite;
-    }
-
-    private function UpdateBoiteDuration(array $arrayBoite): Boite
-    {
-        $boite = $this->boiteRepository->findOneBy(['id' => $arrayBoite['id']]);
-
-        if(!$boite){
-            $boite = new Boite();
-        }
-
-        $boite->setDurationGame($this->durationOfGameRepository->findOneBy(['id' => $arrayBoite['duration_game_id']]) ?? $this->durationOfGameRepository->findOneBy(['id' => 1]));
 
         return $boite;
     }
@@ -285,14 +255,6 @@ class BoiteService
         return $csvPieces;
     }
 
-    private function readCsvFileBoitesWithDuration(): Reader
-    {
-        $csvBoites = Reader::createFromPath('%kernel.root.dir%/../import/_table_boites_duration_ok.csv','r');
-        $csvBoites->setHeaderOffset(0);
-
-        return $csvBoites;
-    }
-
     private function createOrUpdateContentBoite(array $arrayPiece): void
     {
 
@@ -325,7 +287,7 @@ class BoiteService
             ->setIsOccasion(false)
             ->setWeigth(0)
             ->setAge((int) 0)
-            ->setPlayersMin($this->numbersOfPlayersRepository->findOneBy(['name' => 'A définir']))
+            ->setPlayersMin($this->numbersOfPlayersRepository->findOneBy(['name' => '-']))
             ->setHtPrice(0)
             ->setCreatedBy($this->userRepository->findOneBy(['nickname' => 'Je Développe']))
             ->setIsDeee(false)

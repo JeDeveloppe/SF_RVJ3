@@ -16,7 +16,7 @@ class SiteControllerService
         $siteControllerServiceContent = [
             'header_h1_no_purple'=> 'Nos',
             'header_h1_purple' => 'prestations',
-            'header_description' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', //TODO
+            'header_description' => 'En plus de la valorisation des jeux, l\'association propose différentes prestations. N\'hésitez pas à nous contacter pour en savoir plus ou pour nous faire part de vos demandes !',
             'dark_button_link' => $this->routerInterface->generate('app_prestations'),
             'dark_button_link_archor' => '#id_animations',
             'dark_button_text' => 'Animations',

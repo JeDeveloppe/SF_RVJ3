@@ -50,7 +50,7 @@ class PlayerService
             'display'=> false
         ];
         $players[] = [
-            'name' => 'A définir', //! ne pas changer cette variable
+            'name' => '-', //! ne pas changer cette variable
             'key' => null,
             'display'=> false
         ];

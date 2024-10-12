@@ -174,13 +174,17 @@ class OccasionService
             $occasion = new Occasion();
         }
 
+        $boxCondition = $this->cleanBoxConditionAndEtatMateriel($arrayOccasion['etatBoite']);
+        $materielEtat = $this->cleanBoxConditionAndEtatMateriel($arrayOccasion['etatMateriel']);
+        $etatRegle = $this->cleanEtatRegle($arrayOccasion['regleJeu']);
+
         $occasion->setBoite($this->boiteRepository->findOneBy(['rvj2id' => $arrayOccasion['idCatalogue']]) ?? $this->boiteRepository->findOneBy(['name' => 'BOITE SUPPRIMEE']))
                 ->setReference($arrayOccasion['reference'])
                 ->setInformation($this->utilitiesService->stringToNull($arrayOccasion['information']))
                 ->setIsNew($this->stringToBoolean($arrayOccasion['isNeuf']))
-                ->setBoxCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatBoite']]))
-                ->setEquipmentCondition($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['etatMateriel']]))
-                ->setGameRule($this->conditionOccasionRepository->findOneBy(['name' => $arrayOccasion['regleJeu']]))
+                ->setBoxCondition($this->conditionOccasionRepository->findOneBy(['name' => $boxCondition]))
+                ->setEquipmentCondition($this->conditionOccasionRepository->findOneBy(['name' => $materielEtat]))
+                ->setGameRule($this->conditionOccasionRepository->findOneBy(['name' => $etatRegle]))
                 ->setIsOnLine($arrayOccasion['actif'])
                 ->setOffSiteOccasionSale(null)
                 ->setPriceWithoutTax($arrayOccasion['prixHT'])
@@ -286,5 +290,34 @@ class OccasionService
         $choices['twig'] = $twig;
 
         return $choices;
+    }
+
+    public function cleanBoxConditionAndEtatMateriel($etat){
+
+        $etat = str_replace('ÉTAT','',$etat);
+        $etat = str_replace(' ','',$etat);
+        if(str_contains($etat, 'NEUF')){
+            $etat = 'Comme neuf';
+        }
+        $etat = strtolower($etat);
+        $etat = ucfirst($etat);
+
+        return $etat;
+    }
+
+    public function cleanEtatRegle($etat){
+
+        $etat = str_replace('ÉTAT','',$etat);
+        $etat = str_replace(' ','',$etat);
+        if(str_contains($etat, 'BOITE')){
+            $etat = 'Sur la boite';
+        }
+        if(str_contains($etat, 'IMPRIMÉE')){
+            $etat = 'Imprimée';
+        }
+        $etat = strtolower($etat);
+        $etat = ucfirst($etat);
+
+        return $etat;
     }
 }

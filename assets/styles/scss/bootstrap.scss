@@ -3254,6 +3254,7 @@ fieldset:disabled .btn {
     background-color: var(--bs-yellow);
     border-color: var(--bs-yellow);
     box-sizing: border-box;
+    text-transform: uppercase;
   }
 .btn-yellow:hover {
     color: #fff;
@@ -3265,7 +3266,10 @@ fieldset:disabled .btn {
 .btn-purple{
     color: var(--bs-white);
     background-color: var(--bs-purple);
-    border-color: var(--bs-purple)
+    border-color: var(--bs-purple);
+    padding: 10px 24px 10px 24px;
+    box-sizing: border-box;
+    text-transform: uppercase;
   }
 .btn-purple:hover {
     color: var(--bs-dark);
@@ -3503,7 +3507,9 @@ fieldset:disabled .btn {
     color: #fff;
     padding: 10px 24px 10px 24px;
     background-color: #212529;
-    border-color: #212529
+    border-color: #212529;
+    font-size: 13px;
+    text-transform: uppercase;
 }
 
 .btn-dark:hover {

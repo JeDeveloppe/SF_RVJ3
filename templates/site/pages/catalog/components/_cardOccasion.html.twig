@@ -9,10 +9,10 @@
 
     <div id="{{ setEntityId }}" class="card_ d-flex flex-wrap h-100 mx-2 position-relative">
         <a href="{{ path('occasion', {'reference_occasion': occasion.reference, 'editor_slug': occasion.boite.editor.slug, 'boite_slug': occasion.boite.slug | lower }) }}" class="_card_full_button"></a>
-        <div class="card_div_img">
+        <div class="card_div_img p-0">
             <img class="card_catalog_img" src="{{ vich_uploader_asset(boite, 'imageFile') }}" alt="Image de la boite de jeu {{ boite.name }} - {{ boite.editor }}"/><br/>
         </div>
-        <div class="card_boite_name mt-3">{{ boite.name | raw }}</div>
+        <div class="card_boite_name mt-0 mt-md-1">{{ boite.name | raw }}</div>
         <div class="col-12 px-0">
             {% include "components/catalog/_players&age.html.twig" with {'item': boite } %}
         </div>

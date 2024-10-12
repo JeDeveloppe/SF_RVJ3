@@ -58,6 +58,9 @@ class PanierController extends AbstractController
         //?on demarre la session
         $session = $request->getSession();
 
+        //?on garde en memoire back_url_after_login
+        $session->set('back_url_after_login', $request->get('_route'));
+
         //?on compte le nombre de products dans le panier en session
         $count = $this->utilitiesService->countNumberOfProductsInSessionCart($session->get('paniers'));
     

@@ -59,19 +59,16 @@ function getCookie(cname) {
 }
 // End CookieBand effect 
 
+//occasions_filters_menu effect
+let occasions_filters_button = document.querySelector('.occasions_filters_button');
+let occasions_filters_menu = document.querySelector('.occasions_filters_menu');
+occasions_filters_button.addEventListener('click', showFiltersMenu);
 
-//menu effect for display or not menu user when collapsed
-let menu_user_cart = document.getElementById('menu_user_cart');
-let navbar_button = document.getElementById('navbar_button');
-let logoNav = document.getElementById('logoNav');
-
-navbar_button.addEventListener('click', displayMenuUserCart);
-
-function displayMenuUserCart(){
-    if(navbar_button.getAttribute('aria-expanded') === "true"){
-      menu_user_cart.style.opacity = 0;
-    }else{
-      menu_user_cart.style.opacity = 1;
-    }
+function showFiltersMenu(){
+  if(occasions_filters_menu.classList.contains('d-none')){
+    occasions_filters_menu.classList.remove('d-none');
+  }else{
+    occasions_filters_menu.classList.add('d-none');
+  }
 }
-//menu effect for display or not menu user when collapsed
+//occasions_filters_menu effect

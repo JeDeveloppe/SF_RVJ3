@@ -195,10 +195,10 @@ class CatalogController extends AbstractController
         }else{
 
             //on cherche l'ensemble du catalogue
-            $donneesFromDatabases = $this->occasionRepository->searchAllOccasionsByStartAndEndFromCategory($choices['start_and_end_ages']['start'], $choices['start_and_end_ages']['end']);
+            $donneesFromDatabases = $this->occasionRepository->searchOccasionsInCatalogue('',[], $choices['start_and_end_ages']['end'],[],[],$choices);
 
         }
-
+        
         $diff = $this->catalogueService->returnOccasionsWithoutOccasionsInCart($donneesFromDatabases);
 
         $occasions = $this->paginator->paginate(
@@ -214,7 +214,7 @@ class CatalogController extends AbstractController
             return new JsonResponse([
                 'content' => $this->renderView('site/pages/catalog/components/_display_occasions_results.html.twig', [
                     'occasions' => $occasions,
-                    'occasions_totales' => $donneesFromDatabases,
+                    'occasions_totales' => $diff,
                     'metas' => $metas,
                     'titreDeLaPage' => $choices['twig']['titleH1'],
                     'breadcrumb' => $choices['twig']['breadcrumb'],
@@ -229,7 +229,7 @@ class CatalogController extends AbstractController
 
             return $this->render('site/pages/catalog/occasions/les_occasions.html.twig', [
                 'occasions' => $occasions,
-                'occasions_totales' => $donneesFromDatabases,
+                'occasions_totales' => $diff,
                 'metas' => $metas,
                 'titreDeLaPage' => $choices['twig']['titleH1'],
                 'breadcrumb' => $choices['twig']['breadcrumb'],

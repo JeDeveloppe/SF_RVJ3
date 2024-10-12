@@ -25,6 +25,7 @@ use App\Service\PaiementService;
 use App\Service\PartnerService;
 use App\Service\PlayerService;
 use App\Service\SiteSettingsService;
+use App\Service\StockService;
 use App\Service\UserService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -60,7 +61,8 @@ class InitDataBase3 extends Command
             private DiscountService $discountService,
             private UserService $userService,
             private CollectionPointService $collectionPointService,
-            private DurationOfGameService $durationOfGameService
+            private DurationOfGameService $durationOfGameService,
+            private StockService $stockService
         )
     {
         parent::__construct();
@@ -74,7 +76,7 @@ class InitDataBase3 extends Command
 
         $io = new SymfonyStyle($input,$output);
 
-        //on importe les partenaires
+        // //on importe les partenaires
         // $this->partnerService->importPartenaires($io);
 
         // //on importe les adresses (facturation et livraison)
@@ -88,8 +90,6 @@ class InitDataBase3 extends Command
 
         // //on importe les boites
         // $this->boiteService->importBoites($io);
-
-        // $this->boiteService->updateBoitesWithDuration($io);
 
         // //SI ON EST EN DEV on génére de facon aléatoire la duree des parties aux boites
         // if($_ENV['APP_ENV'] == 'dev' or $_ENV['APP_ENV'] == 'DEV'){
@@ -115,6 +115,8 @@ class InitDataBase3 extends Command
         // //on cree les MOYENS DE PAIEMENT
         // $this->meansOffPayementService->addMoyens($io);
 
+        //on importe les stocks du site
+        $this->stockService->addStocks($io);
         //on importe les jeux complet
         $this->occasionService->importOccasions($io);
 
