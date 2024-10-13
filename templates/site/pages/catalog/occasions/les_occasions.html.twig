@@ -14,12 +14,12 @@
             <div class="col-11 text-center small mb-2">{{ breadcrumb | raw }}</div>
             <h1 class="col-12 text-center">{{ titreDeLaPage | raw }}</h1>
         </div>
-        <div class="row g-0 justify-content-around align-items-start py-3 py-md-5 bg-white">
+        <div class="row g-0 align-items-start py-3 py-md-5 bg-white">
             <!-- left column / searchs -->
-            <div class="d-flex d-md-none col-11 justify-content-end">
+            <div class="col-11 d-flex d-md-none justify-content-end">
                 <i class="fa-solid fa-filter btn btn-yellow occasions_filters_button"> Filtrer</i>
             </div>
-            <div class="col-12 col-md-4 col-lg-3 occasions_filters_menu d-none d-md-block">
+            <div class="col-12 d-flex flex-wrap col-md-4 col-lg-3 occasions_filters_menu d-none d-md-block px-2">
                 {% include "site/pages/catalog/components/_search_occasion.html.twig" %}
             </div>
             <!-- rigth column / results -->

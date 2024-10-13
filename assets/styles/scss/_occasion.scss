@@ -132,6 +132,10 @@
 }
 .li_players_label{
     position: absolute;
+    font-size: 14px;
+}
+.li_ages_label, .li_durations_label{
+    font-size: 14px;
 }
 
 .li_players > input[type="checkbox"]::before {
