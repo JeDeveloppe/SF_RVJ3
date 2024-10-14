@@ -4,9 +4,9 @@
             <label class="label_in_occasion_search_form">{{ form_label(form.playerMin) }}</label>
             <ul class="d-flex flex-wrap p-0">
                 {% for player in form.playerMin %}
-                    <li class="list-unstyled p-0 my-1 mx-1 d-flex flex-wrap justify-content-center align-items-center">
-                        <div class="li_players">{{ form_widget(player) }}</div>
-                        <div class="li_players_label">{{ form_label(player) }}</div>
+                    <li class="list-unstyled p-0 my-1 mx-1 d-flex justify-content-center align-items-center">
+                        <div class="li_players position-relative">{{ form_widget(player) }}</div>
+                        <div class="li_players_label position-absolute">{{ form_label(player) }}</div>
                     </li>
                 {% endfor %}
             </ul>

@@ -132,25 +132,51 @@ class OccasionRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findUniqueOccasionByRefrenceWhenIsOnLineAndSlugIsOk(string $occasionReference, string $boiteSlug)
+    public function findUniqueOccasionByRefrenceV3WhenIsOnLineAndSlugsAreOk(string $occasionReference, string $editor_slug, string $boiteSlug)
     {
-
         return $this->createQueryBuilder('o')
         ->join('o.boite','b')
+        ->join('b.editor', 'e')
         ->where('b.slug = :slug')
-        ->andWhere('o.reference = :occasionReference')
+        ->andWhere('o.reference = :referenceV3')
+        ->andWhere('e.slug = :editorSlug')
         ->andWhere('o.isOnline = :online')
         ->setParameters([
             'slug' => $boiteSlug,
-            'occasionReference' => $occasionReference,
+            'editorSlug' => $editor_slug,
+            'referenceV3' => $occasionReference,
             'online' =>  true,
         ])
         ->getQuery()
-        ->getSingleResult()
+        ->getOneOrNullResult()
+        // ->getSingleResult()
         ;
 
     }
 
+    public function findUniqueOccasionByRefrenceV2WhenIsOnLineAndSlugsAreOk(string $occasionReference, string $editor_slug, string $boiteSlug)
+    {
+        $references = explode('-', $occasionReference);
+
+        return $this->createQueryBuilder('o')
+        ->join('o.boite','b')
+        ->join('b.editor', 'e')
+        ->where('b.slug = :slug')
+        ->andWhere('o.reference = :referenceV2')
+        ->andWhere('e.slug = :editorSlug')
+        ->andWhere('o.isOnline = :online')
+        ->setParameters([
+            'slug' => $boiteSlug,
+            'editorSlug' => $editor_slug,
+            'referenceV2' => $references[1].'-'.$references[0],
+            'online' =>  true,
+        ])
+        ->getQuery()
+        ->getOneOrNullResult()
+        // ->getSingleResult()
+        ;
+
+    }
 //    /**
 //     * @return Occasion[] Returns an array of Occasion objects
 //     */

@@ -59,16 +59,14 @@ function getCookie(cname) {
 }
 // End CookieBand effect 
 
-//occasions_filters_menu effect
-let occasions_filters_button = document.querySelector('.occasions_filters_button');
-let occasions_filters_menu = document.querySelector('.occasions_filters_menu');
-occasions_filters_button.addEventListener('click', showFiltersMenu);
-
-function showFiltersMenu(){
-  if(occasions_filters_menu.classList.contains('d-none')){
-    occasions_filters_menu.classList.remove('d-none');
+let navbarToggler = document.querySelector('.navbar-toggler');
+let attribute = navbarToggler.getAttribute('aria-expanded');
+let menu_user_cart = document.getElementById('menu_user_cart');
+function loginEffect(){
+  if(attribute === true){
+    menu_user_cart.classList.add('d-none');
   }else{
-    occasions_filters_menu.classList.add('d-none');
+    menu_user_cart.classList.remove('d-none');
   }
 }
-//occasions_filters_menu effect
+navbarToggler.addEventListener('click', loginEffect );

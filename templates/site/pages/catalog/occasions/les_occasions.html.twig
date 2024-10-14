@@ -36,7 +36,19 @@
 {% block javascript %}
 <script>
     window.onload = () => {
+        //occasions_filters_menu effect
+        let occasions_filters_button = document.querySelector('.occasions_filters_button');
+        let occasions_filters_menu = document.querySelector('.occasions_filters_menu');
+        occasions_filters_button.addEventListener('click', showFiltersMenu);
 
+        function showFiltersMenu(){
+        if(occasions_filters_menu.classList.contains('d-none')){
+            occasions_filters_menu.classList.remove('d-none');
+        }else{
+            occasions_filters_menu.classList.add('d-none');
+        }
+        }
+        //occasions_filters_menu effect
         let FormOccasion = document.getElementById('search_occasions_in_catalogue');
 
         let resetFormButton = document.getElementById('resetFormButton');

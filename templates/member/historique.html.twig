@@ -57,7 +57,7 @@
                            <div class="col-6 col-md-3 text-center order-2 order-md-3">{{ document.documentStatus.name }}</div>
                            <div class="col-6 col-md-3 text-center order-4">
                               {% if document.sendingAt is not null %}
-                                 {{ document.shippingMethod.name }}<br/>le: {{ document.sendingAt | date('d-m-Y') }}<br/>
+                                 {{ document.shippingMethod.name }}<br/>le : {{ document.sendingAt | date('d-m-Y') }}<br/>
                                  {% if document.sendingNumber is not null %}
                                     Numéro de suivi: {{ document.sendingNumber }}
                                  {% else %}

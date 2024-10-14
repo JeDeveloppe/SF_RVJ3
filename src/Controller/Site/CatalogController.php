@@ -29,7 +29,11 @@ use App\Repository\DurationOfGameRepository;
 use App\Service\CatalogueService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+use function PHPUnit\Framework\throwException;
 
 class CatalogController extends AbstractController
 {
@@ -243,17 +247,16 @@ class CatalogController extends AbstractController
     }
 
     #[Route('/jeu-occasion/{reference_occasion}/{editor_slug}/{boite_slug}', name: 'occasion')]
-    public function occasion($reference_occasion, Security $security, $boite_slug): Response
+    public function occasion($reference_occasion, Security $security, $editor_slug, $boite_slug): Response
     {
 
         $delivery = null;
 
-        $occasion = $this->occasionRepository->findUniqueOccasionByRefrenceWhenIsOnLineAndSlugIsOk($reference_occasion, $boite_slug);
+        $occasion = $this->occasionRepository->findUniqueOccasionByRefrenceV3WhenIsOnLineAndSlugsAreOk($reference_occasion, $editor_slug, $boite_slug);
 
+        //si toujours pas d'occasion => page non trouvée
         if(!$occasion){
-
-            $this->addFlash('warning', 'Jeu non disponible ou inconnu !');
-            return $this->redirectToRoute('app_catalogue_occasions');
+            throw $this->createNotFoundException('Occasion non trouvé'); //TODO redirection vers page 'rangement'
         }
 
         $user = $security->getUser();
@@ -287,10 +290,10 @@ class CatalogController extends AbstractController
 
         }
 
+
         $query = $this->occasionRepository->findAleatoireOccasionsByAgeWhitoutThisOccasion($occasion->getBoite()->getAge(), $occasion);
         shuffle($query); // on mélange
         $firstElements = array_slice($query, 0, 4); //on prend les 6 premiers apres avoir mélanger
-
         $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.$occasion->getBoite()->getName().' - '.$occasion->getBoite()->getEditor()->getName();
 
         return $this->render('site/pages/catalog/occasions/occasion.html.twig', [

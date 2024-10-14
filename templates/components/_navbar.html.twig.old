@@ -3,7 +3,7 @@
   {% set bg_white_if_route_not_app_home = 'bg-secondary' %}
 {% endif %}
 
-<nav class="navbar navbar-expand-lg navbar-light pt-4 pt-lg-0 {{ bg_white_if_route_not_app_home }}">
+<nav class="navbar navbar-expand-lg navbar-light sticky-top pt-4 pt-lg-0 {{ bg_white_if_route_not_app_home }}">
 	<a class="navbar-brand" id="logoNav" href="{{ path('app_home') }}">
 		<img src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo Refaites vos jeux">
 	</a>
@@ -11,36 +11,58 @@
 		<span class="navbar-toggler-icon"></span>
 	</button>
 
-	<div class="collapse navbar-collapse flex-column" id="navbarSupportedContent">
-		<ul class="navbar-nav bg-purple col-12 justify-content-end align-items-end text-uppercase small">
-			<li class="nav-item d-flex pe-3 pe-lg-0">
+	<div class="collapse navbar-collapse flex-wrap" id="navbarSupportedContent">
+		<ul class="navbar-nav bg-purple col-12 mt-2 mt-lg-0 justify-content-end align-items-center align-items-lg-end text-uppercase small">
+			<li class="nav-item d-flex ps-3 ps-lg-0 pe-3 pe-lg-0">
 				<a class="nav-link text-white" href="{{ path('app_support_us') }}">Soutenir l'association</a>
 			</li>
-			<li class="nav-item d-flex pe-3 pe-lg-0">
+			<li class="nav-item d-flex ps-3 ps-lg-0 pe-3 pe-lg-0">
 				<a class="nav-link text-white" href="{{ path('app_prestations') }}">Prestations</a>
 			</li>
-			<li class="nav-item d-flex pe-3 pe-lg-0">
+			<li class="nav-item d-flex ps-3 ps-lg-0 pe-3 pe-lg-0">
 				<a class="nav-link text-white" href="{{ path('app_organize_a_collection') }}">Organiser une collecte</a>
 			</li>
 		</ul>
-		<ul class="navbar-nav col-12 justify-content-center {{ bg_white_if_route_not_app_home }} py-3">
-			<li class="nav-item d-flex ps-3 ps-lg-0">
+		<ul class="navbar-nav col-12 justify-content-center align-items-center {{ bg_white_if_route_not_app_home }} py-3">
+			<li class="nav-item d-flex px-2">
 				<a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': 'tous-les-jeux' }) }}">Tous les jeux</a>
 			</li>
-			<li class="nav-item d-flex ps-3 ps-lg-0">
+			<li class="nav-item d-flex px-2">
 				<a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}">Enfants</a>
 			</li>
-			<li class="nav-item d-flex ps-3 ps-lg-0">
+			<li class="nav-item d-flex px-2">
 				<a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-tout-public'}) }}">Tout public</a>
 			</li>
-			<li class="nav-item d-flex ps-3 ps-lg-0">
+			<li class="nav-item d-flex px-2">
 				<a class="nav-link text-dark" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}">Initié·es</a>
 			</li>
-			<li class="nav-item d-flex ps-3 ps-lg-0">
+			<li class="nav-item d-flex px-2">
 				<a class="nav-link text-dark" href="{{ path('app_home') }}#piecesDetachees">Pièces détachées</a>
 			</li>
-			<li class="nav-item d-flex pb-2 pb-lg-0 ps-3 ps-lg-0">
+			<li class="nav-item d-flex pb-2 pb-lg-0 px-2">
 				<a class="nav-link text-dark btn btn-yellow p-2" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
+			</li>
+		</ul>
+		<ul class="d-lg-none navbar-nav col-12 align-items-center {{ bg_white_if_route_not_app_home }}">
+			<li class="nav-item d-flex ps-3 ps-lg-0">
+				<a href="{{ path('app_conditions_generale_de_vente') }}" class="nav-link text-dark">Conditions générales de vente</a>
+			</li>
+			<li class="nav-item d-flex ps-3 ps-lg-0">
+				<a href="{{ path('app_mentions_legales') }}" class="nav-link text-dark">Mentions légales & CGU</a>
+			</li>
+			<li class="nav-item d-flex ps-3 ps-lg-0">
+				<a href="{{ path('app_contact') }}" class="nav-link text-dark">Contact</a>
+			</li>
+			<li class="nav-item d-flex ps-3 ps-lg-0">
+				<a href="{{ path('app_press') }}" class="nav-link text-dark">Presse</a>
+			</li>
+			<li class="nav-item d-flex ps-3 ps-lg-0">
+				<a href="https://www.facebook.com/refaitesvosjeux">
+					<img src="{{ asset('build/images/design/footer/facebook_link.svg') }}" alt="Suivez-nous sur Facebook !">
+				</a>
+				<a href="https://www.instagram.com/refaitesvosjeux/">
+					<img src="{{ asset('build/images/design/footer/instagram_link.svg') }}" alt="Suivez-nous sur Instagram !">
+				</a>
 			</li>
 		</ul>
 	</div>

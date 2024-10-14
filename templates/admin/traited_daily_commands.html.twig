@@ -21,11 +21,11 @@
                                 <div class="card-header">{{ document.quoteNumber }} - {{ document.billNumber }}</div>
                                 <div class="card-body d-flex align-items-center">
                                     <div class="col-3">
-                                        <p>Payée le: {{ document.payment.timeOfTransaction | date('d-m-Y') }}<br/>
+                                        <p>Payée le : {{ document.payment.timeOfTransaction | date('d-m-Y') }}<br/>
                                             {{ document.payment.details }}</p>
                                         <b>Envoi / retrait:<br/></b>
                                         {% if document.sendingAt is not null %}
-                                            Envoi le: {{ document.sendingAt | date('d-m-Y') }}<br/>
+                                            Envoi le : {{ document.sendingAt | date('d-m-Y') }}<br/>
                                                 {% if document.sendingNumber is not null %}
                                                     Numéro de suivi: {{ document.sendingNumber }}
                                                 {% else %}
@@ -73,7 +73,7 @@
                                                                         <li>{{ value.answer }}</li>
                                                                     </ul>
                                                                 {% elseif value.occasion is not null %}
-                                                                    Occasion: (Référence: {{ value.occasion.reference }})<br/>
+                                                                    Occasion: (Référence : {{ value.occasion.reference }})<br/>
                                                                     {{ value.occasion.boite.name }} - {{ value.occasion.boite.editor }} - {{ value.occasion.boite.year }}
                                                                     <ul>
                                                                         <li>État de la boite : {{ value.occasion.boxCondition }}</li>
@@ -82,7 +82,7 @@
                                                                     </ul>
                                                                 {% else %}
                                                                     Article:<br/>
-                                                                    {{ value.item.name }} - Référence: {{ value.item.reference }} - Qté: {{ value.quantity }}
+                                                                    {{ value.item.name }} - Référence : {{ value.item.reference }} - Qté: {{ value.quantity }}
                                                                 {% endif %}
                                                             </td>
                                                             <td class="text-center">{{ (value.priceExcludingTax) / 100 |number_format(2, '.', ',') }} €</td>
@@ -91,7 +91,7 @@
                                                 </table>
                                         </div>
                                         <div class="modal-footer">
-                                            Payée le: {{ document.payment.timeOfTransaction | date('d-m-Y') }}<br/>
+                                            Payée le : {{ document.payment.timeOfTransaction | date('d-m-Y') }}<br/>
                                             {{ document.payment.details }}
                                         </div>
                                     </div>

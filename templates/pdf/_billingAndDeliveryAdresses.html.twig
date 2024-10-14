@@ -52,5 +52,5 @@ style="
     height:1.4cm;
     border:1px solid black;
     ">
-    <div class="card-body p-2" style="font-size:12px;">Payé le: {{ document.payment.timeOfTransaction | date('d-m-Y') }} {{ document.payment.details ? ' - '~ document.payment.details : ' - [DETAILS PAIEMENT ABSENT]' }}</div>
+    <div class="card-body p-2" style="font-size:12px;">Payé le : {{ document.payment.timeOfTransaction | date('d-m-Y') }} {{ document.payment.details ? ' - '~ document.payment.details : ' - [DETAILS PAIEMENT ABSENT]' }}</div>
 </div>
