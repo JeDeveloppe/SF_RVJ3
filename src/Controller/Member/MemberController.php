@@ -49,7 +49,23 @@ class MemberController extends AbstractController
         //on supprime les document trop vieu non relancer
         $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
-        return $this->render('member/member.html.twig', []);
+        $themes[] = [
+            'title' => 'Mes commandes',
+            'imgName' => 'commandes',
+            'link' => $this->generateUrl('member_historique')
+        ];
+        $themes[] = [
+            'title' => 'Mes adresses',
+            'imgName' => 'adresses',
+            'link' => $this->generateUrl('member_adresses')           
+        ];
+        $themes[] = [
+            'title' => 'Mes paramètres',
+            'imgName' => 'parametres',
+            'link' => $this->generateUrl('member_compte')           
+        ];
+
+        return $this->render('member/member.html.twig', ['themes' => $themes]);
     }
     
     #[Route('/membre/adresses', name: 'member_adresses')]

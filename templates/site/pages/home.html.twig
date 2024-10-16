@@ -6,44 +6,43 @@
 
 
 <div class="row g-0 justify-content-center align-items-center py-5">
-    <div class="col-12 col-md-6 col-lg-5 d-flex flex-column pt-3">
+    <div class="col-12 col-md-6 col-lg-5 d-flex flex-wrap">
         <h1 class="col-12 text-center text-md-start">
             Craquez pour nos <span class="text-purple">jeux de société</span> d'occasion !
         </h1>
-        <div class="col-12 mt-4 text-center text-md-start">
+        <div class="col-12 mt-1 text-center text-md-start">
             Disponibles en retrait à Caen dans le Calvados.
         </div>
-        <div class="col-12 d-flex justify-content-center justify-content-md-start mt-5 text-uppercase">
+        <div class="col-12 d-flex mt-5 justify-content-center justify-content-md-start">
             <a class="btn btn-dark d-flex align-items-center" href="{{ path('app_catalogue_occasions', {'category': null}) }}">Acheter un jeu</a>
-            <a class="ms-3 btn btn-light flex-column" href="{{ path('app_home') }}#piecesDetachees">
+            <a style="width: 184px; height: 46px; font-size: 12px;" class="ms-3 btn btn-light d-flex flex-column justify-content-center" href="{{ path('app_home') }}#piecesDetachees">
             Completer un jeu</br>
-            <small>Livraison possible</small>
+            <span class="small">Livraison possible</span>
             </a>
         </div>
-
     </div>
-    <div class="col-12 mt-4 mt-md-0 offset-md-1 col-md-4 d-flex justify-content-around align-items-center">
-        <img class="card-img-top-index" src="{{ asset('build/images/design/index/lot_de_presentation.png') }}" alt="Image d'un lot de jeux de socièté">
+    <div class="col-12 mt-4 mt-md-0 col-md-5 d-flex justify-content-center align-items-center">
+        <img class="card-img-top-index p-1" src="{{ asset('build/images/design/index/lot_de_presentation.png') }}" alt="Image d'un lot de jeux de socièté">
     </div>
 </div>
 
 
-<div class="row g-0 justify-content-around align-items-center bg-yellow py-1">
-    <div class="col-6 col-lg-3 d-flex">
-        <img class="col-3 col-md-2 p-2 d-flex justify-content-center align-items-center" src="{{ asset('build/images/design/index/flower_planet.png') }}" alt="Des jeux bons pour la planète" />
-        <div class="col-9 col-md-8 d-flex align-items-center pe-1">Des jeux bons pour la planète</div>
+<div class="row g-0 bg-yellow py-2">
+    <div class="col-6 col-lg-3 d-flex justify-content-start justify-content-lg-center align-items-center py-2">
+        <img class="home_bandeau_img px-1 px-lg-0" src="{{ asset('build/images/design/index/flower_planet.png') }}" alt="Des jeux bons pour la planète" />
+        <div class="home_bandeau_text px-2">Des jeux bons pour la planète</div>
     </div>
-    <div class="col-6 col-lg-3 d-flex">
-        <img class="col-3 col-md-2 p-2 d-flex justify-content-center align-items-center" src="{{ asset('build/images/design/index/flower_low_price.png') }}" alt="Des jeux à prix solidaire" />
-        <div class="col-9 col-md-8 d-flex align-items-center pe-1">Des jeux à prix solidaires</div>
+    <div class="col-6 col-lg-3 d-flex justify-content-start justify-content-lg-center align-items-center">
+        <img class="home_bandeau_img px-1 px-lg-0" src="{{ asset('build/images/design/index/flower_low_price.png') }}" alt="Des jeux à prix solidaire" />
+        <div class="home_bandeau_text px-2">Des jeux à prix solidaires</div>
     </div>
-    <div class="col-6 col-lg-3 d-flex">
-        <img class="col-3 col-md-2 p-2 d-flex justify-content-center align-items-center" src="{{ asset('build/images/design/index/flower_verify.png') }}" alt="Des jeux vérifiés et nettoyés avec soin" />
-        <div class="col-9 col-md-8 d-flex align-items-center pe-1">Des jeux vérifiés et nettoyés avec soin</div>
+    <div class="col-6 col-lg-3 d-flex justify-content-start justify-content-lg-center align-items-center">
+        <img class="home_bandeau_img px-1 px-lg-0" src="{{ asset('build/images/design/index/flower_verify.png') }}" alt="Des jeux vérifiés et nettoyés avec soin" />
+        <div class="home_bandeau_text px-2">Des jeux vérifiés et nettoyés avec soin</div>
     </div>
-    <div class="col-6 col-lg-3 d-flex">
-        <img class="col-3 col-md-2 p-2 d-flex justify-content-center align-items-center" src="{{ asset('build/images/design/index/flower_social.png') }}" alt="Un projet en faveur du lien social" />
-        <div class="col-9 col-md-8 d-flex align-items-center pe-1">Un projet en faveur du lien social</div>
+    <div class="col-6 col-lg-3 d-flex justify-content-start justify-content-lg-center align-items-center">
+        <img class="home_bandeau_img px-1 px-lg-0" src="{{ asset('build/images/design/index/flower_social.png') }}" alt="Un projet en faveur du lien social" />
+        <div class="home_bandeau_text px-2">Un projet en faveur du lien social</div>
     </div>
 </div>
 

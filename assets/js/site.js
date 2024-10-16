@@ -58,15 +58,3 @@ function getCookie(cname) {
   return "";
 }
 // End CookieBand effect 
-
-let navbarToggler = document.querySelector('.navbar-toggler');
-let attribute = navbarToggler.getAttribute('aria-expanded');
-let menu_user_cart = document.getElementById('menu_user_cart');
-function loginEffect(){
-  if(attribute === true){
-    menu_user_cart.classList.add('d-none');
-  }else{
-    menu_user_cart.classList.remove('d-none');
-  }
-}
-navbarToggler.addEventListener('click', loginEffect );

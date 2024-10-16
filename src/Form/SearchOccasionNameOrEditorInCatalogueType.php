@@ -17,7 +17,7 @@ class SearchOccasionNameOrEditorInCatalogueType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Rechercher un jeu, un éditeur...',
-                    'class' => 'form-control'
+                    'class' => 'form-control border-2 rounded-2'
                 ]
             ]);
     }

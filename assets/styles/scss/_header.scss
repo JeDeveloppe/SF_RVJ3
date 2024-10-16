@@ -6,11 +6,33 @@ nav {
     position: relative;
 }
 
+.card_member_all_themes{
+    max-width: 669px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #1C1C3E1A;
+    border-radius: 20px;
+    opacity: 1;
+}
+.card_member_theme{
+    background: var(--bs-secondary) 0% 0% no-repeat padding-box;
+    border-radius: 20px;
+    opacity: 1;
+    width: 180px;
+    height: 160px;
+}
+.card_member_theme img{
+    width: 52px;
+    height: 52px;
+}
+
+
+
 #menu_user_cart{
     position: absolute;
-    right: 0;
+    right: 1%;
     top: 20%;
     transition: all 200ms ease-in;
+    z-index: 5000;
 }
 
 #cart_link_logo{
@@ -70,6 +92,7 @@ nav {
     }
     #menu_user_cart{
         top: 45%;
+        right: 2%;
     }
 }
 

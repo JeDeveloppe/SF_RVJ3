@@ -3461,7 +3461,10 @@ fieldset:disabled .btn {
 .btn-light {
     color: #000;
     background-color: #f8f9fa;
-    border-color: #000
+    border-color: #000;
+    padding: 10px 24px 10px 24px;
+    font-size: 14px;
+    text-transform: uppercase;
 }
 
 .btn-light:hover {
@@ -3508,7 +3511,7 @@ fieldset:disabled .btn {
     padding: 10px 24px 10px 24px;
     background-color: #212529;
     border-color: #212529;
-    font-size: 13px;
+    font-size: 14px;
     text-transform: uppercase;
 }
 
