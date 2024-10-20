@@ -17,7 +17,6 @@ use App\Service\UtilitiesService;
 use App\Repository\UserRepository;
 use App\Service\AmbassadorService;
 use App\Repository\MediaRepository;
-use App\Form\AddressForDonationType;
 use App\Repository\PartnerRepository;
 use Symfony\Component\Form\FormError;
 use App\Repository\DocumentRepository;
@@ -26,14 +25,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DocumentLineRepository;
 use App\Form\EmailForSendResetPasswordType;
 use App\Repository\ResetPasswordRepository;
-use App\Repository\CollectionPointRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
+use App\Service\MentionsLegalesService;
 use App\Service\SiteControllerService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -56,7 +54,8 @@ class SiteController extends AbstractController
         private AmbassadorService $ambassadorService,
         private AmbassadorRepository $ambassadorRepository,
         private UrlGeneratorInterface $urlGeneratorInterface,
-        private SiteControllerService $siteControllerService
+        private SiteControllerService $siteControllerService,
+        private MentionsLegalesService $mentionsLegalesService
     )
     {
     }
@@ -75,11 +74,13 @@ class SiteController extends AbstractController
     public function mentionsLegales(): Response
     {
         $legales = $this->legalInformationRepository->findOneBy(['isOnline' => true], ['id' => 'ASC']);
-        $metas['description'] = 'Vous avez un jeu de société incomplet ? Refaites vos jeux vous propose un service pour donner une seconde vie à votre jeu, nous avons plein de pièces détachées en stock.';
+        $paragraphs = $this->mentionsLegalesService->mentionsParagraphs($legales);
+        $metas['description'] = ''; //TODO
 
         return $this->render('site/pages/legale/mentions_legales.html.twig', [
             'legales' => $legales,
-            'metas' => $metas
+            'metas' => $metas,
+            'paragraphs' => $paragraphs
         ]);
     }
 
@@ -95,23 +96,35 @@ class SiteController extends AbstractController
         ]);
     }
 
-    #[Route('/nos-partenaires', name: 'app_partenaires')]
-    public function partenaires(Request $request, PartnerRepository $partnerRepository): Response
+    #[Route('/conditions-generale-d-utilisation', name: 'app_conditions_generale_utilisation')] //TODO
+    public function cgu(): Response
     {
-        $partenaires = $partnerRepository->findBy(['isOnline' => true], ['name' => 'ASC']);
-        
-        $baseUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+        $legales = $this->legalInformationRepository->findOneBy(['isOnline' => true], ['id' => 'ASC']);
+        $metas['description'] = 'Nos conditions générales d\'utilisation du site.';
 
-        $donnees = $this->partnerService->constructionMapOfFranceWithPartners($baseUrl);
-
-        $metas['description'] = 'Cette page répertorie tous les partenaires français du service. Il s’agit de personnes, d’organismes ou d’entreprises qui s’inscrivent dans la même démarche autour du jeu, du développement durable, du réemploi et de la réduction des déchets. Auprès de ces partenaires vous pouvez acheter, louer ou donner des jeux d’occasion !';
-
-        return $this->render('site/pages/partners/partners.html.twig', [
-            'donnees' => $donnees,
-            'partners' => $partenaires,
+        return $this->render('site/pages/legale/cgu.html.twig', [
+            'legales' => $legales,
             'metas' => $metas
         ]);
     }
+
+    // #[Route('/nos-partenaires', name: 'app_partenaires')]
+    // public function partenaires(Request $request, PartnerRepository $partnerRepository): Response
+    // {
+    //     $partenaires = $partnerRepository->findBy(['isOnline' => true], ['name' => 'ASC']);
+        
+    //     $baseUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+
+    //     $donnees = $this->partnerService->constructionMapOfFranceWithPartners($baseUrl);
+
+    //     $metas['description'] = 'Cette page répertorie tous les partenaires français du service. Il s’agit de personnes, d’organismes ou d’entreprises qui s’inscrivent dans la même démarche autour du jeu, du développement durable, du réemploi et de la réduction des déchets. Auprès de ces partenaires vous pouvez acheter, louer ou donner des jeux d’occasion !';
+
+    //     return $this->render('site/pages/partners/partners.html.twig', [
+    //         'donnees' => $donnees,
+    //         'partners' => $partenaires,
+    //         'metas' => $metas
+    //     ]);
+    // }
 
     #[Route('/contact', name: 'app_contact')]
     public function contact(Request $request): Response
@@ -452,7 +465,7 @@ class SiteController extends AbstractController
             }
         }
 
-        return $this->render('site/pages/password/email_to_send_link_for_reset_password.html.twig', [
+        return $this->render('member/email_to_send_link_for_reset_password.html.twig', [
             'emailForSendResetPasswordForm' => $form->createView()
         ]);
     }

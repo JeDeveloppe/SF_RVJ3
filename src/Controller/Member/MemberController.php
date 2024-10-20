@@ -16,6 +16,7 @@ use App\Repository\LegalInformationRepository;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\DocumentParametreRepository;
 use App\Service\MailService;
+use App\Service\MemberService;
 use DateTimeImmutable;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,7 +34,8 @@ class MemberController extends AbstractController
         private DocumentService $documentService,
         private LegalInformationRepository $legalInformationRepository,
         private EntityManagerInterface $em,
-        private MailService $mailService
+        private MailService $mailService,
+        private MemberService $memberService
         )
     {
     }
@@ -49,21 +51,7 @@ class MemberController extends AbstractController
         //on supprime les document trop vieu non relancer
         $this->documentService->deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
-        $themes[] = [
-            'title' => 'Mes commandes',
-            'imgName' => 'commandes',
-            'link' => $this->generateUrl('member_historique')
-        ];
-        $themes[] = [
-            'title' => 'Mes adresses',
-            'imgName' => 'adresses',
-            'link' => $this->generateUrl('member_adresses')           
-        ];
-        $themes[] = [
-            'title' => 'Mes paramètres',
-            'imgName' => 'parametres',
-            'link' => $this->generateUrl('member_compte')           
-        ];
+        $themes = $this->memberService->memberThemes();  
 
         return $this->render('member/member.html.twig', ['themes' => $themes]);
     }
@@ -74,11 +62,13 @@ class MemberController extends AbstractController
         $user = $this->security->getUser();
         $nbrOfAdressesMax = $_ENV['NBR_MAX_ADDRESSES_FOR_MEMBER'];
 
+        $themes = $this->memberService->memberThemes();  
 
         return $this->render('member/adresse/index.html.twig', [
             'livraison_adresses' => $this->addressRepository->findBy(['user' => $user, 'isFacturation' => false]),
             'facturation_adresses' => $this->addressRepository->findBy(['user' => $user, 'isFacturation' => true]),
-            'nbrOfAdressesMax' => $nbrOfAdressesMax
+            'nbrOfAdressesMax' => $nbrOfAdressesMax,
+            'themes' => $themes
         ]);
 
     }
@@ -103,10 +93,13 @@ class MemberController extends AbstractController
             $limitPerPage /*limit per page*/
         );
 
+        $themes = $this->memberService->memberThemes();  
+
         return $this->render('member/historique.html.twig', [
             'documents' => $documents,
             'docParams' => $documentParametreRepository->findOneBy([]),
-            'limitPerPage' => $limitPerPage
+            'limitPerPage' => $limitPerPage,
+            'themes' => $themes
         ]);
     }
 
@@ -123,12 +116,17 @@ class MemberController extends AbstractController
     
             $this->em->persist($user);
             $this->em->flush();
+
+            $this->addFlash('success', 'Enregistré');
             
             return $this->redirectToRoute('member_compte', [], Response::HTTP_SEE_OTHER);
         }
 
+        $themes = $this->memberService->memberThemes();  
+
         return $this->render('member/compte.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'themes' => $themes
             ]);
     }
 

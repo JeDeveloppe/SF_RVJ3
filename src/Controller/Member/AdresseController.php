@@ -6,6 +6,7 @@ use App\Entity\Address;
 use App\Form\AddressType;
 use App\Repository\AddressRepository;
 use App\Repository\PanierRepository;
+use App\Service\MemberService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,8 @@ class AdresseController extends AbstractController
     public function __construct(
         private Security $security,
         private PanierRepository $panierRepository,
-        private AddressRepository $addressRepository
+        private AddressRepository $addressRepository,
+        private MemberService $memberService
     )
     { 
     }
@@ -101,9 +103,12 @@ class AdresseController extends AbstractController
             return $this->redirectToRoute('member_adresses', [], Response::HTTP_SEE_OTHER);
         }
 
+        $themes = $this->memberService->memberThemes();  
+
         return $this->renderForm('member/adresse/edit.html.twig', [
             'form' => $form,
-            'address' => $id
+            'address' => $id,
+            'themes' => $themes
         ]);
     }
 

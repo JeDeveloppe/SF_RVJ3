@@ -14,9 +14,9 @@
         {% set tdText = 'Frais de gestion:' %}
     {% endif %}
 
-    <div class="row justify-content-around align-items-center py-5">
-        <div class="col-11 col-md-5 d-flex flex-column justify-content-around pt-3">
-            <h1 class="col-12 text-center text-md-start">">
+    <div class="row g-0 justify-content-center align-items-center py-5">
+        <div class="col-11 col-md-4 d-flex flex-column justify-content-around pt-3">
+            <h1 class="col-12 text-center text-md-start">
                 {% if document.billNumber is null %}
                     <span class="text-purple">Devis</span><br/> {{ document.quoteNumber }} 
                 {% else %}
@@ -39,15 +39,15 @@
                 </div>
             {% endif %}
         </div>
-        <div class="col-11 mt-3 mt-md-0 col-md-5 d-flex justify-content-around">
-            <img src="{{ asset('build/images/design/donner_jeux/donner_piece_de_jeux.png') }}" alt="//TODO Image facture">
+        <div class="col-11 mt-3 mt-md-0 col-md-4 d-flex justify-content-around">
+            <img src="{{ asset('build/images/design/donner_jeux/donner_piece_de_jeux.png') }}" alt="//TODO Logo MERCI ?">
         </div>
     </div>
 
-    <div class="row py-5 justify-content-around bg-white">
+    <div class="row g-0 py-5 justify-content-center bg-white">
         <!-- affichage des adresses -->
-        <div class="col-5">
-            <div class="card col-11 shadow border p-2">
+        <div class="col-11 col-sm-9 col-md-5 order-2 order-md-1">
+            <div class="card col-11 shadow border p-2 mx-auto">
                 <h5 class="text-purple">Facturation</h5>
                 <div class="col-12 text-end">
                     {% set facturations = document.billingAddress|split('<br/>') %}
@@ -56,7 +56,7 @@
                         {% endfor %}
                 </div>
             </div>
-            <div class="card col-11 shadow mt-3 border p-2">
+            <div class="card col-11 shadow mt-3 border p-2 mx-auto">
                 <h5 class="text-purple">
                     {% if document.deliveryPriceExcludingTax == 0 %}
                         Retrait à:
@@ -73,8 +73,8 @@
             </div>
         </div>
         <!-- affichage des totaux -->
-        <div class="col-7">
-            <table class="table table-striped align-middle px-0">
+        <div class="col-11 col-md-6 mt-4 mt-md-0 order-1 order-md-2">
+            <table class="table table-striped align-middle px-1">
                 <tr>
                     <td class="col-8">Sous-total articles:</td>
                     <td class="text-end">{{ ((document.documentLineTotals.itemsPriceWithoutTax + document.documentLineTotals.boitesPriceWithoutTax) * ( 1 + (document.taxRateValue / 100)) / 100) | number_format(2, '.', ',') }} €</td>
@@ -156,7 +156,7 @@
     {% if app.user is not null and app.user.password == document.user.password %}
 
         {% if document.billNumber is null %}
-            <div class="row py-5 bg-white">
+            <div class="row g-0 py-5 bg-white">
                 <div class="col-6 d-flex flex-row justify-content-center align-items-center">
                         {% include "site/pages/panier/components/_acceptCartForm.html.twig" %}
                 </div>

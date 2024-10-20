@@ -3255,6 +3255,7 @@ fieldset:disabled .btn {
     border-color: var(--bs-yellow);
     box-sizing: border-box;
     text-transform: uppercase;
+    font-size: 14px;
   }
 .btn-yellow:hover {
     color: #fff;
@@ -3416,7 +3417,9 @@ fieldset:disabled .btn {
 .btn-danger {
     color: #fff;
     background-color: #dc3545;
-    border-color: #dc3545
+    border-color: #dc3545;
+    font-size: 14px;
+    text-transform: uppercase;
 }
 
 .btn-danger:hover {
@@ -3508,11 +3511,11 @@ fieldset:disabled .btn {
 
 .btn-dark {
     color: #fff;
-    padding: 10px 24px 10px 24px;
-    background-color: #212529;
     border-color: #212529;
     font-size: 14px;
     text-transform: uppercase;
+    background: var(--bs-dark) 0% 0% no-repeat padding-box;
+    border-radius: 24px;
 }
 
 .btn-dark:hover {

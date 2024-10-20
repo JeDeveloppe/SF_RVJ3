@@ -1,4 +1,4 @@
-<div class="col-10 col-sm-8 col-md-7 col-lg-6 col-xl-5 mx-auto px-0">
+<div class="col-11">
     {{ form_start(form) }}
         <div class="mb-3">
             {{ form_row(form.isFacturation) }}
@@ -19,9 +19,9 @@
             {{ form_row(form.city) }}
         </div>
 
-        <div class="col-12 d-flex flex-wrap justify-content-around px-0">
-            <a class="btn btn-yellow" href="{{ path('member_adresses') }}">Retour aux adresses</a>
-            <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+        <div class="col-12 d-flex flex-wrap justify-content-between">
+            <a class="btn btn-yellow p-2" href="{{ path('member_adresses') }}">Retour aux adresses</a>
+            <button class="btn btn-success text-uppercase p-2">{{ button_label|default('Enregistrer') }}</button>
         </div>
     {{ form_end(form) }}
 </div>
