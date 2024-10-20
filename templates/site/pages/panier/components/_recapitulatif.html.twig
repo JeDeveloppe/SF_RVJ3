@@ -1,8 +1,7 @@
     {% if displayOccasions == true %}
         {% if allCartValues['panier_occasions'] | length > 0 %}
             <!-- liste des occasions -->
-            <div class="col-11 py-3">
-                <h5 class="ps-2 text-yellow">Occasions:</h5>
+            <div class="col-12 py-3">
                 <div class="col-12 d-flex flex-column justify-content-center align-items-center">
                     {% for panier in allCartValues['panier_occasions'] %}
                         <div class="panier_display_boite_name_at_right col-11 px-0 d-flex flex-wrap justify-content-around align-items-center">
@@ -32,10 +31,9 @@
     {% if displayVoucher == true %}
         <!-- partie voucher -->
         {% if allCartValues['remises'].voucher.actif == false %}
-            <div class="col-10 offset-1 d-flex flex-wrap pb-3">
-                <hr class="col-6 border border-2"></hr>
-                <div class="col-12 font-weight-bolder ps-0 text-start">Avez-vous un bon d'achat ?</div>
-                <div class="col-12 d-flex justify-content-end px-0">
+            <div class="col-12 d-flex flex-wrap justify-content-around mb-3">
+                <div id="discount_question" class="col-11 ps-0 fw-bolder text-purple">Avez vous un bon d'achat ?</div>
+                <div id="discount_form" class="col-12 d-flex justify-content-end d-none pe-3">
                     {% include "site/pages/panier/components/_voucherDiscountForm.html.twig" %}
                 </div>
             </div>

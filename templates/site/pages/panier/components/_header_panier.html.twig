@@ -3,25 +3,25 @@
 {% set bgPaiementOrange = '' %}
 
 {% if page == 'panier' %}
-    {% set bgPanierOrange = 'bg-purple text-white' %}
+    {% set bgPanierOrange = 'bg-yellow text-white' %}
 {% endif %}
 {% if page == 'adresses' %}
-    {% set bgAdressesOrange = 'bg-purple text-white' %}
+    {% set bgAdressesOrange = 'bg-yellow text-white' %}
 {% endif %}
 {% if page == 'paiement' %}
-    {% set bgPaiementOrange = 'bg-purple text-white' %}
+    {% set bgPaiementOrange = 'bg-yellow text-white' %}
 {% endif %}
 
-<div class="row justify-content-center py-3">
-    <div class="col-3 px-3 px-md-0 d-flex flex-column align-items-center">
+<div class="row g-0 justify-content-center align-items-center py-3 bg-white position-relative">
+    <div class="col-4 col-md-2 text-center d-flex flex-column align-items-center">
         <div class="cart_step {{ bgPanierOrange }}">1</div>
         <div class="col-12 d-flex justify-content-center">Mon panier</div>
-    </div> 
-    <div class="col-3 px-3 px-md-0 d-flex flex-column align-items-center">
+    </div>
+    <div class="col-4 col-md-2 text-center d-flex flex-column align-items-center">
         <div class="cart_step {{ bgAdressesOrange }}">2</div>
         <div class="col-12 d-flex justify-content-center">Adresses</div>
     </div> 
-    <div class="col-3 px-3 px-md-0 d-flex flex-column align-items-center">
+    <div class="col-4 col-md-2 text-center d-flex flex-column align-items-center">
         <div class="cart_step {{ bgPaiementOrange }}">3</div>
         <div class="col-12 d-flex justify-content-center">Paiement</div>
     </div>

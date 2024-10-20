@@ -1,1 +1,6 @@
-<span class="text-orange fw-bold">{{ (product.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, ',', ',') | replace({",00" : ""}) }}€</span>
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+{% set colorText = 'text-orange' %}
+{% if 'panier' in currentPath %}
+    {% set colorText = '' %}
+{% endif %}
+<span class="{{ colorText }} fw-bold">{{ (product.PriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, ',', ',') | replace({",00" : ""}) }}€</span>

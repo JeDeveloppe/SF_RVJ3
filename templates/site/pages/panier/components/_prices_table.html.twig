@@ -30,21 +30,21 @@
     {% endif %}
     <tr>
         {% if javascript == true %}
-            <td><div id="divTextLivraisonOuRetrait"></div> <small>(poid total: {{ allCartValues['weigthPanier'] }}g)</small>
+            <td><div id="divTextLivraisonOuRetrait"></div> <small>(poid total : {{ allCartValues['weigthPanier'] }}g)</small>
             </td>
             <td class="align-middle text-end">
                 <div id="shippingResult">Calcul en attente...</div>
             </td>
         {% else %}
             {% if allCartValues['deliveryCostWithoutTax'] == 0 %}
-                <td>Retrait : <small>(poid total: {{ allCartValues['weigthPanier'] }}g)</small>
+                <td>Retrait à Caen : <small>(poid total : {{ allCartValues['weigthPanier'] }}g)</small>
                 </td>
                 <td class="align-middle text-end">
                     0.00 €
                 </td>
             {% else %}
                 <td>Livraison:<br/>
-                    <small>(poid total: {{ allCartValues['weigthPanier'] }}g)</small>
+                    <small>(poid total : {{ allCartValues['weigthPanier'] }}g)</small>
                 </td>
                 <td class="align-middle text-end">
                     {{ (allCartValues['deliveryCostWithoutTax'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €
@@ -54,7 +54,7 @@
     </tr>
     <tr>
         <td>
-            Préparation:
+            Préparation :
             {% if allCartValues['preparationHt'] == 0 %}
                 <br/>Abonnement jusqu'au {{ app.user.membership | date('d-m-Y') }}
             {% endif %}
@@ -63,11 +63,11 @@
     </tr>
     {% if javascript == false %}
         <tr>
-            <td>Total HT:</td>
+            <td>Total HT :</td>
             <td class="text-end">{{ (allCartValues['totalPanierHt'] / 100) | number_format(2, '.', ',') }} €</td>
         </tr>
         <tr>
-            <td>TVA:</td>
+            <td>TVA :</td>
             <td class="text-end">
             {% if allCartValues['totalPanierHt'] * ( 1 + (allCartValues['tax'].value / 100)) - allCartValues['totalPanierHt'] == 0 %}
                 0.00 €
@@ -77,8 +77,8 @@
         </tr>
     {% endif %}
     <tr>
-        <td>Total à payer TTC:</td>
-        <td class="text-end font-weight-bolder">
+        <td>Total à payer TTC :</td>
+        <td class="text-end fw-bolder">
             {% if javascript == true %}
                 <div id="DivTotalTTC">Calcul en attente...</div>
             {% else %}

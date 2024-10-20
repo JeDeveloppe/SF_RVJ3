@@ -19,7 +19,7 @@ class VoucherType extends AbstractType
         $builder
             ->add('voucherDiscount', TextType::class, [
                 'help' => 'Exemple: 0124-1234567890',
-                'help_attr' => ['class' => 'small'],
+                'help_attr' => ['class' => 'small text-start'],
                 'attr' => [
                     'class' => 'form-control text-center',
                     'placeholder' => 'XXXX-XXXXXXXXXX',

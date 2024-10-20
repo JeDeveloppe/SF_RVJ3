@@ -1,4 +1,3 @@
-{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
         {% if product.discountedPriceWithoutTax > 0 %}
             <strike>{% include "components/occasion/_count_price.html.twig" with {'product': product }%}</strike>
             {% include "components/occasion/_count_reduct_price.html.twig" %}
