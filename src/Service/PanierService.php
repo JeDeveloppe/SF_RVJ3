@@ -156,9 +156,10 @@ class PanierService
         $now = new DateTimeImmutable('now');
 
         $responses = $this->separateBoitesItemsAndOccasion($paniers);
+        $responses['preparationHt'] = $docParams->getPreparation();
+        $responses['memberShipOnTime'] = false;
 
         if($user){
-            $responses['preparationHt'] = $docParams->getPreparation();
             // $responses['panier_occasions'] = $this->panierRepository->findOccasionsByUser($user);
             // $responses['panier_boites'] = $this->panierRepository->findBoitesByUser($user);
             // $responses['panier_items'] = $this->panierRepository->findItemsByUser($user);
@@ -166,13 +167,18 @@ class PanierService
             //gestion membership au niveau du panier
             if($user->getMembership() > $now){
                 $responses['preparationHt'] = 0;
+                $responses['memberShipOnTime'] = true;
             }
 
         }else{
 
-            $responses['preparationHt'] = $docParams->getPreparation();
             $responses['remises']['volume'] = $this->calculateRemise($paniers);
 
+        }
+
+        //? et frais de préparation si pas d'articles
+        if( count($responses['panier_items']) < 1){
+            $responses['preparationHt'] = 0;
         }
 
         $responses['tax'] = $this->taxRepository->findOneBy([]);

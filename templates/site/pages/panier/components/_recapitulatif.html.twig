@@ -1,30 +1,23 @@
     {% if displayOccasions == true %}
         {% if allCartValues['panier_occasions'] | length > 0 %}
             <!-- liste des occasions -->
-            <div class="col-12 py-3">
-                <div class="col-12 d-flex flex-column justify-content-center align-items-center">
-                    {% for panier in allCartValues['panier_occasions'] %}
-                        <div class="panier_display_boite_name_at_right col-11 px-0 d-flex flex-wrap justify-content-around align-items-center">
-                            <div class="col-8 font-weight-bolder name_occasion_in_cart_rigth">{{ panier.occasion.boite.name | raw }}</div>
-                            <div class="col-4 text-end">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': panier.occasion,'tax': allCartValues['tax']} %}</div>
-                        </div>
-                    {% endfor %}
+            {% for panier in allCartValues['panier_occasions'] %}
+                <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2">
+                    <div class="col-9 name_occasion_in_cart_rigth">{{ panier.occasion.boite.name | raw }}</div>
+                    <div class="col-2 text-end">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': panier.occasion,'tax': allCartValues['tax']} %}</div>
                 </div>
-            </div>
+            {% endfor %}
         {% endif %}
     {% endif %}
     {% if displayItems == true %}
         {% if allCartValues['panier_items'] | length > 0 %}
             <!-- liste des pièces détachées -->
-            <div class="col-12 py-3">
-            <h5 class="text-yellow">Pièces détachées:</h5>
             {% for panier in allCartValues['panier_items'] %}
-                <div class="panier_display_boite_name_at_right col-12 px-0 d-flex flex-wrap justify-content-around align-items-center">
-                    <div class="col-8 font-weight-bolder text-uppercase">{{ panier.item.reference }}</div>
-                    <div class="col-4 text-end">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': panier,'tax': allCartValues['tax']} %}</div>
+                <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2">
+                    <div class="col-9 fw-bolder text-uppercase">{{ panier.item.reference }}</div>
+                    <div class="col-2 text-end">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': panier,'tax': allCartValues['tax']} %}</div>
                 </div>
             {% endfor %}
-            </div>
         {% endif %}
     {% endif %}
 
@@ -32,7 +25,7 @@
         <!-- partie voucher -->
         {% if allCartValues['remises'].voucher.actif == false %}
             <div class="col-12 d-flex flex-wrap justify-content-around mb-3">
-                <div id="discount_question" class="col-11 ps-0 fw-bolder text-purple">Avez vous un bon d'achat ?</div>
+                <div id="discount_question" class="col-12 ps-0 fw-bolder text-purple">Avez vous un bon d'achat ?</div>
                 <div id="discount_form" class="col-12 d-flex justify-content-end d-none pe-3">
                     {% include "site/pages/panier/components/_voucherDiscountForm.html.twig" %}
                 </div>
@@ -55,6 +48,4 @@
         {% endif %}
     {% endif %}
     <!-- partie des totaux -->
-    <div class="col-12 px-0">
-        {% include "site/pages/panier/components/_prices_table.html.twig" with {'javascript': javascript}%}
-    </div>
+    {% include "site/pages/panier/components/_prices_table.html.twig" with {'javascript': javascript}%}

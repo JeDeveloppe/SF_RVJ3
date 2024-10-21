@@ -15,21 +15,21 @@
     <!-- partie récapitulatif -->
     <div class="col-11 col-md-8 mt-4 mt-md-0 col-lg-5">
         <h3 class="col-12 px-0">Récapitulatif</h3>
-            <div class="col-12 card rounded-4 p-0 d-flex justify-content-around">
-                {% include "site/pages/panier/components/_recapitulatif.html.twig" with {'displayOccasions': true, 'displayItems': true, 'displayVoucher': true, 'displayShippingMethod': true, 'javascript': true } %}
-                {% if app.user.email is defined %}
-                    <div class="col-11 d-flex justify-content-end my-2">
-                        <a id="button_next" class="btn btn-yellow" href="{{ path('panier_addresses') }}">Choisir les adresses <i class="fa-solid fa-forward-step ms-2"></i></a>
+        <div class="col-12 card rounded-4 p-4 d-flex flex-column">
+            {% include "site/pages/panier/components/_recapitulatif.html.twig" with {'displayOccasions': true, 'displayItems': true, 'displayVoucher': true, 'displayShippingMethod': true, 'javascript': true } %}
+            {% if app.user.email is defined %}
+                <div class="col-11 d-flex justify-content-end my-2">
+                    <a id="button_next" class="btn btn-yellow" href="{{ path('panier_addresses') }}">Choisir les adresses <i class="fa-solid fa-forward-step ms-2"></i></a>
+                </div>
+            {% else %}
+                <div class="col-11 d-flex justify-content-end my-2">
+                    <div id="button_next"  class="btn-group" role="group" aria-label="Basic example">
+                        <a href="{{ path('app_login') }}" class="btn btn-yellow">Se connecter</a>
+                        <a href="{{ path('app_register') }}" class="btn btn-purple">S'inscrire</a>
                     </div>
-                {% else %}
-                    <div class="col-11 d-flex justify-content-end my-2">
-                        <div id="button_next"  class="btn-group" role="group" aria-label="Basic example">
-                            <a href="{{ path('app_login') }}" class="btn btn-yellow">Se connecter</a>
-                            <a href="{{ path('app_register') }}" class="btn btn-purple">S'inscrire</a>
-                        </div>
-                    </div>                 
-                {% endif %}
-            </div>
+                </div>                 
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -51,11 +51,16 @@
         button_next.classList.add('disabled')
         let shippingForm = document.getElementById('shippingForm');
         let shippingResult = document.getElementById('shippingResult');
+        let voucherButton = document.getElementById('voucherButton');
 
         let discount_question = document.getElementById('discount_question');
-        discount_question.style.cursor = 'pointer';
+        if(discount_question){
+            discount_question.style.cursor = 'pointer';
+            discount_question.addEventListener('click', showDiscountForm);
+        }
+
         let discount_form = document.getElementById('discount_form');
-        discount_question.addEventListener('click', showDiscountForm);
+
 
         if(voucher_voucherDiscount){
             voucher_voucherDiscount.addEventListener("input", inputVoucher);
@@ -69,7 +74,7 @@
         }else{
 
             button_next.classList.remove('disabled');
-            divTextLivraisonOuRetrait.innerHTML = 'Retrait:';
+            divTextLivraisonOuRetrait.innerHTML = 'Retrait :';
             getDeliveryCost(shippingMethodRetraitInCaenId,weightPanier);
 
         }
@@ -81,6 +86,7 @@
                 if(regex.test(voucher_voucherDiscount.value)){
 
                     voucher_voucherDiscount.style.borderColor = "#5BFF33";
+                    voucherButton.click();
 
                 }else{
                     voucher_voucherDiscount.style.borderColor = "#E52213";
@@ -138,9 +144,8 @@
 
                 //on crée le cookie
                 creerCookie('shippingMethodId', shippingId, 1);
-
                 if(data.deliveryCost < 1){
-                    divTextLivraisonOuRetrait.innerHTML = 'Retrait à Caen :';
+                    divTextLivraisonOuRetrait.innerHTML = 'Retrait gratuit :';
                 }else{
                     divTextLivraisonOuRetrait.innerHTML = 'Livraison :';
                 }

@@ -21,12 +21,9 @@
     align-items: center;
 }
 
-.panier_display_boite_name_at_right{
+.name_occasion_in_cart_rigth{
     text-transform: lowercase;
     display: inline-block;
-}
-.panier_display_boite_name_at_right::first-letter{
-    text-transform: uppercase;
 }
 
 .name_occasion_in_cart_rigth::first-letter{

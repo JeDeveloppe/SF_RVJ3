@@ -1,9 +1,9 @@
 
 
 {{ form_start(billingAndDeliveryForm, { 'attr': {'class': 'col-12 d-flex flex-wrap justify-content-around align-items-center'} }) }}
-    <h3 class="col-12 px-0">Adresse de facturation:</h3>
+    <h3 class="col-12">Adresse de facturation:</h3>
 
-    <div class="col-12 p-0">
+    <div class="col-12">
         {% for address in billingAndDeliveryForm.billingAddress %}
             <div class="col-12 d-flex align-items-center justify-content-start py-2 border">
                 {{ form_widget(address,{ 'attr': {'class': ''} }) }} <span class="">{{ form_label(address) }} </span>
@@ -23,6 +23,7 @@
     <div class="col-12 card p-4 mt-4">
         <div class="input-group col-12 col-sm-11 mx-auto">
             {{ form_widget(billingAndDeliveryForm.deliveryAddress) }}
+            {{ form_label(billingAndDeliveryForm.deliveryAddress) }}
         </div>
         {% if shippingMethod.price == "PAYANT" %}
             <div class="col-12 text-end mt-2">

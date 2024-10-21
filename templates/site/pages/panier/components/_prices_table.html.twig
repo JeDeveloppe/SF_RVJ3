@@ -1,72 +1,72 @@
-<table class="table table-striped align-middle px-0">
 
     {% if allCartValues['totauxItems']['price'] > 0 %}
-        <tr>
-            <td class="col-8">Sous-total articles:</td>
-            <td class="text-end">{{ (allCartValues['totauxItems']['price'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
-        </tr>
+        <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2">
+            <div class="col-9 fw-bolder text-uppercase">Sous-total articles :</div>
+            <div class="col-2 text-end">{{ (allCartValues['totauxItems']['price'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</div>
+        </div>
     {% endif %}
+
+    {# affichage des remises sur les articles #}
     {% if allCartValues['remises'].volume.actif == true %}
-        <tr>
-            <td>
-            Remise sur les articles ( - {{ allCartValues['remises'].volume.value }}%):<br/>
-                {% if allCartValues['remises'].volume.nextRemiseSupplementaire is not same as false %}
-                    Dès {{ allCartValues['remises'].volume.nextQteForRemiseSupplementaire }} articles pour {{ allCartValues['remises'].volume.nextRemiseSupplementaire }} % de remise.
-                {% endif %}
-            </td>
-            <td class="text-end align-middle"> - {{ (allCartValues['remises'].volume.remiseDeQte * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
-        </tr>
+        <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2">
+            <div class="col-9 fw-bolder text-uppercase">
+                Remise sur les articles ( - {{ allCartValues['remises'].volume.value }}%):<br/>
+                    {% if allCartValues['remises'].volume.nextRemiseSupplementaire is not same as false %}
+                        Dès {{ allCartValues['remises'].volume.nextQteForRemiseSupplementaire }} articles pour {{ allCartValues['remises'].volume.nextRemiseSupplementaire }} % de remise.
+                    {% endif %}
+            </div>
+            <div class="col-2 text-end">- {{ (allCartValues['remises'].volume.remiseDeQte * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</div>
+        </div>
     {% endif %}
-    <tr>
-        <td>Sous-total occasions:</td>
-        <td class="text-end">{{ (allCartValues['totauxOccasions']['price'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
-    </tr>
+
+    {# affichage du code de reduction #}
     {% if allCartValues['remises'].voucher.actif == true %}
-        <tr>
-            <td>Code de réduction ({{ allCartValues['remises'].voucher.token }}):<br/>
-            Reste à utiliser : {{ (allCartValues['remises'].voucher.voucherRemaining * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
-            <td class="text-end align-middle">- {{ (allCartValues['remises'].voucher.used * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
-        </tr>
+        <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2 border border-purple p-2">
+            <div class="col-9 fw-bolder">
+                Code de réduction ({{ allCartValues['remises'].voucher.token }}) :<br/>
+                <span class="small">Reste à utiliser : {{ (allCartValues['remises'].voucher.voucherRemaining * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</span>
+            </div>
+            <div class="col-2 text-end">- {{ (allCartValues['remises'].voucher.used * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</div>
+        </div>
     {% endif %}
-    <tr>
-        {% if javascript == true %}
-            <td><div id="divTextLivraisonOuRetrait"></div> <small>(poid total : {{ allCartValues['weigthPanier'] }}g)</small>
-            </td>
-            <td class="align-middle text-end">
-                <div id="shippingResult">Calcul en attente...</div>
-            </td>
+
+    {% if javascript == true %}
+        <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2">
+            <div class="col-9 fw-bolder"><div id="divTextLivraisonOuRetrait"></div></div>
+            <div class="col-2 text-end"><div id="shippingResult">Calcul en attente...</div></div>
+        </div>
+    {% else %}
+        {% if allCartValues['deliveryCostWithoutTax'] == 0 %}
+            <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2">
+                <div class="col-9 fw-bolder text-uppercase">Retrait gratuit :</div>
+                <div class="col-2 text-end">0.00 €</div>
+            </div>
         {% else %}
-            {% if allCartValues['deliveryCostWithoutTax'] == 0 %}
-                <td>Retrait à Caen : <small>(poid total : {{ allCartValues['weigthPanier'] }}g)</small>
-                </td>
-                <td class="align-middle text-end">
-                    0.00 €
-                </td>
-            {% else %}
-                <td>Livraison:<br/>
-                    <small>(poid total : {{ allCartValues['weigthPanier'] }}g)</small>
-                </td>
-                <td class="align-middle text-end">
-                    {{ (allCartValues['deliveryCostWithoutTax'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €
-                </td>
-            {% endif %}
+            <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2">
+                <div class="col-9 fw-bolder text-uppercase">
+                    Livraison :<br/>
+                    {# <small>(poid total : {{ allCartValues['weigthPanier'] }}g)</small> #}
+                </div>
+                <div class="col-2 text-end">{{ (allCartValues['deliveryCostWithoutTax'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</div>
+            </div>
         {% endif %}
-    </tr>
-    <tr>
-        <td>
+    {% endif %}
+
+    <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2">
+        <div class="col-9 fw-bolder">
             Préparation :
-            {% if allCartValues['preparationHt'] == 0 %}
+            {% if allCartValues['memberShipOnTime'] == true %}
                 <br/>Abonnement jusqu'au {{ app.user.membership | date('d-m-Y') }}
             {% endif %}
-        </td>
-        <td class="text-end">{{ (allCartValues['preparationHt'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</td>
-    </tr>
-    {% if javascript == false %}
+        </div>
+        <div class="col-2 text-end">{{ (allCartValues['preparationHt'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</div>
+    </div>
+    {# {% if javascript == false %}
         <tr>
             <td>Total HT :</td>
             <td class="text-end">{{ (allCartValues['totalPanierHt'] / 100) | number_format(2, '.', ',') }} €</td>
-        </tr>
-        <tr>
+        </tr> #}
+        {# <tr>
             <td>TVA :</td>
             <td class="text-end">
             {% if allCartValues['totalPanierHt'] * ( 1 + (allCartValues['tax'].value / 100)) - allCartValues['totalPanierHt'] == 0 %}
@@ -75,15 +75,15 @@
                 {{ ((allCartValues['totalPanierHt'] * ( 1 + (allCartValues['tax'].value / 100)))  - allCartValues['totalPanierHt']) / 100 | number_format(2, '.', ',')  }} €</td>
             {% endif %}
         </tr>
-    {% endif %}
-    <tr>
-        <td>Total à payer TTC :</td>
-        <td class="text-end fw-bolder">
+    {% endif %} #}
+
+    <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2">
+        <div class="col-9 fw-bolder">Total à payer :</div>
+        <div class="col-2 text-end">
             {% if javascript == true %}
                 <div id="DivTotalTTC">Calcul en attente...</div>
             {% else %}
-                {{ (allCartValues['totalPanierHt'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} € TTC
+                {{ (allCartValues['totalPanierHt'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €
             {% endif %}
-        </td>
-    </tr>
-</table>
+        </div>
+    </div>
