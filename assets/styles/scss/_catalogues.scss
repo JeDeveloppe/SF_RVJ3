@@ -137,6 +137,17 @@
     padding: 3% 3%;
 }
 
+.card_div_img_articles {
+    max-width: 150px;
+    max-height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+    padding: 3% 3%;
+}
+
 .card_catalog_img {
     max-width: 100%;
     max-height: 150px;

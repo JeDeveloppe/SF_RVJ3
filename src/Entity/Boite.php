@@ -412,7 +412,7 @@ class Boite
 
     public function __toString()
     {
-        return '#'.$this->id.' '.$this->rvj2id.' - '.$this->name.' - '.$this->editor.' - '.$this->year;
+        return '#'.$this->id.' - '.$this->name.' - '.$this->editor.' - '.$this->year;
     }
 
     /**

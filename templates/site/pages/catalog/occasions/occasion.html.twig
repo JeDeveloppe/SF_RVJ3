@@ -52,7 +52,7 @@
 							{% if occasion.boite.year > 0 %}
 								- <span class="small">{{ occasion.boite.year }}</span>
 							{% endif %}
-						</div>
+					</div>
 					<h1 class="col-12 occasion_detail_name">{{ occasion.boite.name | raw }}</h1>
 					{% include "components/catalog/_occasion_details.html.twig"  with { 'occasion': occasion } %}
 					{# on inclus le bouton ajout au panier #}

@@ -93,24 +93,18 @@ class CatalogController extends AbstractController
             24 /*limit per page*/
         );
 
-        $partenaires = $this->partnerRepository->findBy(['isDisplayOnCatalogueWhenSearchIsNull' => true]);
-
-
         $metas['description'] = 'Catalogue complet de toutes les boites dont le service dispose de pièces détachées.';
 
         return $this->render('site/pages/catalog/pieces_detachees/pieces_detachees.html.twig', [
             'boites' => $boites,
             'form' => $form,
             'search' => $search ?? null,
-            'partners' => $partenaires ?? null,
-            'transforms' => $transforms ?? null,
             'metas' => $metas,
             'tax' => $this->taxRepository->findOneBy([]),
             'siteSetting' => $siteSetting
         ]);
     }
 
-    //TODO pièces détachées
     #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}/', name: 'app_catalogue_pieces_detachees_articles_d_une_boite')]
     public function cataloguePiecesDetacheesArticlesDuneBoite($id, $editorSlug, $boiteSlug): Response
     {
@@ -125,7 +119,7 @@ class CatalogController extends AbstractController
             return $this->redirectToRoute('app_catalogue_pieces_detachees');
         }
 
-        $metas['description'] = 'Les pièces détachées que le service a en stock concernant le jeu: '.$boite->getName().' - '.$boite->getEditor()->getName();
+        $metas['description'] = 'Les pièces détachées que le service a en stock pour le jeu: '.ucfirst(strtolower($boite->getName())).' - '.ucfirst(strtolower($boite->getEditor()->getName()));
 
         $items = $boite->getItemsOrigine();
         $groups = [];
@@ -319,7 +313,7 @@ class CatalogController extends AbstractController
         $query = $this->occasionRepository->findAleatoireOccasionsByAgeWhitoutThisOccasion($occasion->getBoite()->getAge(), $occasion);
         shuffle($query); // on mélange
         $firstElements = array_slice($query, 0, 4); //on prend les 6 premiers apres avoir mélanger
-        $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.strtolower(ucfirst($occasion->getBoite()->getName())).' - '.strtolower(ucfirst($occasion->getBoite()->getEditor()->getName()));
+        $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.ucfirst(strtolower($occasion->getBoite()->getName())).' - '.ucfirst(strtolower($occasion->getBoite()->getEditor()->getName()));
 
         return $this->render('site/pages/catalog/occasions/occasion.html.twig', [
             'occasion' => $occasion,

@@ -5,6 +5,7 @@ namespace App\Controller\Admin\EasyAdmin;
 use App\Entity\Item;
 use DateTimeImmutable;
 use App\Service\ItemService;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -16,6 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -40,57 +42,79 @@ class ItemCrudController extends AbstractCrudController
     {
         return [
             FormField::addTab('Général'),
-            ImageField::new('image')->setBasePath($this->getParameter('app.path.item_images'))->onlyOnIndex(),
-            TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
-                'required' => false,
-                'allow_delete' => false,
-                'delete_label' => 'Supprimer du serveur ?',
-                'download_label' => '...',
-                'download_uri' => true,
-                'image_uri' => true,
-                // 'imagine_pattern' => '...',
-                'asset_helper' => true,
-            ])->setLabel('Image')->onlyWhenCreating()->setColumns(12)->setRequired(true),
-            TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
-                'required' => false,
-                'allow_delete' => false,
-                'delete_label' => 'Supprimer du serveur ?',
-                'download_label' => '...',
-                'download_uri' => true,
-                'image_uri' => true,
-                // 'imagine_pattern' => '...',
-                'asset_helper' => true,
-            ])->setLabel('Image')->onlyWhenUpdating()->setColumns(12)->setRequired(false),
-            TextField::new('reference')->setLabel('Référence: (construite à partir de la première boite)')->setDisabled(true)->setColumns(6),
-            IdField::new('id')->setLabel('Id')->setDisabled(true)->onlyOnForms()->setColumns(6),
-            TextField::new('name')
-                ->setLabel('Nom:')->setColumns(6),
-            AssociationField::new('itemGroup')
-                ->setLabel('Groupe d\'articles:')->onlyOnForms()->setRequired(true)->setFormTypeOptions(['placeholder' => 'Faire un choix...']),
-            AssociationField::new('BoiteOrigine')
-                ->setLabel('Boites Originale:')->onlyOnForms()->setColumns(6)->setRequired(true),
-            AssociationField::new('BoiteSecondaire')
-                ->setLabel('Boites Secondaire:')->setDisabled(true)->onlyOnForms()->setColumns(6),
-            IntegerField::new('stockForSale')
-                ->setLabel('Stock à la vente:')->setColumns(6),
-            IntegerField::new('priceExcludingTax')
-                ->setLabel('Prix unitaire HT (en cents):')->onlyOnForms()->setColumns(6),
-            IntegerField::new('weigth')
-                ->setLabel('Poid (en gramme) => arrondir au-dessus:')->onlyOnForms()->setColumns(6),
-            AssociationField::new('Envelope')->setLabel('Enveloppe:')
-            ->setFormTypeOptions(['placeholder' => 'Sélectionner une enveloppe...'])->onlyOnForms()->setColumns(6),
-            ArrayField::new('BoiteOrigine')
-            ->setLabel('Boites Originale:')->onlyOnIndex(),
+                FormField::addFieldset('Informations')->onlyWhenUpdating(),
+                    IdField::new('id')->onlyWhenUpdating()->setLabel('Id')->setDisabled(true)->setColumns(6),
+                    TextField::new('reference')->onlyWhenUpdating()->setLabel('Référence:')->setDisabled(true)->setColumns(6)->onlyOnIndex(),
 
-            FormField::addTab('Ventes'),
-            AssociationField::new('documentLines')->setLabel('Ventes')->onlyOnForms()->setDisabled(true),
-            // CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twi')->setDisabled(true)->onlyOnForms(),
+                FormField::addFieldset('Catalogue'),
+                    AssociationField::new('itemGroup')
+                        ->setLabel('Groupe d\'articles:')
+                        ->onlyOnForms()
+                        ->setRequired(true)
+                        ->setFormTypeOptions(['placeholder' => 'Faire un choix...'])
+                        ->setTextAlign('center')
+                        ->setColumns(6),
+                    AssociationField::new('BoiteOrigine')
+                        ->setLabel('Boites Originale:')
+                        ->onlyOnForms()
+                        ->setColumns(6)
+                        ->setRequired(true)
+                        ->setQueryBuilder(
+                            fn(QueryBuilder $queryBuilder) => 
+                            $queryBuilder
+                                ->where('entity.isOnline = :true')
+                                ->setParameter('true', true)
+                                ->orderBy('entity.name', 'ASC')),
+                    AssociationField::new('BoiteSecondaire')
+                        ->setLabel('Boites Secondaire:')->setDisabled(true)->onlyOnForms()->setColumns(6),
+
+                FormField::addFieldset('Détails'),
+                    ImageField::new('image')->setBasePath($this->getParameter('app.path.item_images'))->onlyOnIndex(),
+                    TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
+                            'required' => false,
+                            'allow_delete' => false,
+                            'delete_label' => 'Supprimer du serveur ?',
+                            'download_label' => '...',
+                            'download_uri' => true,
+                            'image_uri' => true,
+                            // 'imagine_pattern' => '...',
+                            'asset_helper' => true,
+                        ])->setLabel('Image')->onlyWhenCreating()->setColumns(12)->setRequired(true),
+                    TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
+                            'required' => false,
+                            'allow_delete' => false,
+                            'delete_label' => 'Supprimer du serveur ?',
+                            'download_label' => '...',
+                            'download_uri' => true,
+                            'image_uri' => true,
+                            // 'imagine_pattern' => '...',
+                            'asset_helper' => true,
+                        ])
+                        ->setLabel('Image')->onlyWhenUpdating()->setColumns(12)->setRequired(false),
+                    TextField::new('name')
+                        ->setLabel('Nom:')->setColumns(6),
+                    IntegerField::new('stockForSale')
+                        ->setLabel('Stock à la vente:')->setColumns(6),
+                    MoneyField::new('priceExcludingTax')
+                        ->setLabel('Prix unitaire HT:')
+                        ->setCurrency('EUR')
+                        ->setStoredAsCents()
+                        ->onlyOnForms()
+                        ->setColumns(6),
+                    IntegerField::new('weigth')
+                        ->setLabel('Poid (en gramme) => arrondir au-dessus:')->onlyOnForms()->setColumns(6),
+                    AssociationField::new('Envelope')->setLabel('Enveloppe:')
+                    ->setFormTypeOptions(['placeholder' => 'Sélectionner une enveloppe...'])->onlyOnForms()->setColumns(6),
+
+            FormField::addTab('Ventes')->onlyWhenUpdating(),
+                AssociationField::new('documentLines')->setLabel('Ventes')->onlyWhenUpdating()->setDisabled(true),
+                // CollectionField::new('documentLines')->setTemplatePath('admin/fields/documentLines.html.twi')->setDisabled(true)->onlyOnForms(),
             
-            FormField::addTab('Création / Mise à jour'),
-            AssociationField::new('updatedBy')->setLabel('Mise à jour par:')->setDisabled(true)->onlyOnForms(),
-            DateTimeField::new('updatedAt')->setLabel('Mise à jour le:')->setDisabled(true)->onlyOnForms(),
-            AssociationField::new('createdBy')->setLabel('Créé par:')->setDisabled(true)->onlyOnForms(),
-            DateTimeField::new('createdAt')->setLabel('Créé le:')->setDisabled(true)->onlyOnForms()
+            FormField::addTab('Création / Mise à jour')->onlyWhenUpdating(),
+                AssociationField::new('createdBy')->onlyWhenUpdating()->setLabel('Créé par:')->setDisabled(true),
+                DateTimeField::new('createdAt')->onlyWhenUpdating()->setLabel('Créé le:')->setDisabled(true),
+                AssociationField::new('updatedBy')->onlyWhenUpdating()->setLabel('Mise à jour par:')->setDisabled(true),
+                DateTimeField::new('updatedAt')->onlyWhenUpdating()->setLabel('Mise à jour le:')->setDisabled(true),
         ];
     }
 
