@@ -1,0 +1,41 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+
+{% if ea.crud.currentAction == 'detail' %}
+    <table class="table align-middle">
+        <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Boite</th>
+            <th>Référence</th>
+            <th class="text-center">Prix HT</th>
+            <th>En ligne</th>
+        </tr>
+        {% for value in field.value %}
+            {% set setEntityId = value.id %}
+            {% set entityNameController = 'Occasion' %}
+            <tr>
+                <td>
+                    {% include "components/catalog/_card_admin_link_to_entity.html.twig" with {'entityNameInController': entityNameController} %}
+                </td>
+                <td>
+                    <img class="card_catalog_img" style="max-width:120px" src="{{ vich_uploader_asset(value.boite, 'imageFile') }}"/>
+                </td>
+                <td>
+                    {{ value.boite.name }} - {{ value.boite.editor }} - {{ value.boite.year }}
+                    <ul>
+                        <li>État de la boite : {{ value.boxCondition }}</li>
+                        <li>État du matériel : {{ value.equipmentCondition }}</li>
+                        <li>Règle du jeu : {{ value.gameRule }}</li>
+                    </ul>
+                </td>
+                <td>{{ value.reference }}</td>
+                <td class="text-center">{{ (value.priceWithoutTax) / 100 |number_format(2, '.', ',') }} €</td>
+                <td class="text-center">{{ value.isOnline ? '<i class="fa-solid fa-circle text-success"></i>' : '<i class="fa-solid fa-circle text-danger"></i>' }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span class="badge badge-secondary">{{ field.formattedValue }}</span>
+{% endif %}

@@ -1,0 +1,23 @@
+<div class="row justify-content-around align-items-center py-5">
+    <div class="col-11 col-md-4 d-flex flex-column justify-content-around pt-3">
+        <h1 class="col-12 text-center text-md-start">">
+            Foire <span class="text-purple">en cours</span>
+        </h1>
+        <div class="col-11">
+        Nous sommes actuellement ... / catalogue des jeux non disponible...</div>
+    </div>
+    <div class="col-11 mt-3 mt-md-0 col-md-4 d-flex justify-content-around">
+        <img src="{{ asset('build/images/design/prestations/prestation_header.png') }}" alt="Image d'une foire Refaite vos jeux">
+    </div>
+</div>
+
+<div class="row justify-content-center align-items-center py-5 bg-white">
+    <div class="col-11 d-flex justify-content-around py-5">
+        {{ fairDay | raw }}
+        <a class="text-decoration-none text-dark" href="https://www.facebook.com/refaitesvosjeux">
+            Information disponible sur : <img class="ms-4" src="{{ asset('build/images/design/footer/facebook_link.svg') }}" alt="Suivez-nous sur Facebook !">
+        </a>
+    </div>
+</div>
+
+{% include "components/_row_donner_ses_jeux.html.twig" %}

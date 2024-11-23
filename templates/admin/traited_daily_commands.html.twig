@@ -1,0 +1,113 @@
+{# templates/admin/my-custom-page.html.twig #}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+
+{% block content_title %}TRAITEMENT DES COMMANDES{% endblock %}
+
+{% block main %}
+
+    {% include "admin/components/_options_page.html.twig" %}
+
+    {% include "components/_flash_message.html.twig" %}
+
+
+    {% for data in datas %}
+        <div class="row my-4">
+            <div class="col-12 h2">{{ data.value }}</div>
+        </div>
+ 
+        {% if data.documents | length > 0 %}
+            {% for document in data.documents|reverse %}
+                <div class="card mb-4">
+                    <div class="card-header">{{ document.quoteNumber }} - {{ document.billNumber }}</div>
+                    <div class="card-body d-flex flex-wrap align-items-center">
+                        <div class="col-6 col-md-3">
+                            <p>Payée le : {{ document.payment.timeOfTransaction | date('d-m-Y') }}<br/>
+                                {{ document.payment.details }}</p>
+                            <b>Envoi / retrait:<br/></b>
+                            {% if document.sendingAt is not null %}
+                                Envoi le : {{ document.sendingAt | date('d-m-Y') }}<br/>
+                                    {% if document.sendingNumber is not null %}
+                                        Numéro de suivi: {{ document.sendingNumber }}
+                                    {% else %}
+                                        Pas de numéro de suivi.
+                                    {% endif %}
+                                {% else %}
+                                Pas encore envoyé...
+                            {% endif %}
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <b>Adresse de facturation:</b>
+                            <p>{{ document.billingAddress | raw }}</p>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <b>Adresse de livraison:</b>
+                            <p>{{ document.deliveryAddress | raw }}</p>
+                        </div>
+                        <div class="col-6 col-md-3 text-center">
+                            {% include "admin/components/admin_group_buttons_traited_daily.html.twig" with {'command': data.action, 'document': document} %}
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal-{{ document.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">{{ document.quoteNumber }} - {{ document.billNumber }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                    <table class="table align-middle">
+                                        <tr>
+                                            <th>Désignation</th>
+                                            {# <th class="text-center">Prix HT</th> #}
+                                        </tr>
+                                        {% for value in document.documentLines %}
+                                            <tr>
+                                                <td class="d-flex">
+                                                    {% if value.boite is not null %}
+                                                        Boite:<br/>
+                                                        {{ value.boite.id }} / {{ value.boite.name }} - {{ value.boite.editor }} - {{ value.boite.year }}
+                                                        <ul>
+                                                            <li>{{ value.question }}</li>
+                                                            <li>{{ value.answer }}</li>
+                                                        </ul>
+                                                    {% elseif value.occasion is not null %}
+                                                        <div class="col-4 text-center">
+                                                            <img class="card_catalog_img" style="max-width:80px" src="{{ vich_uploader_asset(value.occasion.boite, 'imageFile') }}"/>
+                                                        </div>
+                                                        <div class="ps-1">
+                                                            Occasion: (Référence : {{ value.occasion.reference }})<br/>
+                                                            {{ value.occasion.boite.name }} - {{ value.occasion.boite.editor }} - {{ value.occasion.boite.year }}
+                                                            <ul>
+                                                                <li>État de la boite : {{ value.occasion.boxCondition }}</li>
+                                                                <li>État du matériel : {{ value.occasion.equipmentCondition }}</li>
+                                                                <li>Règle du jeu : {{ value.occasion.gameRule }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    {% else %}
+                                                        Article:<br/>
+                                                        {{ value.item.name }} - Référence : {{ value.item.reference }} - Qté: {{ value.quantity }}
+                                                    {% endif %}
+                                                </td>
+                                                {# <td class="text-center">{{ (value.priceExcludingTax) / 100 |number_format(2, '.', ',') }} €</td> #}
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                            </div>
+                            <div class="modal-footer">
+                                Payée le : {{ document.payment.timeOfTransaction | date('d-m-Y') }} - {{ document.payment.details }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+            {% endfor %}
+        {% else %}
+            <p class="text-center h5 text-danger">"NOTHING FOR THE MOMENT..."</p>
+        {% endif %}
+
+    {% endfor %}
+ 
+{% endblock %}

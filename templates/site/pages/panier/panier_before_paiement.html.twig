@@ -1,0 +1,33 @@
+{% extends "components/_base_panier.html.twig" %}
+
+{% block title %}Panier{% endblock %}
+
+{% block body %}
+
+{% include "site/pages/panier/components/_header_panier.html.twig" with {'page': 'paiement'} %}
+
+{% include "site/pages/panier/components/_row_continu_achats.html.twig" %}
+
+<div class="row g-0 justify-content-center bg-white py-5 align-items-start">
+    <h3 class="col-12 text-center">Récapitulatif avant paiement</h3>
+
+    <!-- partie panier -->
+    <div class="col-11 col-md-8 col-lg-5 d-flex flex-column pe-lg-5">
+        {% include "site/pages/panier/components/_productsInCart.html.twig" with {'displayProductsInCart': true} %}
+        {% include "site/pages/panier/components/_address.html.twig" with {'billingAddress': billingAddress, 'deliveryAddress': deliveryAddress }%}
+    </div>
+    <!-- partie récapitulatif -->
+    <div class="col-11 p-0 px-lg-2 mt-4 col-md-8 mt-4 mt-lg-0 col-lg-5 sticky-top">
+            <div class="col-12 card rounded-4 p-4 d-flex flex-column">
+                {% include "site/pages/panier/components/_recapitulatif.html.twig" with {'displayOccasions': false, 'displayItems': false, 'displayVoucher': false, 'displayShippingMethod': false, 'javascript': false } %}
+                <div class="col-12">
+                    {% include "site/pages/panier/components/_acceptCartForm.html.twig" %}
+                </div>
+            </div>
+
+    </div>
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+{% endblock %}

@@ -1,0 +1,50 @@
+<div class="col-12 col-md-7 mx-auto text-center">
+
+    <style>
+    .HaAuthorizeButton {
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    background-color : #FFFFFF;
+    border : 0.0625rem solid #49D38A;
+    border-radius: 0.125rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 0;
+    }
+    .HaAuthorizeButton:disabled {
+    background-color : #E9E9F0;
+    border-color : transparent;
+    cursor : not-allowed;
+    }
+    .HaAuthorizeButton:not(:disabled):focus {
+    box-shadow: 0 0 0 0.25rem rgba(73, 211, 138, 0.25);
+    -webkit-box-shadow: 0 0 0 0.25rem rgba(73, 211, 138, 0.25);
+    }
+    .HaAuthorizeButtonLogo {
+    padding: 0 0.8rem;
+    width: 4.25rem;
+    }
+    .HaAuthorizeButtonTitle {
+    background-color : #49D38A;
+    color : #FFFFFF;
+    font-size : 1rem;
+    font-weight : 700;
+    padding: 0.78125rem 1.5rem;
+    }
+    .HaAuthorizeButton:disabled .HaAuthorizeButtonTitle {
+    background-color : #E9E9F0;
+    color : #9A9DA8;
+    }
+    .HaAuthorizeButton:not(:disabled):hover .HaAuthorizeButtonTitle,
+    .HaAuthorizeButton:not(:disabled):focus .HaAuthorizeButtonTitle {
+    background-color : #30c677;
+    }
+    </style>
+
+    <a class="btn btn-lg" href="https://www.helloasso.com/associations/refaites-vos-jeux/formulaires/1" target="_blank">
+        <img src="https://api.helloasso.com/v5/DocAssets/logo-ha.svg" alt="" class="HaAuthorizeButtonLogo">
+        <span class="HaAuthorizeButtonTitle">Faire un don sur HelloAsso</span>
+    </a>
+</div>

@@ -1,0 +1,20 @@
+{% extends "components/_base_panier.html.twig" %}
+
+{% block title %}Demande de devis bien reçu !{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center my-5 py-4">
+        <div class="jumbotron col-11 col-md-6 my-5 h-100">
+            <h1 class="">Demande de devis reçu.</h1>
+            <p class="lead">Nous vous remerçions de votre demande de devis!</p>
+            <p class="lead">Un email / devis vous sera envoyé dans quelques jours.</p>
+            <hr class="my-4">
+            <div class="col-12 my-5">
+                <div class="text-center">
+                    <a class="btn btn-primary btn-lg" href="{{ path('app_home') }}" role="button">Retour à l'accueil...</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

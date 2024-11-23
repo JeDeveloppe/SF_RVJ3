@@ -1,0 +1,21 @@
+<!-- Open Graph / Facebook -->
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+
+{% if "/catalogue-pieces-detachees/" in currentPath %}
+    <meta property="og:image" content="{{ vich_uploader_asset(boite, 'imageFile') }}" />
+{% endif %}
+{% if "/jeu-occasion/" in currentPath and occasion is not null %}
+    <meta property="og:image" content="{{ vich_uploader_asset(occasion.boite, 'imageFile') }}" />
+{% else %}
+    <meta property="og:image" content="{{ asset('build/images/design/logoSite.svg') }}" />
+{% endif %}
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{ app.request.uri }}" />
+<meta property="og:title" content="" />
+
+{% if metas.description is defined %}
+    <meta property="og:description" content="{{ metas.description }}" />
+{% else %}
+    <meta property="og:description" content="Description non disponible..." />
+{% endif %}

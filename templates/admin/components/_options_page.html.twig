@@ -1,0 +1,11 @@
+<div class="row">
+    <div class="col-6">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            {% if setting.BlockEmailSending == 1 %}
+                <a href="{{ path('admin_change_status_option', {'option': 'setBlockEmailSending', 'value': 0 }) }}" type="button" class="btn btn-secondary"><i class="fa-solid fa-paper-plane text-danger"></i> Envoi des emails bloqué</a>
+            {% else %}
+                <a href="{{ path('admin_change_status_option', {'option': 'setBlockEmailSending', 'value': 1 }) }}" type="button" class="btn btn-secondary"><i class="fa-solid fa-paper-plane text-success"></i> Emails envoyés</a>
+            {% endif %}
+        </div>
+    </div>
+</div>

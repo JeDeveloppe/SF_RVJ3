@@ -1,0 +1,114 @@
+nav {
+    padding: 0;
+}
+
+#cart_link{
+    position: relative;
+}
+
+.card_member_all_themes{
+    max-width: 669px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #1C1C3E1A;
+    border-radius: 20px;
+    opacity: 1;
+}
+.card_member_theme{
+    background: var(--bs-secondary) 0% 0% no-repeat padding-box;
+    border-radius: 20px;
+    opacity: 1;
+    width: 180px;
+    height: 160px;
+}
+.card_member_theme img{
+    width: 52px;
+    height: 52px;
+}
+
+
+
+#menu_user_cart{
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding-top: 3%;
+    transition: all 200ms ease-in;
+}
+
+#cart_link_logo{
+    margin-top: 5%;
+}
+#cart_link_value{
+    position: absolute;
+    top: 0;
+    left: 60%;
+    border-radius: 50%;
+    background: #FEC538;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    display: flex;
+    color: #fff;
+    font-size: 0.9rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.fa-user {
+    transform: scale(1.2);
+}
+
+#logoNav{
+    position: absolute;
+    top: 0;
+    padding-top: 1%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding-left: 1%;
+    transition: all 200ms ease-in;
+}
+// X-Small devices (portrait phones, less than 576px)
+// No media query for `xs` since this is the default in Bootstrap
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+    #menu_user_cart{
+        padding-top: 2%;
+    }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+    #menu_user_cart{
+        right: 0;
+    }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+    #logoNav{
+        left: 0;
+        top: 40%;
+        transform: translateX(1%);
+    }
+    #menu_user_cart{
+        top: 28%;
+    }
+    .__a_pieces_detachees::before{
+        content: '|';
+        color: var(--bs-yellow);
+        padding-right: 15px;
+    }
+}
+
+// X-Large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+    #menu_user_cart{
+        right: 5%;
+    }
+}
+
+// XX-Large devices (larger desktops, 1400px and up)
+@media (min-width: 1400px) {
+
+}

@@ -1,0 +1,130 @@
+{% extends 'components/_base.html.twig' %}
+
+{% block title %}Conditions générales de vente{% endblock %}
+
+{% block body %}
+
+
+    <div class="row g-0 justify-content-around align-items-center py-4">
+        <h1 class="col-12 text-center">Conditions générales de vente</h1>
+        <div class="col-12 small text-center">Date de dernière mise à jour : {{ legales.updatedAt | date('d-m-Y') }}</div>
+    </div>
+
+    <div class="row g-0 justify-content-center py-5 bg-white">
+        <ul class="list-unstyled col-11 col-lg-7">
+            <li class="h3 mt-3"><span class="text-purple">Article 1 - Objet</span></li>
+                <ol class="text-justify">Les présentes conditions régissent les ventes par {{ legales.companyName }} de produits ou services commercialisés par le site internet {{ legales.fullUrlCompany }}.</ol class="text-justify">
+            <li class="h3 mt-3"><span class="text-purple">Article 2 - Prix et adhésion</span></li> //TODO
+                <ol class="text-justify">
+                    Les prix de nos produits sont indiqués en euros toutes taxes comprises (TVA et autres taxes applicables au jour de la commande), sauf indication contraire et hors frais de traitement et d'expédition.
+                    En cas de commande vers un pays autre que la France métropolitaine vous êtes l'importateur du ou des produits concernés. Des droits de douane ou autres taxes locales ou droits d'importation ou taxes d'état sont susceptibles d'être exigibles. Ces droits et sommes ne relèvent pas du ressort de {{ legales.companyName }}. Ils seront à votre charge et relèvent de votre entière responsabilité, tant en termes de déclarations que de paiements aux autorités et organismes compétents de votre pays. Nous vous conseillons de vous renseigner sur ces aspects auprès de vos autorités locales.
+                    Toutes les commandes quelle que soit leur origine sont payables en euros.
+                    {{ legales.companyName }} se réserve le droit de modifier ses prix à tout moment, mais le produit sera facturé sur la base du tarif en vigueur au moment de la validation de la commande et sous réserve de disponibilité.
+                    Les produits demeurent la propriété de {{ legales.companyName }} jusqu'au paiement complet du prix.
+                    Attention : dès que vous prenez possession physiquement des produits commandés, les risques de perte ou d'endommagement des produits vous sont transférés.
+                    <p id="cgvAdhesion" class="mt-4 h4">Adhésion:</span></p>
+                    Le service fonctionne avec un système d’adhésion. Pour toute première commande, une adhésion au service de 2€ est facturée. Cette adhésion est valable 1 an, de date à date. La date de début correspond à la date du premier achat. Cette adhésion n’est pas facturée pour les commandes suivantes passées durant l’année. Après expiration au bout d’1 an, l’adhésion est de nouveau facturée lors de l’achat suivant.
+                    Cette adhésion permet de prendre en charge une partie des frais liés à la plateforme de paiement en ligne. Elle représente également un soutien au projet et valorise le temps consacré par nos équipes à la valorisation des jeux.
+                </ol class="text-justify">
+            <li class="h3 mt-3"><span class="text-purple">Article 3 - Commandes</span></li>
+                <ol class="text-justify">
+                    Vous pouvez passer commande uniquement sur internet : {{ legales.fullUrlCompany }}
+                    Les informations contractuelles sont présentées en langue française et feront l'objet d'une confirmation au plus tard au moment de la validation de votre commande.
+                    {{ legales.companyName }} se réserve le droit de ne pas enregistrer un paiement, et de ne pas confirmer une commande pour quelque raison que ce soit, et plus particulièrement en cas de problème d'approvisionnement, ou en cas de difficulté concernant la commande reçue.
+                </ol class="text-justify">
+            <li class="h3 mt-3"><span class="text-purple">Article 4 - Validation de votre commande</span></li>
+                <ol class="text-justify">
+                    Toute commande figurant sur le site Internet {{ legales.fullUrlCompany }} suppose l'adhésion aux présentes Conditions Générales. Toute confirmation de commande entraîne votre adhésion pleine et entière aux présentes conditions générales de vente, sans exception ni réserve.
+
+                    L'ensemble des données fournies et la confirmation enregistrée vaudront preuve de la transaction.
+
+                    Vous déclarez en avoir parfaite connaissance.
+
+                    La confirmation de commande vaudra signature et acceptation des opérations effectuées.
+                </ol class="text-justify">
+            <li class="h3 mt-3"><span class="text-purple">Article 5 - Paiement</span></li>
+                <ol class="text-justify">
+                    Le fait de valider votre commande implique pour vous l'obligation de payer le prix indiqué.<br/>
+
+                    Voici les moyens de paiement disponibles sur le site {{ legales.fullUrlCompany }} :
+                        <ul>
+                            <li>Paiement par carte bancaire. Le débit de la carte est nécessaire pour confirmer la commande.</li>
+                        </ul>
+                </ol class="text-justify">
+            <li class="h3 mt-3"><span class="text-purple">Article 6 - Rétractation</span></li>
+                <ol class="text-justify">
+                    Conformément aux dispositions de l'article L.121-21 du Code de la Consommation, vous disposez d'un délai de rétractation de 14 jours à compter de la réception de vos produits pour exercer votre droit de rétraction sans avoir à justifier de motifs ni à payer de pénalité.
+
+                    Les retours sont à effectuer dans un état semblable à l'expédition. Dans ce cadre, votre responsabilité est engagée. Tout dommage subi par le produit à cette occasion peut être de nature à faire échec au droit de rétractation.
+
+                    Les frais de retour sont à votre charge.
+
+                    En cas d'exercice du droit de rétractation, {{ legales.companyName }} procédera au remboursement des sommes versées, dans un délai de 14 jours suivant la notification de votre demande et via le même moyen de paiement que celui utilisé lors de la commande.
+
+                    <p class="mt-4 h4">EXCEPTIONS AU DROIT DE RETRACTATION</p>
+
+                    Conformément aux dispositions de l'article L.121-21-8 du Code de la Consommation, le droit de rétractation ne s'applique pas à :
+                        <ul>
+                            <li>La fourniture de services pleinement exécutés avant la fin du délai de rétractation et dont l'exécution a commencé après accord préalable exprès du consommateur et renoncement exprès à son droit de rétractation.</li>
+                            <li>La fourniture de biens ou de services dont le prix dépend de fluctuations sur le marché financier échappant au contrôle du professionnel et susceptibles de se produire pendant le délai de rétractation.</li>
+                            <li>La fourniture de biens confectionnés selon les spécifications du consommateur ou nettement personnalisés.</li>
+                            <li>La fourniture de biens susceptibles de se détériorer ou de se périmer rapidement.</li>
+                            <li>La fourniture de biens qui ont été descellés par le consommateur après la livraison et qui ne peuvent être renvoyés pour des raisons d'hygiène ou de protection de la santé.</li>
+                            <li>La fourniture de biens qui, après avoir été livrés et de par leur nature, sont mélangés de manière indissociable avec d'autres articles.</li>
+                            <li>La fourniture de boissons alcoolisées dont la livraison est différée au-delà de trente jours et dont la valeur convenue à la conclusion du contrat dépend de fluctuations sur le marché échappant au contrôle du professionnel.</li>
+                            <li>La fourniture d'enregistrements audio ou vidéo ou de logiciels informatiques lorsqu'ils ont été descellés par le consommateur après la livraison.</li>
+                            <li>La fourniture d'un journal, d'un périodique ou d'un magazine, sauf pour les contrats d'abonnement à ces publications.</li>
+                            <li>Les transactions conclues lors d'une enchère publique.</li>
+                            <li>La fourniture d'un contenu numérique non fourni sur un support matériel dont l'exécution a commencé après accord préalable exprès du consommateur et renoncement exprès à son droit de rétractation.</li>
+                        </ul>
+                </ol class="text-justify">
+            <li class="h3 mt-3"><span class="text-purple">Article 7 - Livraison</span></li>
+                <ol class="text-justify">
+                    Les produits sont livrés à l'adresse de livraison indiquée au cours du processus de commande.
+
+                    Les délais d'expedition indiqués sont indicatifs. {{ legales.companyName }} s'engage à livrer le bien ou exécuter la prestation sans retard injustifié et au plus tard trente jours après la commande.
+
+                    En cas de retard d'expédition, un mail vous sera adressé pour vous informer d'une éventuelle conséquence sur le délai de livraison qui vous a été indiqué.
+
+                    Conformément aux dispositions légales, en cas de retard de livraison, vous bénéficiez de la possibilité d'annuler la commande dans les conditions et modalités définies à l'article L 138-2 du Code de la Consommation. Si entre temps vous recevez le produit, nous procéderons à son remboursement et aux frais de retour dans les conditions de l'article L 138-3 du Code de la Consommation.
+
+                    En cas de livraison par un transporteur, {{ legales.companyName }} ne peut être tenue pour responsable de retard de livraison dû exclusivement à une indisponibilité du client après plusieurs propositions de rendez-vous.
+                </ol class="text-justify">
+            <li class="h3 mt-3"><span class="text-purple">Article 8 - Responsabilité</span></li>
+                <ol class="text-justify">
+                    Les produits proposés sont conformes à la législation française en vigueur. La responsabilité de {{ legales.companyName }} ne saurait être engagée en cas de non-respect de la législation du pays où le produit est livré. Il vous appartient de vérifier auprès des autorités locales les possibilités d'importation ou d'utilisation des produits ou services que vous envisagez de commander.
+
+                    Par ailleurs, {{ legales.companyName }} ne saurait être tenue pour responsable des dommages résultant d'une mauvaise utilisation du produit acheté.
+
+                    Enfin la responsabilité de {{ legales.companyName }} ne saurait être engagée pour tous les inconvénients ou dommages inhérents à l'utilisation du réseau Internet, notamment une rupture de service, une intrusion extérieure ou la présence de virus informatiques.
+                </ol class="text-justify">
+            <li class="h3 mt-3"><span class="text-purple">Article 9 - Droit applicable en cas de litiges</span></li>
+                <ol class="text-justify">
+                    La langue du présent contrat est la langue française. Les présentes conditions de vente sont soumises à la loi française. En cas de litige, les tribunaux français seront les seuls compétents.
+                </ol class="text-justify">
+            <li class="h3 mt-3"><span class="text-purple">Article 10 - Propriété intellectuelle</span></li>
+                <ol class="text-justify">
+                    Tous les éléments du site {{ legales.fullUrlCompany }} sont et restent la propriété intellectuelle et exclusive de {{ legales.companyName }}. Nul n'est autorisé à reproduire, exploiter, rediffuser, ou utiliser à quelque titre que ce soit, même partiellement, des éléments du site qu'ils soient logiciels, visuels ou sonores.
+                </ol class="text-justify">
+            <li class="h3 mt-3"><span class="text-purple">Article 11 - Données personnelles</span></li>
+                <ol class="text-justify">
+                    {{ legales.companyName }} se réserve le droit de collecter les informations nominatives et les données personnelles vous concernant. Elles sont nécessaires à la gestion de votre commande, ainsi qu'à l'amélioration des services et des informations que nous vous adressons.
+
+                    Elles peuvent aussi être transmises aux sociétés qui contribuent à ces relations, telles que celles chargées de l'exécution des services et commandes pour leur gestion, exécution, traitement et paiement.
+
+                    Ces informations et données sont également conservées à des fins de sécurité, afin de respecter les obligations légales et réglementaires.
+
+                    Conformément à la loi du 6 janvier 1978, vous disposez d'un droit d'accès, de rectification et d'opposition aux informations nominatives et aux données personnelles vous concernant, directement sur le site Internet.
+                </ol class="text-justify">
+            <li class="h3 mt-3"><span class="text-purple">Article 12 - Archivage et preuve</span></li>
+                <ol class="text-justify">
+                    {{ legales.companyName }} archivera les bons de commandes et les factures sur un support fiable et durable constituant une copie fidèle conformément aux dispositions de l'article 1348 du Code civil.
+
+                    Les registres informatisés de {{ legales.companyName }} seront considérés par toutes les parties concernées comme preuve des communications, commandes, paiements et transactions intervenus entre les parties.
+                </ol class="text-justify">
+        </ul>
+    </div>
+
+    {% include "components/_separateur_wave.html.twig" %}
+
+{% endblock %}

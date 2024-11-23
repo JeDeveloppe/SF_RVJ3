@@ -1,0 +1,23 @@
+{% extends 'components/_base.html.twig' %}
+
+{% block title %}Paiement terminé{% endblock %}
+
+{% block body %}
+    <div class="row g-0 justify-content-center bg-white">
+        <div class="jumbotron col-11 col-md-6 py-5 h-100">
+            <h1 class=" mb-3">PAIEMENT <span class="text-purple">TERMINÉ</span></h1>
+            <p class="lead">Nous vous remerçions pour votre commande !</p>
+            <p class="lead">Votre paiement a bien été pris en compte.</p>
+            <p class="lead">Un email vous sera envoyé dès que votre commande sera expédiée ou déposée au lieu choisi.</p>
+            <p class="lead">(Retrait sur le secteur de CAEN: prévoir un délai maximum de 7 jours)</p>
+            <div class="col-12">
+                <div class="my-5 text-center">
+                    <a class="btn btn-dark" href="{{ path('app_home') }}" role="button">Retour à l'accueil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+{% endblock %}

@@ -1,0 +1,27 @@
+<div class="row justify-content-around my-5 ">
+    <div class="card col-11 shadow border p-2">
+        <h5 class="text-purple">Facturation</h5>
+        <div class="col-12 text-end">
+            {{ billingAddress.organization }}<br/>
+            {{ billingAddress.lastname }} {{ billingAddress.firstname }}<br/>
+            {{ billingAddress.street }} <br/>
+            {{ billingAddress.city }}
+        </div>
+    </div>
+
+    <div class="card col-11 shadow mt-3 border p-2">
+        <h5 class="text-purple">
+            {% if allCartValues['deliveryCostWithoutTax'] == 0 %}
+                Retrait à:
+            {% else %}
+                Livraison à:
+            {% endif %}
+        </h5>
+        <div class="col-12 text-end">
+            {{ deliveryAddress.organization ? deliveryAddress.organization : '' }}<br/>
+            {{ deliveryAddress.lastname ? deliveryAddress.lastname : '' }} {{ deliveryAddress.firstname ? deliveryAddress.firstname : '' }}<br/>
+            {{ deliveryAddress.street }} <br/>
+            {{ deliveryAddress.city }}
+        </div>
+    </div>
+</div>

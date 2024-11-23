@@ -1,0 +1,14 @@
+{% if item.durationGame is not null %}
+
+    <span class="span_duration_game "><i class="fa-regular fa-clock"></i> {{ item.durationGame.name }}</span>
+
+{% else %}
+
+    {% if is_granted('ROLE_BENEVOLE') %}
+
+        <i class="fa-solid fa-person text-danger"> <i class="fa-regular fa-clock text-danger"></i></i>
+
+    {% endif %}
+
+{% endif %}
+

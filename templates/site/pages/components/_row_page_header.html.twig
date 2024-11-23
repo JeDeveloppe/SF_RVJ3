@@ -1,0 +1,18 @@
+<div class="row g-0 justify-content-center align-items-center my-5">
+    <div class="col-10 col-md-5 d-flex flex-column justify-content-around pt-3 mb-5 mb-md-0">
+        <h1 class="col-12 text-center text-md-start">
+            {{ siteControllerServiceContent.header_h1_no_purple }} <span class="text-purple">{{ siteControllerServiceContent.header_h1_purple }}</span>
+        </h1>
+        <div class="col-12">{{ siteControllerServiceContent.header_description | raw }}</div>
+
+        <div class="col-12 mt-3 d-flex">
+            <a class="btn btn-dark" href="{{ siteControllerServiceContent.dark_button_link }}{{ siteControllerServiceContent.dark_button_link_archor }}">{{siteControllerServiceContent.dark_button_text}}</a>
+            {% if siteControllerServiceContent.yellow_button_link is defined %}
+                <a class="btn btn-yellow ms-2" href="{{ siteControllerServiceContent.yellow_button_link }}{{ siteControllerServiceContent.yellow_button_link_archor }}">{{siteControllerServiceContent.yellow_button_text}}</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-6 col-sm-5 col-md-4 d-flex justify-content-around align-items-center p-2">
+        <img src="{{ asset('build/images/design/' ~ siteControllerServiceContent.img_asset ~ '') }}" alt="{{ siteControllerServiceContent.img_alt }}">
+    </div>
+</div>

@@ -1,0 +1,9 @@
+{# {% if is_granted('ROLE_USER') %} #}
+
+    <a class="btn btn-dark" href="{{ path('app_catalogue_pieces_detachees_articles_d_une_boite', {'id': boite.id, 'boiteSlug':boite.slug | lower , 'editorSlug': boite.editor.slug  }) }}">Voir les pièces disponibles</a>
+
+{# {% else %}
+
+    <a href="{{ path('app_login') }}" class="btn btn-dark mt-3 mb-2">S'identifier</a>
+    
+{% endif %} #}

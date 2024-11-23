@@ -1,0 +1,114 @@
+{% extends "components/_base.html.twig" %}
+
+{% block title %}Organiser une collecte{% endblock %}
+
+{% block body %}
+
+    {% include "site/pages/components/_row_page_header.html.twig" with {'siteControllerServiceContent': siteControllerServiceContent } %}
+
+    <div class="row g-0 justify-content-center align-items-center bg-white">
+        <div class="col-7 col-sm-6 mt-3 mt-md-0 col-md-5 p-4 d-flex justify-content-center align-items-center">
+            <img src="{{ asset('build/images/design/collecte/collecte.png') }}" alt="Exemple de collecte">
+        </div>
+        <div id="organiserCollecte" class="col-11 col-sm-6 col-md-5 d-flex flex-column pt-3 ps-2 mt-3 mt-md-0">
+            <h2 class="col-12">
+                Organiser <span class="text-purple">une collecte</span>
+            </h2>
+            <div class="col-12">
+                À l’échelle nationale, nous faisons le constat que peu de structures ont la capacité de valoriser en grande quantité les jeux de société incomplets.
+                Nous avons donc imaginé une mission d’ambassadrice/ambassadeur. Cette mission consiste à collecter des jeux incomplets près de chez vous (où que vous soyez en France) et à nous les envoyer afin qu’ils soient complétés ou qu’ils alimentent le catalogue des pièces détachées.
+            </div>
+            <ul class="col-12 mt-3 list-unstyled">
+                <li class="mb-2"><i class="fa-solid text-yellow fa-arrow-right"></i> <b>Collecte près de Caen :</b> nous vous fournissons le matériel nécessaire à la collecte, et venons récupérer les jeux à la fin de la collecte.</li>
+                <li><i class="fa-solid text-yellow fa-arrow-right"></i> <b>Collecte à distance :</b> nous vous fournissons un guide de collecte et les instructions d’envoi du colis par Mondial Relay.</li>
+            </ul>
+            <div class="col-12 mt-4 d-flex justify-content-start">
+                <a class="btn btn-dark" href="{{ path('app_contact') }}">NOUS CONTACTER</a>
+            </div>
+        </div>
+        <div class="col-12 my-5 d-flex justify-content-center">
+            <div class="col-11 col-sm-9 col-md-7 col-lg-5 _collecte_card_info d-flex p-3">
+                <div class="col-2 d-flex justify-content-center align-items-center"><img src="{{ asset('build/images/design/collecte/info_logo.svg') }}" alt="Logo information attention"></div>
+                <div class="col-10"><b>Avant de vous lancer</b>, assurez-vous qu’il n’existe pas près de chez vous des structures de réemploi susceptibles de valoriser ces jeux incomplets.</div>
+        </div>
+    </div>
+
+    {% include "components/_separateur_wave.html.twig" %}
+
+
+    <div class="row g-0 justify-content-center py-5 bg-white">
+        <h2 class="col-12 text-center mb-5"><span class="text-purple">Quels jeux</span> collecter ?</h2>
+        <div class="col-11 col-sm-6 col-lg-5 col-xl-4">
+            <div class="col-11 mx-auto card_collectons h-100">
+                <div class="col-12 d-flex justify-content-center p-4 mb-3">
+                    <img class="img_collecte_or_not" src="{{ asset('build/images/design/collecte/collecte_ok.png') }}" alt="Exemple de jeux collectés">
+                </div>
+                <h4 class="text-center text-yellow pt-3">Nous collectons</h5>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ok.svg') }}"> Jeux de société modernes et anciens</li>
+                        <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ok.svg') }}"> Jeux éducatifs en boîte carton</li>
+                        <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ok.svg') }}"> Pièces détachées (pions, dés, sabliers…)</li>
+                        <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ok.svg') }}"> Puzzles complets</li>
+                        <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ok.svg') }}"> Jeux d’encastrement en bois</li>
+                        <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ok.svg') }}"> Certains jouets : Domino Express, jeux SMARTMAX et GEOMAG</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-11 col-sm-6 col-lg-5 col-xl-4 mt-5 mt-sm-0 h-100">
+            <div class="col-11 mx-auto card_collectons">
+                <div class="col-12 d-flex justify-content-center p-4 mb-3">
+                    <img class="img_collecte_or_not" src="{{ asset('build/images/design/collecte/ko_collecte.png') }}" alt="Exemple de jeux non collectés">
+                </div>
+                <h4 class="text-center text-yellow pt-3">Nous ne collectons pas</h5>
+                <div class="card-body px-4">
+                    <ul class="list-unstyled">
+                        <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ko.svg') }}">Jouets</li>
+                        <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ko.svg') }}">Puzzles incomplets</li>
+                        <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ko.svg') }}">Jeux de société de sous-marques ou certains jeux de marques distributeurs (ex : Pavillon)</li>
+                        <li class="d-flex align-items-start"><img class="li_ok pt-1 me-2" src="{{ asset('build/images/design/collecte/ko.svg') }}">Certains jeux trop lourds pour envoi ou difficiles à revaloriser. Ex : Trivial Pursuit, In ze boîte, jeux TV (sauf Pyramide)…</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "components/_separateur_wave.html.twig" %}
+
+    <div id="devenir-ambassadeur" class="row g-0 justify-content-around py-4 bg-white">
+        <h2 class="col-12 text-center">DEVENIR <span class="text-purple">AMBASSADEUR·RICE</span></h2>
+        <div class="col-12 col-md-8 text-center mt-3">
+            Vous n'habitez pas dans la région de Caen mais vous souhaitez vous impliquer dans le projet ? Devenez ambassadeur.rice Refaites vos jeux ! Où que vous soyez en France métropolitaine, collectez des jeux près de chez vous et envoyez-les nous ! Nous vous accompagnons pour organiser la collecte, le pré-tri et l'envoi.
+        </div>
+        <h4 class="col-12 text-center text-yellow mt-4">COMMENT ÇA MARCHE ?</h4>
+        <div class="col-12 d-flex flex-wrap justify-content-around mt-5">
+            {% set number = 1 %}
+            {% for step in steps %}
+
+                <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                    <div class="card col-11 mx-auto h-100 border-0">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <i class="fa-solid fa-circle fa-6x position-relative text-secondary"></i>
+                                <span class="position-absolute text-green fw-bolder h2">{{ number }}</span>
+                            </div>
+                            <h6 class="text-dark text-center my-3">{{ step.title }} </h6>
+                            <div class="card-text text-center">
+                                {{ step.description }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% set number = number + 1 %}
+            {% endfor %}
+
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+            <a class="btn btn-dark mt-4" href="{{ path('app_download_ambassador_quide') }}">Télécharger le formulaire</a>
+        </div>
+    </div>
+
+    {% include "components/_separateur_wave.html.twig" %}
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% include "email/header.html.twig" %}
+
+    <!-- PARAGRAPH -->
+    <!-- Set text color and font family ("sans-serif" or "Georgia, serif"). Duplicate all text styles in links, including line-height -->
+    <tr>
+        <td align="left" valign="top" style="border-collapse : collapse; border-spacing: 0; margin: 0; padding: 0; padding-left : 6.25%; padding-right : 6.25%; width: 87.5%; font-size : 17px; font-weight : 400; line-height : 160%;
+            padding-top: 10px; 
+            color : #000000;
+            font-family: sans-serif;" class="paragraph">
+            <p>Bonjour,</p>
+            <p>Grâce à la collecte effectuéé en date du {{ donnees.endOfTheCollect | date('d-m-Y') }} où vous avez pu récupérer {{ donnees.numberOfKilosCollected }} kilos de jeux, nous avons le plaisir de vous offrir un bon d'achat d'une valeur de:</p>
+            <p>{{ donnees.discountValueExcludingTax / 100 }} euros HT</p>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" valign="top" style="border-collapse : collapse; border-spacing: 0; margin: 0; padding: 0; padding-left : 6.25%; padding-right : 6.25%; width: 87.5%; font-size : 17px; font-weight : 400; line-height : 160%;
+            padding-top: 10px; padding-bottom: 25px; 
+            color : #000000;
+            font-family: sans-serif;" class="paragraph">
+            <p>Bon d'achat uniquement valable sur tous les achats du site.</p>
+            <p>Code à saisir:</p>
+            <p> {{ donnees.token }}</p>
+        </td>
+    </tr>
+    <tr>
+        <td align="left" valign="top" style="border-collapse : collapse; border-spacing: 0; margin: 0; padding: 0; padding-left : 6.25%; padding-right : 6.25%; width: 87.5%; font-size : 10px; font-weight : 400; line-height : 160%;
+            padding-top: 10px; padding-bottom: 25px; 
+            color : #000000;
+            font-family: sans-serif;" class="paragraph">
+            <p>Conditions d'utilisation: <br/>
+            L'utilisateur doit être inscrit sur le site www.refaitesvosjeux.fr et l'utilisé avant le {{ donnees.validUntil | date('d-m-Y') }} à {{ donnees.validUntil|date('H:i:s') }}.</p>
+        </td>
+    </tr>
+
+{% include "email/footer_without_unsubscribe.html.twig" %}

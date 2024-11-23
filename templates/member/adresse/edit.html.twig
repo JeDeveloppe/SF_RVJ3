@@ -1,0 +1,21 @@
+{% extends "components/_base.html.twig" %}
+
+{% block title %}Espace membre{% endblock %}
+
+{% block body %}
+
+<div class="row g-0 justify-content-center py-5 bg-white">
+    <div class="col-11 col-md-4">
+        {% include "member/components/_navMini.html.twig" with {'themes':themes } %}
+    </div>
+    <div class="col-10 mt-3 mt-sm-0 col-md-6 card_member_all_themes d-flex flex-wrap flex-column flex-md-row align-items-center justify-content-center py-4">
+        <h4 class="col-11 text-purple mb-4">Édition d'une adresse:</span></h4>
+    
+        {{ include('member/adresse/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    </div>
+</div>
+
+
+
+    </div>
+{% endblock %}

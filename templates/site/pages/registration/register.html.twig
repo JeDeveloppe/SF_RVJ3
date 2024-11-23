@@ -1,0 +1,65 @@
+{% extends 'components/_base.html.twig' %}
+
+{% block title %}Inscription au service{% endblock %}
+
+{% block body %}
+
+<div class="row justify-content-around my-4">
+        <h1 class="col-12 text-center">PAS ENCORE CLIENT·E ?</h1>
+    
+    {# For convenience sake of this snippet, store the errors in a variable #}
+    {% set formErrors = registrationForm.vars.errors.form.getErrors(true) %}
+                                        
+    {# If there are errors in the form, display them in this unorganized list #}
+    {% if formErrors|length %}
+        <div class="col-12 d-flex justify-content-around">
+            <ul class="col-11 col-sm-9 col-md-7 col-lg-6 col-xl-5">
+                {% for error in formErrors %}
+                    <li class="text-danger">{{ error.message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <div class="col-9 col-sm-7 col-md-5 col-lg-4 col-xl-3 my-3">
+        {{ form_start(registrationForm) }}
+
+            <div class="col-12 d-flex justify-content-center mb-3">
+                <div class="form-group col-12">
+                    <label for="exampleInputEmail1">{{ form_label(registrationForm.email) }}</label>
+                    {{ form_widget(registrationForm.email) }}
+                </div>
+            </div>
+            <div class="col-12 d-flex justify-content-center mb-3">
+                <div class="form-group col-12">
+                    <label for="exampleInputEmail1">{{ form_label(registrationForm.plainPassword) }}</label>
+                    {{ form_widget(registrationForm.plainPassword) }}
+                    <span class="small text-purple">{{ form_help(registrationForm.plainPassword) }}</span>
+                </div>
+            </div>
+            <div class="col-12 d-flex justify-content-center mb-3">
+                <div class="form-group col-12">
+                    <label for="exampleInputEmail1">{{ form_label(registrationForm.plainPasswordVerification) }}</label>
+                    {{ form_widget(registrationForm.plainPasswordVerification) }}
+                    <span class="small text-purple">{{ form_help(registrationForm.plainPasswordVerification) }}</span>
+                </div>
+            </div>
+            <div class="col-12 d-flex justify-content-center mb-3">
+                <div class="form-group col-12">
+                    <label for="exampleInputEmail1">{{ form_label(registrationForm.country) }}</label>
+                    {{ form_widget(registrationForm.country) }}
+                </div>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-yellow col-12">CRÉER UN COMPTE</button>
+            </div>
+            <div class="col-12 mt-4 text-center small">
+                <a class="text-decoration-none text-purple" href="{{ path('app_login') }}">Déjà client·e ? Se connecter</a>
+            </div>
+
+        {{ form_end(registrationForm) }}
+    </div>
+</div>
+
+{% endblock %}

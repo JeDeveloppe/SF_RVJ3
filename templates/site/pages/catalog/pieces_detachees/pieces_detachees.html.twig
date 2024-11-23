@@ -1,0 +1,52 @@
+{% extends "components/_base.html.twig" %}
+   
+{% block title %}Catalogue des pièces détachées{% endblock %}
+
+{% block body %}
+{{ dump(twigEvent_paniers) }}
+    <h1 class="col-12 text-center mt-3">Catalogue des <span class="text-purple">pièces détachées</span></h1>
+    <div class="col-12 text-center small mb-3 fst-italic">(Catalogue des boites dont le service possède des pièces)</div>
+
+    {% set conjugaison_boite = "boite" %}
+
+        <div class="row g-0 justify-content-around py-5 bg-white">
+            <!-- left column / searchs -->
+            <div class="col-12 d-flex flex-wrap justify-content-center">
+                    <div class="col-12 d-flex justify-content-center">
+                        {% include "components/forms/_search_boite.html.twig" %}
+                    </div>
+                    <div class="col-6 text-center">
+                        {% if boites | length > 1 %}
+                            {% set conjugaison_boite = "boites" %}
+                        {% endif %}
+                        {{ boites | length }} {{ conjugaison_boite }} en ligne.
+                    </div>
+            </div>
+        </div>
+
+        <!-- results > 0 -->
+        {% if boites | length > 0 %}
+        
+            <div class="row g-0 bg-white">
+
+                    {% for boite in boites %}  
+
+                        <div class="col-9 col-sm-6 col-md-4 col-xl-3 mx-md-0 p-1">
+                            {% include "site/pages/catalog/components/_cardDetachees.html.twig" with { 'boite': boite } %}
+                        </div>
+
+                    {% endfor %}
+
+                    <div class="col-11 d-flex justify-content-center my-5">
+                        {{ knp_pagination_render(boites, 'components/_pagination.html.twig') }}
+                    </div>
+
+                {% else %}
+                    
+                    <!-- result == 0 -->
+                    {% include "site/pages/catalog/components/_emptyResultsDisplayPartners.html.twig" with {'partners': partners } %}
+
+                {% endif %}
+            </div>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+footer {
+    color: #1C1E3C;
+    font-size: 14px/36px;
+    letter-spacing: 0px;
+    margin-top: auto;
+}
+
+footer a {
+    text-decoration: none;
+    color: #1C1E3C;
+}
+
+footer a:hover {
+    color: #5F49CE;
+}
+
+#logoInFooter {
+    scale: 0.8;
+}
+
+#logoInFooter_text {
+    font-size: 14px;
+}
+
+
+.imgFindUsOnFacebook {
+    max-width: 40px;
+    border-radius: 5px;
+}
+
+.imgFindUsOnFacebook:hover {
+    box-shadow: 0px 0px 2px 2px var(--bs-blue);
+    -webkit-animation: rotate-hor-center 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+    animation: rotate-hor-center 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+}
+
+@-webkit-keyframes rotate-hor-center {
+    0% {
+        -webkit-transform: rotateX(0);
+        transform: rotateX(0);
+    }
+
+    100% {
+        -webkit-transform: rotateX(-360deg);
+        transform: rotateX(-360deg);
+    }
+}
+
+@keyframes rotate-hor-center {
+    0% {
+        -webkit-transform: rotateX(0);
+        transform: rotateX(0);
+    }
+
+    100% {
+        -webkit-transform: rotateX(-360deg);
+        transform: rotateX(-360deg);
+    }
+}

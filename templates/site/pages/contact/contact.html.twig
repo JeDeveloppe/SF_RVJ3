@@ -1,0 +1,46 @@
+{% extends 'components/_base.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block body %}
+
+    <div class="row justify-content-around align-items-center py-4">
+        <h1 class="col-12 text-center"><span class="text-purple">Nous</span> contacter</h1>
+    </div>
+
+    <div class="row g-0 justify-content-center py-4 bg-white">
+
+        <div class="col-10 col-sm-8 col-md-5 col-xl-4 pt-3">
+            <h3 class="mb-4"><span class="text-purple">Des questions ?</span></h3>
+            <p>Vous avez une question ou vous recherchez une information ? C’est par ici que ça se passe !</p>
+            <ul class="list-unstyled">
+                <li class="mb-2"><img src="{{ asset('build/images/design/contact/location.svg') }}" alt="icone location"> Mondeville, Calvados</li>
+                <li><img src="{{ asset('build/images/design/contact/enveloppe.svg') }}" alt="icone enveloppe"> {{ legales.emailCompany }}</li>
+            </ul>
+        </div>
+        <div class="col-10 col-sm-8 col-md-5 col-xl-4 pt-3 mt-3 mt-md-0">
+
+            {{ form_start(form) }}
+                <div class="col-12">
+                    <label class="form-label">{{ form_label(form.email) }}</label>
+                        {{ form_widget(form.email) }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label">{{ form_label(form.sujet) }}</label>
+                        {{ form_widget(form.sujet) }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label">{{ form_label(form.message) }}</label>
+                        {{ form_widget(form.message) }}
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-yellow">Envoyer</button>
+                </div>
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+    {% include "components/_separateur_wave.html.twig" %}
+
+{% endblock %}

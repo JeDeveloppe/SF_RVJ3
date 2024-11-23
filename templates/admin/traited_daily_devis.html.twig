@@ -1,0 +1,82 @@
+{# templates/admin/my-custom-page.html.twig #}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}EN ATTENTE DE PAIEMENT{% endblock %}
+
+{% block main %}
+
+    {% include "components/_flash_message.html.twig" %}
+
+    <div class="row">
+
+        {% if devisWithPrice | length > 0 %}
+            {% for document in devisWithPrice %}
+                <div class="card mb-4 p-0 shadow">
+                    <div class="card-header d-flex flex-wrap align-items-center">
+                        <div class="col-3">
+                            {{ document.quoteNumber }}
+                        </div>
+                        <div class="col-3">
+                            Fait le: {{ document.createdAt | date("d/m/Y") }}<br/>
+                            Valable jusqu'au {{ document.endOfQuoteValidation | date('d/m/Y') }}
+                        </div>
+                        <div class="col-3">
+                            {% if document.isQuoteReminder == true %}
+                                {% set color = 'success' %}
+                            {% else %}
+                                {% set color = 'danger' %}
+                            {% endif %}
+                            Relancé par email: <i class="fa-solid fa-paper-plane text-{{ color }}"></i>
+                        </div>
+                        <div class="col-3 text-end">
+                            {{ document.totalWithTax  / 100 | number_format(2, '.', ',') }} € TTC
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table align-middle">
+                            <tr>
+                                <th>Image</th>
+                                <th>Désignation</th>
+                                <th class="text-center">Prix HT</th>
+                            </tr>
+                            {% for value in document.documentLines %}
+                                <tr>
+                                    <td>
+                                        <img class="card_catalog_img" style="max-width:120px" src="{{ vich_uploader_asset(value.occasion.boite, 'imageFile') }}"/>
+                                    </td>
+                                    <td>
+                                        {% if value.boite is not null %}
+                                            Boite:<br/>
+                                            {{ value.boite.id }} / {{ value.boite.name }} - {{ value.boite.editor }} - {{ value.boite.year }}
+                                            <ul>
+                                                <li>{{ value.question }}</li>
+                                                <li>{{ value.answer }}</li>
+                                            </ul>
+                                        {% elseif value.occasion is not null %}
+                                            Occasion:<br/>
+                                            {{ value.occasion.boite.name }} - {{ value.occasion.boite.editor }} - {{ value.occasion.boite.year }}
+                                            <ul>
+                                                <li>État de la boite : {{ value.occasion.boxCondition }}</li>
+                                                <li>État du matériel : {{ value.occasion.equipmentCondition }}</li>
+                                                <li>Règle du jeu : {{ value.occasion.gameRule }}</li>
+                                            </ul>
+                                        {% else %}
+                                            Article:<br/>
+                                            {{ value.item.name }} - Référence : {{ value.item.reference }} - Qté: {{ value.quantity }}
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">{{ (value.priceExcludingTax) / 100 |number_format(2, '.', ',') }} €</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            "NOTHING FOR THE MOMENT..."
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}

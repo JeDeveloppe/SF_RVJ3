@@ -1,0 +1,50 @@
+{% extends 'components/_base.html.twig' %}
+
+{% block title %}Le coin presse{% endblock %}
+
+{% block body %}
+
+    <div class="row g-0 justify-content-around align-items-center py-4">
+        <h1 class="col-12 text-center"><span class="text-purple">Coin</span> presse</h1>
+    </div>
+
+    <div class="row g-0 justify-content-center bg-white">
+        <div class="col-11 col-md-10 my-4">
+            <ul class="timeline">
+                {% for key,media in medias %}
+                    {% if key is divisible by(2) %}
+                        <li class="timeline-inverted">
+                    {% else %}
+                        <li>
+                    {% endif %}
+                            <div class="timeline-badge" style="background-color:{{ media.badge.bgcolor }}"><i class="{{ media.badge.text }}"></i></div>
+                            <div class="timeline-panel bg-white rounded-2">
+                                <div class="timeline-heading">
+                                <h5 class="timeline-title"><span class="text-purple">{{ media.title }}</span></h5>
+                                <p class="small">
+                                    {{ media.autor }}<br/>
+                                    <span class="text-gray-dark opacity-75">
+                                    <i class="fa fa-clock-o"></i>
+                                    {{ media.publishedAt | date('d F Y') |format_datetime('full','none',locale='fr') }}
+                                    </span>
+                                </p>
+                                </div>
+                                <div class="timeline-body text-justify">
+                                {% if media.description is not null %}
+                                    {{ media.description }}
+                                {% endif %}
+                                <p class="text-end mt-2 small"><a href="{{ media.link }}" target="_blank" class="text-decoration-none text-purple">Lire l'article</a></p>
+                                </div>
+                            </div>
+                        </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-11 text-center mb-3">
+            <i class="fa-solid fa-2x fa-lightbulb text-info small"></i> Création du service en 2020...
+        </div>
+    </div>
+
+    {% include "components/_separateur_wave.html.twig" %}
+
+{% endblock %}

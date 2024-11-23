@@ -1,0 +1,7 @@
+<a class="btn btn-yellow p-2" href="{{ path('adresse_edit', {'id': adresse.id}) }}"><i class="fa-solid fa-pen-to-square"></i></a> 
+
+<form method="post" class="ms-2 mt-1" action="{{ path('adresse_delete', {'id': adresse.id}) }}" onsubmit="return confirm('Vous êtes sûr de vouloir supprimer cette adresse?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ adresse.id) }}">
+    <button class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+</form>
+

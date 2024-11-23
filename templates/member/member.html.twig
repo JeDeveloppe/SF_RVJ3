@@ -1,0 +1,24 @@
+{% extends "components/_base.html.twig" %}
+
+{% block title %}Espace membre{% endblock %}
+
+{% block body %}
+
+<div class="row g-0 justify-content-center py-5 bg-white">
+    <div class="col-11 col-md-4">
+        {% include "member/components/_navMini.html.twig" with {'themes':themes } %}
+    </div>
+    <div class="col-8 mt-3 mt-md-0 col-md-6 card_member_all_themes d-flex flex-wrap flex-column flex-md-row align-items-center justify-content-center py-2">
+            {% for theme in themes %}
+                <div class="card_member_theme d-flex flex-column align-items-center m-2 position-relative">
+                    <a href="{{ theme.link }}" class="_card_full_button"></a>
+                    <img src="{{ asset('build/images/design/member/bigLogos/' ~ theme.imgName ~ '.svg') }}" class="mt-4" alt="Logo des {{ theme.imgName }}">
+                    <h5 class="card-title text-purple mt-4">{{ theme.title }}</h5>
+                </div>
+            {% endfor %}
+    </div>
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+{% endblock %}

@@ -1,0 +1,5 @@
+framework:
+    mailer:
+        transports:
+            main: '%env(MAILER_DSN_CONTACT)%'
+            commande: '%env(MAILER_DSN_COMMANDES)%'

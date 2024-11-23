@@ -1,0 +1,70 @@
+{# templates/admin/my-custom-page.html.twig #}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Accueil ADMINISTRATION{% endblock %}
+
+{% block main %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+    
+        {% include "admin/components/_options_page.html.twig" %}
+
+        {# {% if app.request.server.get('PAIEMENT_MODULE') == "HELLOASSO" %}
+            <div class="row my-4">
+                <div class="col-4">
+                    <a class="btn btn-warning" href="{{ path('admin_verification_achats_helloAsso') }}" target="_blank">Mettre les paiements HelloAsso à jour</a>
+                </div>
+            </div>
+        {% endif %} #}
+
+        <div class="row my-5">
+            {% for total in totals %}
+                <div class="col-4 mb-3">
+                    <div class="card">
+                        <div class="card-header">{{ total.name }}</div>
+                        <div class="card-body">
+                            {% if total.isMoney == true %}
+                                {{ (total.total) / 100 |number_format(2, '.', ',') }}
+                            {% else %}
+                                {{ total.total }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row mt-5 border-top">
+            <h3 class="col-12 mt-3">Les ventes en attente:</h3>
+        </div>
+        <div class="row">
+                {% for detail in detailsDesVentesEnAttenteDePaiement %}
+                    <div class="col-6 col-md-4">
+                        <div class="col-12 card p-0">
+                            <div class="card-header">{{ detail.name }}</div>
+                            <div class="card-body d-flex justify-content-around align-items-center">
+                            {{ detail.valeur }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor%}
+        </div>
+
+        <div class="row my-5 border-top">
+            <h3 class="col-12 mt-3">Les articles avec un stock à 0:</h3>
+                {% for item in itemsWithStockIsNull %}
+                        <div class="col-3">
+                            <div class="col-11 mx-auto card p-0">
+                                <div class="card-body d-flex justify-content-around align-items-center">
+                                    {{ item.name }}
+                                    {% include "components/catalog/_card_admin_link_to_entity_item.html.twig" with {'item': item} %}
+                                </div>
+                            </div>
+                        </div>
+                {% else %}
+                    <div class="col-11 mx-auto card bg-success p-2">Aucun pour le moment...</div>
+                {% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock %}

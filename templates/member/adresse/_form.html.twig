@@ -1,0 +1,27 @@
+<div class="col-11">
+    {{ form_start(form) }}
+        <div class="mb-3">
+            {{ form_row(form.isFacturation) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.organization) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.lastname) }}
+        </div>          
+        <div class="mb-3">
+            {{ form_row(form.firstname) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.street) }}
+        </div>
+        <div class="mb-5">
+            {{ form_row(form.city) }}
+        </div>
+
+        <div class="col-12 d-flex flex-wrap justify-content-between">
+            <a class="btn btn-yellow p-2" href="{{ path('member_adresses') }}">Retour aux adresses</a>
+            <button class="btn btn-success text-uppercase p-2">{{ button_label|default('Enregistrer') }}</button>
+        </div>
+    {{ form_end(form) }}
+</div>

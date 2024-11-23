@@ -1,0 +1,181 @@
+.divImgPresentation{
+    .zoom {
+        overflow: hidden;
+        position: relative;
+        display: inline-block;
+        width: 300px;
+        height: 280px;
+        cursor: move;
+
+        &>div {
+            height: 33.33%;
+            width: 33.333%;
+            z-index: 1;
+            float: left;
+            display: inline-block;
+            position: relative;
+        }
+
+        //  top
+        &__top {
+
+            //  left
+            &.zoom__left:hover~.zoom__image {
+                transform: translate(20%, 20%) scale(1.5);
+            }
+
+            //  centre
+            &.zoom__centre:hover~.zoom__image {
+                transform: translate(0%, 20%) scale(1.5);
+            }
+
+            //  right
+            &.zoom__right:hover~.zoom__image {
+                transform: translate(-20%, 20%) scale(1.5);
+            }
+        }
+
+        //  middle
+        &__middle {
+
+            //  left
+            &.zoom__left:hover~.zoom__image {
+                transform: translate(20%, 0) scale(1.5);
+            }
+
+            //  centre
+            &.zoom__centre:hover~.zoom__image {
+                transform: translate(0, 0) scale(1.5);
+            }
+
+            //  right
+            &.zoom__right:hover~.zoom__image {
+                transform: translate(-20%, 0) scale(1.5);
+            }
+        }
+
+        //  middle
+        &__bottom {
+
+            //  left
+            &.zoom__left:hover~.zoom__image {
+                transform: translate(20%, -20%) scale(1.5);
+            }
+
+            //  centre
+            &.zoom__centre:hover~.zoom__image {
+                transform: translate(0, -20%) scale(1.5);
+            }
+
+            //  right
+            &.zoom__right:hover~.zoom__image {
+                transform: translate(-20%, -20%) scale(1.5);
+            }
+        }
+
+        &__image {
+            transition: all 0.5s ease;
+            display: block;
+            max-width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        }
+    }
+}
+
+.card_, .card_missions {
+    border: 2px solid var(--bs-secondary);
+    border-radius: 20px;
+    background-color: #fff;
+    padding: 0 5%;
+    overflow: hidden;
+}
+.card_:hover{
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important
+}
+
+._card_full_button{
+    background: transparent;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    z-index: 1;
+}
+
+._card_button_link_add_in_cart, ._card_button_link_to_entity{
+    border-radius: 10px;
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    background-color: #1C1D3D;
+    color: #fff;
+}
+._card_button_link_add_in_cart:hover, ._card_button_link_to_entity:hover{
+    opacity: 0.8;
+    scale: 1.1;
+}
+
+.info_photo {
+    font-size: 10px;
+}
+
+.card_div_img {
+    width: 100%;
+    height: 240px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px 20px;
+    overflow: hidden;
+    padding: 3% 3%;
+}
+
+.card_catalog_img {
+    max-width: 100%;
+    max-height: 150px;
+    object-fit: cover;
+    margin: auto;
+}
+
+.img_full-width {
+    // max-width: 100%;
+    // height: auto;
+    overflow: hidden;
+    object-fit: cover;
+  }
+
+.scale-out-center {
+-webkit-animation: scale-out-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+        animation: scale-out-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+@-webkit-keyframes scale-out-center {
+    0% {
+        -webkit-transform: scale(1);
+                transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: scale(0);
+                transform: scale(0);
+        opacity: 1;
+    }
+}
+@keyframes scale-out-center {
+    0% {
+        -webkit-transform: scale(1);
+                transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: scale(0);
+                transform: scale(0);
+        opacity: 1;
+    }
+}

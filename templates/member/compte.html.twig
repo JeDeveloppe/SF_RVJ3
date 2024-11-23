@@ -1,0 +1,62 @@
+{% extends "components/_base.html.twig" %}
+
+{% block title %}Espace membre{% endblock %}
+
+{% block body %}
+
+<div class="row g-0 justify-content-center py-5 bg-white">
+    <div class="col-11 col-md-4">
+        {% include "member/components/_navMini.html.twig" with {'themes':themes } %}
+    </div>
+    <div class="col-10 mt-3 mt-md-0 col-md-6 card_member_all_themes d-flex flex-wrap flex-column flex-md-row align-items-center justify-content-center py-4">
+      <h4 class="text-purple mb-3 col-11 mx-auto">Mes infos</h4>
+      <p class="col-11 mx-auto fw-bolder">Numéro client : {{ app.user.accountnumber }}</p>
+      <div class="col-11">
+         <div class="col-12 col-md-9 col-lg-6 me-auto">
+            {{ form_start(form) }}
+               {{ form_widget(form.email) }}
+               {{ form_widget(form.phone) }}
+               {{ form_widget(form.country) }}
+               <div class="col-12 mx-auto">
+                  <button class="btn btn-dark my-3">{{ button_label|default('Actualiser') }}</button>
+               </div>
+            {{ form_end(form) }}
+         </div>
+      </div>
+      <h4 class="text-purple mt-5 mb-3 col-11 mx-auto">Changer mon mot de passe</h4>
+      <p class="col-11 mx-auto"><a class="btn btn-dark" href="{{ path('check_email') }}">Modifier</a></p>
+
+      <h4 class="text-purple mt-5 mb-3 col-11 mx-auto">Supprimer mon compte</h4>
+      <p class="col-11 mx-auto">Supprimer mon compte et les données me concernant:</p>
+      <p class="col-11 mx-auto"><button id="delete_account_link" class="btn btn-danger" href="{{ path('check_email') }}" data-bs-toggle="modal" data-bs-target="#exampleModal">Supprimer mon compte</button></p>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Suppression du compte</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            Toutes vos informations seront effacées.<br/>
+            Vous êtes sûr de vouloir faire cela ?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-yellow" data-bs-dismiss="modal">Oups !</button>
+            <a type="button" class="btn btn-success" href="{{ path('delete_user_from_database') }}">Oui je confirme !<br/><span class="small">Action irréversible</span></a>
+            </div>
+         </div>
+      </div>
+      </div>
+      
+
+      <div class="col-12 col-lg-11 mt-5 d-flex justify-content-end">
+         <a class="btn btn-dark" href="{{ path('app_contact') }}"><small>Une question ?</small></a>
+      </div>
+    </div>
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+{% endblock %}

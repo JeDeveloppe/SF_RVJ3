@@ -1,0 +1,15 @@
+<div class="col-4 mx-md-0 px-3 px-lg-1 my-3">
+    <div class="card p-0 h-100">
+        <div class="card-header d-flex justify-content-between align-items-center bg-secondary">
+            <div class="span">{{ partner.name | raw }}</div>
+        </div>
+        <div class="card-body d-flex flex-wrap justify-content-around">
+            <div class="col-6 mx-auto d-flex justify-content-center align-items-center mb-2">
+                <img class="img-thumbnail" src="{{ vich_uploader_asset(partner, 'imageFile') }}" alt="Image du partenaire {{ partner.name }}"/>
+            </div>
+            <div class="col-12 text-center mt-auto">
+                <a href="{{ partner.fullUrl }}" target='_blank' class="btn btn-yellow">Vers le site du partenaire</a>
+            </div>
+        </div>
+    </div>
+</div>

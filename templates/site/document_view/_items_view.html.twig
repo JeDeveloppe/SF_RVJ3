@@ -1,0 +1,27 @@
+{% if attribute(docLines, 'docLines_items') | length > 0 %}
+
+    {% set docLines_items = attribute(docLines, 'docLines_items') %}
+
+    <div class="row justify-content-center mb-4">
+        <h3>Article(s):</h3> 
+        <div class="col-11 col-8">
+            <table class="table table-striped text-center">
+                <thead>
+                    <th>Nom</th>
+                    <th>Quantité</th>
+                    <th>Prix de vente TTC</th>
+                </thead>
+                <tbody>
+                    {% for docLine in docLines_items %}
+                        <tr>
+                            <td>{{ docLine.item.name }}</td>
+                            <td>{{ docLine.quantity }}</td>
+                            <td>{{ (docLine.priceExcludingTax * ( 1 + docLine.document.taxRateValue / 100)) / 100 | number_format(2, '.', ',')  }} €</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endif %}

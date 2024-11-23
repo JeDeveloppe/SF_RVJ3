@@ -1,0 +1,64 @@
+    {# AFFICHAGE DES ARTICLES #}
+    {% if displayItems == true %}
+        {% if allCartValues['panier_items'] | length > 0 %}
+            <!-- liste des pièces détachées -->
+            {% for panier in allCartValues['panier_items'] %}
+                <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2">
+                    <div class="col-6 name_occasion_and_item_in_cart_rigth">{{ panier.item.name }} <small>({{ panier.item.reference }})</small></div>
+                    <div class="col-6 text-end">{% include "components/item/_display_item_price.html.twig" with {'product': panier,'tax': allCartValues['tax']} %}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+
+    {# AFFICHAGE DES OCCASIONS #}
+    {% if displayOccasions == true %}
+        {% if allCartValues['panier_occasions'] | length > 0 %}
+            <!-- liste des occasions -->
+            {% for panier in allCartValues['panier_occasions'] %}
+                <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2">
+                    <div class="col-6 name_occasion_and_item_in_cart_rigth">{{ panier.occasion.boite.name | raw }}</div>
+                    <div class="col-6 text-end">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': panier.occasion,'tax': allCartValues['tax']} %}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+
+    {% if displayVoucher == true %}
+        <!-- partie voucher -->
+        {% if allCartValues['remises'].voucher.actif == false %}
+            <div class="col-12 d-flex flex-wrap justify-content-around mb-3">
+                <div id="discount_question" class="col-12 ps-0 fw-bolder text-purple">Avez vous un bon d'achat ?</div>
+                <div id="discount_form" class="col-12 d-flex justify-content-end d-none pe-3">
+                    {% include "site/pages/panier/components/_voucherDiscountForm.html.twig" %}
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+    {# affichage du code de reduction #}
+    {% if allCartValues['remises'].voucher.actif == true %}
+        <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2 border border-purple p-2">
+            <div class="col-9 fw-bolder">
+                Code de réduction ({{ allCartValues['remises'].voucher.token }}) :<br/>
+                <span class="small">Reste à utiliser : {{ (allCartValues['remises'].voucher.voucherRemaining * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</span>
+            </div>
+            <div class="col-2 text-end">- {{ (allCartValues['remises'].voucher.used * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</div>
+        </div>
+    {% endif %}
+    {% if displayShippingMethod == true %}
+        <!-- partie mode d'envoi / retrait -->
+        {% if allCartValues['panier_occasions'] | length < 1 %}
+            <div class="col-12 d-flex flex-wrap pt-2 pb-4">
+                <div class="col-12 font-weight-bolder px-0 text-start py-2">Méthode de livraison ?</div>
+                {{ form_start(shippingForm, { 'attr': {'class': 'col-12 d-flex flex-wrap justify-content-around align-items-center', 'id': 'shippingForm'} }) }}
+                    {% for choice in shippingForm.shipping %}
+                        <div class="col-11">
+                            {{ form_widget(choice,{ 'attr': {'class': 'radio_choice_shipping'} }) }} <span class="radio_choice_shipping_span">{{ form_label(choice) }} </span>
+                        </div>
+                    {% endfor %}
+                {{ form_end(shippingForm) }}
+            </div>
+        {% endif %}
+    {% endif %}
+    <!-- partie des totaux -->
+    {% include "site/pages/panier/components/_prices_table.html.twig" with {'javascript': javascript}%}

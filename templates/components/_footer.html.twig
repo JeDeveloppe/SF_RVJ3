@@ -1,0 +1,71 @@
+<footer class="row g-0 mt-auto bg-white pt-3">
+	<div class="col-6 col-sm-3 p-2 p-sm-1 d-flex flex-column">
+		<img id="logoInFooter" class="col-12 col-md-6 p-2" src="{{ asset('build/images/design/logoSite.svg') }}" alt="Logo Refaites vos jeux" loading="lazy"/>
+		<div id="logoInFooter_text" class="col-12 col-lg-9 p-2">Refaites Vos Jeux oeuvre pour le réemploi des jeux et le lien social.</div>
+	</div>
+	<div class="col-6 col-sm-3 p-2 p-sm-1">
+		<h5 class="">Boutique</h5>
+		<ul class="list-unstyled">
+			<li class="">
+				<a href="{{ path('app_catalogue_occasions', {'category': 'tous-les-jeux'}) }}" class="text-black text-decoration-none">Tous les jeux</a>
+			</li>
+			<li class="">
+				<a href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}" class="text-black text-decoration-none">Jeux pour enfants</a>
+			</li>
+			<li class="">
+				<a href="{{ path('app_catalogue_occasions', {'category': 'jeux-tout-public'}) }}" class="text-black text-decoration-none">Jeux tout public</a>
+			</li>
+			<li class="">
+				<a href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}" class="text-black text-decoration-none">Jeux pour initié·es</a>
+			</li>
+			<li class="">
+				<a href="{{ path('app_catalogue_pieces_detachees') }}" class="text-black text-decoration-none">Pièces détachées</a>
+			</li>
+		</ul>
+	</div>
+	<div class="col-6 col-sm-3 p-2 p-sm-1">
+		<h5 class="">À propos</h5>
+		<ul class="list-unstyled">
+			<li class="">
+				<a href="{{ path('app_support_us') }}" class="text-black text-decoration-none">Soutenir l'association</a>
+			</li>
+			<li class="">
+				<a href="{{ path('app_prestations') }}" class="text-black text-decoration-none">Nos prestations</a>
+			</li>
+			<li class="">
+				<a href="{{ path('app_organize_a_collection') }}" class="text-black text-decoration-none">Organiser une collecte</a>
+			</li>
+			<li class="">
+				<a href="{{ path('app_give_your_games') }}" class="text-black text-decoration-none">Donner ses jeux</a>
+			</li>
+		</ul>
+	</div>
+	<div class="col-6 col-sm-3 p-2 p-sm-1">
+		<h5 class="">Et plus encore...</h5>
+		<ul class="list-unstyled">
+			<li class="">
+				<a href="{{ path('app_conditions_generale_de_vente') }}" class="text-black text-decoration-none">CGV</a>
+			</li>
+			<li class="">
+				<a href="{{ path('app_mentions_legales') }}" class="text-black text-decoration-none">Mentions légales</a> / <a href="{{ path('app_conditions_generale_utilisation') }}" class="text-black text-decoration-none">CGU</a>
+			</li>
+			<li class="">
+				<a href="{{ path('app_contact') }}" class="text-black text-decoration-none">Contact</a>
+			</li>
+			<li class="">
+				<a href="{{ path('app_press') }}" class="text-black text-decoration-none">Presse</a>
+			</li>
+			<li class="">
+				<a href="https://www.facebook.com/refaitesvosjeux" target="_blank">
+					<img src="{{ asset('build/images/design/footer/facebook_link.svg') }}" alt="Suivez-nous sur Facebook !">
+				</a>
+				<a href="https://www.instagram.com/refaitesvosjeux/" target="_blank">
+					<img src="{{ asset('build/images/design/footer/instagram_link.svg') }}" alt="Suivez-nous sur Instagram !">
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="col-12 small bg-dark py-2 text-white text-center">
+		2021 - {{ "now" | date("Y") }} With 💛 by <a class="text-decoration-none cursor-alias text-white"  href="https://www.je-developpe.fr/" target="_blank">Je-Développe</a>
+	</div>
+</footer>

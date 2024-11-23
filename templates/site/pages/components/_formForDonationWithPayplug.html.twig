@@ -1,0 +1,30 @@
+<div class="col-12 col-md-7 mx-auto">
+    {{ form_start(form) }}
+
+        <div class="mb-3">
+            {{ form_row(form.lastname) }}
+        </div>          
+        <div class="mb-3">
+            {{ form_row(form.firstname) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.street) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.city) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.email) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.phone) }}
+        </div>
+        <div class="col-6 col-md-2 mb-3 mx-auto">
+            {{ form_row(form.count) }}
+        </div>
+
+        <div class="col-12 text-center">
+            <button class="btn btn-info my-3">{{ button_label|default('Faire un don') }}</button>
+        </div>
+    {{ form_end(form) }}
+</div>

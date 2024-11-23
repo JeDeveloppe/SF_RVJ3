@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>REFAITES VOS JEUX | {% block title %}{% endblock %}</title>
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+        {% include "site/googleAnalytics/googleAnalytics.html.twig" %}
+        {# {% if app.request.server.get('APP_ENV') == 'PROD' %}
+            {% include "components/sharing/facebook/meta_facebook.html.twig" %}   
+        {% endif %} #}
+        <meta name="description" content="">
+        {% block meta %}
+        {% endblock %}
+        <link rel="icon" href="/build/images/favicon/favicon.ico">
+        <link rel="apple-touch-icon" sizes="180x180" href="/build/images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/build/images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/build/images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="/build/images/favicon/site.webmanifest">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
+
+        {{ encore_entry_link_tags('site') }}
+        
+        {% block stylesheets %}
+        {% endblock %}
+
+        <script src="https://kit.fontawesome.com/39dfe16fa3.js" crossorigin="anonymous"></script>
+        
+    </head>
+    <body>
+        
+        <div class="container-xl g-0">
+
+            {% include "components/_cookies_alert.html.twig" %}
+
+            {% include "components/sharing/facebook/fb_root.html.twig" %}
+                
+            {% include "components/_flash_message.html.twig" %}
+
+                {% block body %}{% endblock %}
+
+            {% include "components/_footer.html.twig" %}
+
+        </div>
+        {{ encore_entry_script_tags('site') }}
+
+        {% block javascript %}{% endblock %}
+    </body>
+</html>

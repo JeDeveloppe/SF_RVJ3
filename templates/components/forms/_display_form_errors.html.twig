@@ -1,0 +1,13 @@
+{% if not form.vars.valid %}
+    <div class="row mt-5">
+        <ul class="col-12 text-center list-unstyled">Recherche incorrect:
+            {# Loop through every form item #}
+            {% for child in form.children %}
+                {# Display the errors of the form item #}
+                {%for error in child.vars.errors%}
+                    <li class="text-danger small">{{error.message}}</li>
+                {%endfor%}
+            {%endfor%}
+        </ul>
+    </div>
+{%endif%}

@@ -1,0 +1,24 @@
+
+        {# {{ form_start(voucherDiscountForm) }}
+        <div class="col-12 px-0">
+            <div class="input-group">
+                <div class="form-outline">
+                    {{ form_widget(voucherDiscountForm.voucherDiscount) }}
+                </div>
+                <button type="submit" class="btn btn-yellow">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        {{ form_end(voucherDiscountForm) }} #}
+
+    {{ form_start(voucherDiscountForm) }}
+        <div class="input-group position-relative py-3">
+            {{ form_widget(voucherDiscountForm.voucherDiscount) }}
+            <span class="input-group-append valid_button">
+                <button id="voucherButton" class="btn" type="submit">
+                    <i class="fa fa-search text-dark"></i>
+                </button>
+            </span>
+        </div>
+    {{ form_end(voucherDiscountForm) }}

@@ -1,0 +1,68 @@
+{% extends "components/_base.html.twig" %}
+
+{% block title %}Soutenir l'association{% endblock %}
+
+{% block body %}
+
+{% include "site/pages/components/_row_page_header.html.twig" with {'siteControllerServiceContent': siteControllerServiceContent } %}
+
+<div id="missions" class="row g-0 justify-content-center align-items-center bg-white py-4">
+    <h2 class="col-12 text-center">
+        Nos <span class="text-purple">missions</span>
+    </h2>
+    <div class="col-11 text-center fw-bolder">
+        Chaque année en France, près de 100 000 tonnes de jouets sont jetées !
+    </div>
+    <div class="col-11 col-md-8 text-justify mt-2">
+        C’est de cette volonté d’agir contre le gaspillage et pour l’environnement que Refaites Vos Jeux est née en septembre 2020, avant d’obtenir le statut associatif en 2023. À travers son action, l’association souhaite sensibiliser les particuliers et les professionnels aux enjeux liés à la sobriété et à la réduction des déchets. Actuellement, l’équipe n’est composée que de bénévoles. À moyen terme, l’association espère pouvoir créer un ou plusieurs postes salariés et s’inscrire pleinement dans les valeurs de l’Économie Sociale et Solidaire.
+    </div>
+</div>
+
+<div class="row g-0 justify-content-around justify-content-md-center align-items-center bg-white py-4">
+    {% for mission in missions %}
+        <div class="col-9 my-4 my-lg-0 col-sm-6 col-lg-4">
+            <div class="card col-11 mx-auto card_missions border-0 bg-white h-100">
+                <img class="px-4 px-lg-5 mt-2" src="{{ asset('build/images/design/association/' ~ mission.img ~ '') }}" alt="{{ mission.img_alt }}">
+                <h4 class="text-center mt-4 h4">{{ mission.title }}</h5>
+                <div class="card-body">
+                    <div class="card-text text-center">
+                        {{ mission.text }}
+                    </div>
+                    <div class="card-text text-center mt-3">
+                        <a class="btn btn-dark" href="{{ mission.btn_link }}">{{ mission.btn_text }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+
+<div class="row g-0 justify-content-around py-5 bg-white">
+    <h2 id="support_us" class="col-12 text-center">Comment <span class="text-purple">nous soutenir ?</span></h2>
+    <div class="col-11 col-lg-8 text-center mb-4">
+        Que vous soyez un particulier, un professionnel du monde du jeu ou du réemploi, ce projet a besoin de vous pour se pérenniser et se développer.
+    </div>
+</div>
+<div class="row g-0 justify-content-center bg-white">
+    {% for donnee in donnees %}
+        <div class="col-11 col-md-5 mb-5 px-lg-5">
+            <div class="card col-11 mx-auto card_ h-100 p-0">
+                <img src="{{ asset('build/images/design/association/' ~ donnee.img ~ '') }}" alt="">
+                <div class="card-body bg-secondary d-flex flex-column justify-content-between">
+                    <p class="card-title py-2 h4 text-orange text-center">{{ donnee.title }}</p>
+                    <p class="card-text text-center">{{ donnee.description }}</p>
+                    <div class="col-12 text-center mt-auto small">
+                        <a class="btn btn-dark text-uppercase" href="{{ donnee.link }}">{{ donnee.button_text }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+{% endblock %}

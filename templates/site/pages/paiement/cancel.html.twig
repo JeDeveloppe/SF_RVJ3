@@ -1,0 +1,22 @@
+{% extends 'components/_base.html.twig' %}
+
+{% block title %}Paiement annulé{% endblock %}
+
+{% block body %}
+
+    <div class="row g-0 justify-content-center py-5 bg-white">
+        <h1 class="col-12 text-center text-purple py-5">PAIEMENT ANNULÉ</h1>
+        <p class="col-11 lead text-center my-5">Quelque chose ne s'est pas déroulé correctement ou vous avez annulé la transaction.</p>
+        <div class="col-11 mt-5 d-flex flex-wrap justify-content-center">
+            <div class="col-11 col-sm-6 col-md-4 d-flex justify-content-center">
+                <a href="{{ path('paiement', {'tokenDocument': token}) }}" class="btn btn-success" >Relancer le paiement</a>
+            </div>
+            <div class="col-11 col-sm-6 col-md-4 d-flex justify-content-center">
+                <a href="{{ path('member_historique') }}" class="ms-md-2 btn btn-yellow mt-4 mt-md-0" >Voir mon historique</a>
+            </div>
+        </div>
+    </div>
+
+    {% include "components/_separateur_wave.html.twig" %}
+
+{% endblock %}

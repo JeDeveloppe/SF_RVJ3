@@ -1,0 +1,21 @@
+{% if attribute(docLines, 'docLines_boites') | length > 0 %}
+
+    {% set docLines_boites = attribute(docLines, 'docLines_boites') %}
+
+    <div class="row justify-content-center mb-5">
+        <h3 class="col-12 text-start">Pièces détachée(s):</h3>
+
+            {% for docLine in docLine_boites %}
+                <div class="card col-11 p-0 my-2">
+                    <div class="card-header">CONCERNANt : {{ docLine.boite.name }} - {{ docLine.boite.editor }} - {{ docLine.boite.year }}</div>
+                    <div class="card-body">
+                        <div class="col-12">Votre demande : {{ docLine.question }}</div>
+                        <div class="col-12">La réponse : {{ docLine.answer }}</div>
+                    </div>
+                    <div class="card-footer text-end">Prix TTC: <span class="display-6">{{ (docLine.priceExcludingTax / 100 * tva) | number_format(2, '.', ',') }} €</span></div>
+                </div>
+            {% endfor %}
+
+    </div>
+
+{% endif %}

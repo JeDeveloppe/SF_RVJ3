@@ -1,0 +1,28 @@
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+
+<div class="col-12 d-flex flex-column mt-2">
+    {% include "components/catalog/_players&age.html.twig" with {'item': occasion.boite }%}
+    {% include "components/catalog/_durationOfTheGame.html.twig" with {'item': occasion.boite }%}
+    {% if 'panier' not in currentPath %}
+        {% if occasion.boite.linktopresentationvideo is not null %}
+                <a class="text-decoration-none text-purple small" href="{{ occasion.boite.linktopresentationvideo }}" target="_blank"><i class="fa-solid fa-video"></i> Voir la vidéo de présentation.</a>
+        {% endif %}
+    {% endif %}
+    <span class="mt-2 font-weight-bolder">{% include "components/occasion/_display_occasion_price.html.twig" with {'product': occasion,'tax': tax} %}</span>
+
+</div>
+<div class="col-12 mt-4 d-flex occasion_detail_etats">
+    <div class="col-4 col-md-5 col-lg-4">
+        État de la boite :<br/>
+        État du matériel :<br/>
+        Règle du jeu :<br/>
+    </div>
+    <div class="col-4 col-md-5 col-lg-4 text-end">
+        {{ occasion.boxCondition }} <i class="fa-solid fa-circle" style="color : {{ occasion.boxCondition.color }};width:5px;height:5px;"></i><br/>
+        {{ occasion.equipmentCondition }} <i class="fa-solid fa-circle" style="color : {{ occasion.equipmentCondition.color }};width:5px;height:5px;"></i><br/>
+        {{ occasion.gameRule }} <i class="fa-solid fa-circle" style="color : {{ occasion.gameRule.color }};width:5px;height:5px;"></i><br/>
+    </div>
+</div>
+{% if (occasion.information is not null) %}
+    <div class="col-12 mt-3 small"><i class="fa-solid fa-circle-info text-primary"></i> Informations:<br/> {{ occasion.information | raw }}</div>
+{% endif %}

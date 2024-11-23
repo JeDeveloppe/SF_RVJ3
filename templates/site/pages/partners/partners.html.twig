@@ -1,0 +1,29 @@
+{% extends 'components/_base.html.twig' %}
+
+{% block title %}Nos partenaires{% endblock %}
+
+{% block body %}
+
+    <div class="js-locations" data-locations="{{ donnees }}"></div>
+
+    <h1 class="col-12 mt-5 text-center">Nos <span class="text-purple">partenaires</span></h1>
+
+    <div class="row my-4">
+        <div class="col-11 col-md-9 col-lg-6 mx-auto">
+            <script type="text/javascript" src="{{ asset('map/mapdata_france.js') }}"></script> 
+            <script type="text/javascript" src="{{ asset('map/countrymap_france.js') }}"></script> 
+            <div id="map_france"></div>
+        </div>
+    </div>
+
+    <div class="row my-5 justify-content-center">
+
+        {% for partner in partners %}
+
+            {% include "site/pages/partners/_card_partner.html.twig" %}
+
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

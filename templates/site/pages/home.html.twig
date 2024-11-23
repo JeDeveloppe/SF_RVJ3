@@ -1,0 +1,118 @@
+{% extends "components/_base.html.twig" %}
+
+{% block title %}Un service pour complèter vos jeux de socièté.{% endblock %}
+
+{% block body %}
+
+
+<div class="row g-0 justify-content-center align-items-center py-5">
+    <div class="col-12 col-md-6 col-lg-5 d-flex flex-wrap">
+        <h1 class="col-12 text-center text-md-start">
+            Craquez pour nos <span class="text-purple">jeux de société</span> d'occasion !
+        </h1>
+        <div class="col-12 mt-1 text-center text-md-start">
+            Disponibles en retrait à Caen dans le Calvados.
+        </div>
+        <div class="col-12 d-flex mt-5 justify-content-center justify-content-md-start">
+            <a class="btn btn-dark d-flex align-items-center" href="{{ path('app_catalogue_occasions', {'category': null}) }}">Acheter un jeu</a>
+            <a style="width: 184px; height: 46px; font-size: 12px;" class="ms-3 btn btn-light d-flex flex-column justify-content-center" href="{{ path('app_home') }}#piecesDetachees">
+            Compléter un jeu</br>
+            <span class="small">Livraison possible</span>
+            </a>
+        </div>
+    </div>
+    <div class="col-12 mt-4 mt-md-0 col-md-5 d-flex justify-content-center align-items-center">
+        <img class="card-img-top-index p-1" src="{{ asset('build/images/design/index/lot_de_presentation.png') }}" alt="Image d'un lot de jeux de socièté">
+    </div>
+</div>
+
+
+<div class="row g-0 bg-yellow py-2">
+    <div class="col-6 col-lg-3 d-flex justify-content-start justify-content-lg-center align-items-center py-2">
+        <img class="home_bandeau_img px-1 px-lg-0" src="{{ asset('build/images/design/index/flower_planet.png') }}" alt="Des jeux bons pour la planète" />
+        <div class="home_bandeau_text px-2">Des jeux bons pour la planète</div>
+    </div>
+    <div class="col-6 col-lg-3 d-flex justify-content-start justify-content-lg-center align-items-center">
+        <img class="home_bandeau_img px-1 px-lg-0" src="{{ asset('build/images/design/index/flower_low_price.png') }}" alt="Des jeux à prix solidaire" />
+        <div class="home_bandeau_text px-2">Des jeux à prix solidaires</div>
+    </div>
+    <div class="col-6 col-lg-3 d-flex justify-content-start justify-content-lg-center align-items-center">
+        <img class="home_bandeau_img px-1 px-lg-0" src="{{ asset('build/images/design/index/flower_verify.png') }}" alt="Des jeux vérifiés et nettoyés avec soin" />
+        <div class="home_bandeau_text px-2">Des jeux vérifiés et nettoyés avec soin</div>
+    </div>
+    <div class="col-6 col-lg-3 d-flex justify-content-start justify-content-lg-center align-items-center">
+        <img class="home_bandeau_img px-1 px-lg-0" src="{{ asset('build/images/design/index/flower_social.png') }}" alt="Un projet en faveur du lien social" />
+        <div class="home_bandeau_text px-2">Un projet en faveur du lien social</div>
+    </div>
+</div>
+
+<div class="row g-0 justify-content-around py-5 bg-white align-items-center">
+    <div class="col-12 col-sm-5 mb-4 mb-lg-0 col-lg-3 d-flex flex-column ps-5 justify-content-center align-items-center">
+        <h2 class="col-12">
+            Des jeux pour <br/>
+            <span class="text-purple">tous les âges</span>
+        </h2>
+        <div class="col-12">
+            <a class="btn btn-dark mt-3" href="{{ path('app_catalogue_occasions', {'category': null}) }}" >Voir tous les jeux</a>
+        </div>
+    </div>
+    <div class="col-12 p-3 col-sm-5 mb-4 mb-lg-0 col-lg-3 d-flex justify-content-around">
+        <div class="col-12 card card_index_info_catalogue bg-secondary">
+            <a class="_card_full_button" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}"></a>
+            <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_enfant.png') }}" alt="Lot de jeux pour enfants">
+            <div class="card-body">
+                <div class="card-title d-flex justify-content-center align-items-center">
+                    <div class="h4 text-purple">Enfants</div>
+                    <div class="ms-3 text-purple"><i class="fa-solid fa-right-long"></i></div>
+                </div>
+                <p class="card-text text-center small">A partir de 2 ans</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 p-3 col-sm-5 mb-4 mb-lg-0 col-lg-3 d-flex justify-content-around">
+        <div class="col-12 card card_index_info_catalogue bg-secondary">
+            <a class="_card_full_button" href="{{ path('app_catalogue_occasions', {'category': 'jeux-tout-public'}) }}"></a>
+            <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_tout_public.png') }}" alt="Lot de jeux tout public">
+            <div class="card-body">
+                <div class="card-title d-flex justify-content-center align-items-center">
+                    <div class="h4 text-purple">Tout public</div>
+                    <div class="ms-3 text-purple"><i class="fa-solid fa-right-long"></i></div>
+                </div>
+                <p class="card-text text-center small">A partir de 7 ans</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 p-3 col-sm-5 mb-4 mb-lg-0 col-lg-3 d-flex justify-content-around">
+        <div class="col-12 card card_index_info_catalogue bg-secondary">
+            <a class="_card_full_button" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}"></a>
+            <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_inities.png') }}" alt="Lot de jeux pour initiés">
+            <div class="card-body">
+                <div class="card-title d-flex justify-content-center align-items-center">
+                    <div class="h4 text-purple">Initié·es</div>
+                    <div class="ms-3 text-purple"><i class="fa-solid fa-right-long"></i></div>
+                </div>
+                <p class="card-text text-center small">A partir de 12 ans</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+<div id="piecesDetachees" class="row g-0 justify-content-center py-5 bg-white">
+    <h2 class="col-12  text-center">
+        Trouver la pièce <span class="text-purple">manquante !</span>
+    </h2>
+    <div class="col-12 mt-4 text-center">
+        <img class="index_chess" src="{{ asset('build/images/design/index/trace_and_chess.png') }}" alt="Catalogue des pièces détachées">
+    </div>
+    <div class="col-12 text-center my-3">
+        Bientôt disponible ! <br/>
+        L’inventaire de nos pièces détachées est en cours...
+    </div>
+
+</div>
+
+{% include "components/_row_donner_ses_jeux.html.twig" %}
+
+{% endblock %}

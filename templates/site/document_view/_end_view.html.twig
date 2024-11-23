@@ -1,0 +1,22 @@
+{% extends 'components/_base.html.twig' %}
+
+{% block title %}Document non trouver{% endblock %}
+
+{% block body %}
+
+    <div class="row justify-content-center my-5 py-2">
+
+        <div class="jumbotron col-11 col-md-6 my-5">
+            <h1 class="">{{ tableau['h1'] }}</h1>
+            <p class="lead">{{ tableau['p1'] }}</p>
+            <hr class="my-4">
+            <p>{{ tableau['p2'] }}</p>
+            <p class="lead">
+                <a class="btn btn-dark" href="{{ path('app_home') }}" role="button">Retour à l'accueil...</a>
+            </p>
+        </div>
+
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,46 @@
+.underlineMemberLink, .underlineMemberLink:hover{
+    text-decoration: var(--bs-purple) wavy underline;
+}
+
+
+// autocomplete style
+.ts-dropdown-content{
+    background-color: #fff;
+}
+.option:hover{
+    background-color: var(--bs-light-purple);
+}
+.no-more-results{
+    background-color: var(--bs-danger);
+    color: #000;
+}
+.loading-more-results{
+    background-color: var(--bs-yellow)
+}
+.no-results{
+    background-color: var(--bs-danger);
+}
+// end autocomplete style
+
+.traitement_en_cours:after {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    -webkit-animation: ellipsis steps(4, end) 900ms infinite;
+    animation: ellipsis steps(4, end) 900ms infinite;
+    content: "\2026";
+    /* ascii code for the ellipsis character */
+    width: 0px;
+}
+
+@keyframes ellipsis {
+to {
+    width: 40px;
+}
+}
+
+@-webkit-keyframes ellipsis {
+to {
+    width: 40px;
+}
+}

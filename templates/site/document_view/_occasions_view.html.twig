@@ -1,0 +1,27 @@
+{% if attribute(docLines, 'docLines_occasions') | length > 0 %}
+
+    {% set docLines_occasions = attribute(docLines, 'docLines_occasions') %}
+    <div class="row justify-content-center mb-4">
+        <h3>Occasion(s):</h3>
+        <div class="col-11 col-8">
+            <table class="table table-striped text-center">
+                <thead>
+                    <th>Nom / Éditeur / Année</th>
+                    <th>Référence</th>
+                    <th>Quantité</th>
+                    <th>Prix de vente TTC</th>
+                </thead>
+                <tbody>
+                    {% for docLine in docLine_occasions %}
+                        <tr>
+                            <td>{{ docLine.occasion.boite.name }} - {{ docLine.occasion.boite.editor }} - {{ docLine.occasion.boite.year }}</td>
+                            <td>{{ docLine.occasion.reference }}</td>
+                            <td>1</td>
+                            <td>{{ (docLine.priceExcludingTax * tva) / 100 | number_format(2, '.', ',')  }} €</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endif %}

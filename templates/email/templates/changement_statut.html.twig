@@ -1,0 +1,23 @@
+{% include "email/header.html.twig" %}
+
+    <!-- PARAGRAPH -->
+    <!-- Set text color and font family ("sans-serif" or "Georgia, serif"). Duplicate all text styles in links, including line-height -->
+    <tr>
+        <td align="left" valign="top" style="border-collapse : collapse; border-spacing: 0; margin: 0; padding: 0; padding-left : 6.25%; padding-right : 6.25%; width: 87.5%; font-size : 17px; font-weight : 400; line-height : 160%;
+            padding-top: 10px; 
+            color : #000000;
+            font-family: sans-serif;" class="paragraph">
+            <p>Bonjour,<br/>
+            Le service de Refaites Vos Jeux vient de changer le statut de votre commande.</p>
+        </td>
+    </tr>
+    <tr>
+        <td align="left" valign="top" style="border-collapse : collapse; border-spacing: 0; margin: 0; padding: 0; padding-left : 6.25%; padding-right : 6.25%; width: 87.5%; font-size : 17px; font-weight : 400; line-height : 160%;
+            padding-top: 10px; padding-bottom: 25px; 
+            color : #000000;
+            font-family: sans-serif;" class="paragraph">
+            <p>Nouveau statut : {{ document.documentStatus.name }}</p>
+        </td>
+    </tr>
+
+{% include "email/footer_without_unsubscribe.html.twig" %}

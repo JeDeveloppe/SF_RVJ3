@@ -1,0 +1,116 @@
+#shippingAndVoucherFormReturnUp {
+    position: relative;
+    top: -100px;
+}
+
+.panier_img_boite{
+    max-width: 120px;
+}
+#discount_form{
+    transition: all 500ms ease-in-out;
+}
+
+.name_occasion_and_item_in_cart_rigth{
+    text-transform: lowercase;
+    display: inline-block;
+}
+
+.name_occasion_and_item_in_cart_rigth::first-letter{
+    text-transform: uppercase;
+}
+
+
+.cart-steps {
+    position: relative;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: space-evenly;
+            justify-content: space-evenly;
+    -webkit-box-align: center;
+            align-items: center;
+    overflow: hidden;
+}
+  
+.cart-steps:before {
+    content: '';
+    position: absolute;
+    top: 25%;
+    left: 15%;
+    width: 72%;
+    height: 10px;
+    background-color: #eee;
+    z-index: 1;
+}
+
+.cart-step {
+    position: relative;
+    z-index: 2;
+    margin-left: 35px;
+    margin-right: 35px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+}
+
+.cart-step:hover .cart-step-number {
+    background-color: #1FAB89;
+    border-color: #1FAB89;
+}
+
+.cart-step:hover .cart-step-text {
+    color: var(--bs-green);
+}
+
+.cart-step:first-of-type {
+    margin-left: 0;
+}
+.cart-step:last-of-type {
+    margin-right: 0;
+}
+
+.cart-step-active .cart-step-number {
+    background-color: var(--bs-light-purple);
+    border: 8px solid var(--bs-secondary);
+    color: white;
+}
+.cart-step-active .cart-step-text {
+    color: var(--bs-green);
+}
+.cart-step-disabled:hover {
+    cursor: default;
+}
+.cart-step-disabled:hover .cart-step-number {
+    background-color: white;
+    border-color: black;
+}
+.cart-step-disabled:hover .cart-step-text {
+    color: #111;
+}
+.cart-step-text {
+    display: block;
+    font-size: 15px;
+    margin-top: 17px;
+    text-transform: uppercase;
+    color: var(--bs-secondary);
+    -webkit-transition: all 250ms ease-in-out;
+    transition: all 250ms ease-in-out;
+}
+
+.cart-step-number {
+    display: -webkit-inline-box;
+    display: inline-flex;
+    -webkit-box-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+            align-items: center;
+    border: 8px solid var(--bs-secondary);
+    background-color: #ddd;
+    padding: 5px;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    text-align: center;
+    color: var(--bs-secondary);
+    -webkit-transition: all 250ms ease-in-out;
+    transition: all 250ms ease-in-out;
+}

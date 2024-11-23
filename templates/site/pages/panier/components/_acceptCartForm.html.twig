@@ -1,0 +1,19 @@
+{{ form_start(acceptCartForm) }}
+    <div class="col-12 form-group my-4 text-center">
+        <label for="exampleInputEmail1">J'accepte les <a class="text-purple" target="_blank" href="{{ path('app_conditions_generale_de_vente') }}">conditions générales de vente</a> : </label>
+        {{ form_widget(acceptCartForm.accept) }}
+    </div>
+    <div class="col-12 d-flex flex-column justify-content-center align-items-center">
+        {% if app.request.server.get('PAIEMENT_MODULE') == 'HELLOASSO' %}
+            <button class="btn">
+                <img src="{{ asset('build/images/design/'~ app.request.server.get('PAIEMENT_MODULE') ~'/logo-paiement.svg') }}" alt="Paiement avec PAYPLUG"/>
+            </button>
+            {% elseif app.request.server.get('PAIEMENT_MODULE') == 'PAYPLUG' %}
+                <button class="btn">
+                    <img class="img-thumbnail col-7" src="{{ asset('build/images/design/'~ app.request.server.get('PAIEMENT_MODULE') ~'/logo-paiement.png') }}" alt="Paiement avec PAYPLUG"/>
+                </button>
+            {% else %}
+                <a href="#">PAS DE PAIEMENT POSSIBLE</a>
+        {% endif %}
+    </div>
+{{ form_end(acceptCartForm) }}

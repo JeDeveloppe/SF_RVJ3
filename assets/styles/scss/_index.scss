@@ -1,0 +1,57 @@
+.card_index_info_catalogue {
+    background: var(--bg-secondary) 0% 0% no-repeat padding-box;
+    border-radius: 20px;
+}
+
+.card_index_info_catalogue > .card-body >.card-title > a {
+    font: normal normal normal 18px/34px Sound Bubble;
+    letter-spacing: 0px;
+    color: #5F43D1;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.card_index_julie > .card-body > .card-text {
+    text-align: center;
+    font: normal normal 300 14px/22px Nunito;
+    letter-spacing: 0px;
+    color: #1C1E3C;
+}
+
+.index_chess {
+    width: 20%;
+}
+
+.card_index_info {
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.card_index_info > .card-body > .card-title {
+    text-align: center;
+    font: normal normal normal 38px/44px Sound Bubble;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    text-transform: uppercase;
+}
+.card_index_info > .card-body > .card-text{
+    height: 90px;
+}
+.card_index_info > img {
+    max-height: 200px;
+}
+
+.card-img-top-index{
+    padding: 6%;
+}
+.index_card_full_button{
+    background: transparent;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    z-index: 1;
+}

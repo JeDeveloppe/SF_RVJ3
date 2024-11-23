@@ -1,0 +1,46 @@
+<div class="row g-0 justify-content-around py-5">
+    <h2 class="col-12 text-center">
+        <span class="text-purple">Donner</span> ses jeux
+    </h2>
+    <div class="col-11 col-md-7 mt-4 p-2 text-center">
+        L’association récupère <b>les jeux de société complets et incomplets</b> ainsi que <b>les pièces détachées</b> (pions, dés, sabliers…). Nous récupérons également les puzzles complets et les jeux éducatifs en boîte carton (pour apprendre à lire, compter…), qu’ils soient complets ou incomplets.
+    </div>
+    <div class="col-12 my-5 d-flex flex-wrap justify-content-around justify-content-xl-center align-self-auto">
+        <div class="col-10 col-sm-6 col-lg-4 mb-2 mb-lg-0">
+            <div class="card col-11 mx-auto card_index_info bg-green h-100">
+                <div class="card-body">
+                    <p class="card-title py-2">TROUVER UN POINT<br/> DE COLLECTE</p>
+                    <p class="card-text text-center">Vous pouvez déposer vos jeux dans nos points de collecte permanents en France.</p>
+                    <div class="col-12 d-flex justify-content-center">
+                        <a class="btn btn-dark text-uppercase" href="{{ path('app_give_your_games') }}">Donner ses jeux</a>
+                    </div>
+                </div>
+                <img src="{{ asset('build/images/design/index/index_collect.png') }}" alt="Don de pièces détachées">
+            </div>
+        </div>
+        <div class="col-10 col-sm-6 col-lg-4 mb-2 mb-lg-0">
+            <div class="card col-11 mx-auto card_index_info bg-orange h-100">
+                <div class="card-body">
+                    <p class="card-title py-2">ENVOYER SES JEUX<br/>PAR COLIS</p>
+                    <p class="card-text text-center">Pas de point de collecte près de chez vous ? Vous pouvez nous envoyer vos jeux par colis.</p>
+                    <div class="col-12 d-flex justify-content-center">
+                        <a class="btn btn-dark text-uppercase" href="{{ path('app_give_your_games') }}#envoyer-des-jeux">Envoyer ses jeux</a>
+                    </div>
+                </div>
+                <img src="{{ asset('build/images/design/index/donner_un_colis.png') }}" alt="Envoyer un colis de jeux">
+            </div>
+        </div>
+        <div class="col-10 col-sm-6 col-lg-4 mb-0">
+            <div class="card col-11 mx-auto card_index_info bg-light-purple h-100">
+                <div class="card-body">
+                    <p class="card-title py-2">ORGANISER UNE<br/>COLLECTE</p>
+                    <p class="card-text text-center">Collectez des jeux près de chez vous et envoyez-les nous !</p>
+                    <div class="col-12 d-flex justify-content-center">
+                        <a class="btn btn-dark text-uppercase" href="{{ path('app_organize_a_collection') }}#organiserCollecte">ORGANISER UNE COLLECTE</a>
+                    </div>
+                </div>
+                <img src="{{ asset('build/images/design/index/index_ambassador.png') }}" alt="Particiter en tant qu'ambassadeur Refaites vos jeux">
+            </div>
+        </div>
+    </div>
+</div>

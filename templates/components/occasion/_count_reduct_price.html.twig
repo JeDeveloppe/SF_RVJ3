@@ -1,0 +1,1 @@
+<span class="text-orange fw-bold">{{ (product.discountedPriceWithoutTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, ',', ',') | replace({",00" : ""}) }}€</span>

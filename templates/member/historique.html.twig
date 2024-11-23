@@ -1,0 +1,86 @@
+{% extends "components/_base.html.twig" %}
+
+{% block title %}Espace membre{% endblock %}
+
+{% block body %}
+
+   <div class="row g-0 justify-content-center py-5 bg-white px-2">
+      <div class="col-11 col-md-4">
+         {% include "member/components/_navMini.html.twig" with {'themes':themes } %}
+      </div>
+      <div class="col-12 mt-3 mt-sm-0 col-md-8 card_member_all_themes d-flex flex-wrap flex-column flex-md-row align-items-center justify-content-center py-4 mb-4">
+         <p class="col-11 text-center text-danger font-weight-bolder"><i class="fas fa-info-circle"></i> Les commandes de plus de {{ docParams.delayBeforeDeleteDevis * 2 }} jours sont automatiquement supprimées.</p>
+         
+         {% if documents | length > 0 %}
+            <div class="accordion accordion-flush col-11 py-5" id="accordionFlushExample">
+               {% for document in documents %}
+                  <div class="accordion-item border mb-2">
+                     <h3 class="accordion-header">
+                        <button class="accordion-button collapsed d-flex justify-content-around col-12 text-purple" type="button" data-bs-toggle="collapse" data-bs-target="#{{ document.id }}" aria-expanded="false" aria-controls="{{ document.id }}">
+                           <div class="col-6">
+                              {% if document.billNumber is not null %}
+                                 {{ document.billNumber }}
+                              {% else %}
+                                 {{ document.quoteNumber }}
+                              {% endif %}
+                           </div>
+                           <div class="col-6">
+                              {{ (document.totalWithTax / 100) |number_format(2, '.', ',') }} €
+                           </div>
+                        </button>
+                     </h3>
+                     <div id="{{ document.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body d-flex flex-wrap align-items-center p-2 mb-2 border border-secondary">
+                              {% if document.billNumber is not null %}
+                                 <div class="col-12">
+                                    Payé le {{ document.payment.timeOfTransaction|date('d-m-Y') }} <br/>{{ document.payment.details }}
+                                 </div>
+                                 <div class="col-12 d-flex justify-content-around my-3 order-3 order-md-2">
+                                    <a class="col-6 text-center text-success" href="{{ path('document_view', {'tokenDocument': document.token }) }}" data-toggle="tooltip" data-html="true" title="Facture en format web"><i class="fa-solid fa-file-invoice fa-2x"></i></a>
+                                    <a class="col-6 text-center text-dark" href="{{ path('download_billing_document', {'tokenDocument': document.token }) }}" target="_blank" data-toggle="tooltip" data-html="true" title="Facture en pdf"><i class="fas fa-print fa-2x"></i></a>
+                                 </div>
+                              {% else %}
+                                 <div class="col-12 mb-2">Valable jusqu'au {{ document.endOfQuoteValidation | date('d-m-Y') }}</div>
+                                 <div class="col-12 d-flex justify-content-center mb-2">
+                                    <a class="btn btn-yellow" href="{{ path('document_view', {'tokenDocument': document.token }) }}">Visualiser le devis</a>
+                                 </div>
+                              {% endif %}
+
+                              <div class="col-12">Statut : {{ document.documentStatus.name }}</div>
+                              <div class="col-12">
+                                 {% if document.sendingAt is not null %}
+                                    {{ document.shippingMethod.name }} le : {{ document.sendingAt | date('d-m-Y') }}<br/>
+                                    {% if document.sendingNumber is not null %}
+                                       Numéro de suivi: {{ document.sendingNumber }}
+                                    {% else %}
+                                       Pas de numéro de suivi.
+                                    {% endif %}
+                                 {% else %}
+                                       <span class="fst-italic traitement_en_cours">En cours de traitement</span>
+                                 {% endif %}
+                              </div>
+                        </div>
+                     </div>
+                  </div>
+               {% endfor %}
+            </div>
+
+         {% else %}
+            <div class="col-12 text-center py-5 px-1">PAS ENCORE DE DOCUMENTS...</div>
+         {% endif %}
+      </div>
+   </div>
+
+   {% if documents | length > limitPerPage %}
+
+      <div class="row py-2">
+         <div class="col-12 d-flex justify-content-center">
+               {{ knp_pagination_render(documents, 'components/_pagination.html.twig') }}
+         </div>
+      </div>
+   
+   {% endif %}
+
+   {% include "components/_separateur_wave.html.twig" %}
+
+{% endblock %}

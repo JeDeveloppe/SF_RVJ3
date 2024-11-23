@@ -1,0 +1,41 @@
+{% if item.playersMax is not null %}
+    
+    {% set dataJoueur = "joueur" %}
+    {% if item.playersMin.name > 1 %}
+        {% set dataJoueur = 'joueurs' %}
+    {% endif %}
+
+    {% set dataAge = 'an' %}
+    {% if item.age > 1 %}
+        {% set dataAge = 'ans' %}
+    {% endif %}
+
+    <span class="span_players_ages">
+        {% if item.playersMin.name == item.playersMax.name %}
+
+            {{ item.playersMin.name }} {{ dataJoueur }} | Dès {{ item.age }} {{ dataAge }}
+            
+        {% else %}
+
+            {% if item.playersMax.name matches '/^\\d+$/' %}
+            
+                {{ item.playersMin.name }} à {{ item.playersMax.name }} joueurs | Dès {{ item.age }} {{ dataAge }}
+
+            {% else %}
+                
+                {{ item.playersMin.name }} {{ dataJoueur }} {{ item.playersMax.name }} | Dès {{ item.age }} {{ dataAge }}
+
+            {% endif %}
+            
+        {% endif %}
+    </span>
+    
+{% else %}
+
+    {% if is_granted('ROLE_BENEVOLE') %}
+
+        <i class="fa-solid fa-person text-danger"> Nbre de joueurs non renseigné !!!!</i>
+
+    {% endif %}
+
+{% endif %}

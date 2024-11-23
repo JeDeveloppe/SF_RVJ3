@@ -1,0 +1,39 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+{% if ea.crud.currentAction == 'detail' %}
+    <table class="table align-middle">
+        <tr>
+            <th>Désignation</th>
+            <th class="text-center">Prix HT</th>
+        </tr>
+        {% for value in field.value %}
+            <tr>
+                <td>
+                    {% if value.boite is not null %}
+                        Boite:<br/>
+                        {{ value.boite.id }} / {{ value.boite.name }} - {{ value.boite.editor }} - {{ value.boite.year }}
+                        <ul>
+                            <li>{{ value.question }}</li>
+                            <li>{{ value.answer }}</li>
+                        </ul>
+                    {% elseif value.occasion is not null %}
+                        Occasion:<br/>
+                        {{ value.occasion.boite.name }} - {{ value.occasion.boite.editor }} - {{ value.occasion.boite.year }}
+                        <ul>
+                            <li>État de la boite : {{ value.occasion.boxCondition }}</li>
+                            <li>État du matériel : {{ value.occasion.equipmentCondition }}</li>
+                            <li>Règle du jeu : {{ value.occasion.gameRule }}</li>
+                        </ul>
+                    {% else %}
+                        Article:<br/>
+                        {{ value.item.name }} - Référence : {{ value.item.reference }} - Qté: {{ value.quantity }}
+                    {% endif %}
+                </td>
+                <td class="text-center">{{ (value.priceExcludingTax) / 100 |number_format(2, '.', ',') }} €</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span class="badge badge-secondary">{{ field.formattedValue }}</span>
+{% endif %}

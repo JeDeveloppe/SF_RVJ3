@@ -1,0 +1,107 @@
+{% extends "components/_base.html.twig" %}
+
+{% block title %}Nos prestations{% endblock %}
+
+{% block body %}
+
+{% include "site/pages/components/_row_page_header.html.twig" with {'siteControllerServiceContent': siteControllerServiceContent } %}
+
+<div class="row g-0 justify-content-center align-items-center bg-white py-5">
+    <h2 id="id_animations" class="col-11 text-center">
+        <span class="text-purple">Animations</span> et ateliers
+    </h2>
+    <div class="col-12 d-flex flex-wrap justify-content-around justify-content-md-center mt-4 align-items-center">
+        <div class="col-11 col-sm-6 col-md-5 col-lg-4">
+            <div class="card card_collectons py-4 border-0 bg-white">
+                <div class="col-12 d-flex justify-content-center align-items-center">
+                    <img src="{{ asset('build/images/design/prestations/animation_vintage.png') }}" alt="Lot de jeux récoltés">
+                </div>
+                <h3 class="text-center mt-4">Animation jeux vintage</h3>
+                <div class="card-body">
+                    <div class="card-text text-center">
+                        Replongez dans vos souvenirs d’enfance avec nos malles de jeux vintage !
+                        Retrouvez les grands classiques complétés par nos soins : Qui est-ce ?, Piège !, Dix de chute, le cochon qui rit….
+                        Vous ne vous rappelez plus très bien des règles ? Un membre de l’association sera là pour vous les réexpliquer !
+                        Cette animation est une belle occasion de partage et de transmission. Parce que ces jeux ont une histoire, parents et grands-parents auront plaisir à les faire découvrir à leurs enfants et petits-enfants.
+                    </div>
+                    <div class="card-text fw-bolder text-center mt-3">60 € / heure</div>
+                    <div class="card-text small text-center opacity-75">Hors frais de déplacement : 0,40€/km</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-11 mt-3 col-sm-6 col-md-5 mt-md-0 col-lg-4">
+            <div class="card card_collectons py-4 border-0 bg-white">
+                <div class="col-12 d-flex justify-content-center align-items-center">
+                    <img src="{{ asset('build/images/design/prestations/atelier_sensibilisation.png') }}" alt="Lot de jeux non récoltés">
+                </div>
+                <h3 class="text-center mt-4">Atelier sensibilisation</h3>
+                <div class="card-body">
+                    <div class="card-text text-center">
+                        Vous organisez un événement autour du développement durable ?
+                        L’association propose de tenir un stand pour sensibiliser le public aux questions liées à la sobriété et à la réduction des déchets.
+                        Ces thèmes seront abordés à travers le jeu, de sa fabrication à son traitement en tant que déchet.
+                        Un atelier manuel sera également proposé. Enfants comme adultes pourront repartir avec un porte-cartes qu’ils auront fabriqué à partir d’éléments de jeux de récupération.
+                        Activité accessible dès 6 ans, le tout dans une ambiance ludique !
+                    </div>
+                    <div class="card-text fw-bolder text-center mt-3">60 € / heure</div>
+                    <div class="card-text text-center small opacity-75">Hors frais de déplacement : 0,40€/km</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h4 class="col-11 text-center text-yellow mt-3">NOS ANIMATIONS VOUS INTÉRESSENT ?</h4>
+    <div class="col-11 text-center">Contactez-nous pour préciser le projet et définir les modalités. Nous vous enverrons un devis.</div>
+    <div class="col-12 mt-4 d-flex justify-content-around">
+        <a class="btn btn-dark" href="{{ path('app_contact') }}">nous contacter</a>
+    </div>
+</div>
+
+{% include "components/_separateur_wave.html.twig" %}
+
+
+<div class="row g-0 justify-content-around pt-5 bg-white">
+    <h2 id="id_inventaires" class="col-12 text-center"><span class="text-purple">Inventaire </span> de jeux</h2>
+    <div class="col-11 col-lg-6 text-center">
+        Vous faites partie d’une structure et vous avez une armoire remplie de jeux en souffrance ?<br/><b>Nous proposons 2 formules :</b>
+    </div>
+</div>
+<div class="row g-0 justify-content-center bg-white">
+    <div class="col-7 col-sm-6 mt-3 mt-md-0 col-md-5 p-4 d-flex justify-content-center align-items-center">
+        <img src="{{ asset('build/images/design/prestations/etagere_jeux.png') }}" alt="Image étagère pleine">
+    </div>
+    <div class="col-11 mt-3 col-md-6 col-md-5 mt-md-0 py-4">
+        <h4 class="col-12">INVENTAIRE</h4>
+        <div class="col-12">
+            Nous venons faire l’inventaire de vos jeux sur place et les trions en 3 catégories : complets / incomplets mais jouables (pièces ou règles du jeu manquantes) / incomplets et non jouables. Si besoin, les boîtes de jeux sont réparées et les petites pièces mises en sachet pour limiter les risques de perte.
+        </div>
+        <div class="col-12 py-2 fs-5"><b>1€ / jeu</b></div>
+        <div class="col-12 small opacity-75">Hors frais de déplacement : 0,40€ / km</div>
+        <h4 class="col-12 mt-3">INVENTAIRE + COMPLÉTION</h4>
+        <div class="col-12">
+            En plus de l’inventaire, nous complétons les jeux lorsque c’est possible. Cela concerne les jeux dont moins de 30% des pièces sont manquantes et pour lesquels nous possédons les pièces détachées. Nous vous envoyons également les règles du jeu manquantes par mail.
+        </div>
+        <div class="col-12 py-2 fs-5"><b>1,5€ / jeu</b></div>
+        <div class="col-12 small opacity-75">Pièces détachées incluses - Hors frais de déplacement : 0,40€ / km</div>
+    </div>
+</div>
+<div class="row g-0 justify-content-around pb-5 bg-white">
+    <h4 class="col-11 text-center text-yellow mt-5">NOS INVENTAIRES VOUS INTÉRESSENT ?</h4>
+    <div class="col-11 text-center">Contactez-nous pour toute demande de devis.</div>
+    <div class="col-11 mt-4 d-flex justify-content-around">
+        <a class="btn btn-dark" href="{{ path('app_contact') }}">nous contacter</a>
+    </div>
+</div>
+
+<div class="row g-0 justify-content-around py-5">
+    <h2 class="col-12 text-center">UN PROJET EN PARTICULIER ?</h2>
+    <div class="col-md-5 text-center">
+            Vous souhaitez mettre en place un projet particulier ?<br/>
+            Journée de formation, team building…<br/>
+            Nous étudierons toutes vos propositions !
+    </div>
+    <div class="col-12 mt-4 d-flex justify-content-around">
+        <a class="btn btn-yellow" href="{{ path('app_contact') }}">NOUS CONTACTER</a>
+    </div>
+</div>
+
+{% endblock %}

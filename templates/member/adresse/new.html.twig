@@ -1,0 +1,22 @@
+{% extends "components/_base.html.twig" %}
+
+{% block title %}Espace membre{% endblock %}
+
+{% block body %}
+
+    <div class="row g-0 justify-content-center py-5 bg-white">
+        <div class="col-11 col-md-4">
+            {% include "member/components/_navMini.html.twig" with {'themes':themes } %}
+        </div>
+        <div class="col-11 mt-3 mt-md-0 col-md-7 card_member_all_themes d-flex flex-wrap flex-column flex-md-row align-items-center justify-content-center py-4">
+
+            <h2 class="col-12 text-center">Créer <span class="text-purple">une adresse:</span></h2>
+
+            <h5 class="col-12 text-center text-danger font-weight-bolder">Nombre d'adresses maximum: {{ nbrOfAdressesMax }}</h5>
+
+            {{ include('member/adresse/_form.html.twig') }}
+
+        </div>
+    </div>
+
+{% endblock %}
