@@ -58,22 +58,35 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
 
-        //? On enregistre la dernière connexion
+
+        //? On recupere l'utilisateur
         $user = $this->userRepository->findOneBy(['email' => $request->getSession()->get(Security::LAST_USERNAME)]);
 
-
         if($user){
-
+            //on met a jour le visiteur
             $user->setLastvisite(new DateTimeImmutable('now'));
             $this->entityManagerInterface->persist($user);
+
+            //on transforme les paniers au nouveau visiteur loguer
+            $paniers = $this->panierRepository->findBy(['tokenSession' => $request->getSession()->get('tokenSession')]);
+            foreach($paniers as $panier){
+                $panier->setUser($user);
+                $this->entityManagerInterface->persist($panier);
+            }
+
             $this->entityManagerInterface->flush();
 
         }
 
-        // For example:
-        $route = $request->getSession()->get('back_url_after_login') ?? 'app_home';
-        if($route !== 'app_home'){
-            $request->getSession()->remove('back_url_after_login');
+        $panierInSession = $request->getSession()->get('paniers', []);
+        if(array_key_exists('back_url_after_login', $panierInSession)){
+
+            $route = $panierInSession['back_url_after_login'];
+            $request->getSession()->remove($panierInSession['back_url_after_login']);
+
+        }else{
+
+            $route = 'app_home';
         }
 
         return new RedirectResponse($this->urlGenerator->generate($route));

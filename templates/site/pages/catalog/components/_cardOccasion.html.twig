@@ -1,12 +1,3 @@
-    {# si c'est un occasion passe en parametre #}
-
-    {# {% set boite = product.boite %}
-    {% set card_item = product %}
-    {% set occasionId = product.id %}
-    {% set boiteId = product.boite.id %} #}
-
-    
-
     <div id="{{ occasion.id }}" class="card_ d-flex flex-wrap h-100 mx-2 position-relative">
         <a href="{{ path('occasion', {'reference_occasion': occasion.reference, 'editor_slug': occasion.boite.editor.slug, 'boite_slug': occasion.boite.slug | lower }) }}" class="_card_full_button"></a>
         <div class="card_div_img p-0">

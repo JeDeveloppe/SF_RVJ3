@@ -3,6 +3,7 @@
 namespace App\EventSubscriber;
 
 use App\Repository\PanierRepository;
+use App\Repository\ShippingMethodRepository;
 use Twig\Environment;
 use App\Repository\SiteSettingRepository;
 use App\Service\PanierService;
@@ -24,7 +25,8 @@ class TwigEventSubscriber implements EventSubscriberInterface
         private Security $security,
         private UtilitiesService $utilitiesService,
         private PanierRepository $panierRepository,
-        private PanierService $panierService
+        private PanierService $panierService,
+        private ShippingMethodRepository $shippingMethodRepository
     )
     {
     }
@@ -35,15 +37,23 @@ class TwigEventSubscriber implements EventSubscriberInterface
         $siteSetting = $this->siteSettingRepository->findOneBy([]);
         $session = $this->requestStack->getSession();
         $tokenSession = $session->get('tokenSession');
-        $user = $this->security->getUser();
-
+        //par default livraison a Caen
+        
         if(!$tokenSession){
-
+            
             $pre_token = $this->utilitiesService->generateRandomString(200);
             $now = new DateTimeImmutable('now');
             $milli = (int) $now->format('Uv');
             $token = $pre_token.'_'.$milli;
             $session->set('tokenSession', $token);
+        }
+
+        $panierInSession = $session->get('paniers', []);
+        if(!$panierInSession){
+
+            $panierInSession = [];
+            $panierInSession['voucherDiscountId'] = NULL;
+            $session->set('paniers', $panierInSession);
         }
 
         $paniers = $this->panierService->returnAllPaniersFromUser();

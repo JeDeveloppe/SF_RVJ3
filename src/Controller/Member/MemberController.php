@@ -86,7 +86,7 @@ class MemberController extends AbstractController
 
         $donnees = $documentRepository->findBy(['user' => $user, 'isDeleteByUser' => false], ['id' => 'DESC']);
 
-        $limitPerPage = 10;
+        $limitPerPage = 5;
         $documents = $this->paginator->paginate(
             $donnees, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/

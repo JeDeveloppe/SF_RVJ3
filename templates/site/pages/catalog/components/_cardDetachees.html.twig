@@ -1,15 +1,23 @@
     {# ON PASSE UNE BOITE #}
-    <div id="{{ boite.id }}" class="card_ d-flex flex-wrap h-100 col-11 mx-auto">
+    <div id="{{ boite.id }}" class="card_ d-flex flex-wrap h-100 col-11 mx-auto pb-2">
         <div class="card_div_img">
             <img class="card_catalog_img" src="{{ vich_uploader_asset(boite, 'imageFile') }}" alt="Image de la boite de jeu {{ boite.name }} - {{ boite.editor }}"/><br/>
         </div>
         <p class="info_photo col-12 text-center">Photo non contractuelle</p>
-        <div class="card_boite_name text-center">{{ boite.name | raw }}</div>
-        <div class="col-12 d-flex flex-wrap justify-content-around align-items-center mb-1 px-0">
-            <div class="mt-4">
-                {% include "site/pages/catalog/components/_cardDetachees_button.html.twig" with {'boite': boite }%}
-            </div>
-            {% include "components/catalog/_card_admin_link_to_entity_boite.html.twig" with {'boite': boite} %}
+        <div class="card_boite_name text-center text-green">{{ boite.name | raw }}</div>
+        <div class="col-12 occasion_detail_editor text-center">
+            {{ boite.editor }}
+                {% if boite.year > 0 %}
+                    - <span class="small">{{ boite.year }}</span>
+                {% endif %}
         </div>
+        <div class="col-12 d-flex flex-wrap justify-content-around align-items-center mt-3">
+            {% include "site/pages/catalog/components/_cardDetachees_button_add_cart.html.twig" with {'boite': boite }%}
+        </div>
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="col-12 d-flex flex-wrap justify-content-around align-items-center mt-3">
+                {% include "components/catalog/_card_admin_link_to_entity_boite.html.twig" with {'boite': boite} %}
+            </div>
+        {% endif %}
     </div>
 

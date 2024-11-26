@@ -144,8 +144,8 @@ class DocumentService
         $this->addVoucherDiscoundInDocumentLineTotals($panierParams, $documentLineTotals, $session);
         $this->generateAllLinesFromPanierIntoDocumentLines($panierParams, $document);
 
-        $request->cookies->remove('shippingMethodId');
-        $session->remove('shippingMethodId');
+        $paniers = $session->get('paniers');
+        $request->cookies->remove($paniers['shippingMethodId']);
 
         return $document;
     }
@@ -153,17 +153,18 @@ class DocumentService
     public function generateDocument(array $panierParams, Session $session):Document
     {
 
-        $billingAddress = $this->addressRepository->find($session->get('billingAddressId'));
-
-        $shippingMethod = $this->shippingMethodRepository->findOneBy(['id' => $session->get('shippingMethodId')]);
+        $paniers = $session->get('paniers');
+        
+        $billingAddress = $this->addressRepository->find($paniers['billingAddressId']);
+        $shippingMethod = $this->shippingMethodRepository->find($paniers['shippingMethodId']);
 
         if($shippingMethod->getPrice() == "PAYANT"){
 
-            $deliveryAddress = $this->addressRepository->find($session->get('deliveryAddressId'));
+            $deliveryAddress = $this->addressRepository->find($paniers['deliveryAddressId']);
 
         }else{
 
-            $deliveryAddress = $this->collectionPointRepository->find($session->get('deliveryAddressId'));
+            $deliveryAddress = $this->collectionPointRepository->find($paniers['deliveryAddressId']);
         }
         
         //ON genere un nouveau numero
@@ -188,11 +189,11 @@ class DocumentService
         $document
             ->setToken($this->utilitiesService->generateRandomString())
             ->setQuoteNumber($docParams->getQuoteTag().$quoteNumber)
-            ->setTotalExcludingTax($panierParams['totalPanierHt'])
+            ->setTotalExcludingTax($panierParams['totalPanierHtAfterDelivery'])
             ->setUser($this->security->getUser())
             ->setDeliveryAddress($this->adresseService->constructAdresseForSaveInDatabase($deliveryAddress))
             ->setBillingAddress($this->adresseService->constructAdresseForSaveInDatabase($billingAddress))
-            ->setTotalWithTax($this->utilitiesService->htToTTC($panierParams['totalPanierHt'],$panierParams['tax']->getValue()))
+            ->setTotalWithTax($this->utilitiesService->htToTTC($panierParams['totalPanierHtAfterDelivery'],$panierParams['tax']->getValue()))
             ->setDeliveryPriceExcludingTax($panierParams['deliveryCostWithoutTax'])
             ->setIsQuoteReminder(false)
             ->setEndOfQuoteValidation($endDevis)

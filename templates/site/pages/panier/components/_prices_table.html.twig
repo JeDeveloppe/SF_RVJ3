@@ -53,7 +53,7 @@
             {% if javascript == true %}
                 <div id="DivTotalTTC">Calcul en attente...</div>
             {% else %}
-                {{ (allCartValues['totalPanierHt'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €
+                {{ (allCartValues['totalPanierHtAfterDelivery'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €
             {% endif %}
         </div>
     </div>
