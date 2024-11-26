@@ -50,7 +50,6 @@ class SitemapController extends AbstractController
                     ];
             }
         }      
-
         //! traitement des catalogues
         //?liste des occasions
         $occasions = $this->occasionRepository->findBy(['isOnline' => true]);
@@ -64,11 +63,12 @@ class SitemapController extends AbstractController
             ];
         }
 
-        //?liste des boites pour articles (v3)
+        //?liste des boites pour articles comme (v3)
         $boites = $this->boiteRepository->findBoitesWhereThereIsItems();
+
         foreach($boites as $boite){
             $urls[] = [                
-                'loc'        => $this->generateUrl('app_catalogue_pieces_detachees_articles_d_une_boite', ['id' => $boite->getId(), 'boiteSlug' => $boite->getSlug(), 'editorSlug' => strtolower($boite->getEditor()->getSlug())]),
+                'loc'        => $this->generateUrl('catalogue_pieces_detachees_articles_d_une_boite', ['id' => $boite->getId(), 'boiteSlug' => strtolower($boite->getSlug()), 'editorSlug' => strtolower($boite->getEditor()->getSlug())]),
                 'lastmod'    => $occasion->getBoite()->getCreatedAt()->format('Y-m-d'),
                 'changefreq' => "monthly",
                 'priority'   => 0.8
