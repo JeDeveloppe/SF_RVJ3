@@ -455,7 +455,7 @@ class PanierService
 
             if(!is_null($panier->getItem())){
                 $itemInDatabase = $this->itemRepository->find($panier->getItem());
-                $itemInDatabase->setStockForSale($itemInDatabase->getStockForSale() + $panier->getQuantity());
+                $itemInDatabase->setStockForSale($itemInDatabase->getStockForSale() + $panier->getQte());
                 $this->em->persist($itemInDatabase);
                 $this->em->remove($panier);
             }
