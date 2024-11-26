@@ -42,14 +42,17 @@
                 Code de réduction ({{ allCartValues['remises'].voucher.token }}) :<br/>
                 <span class="small">Reste à utiliser : {{ (allCartValues['remises'].voucher.voucherRemaining * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</span>
             </div>
-            <div class="col-2 text-end">- {{ (allCartValues['remises'].voucher.used * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €</div>
+            <div class="col-2 text-end">
+                - {{ (allCartValues['remises'].voucher.used * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }} €<br/>
+                <a href="{{ path('panier_delete_voucher_from_cart') }}" class="text-yellow"><i class="fa-solid fa-trash"></i></a>
+            </div>
         </div>
     {% endif %}
     {% if displayShippingMethod == true %}
         <!-- partie mode d'envoi / retrait -->
         {% if allCartValues['panier_occasions'] | length < 1 %}
             <div class="col-12 d-flex flex-wrap pt-2 pb-4">
-                <div class="col-12 font-weight-bolder px-0 text-start py-2">Méthode de livraison ?</div>
+                <div class="col-12 font-weight-bolder px-0 text-start py-2">Livraison ou retrait ?</div>
                 {{ form_start(shippingForm, { 'attr': {'class': 'col-12 d-flex flex-wrap justify-content-around align-items-center', 'id': 'shippingForm'} }) }}
                     {% for choice in shippingForm.shipping %}
                         <div class="col-11">

@@ -55,15 +55,29 @@ class PanierController extends AbstractController
     public function index(Request $request): Response
     {
 
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
+
         //?on demarre la session
         $session = $request->getSession();
 
         //?on garde en memoire back_url_after_login
-        $session->set('back_url_after_login', $request->get('_route'));
-
-        //?on compte le nombre de products dans le panier en session
-        $paniers = $this->panierService->returnAllPaniersFromUser();
+        $panierInSession = $session->get('paniers', []);
  
+        if(!array_key_exists('voucherDiscountId', $panierInSession)){
+            $panierInSession['voucherDiscountId'] = NULL; // on initialise à null
+            $session->set('paniers', $panierInSession);
+        }
+
+        if(!array_key_exists('back_url_after_login', $panierInSession)){
+
+            $panierInSession['back_url_after_login'] = $request->get('_route');
+            $session->set('paniers', $panierInSession);
+        }
+
+        //?on recupere les paniers de l'utilisateur
+        $paniers = $this->panierService->returnAllPaniersFromUser();
+
         //?retour en arriere si panier vide
         if(count($paniers) < 1){
 
@@ -73,127 +87,133 @@ class PanierController extends AbstractController
 
         }
 
-        //?on genere un mega tableau d'entités Panier()
-        // $paniers = $this->panierService->returnArrayPaniersEntitiesFromPanierSession($session->get('paniers'));
-
-        //?toutes les infos du panier sont là
-        $allCartValues = $this->panierService->calculateAllCartRealtime();
+        //?on calcule les valeurs du panier
+        $allCartValues = $this->panierService->returnArrayWithAllCounts();
 
         //?si y a au moins un occasion pas de possibilite de livraison donc methode == retrait obligatoire
-        if(count($allCartValues['panier_occasions']) > 0 OR NULL){
-            $shippingMethodRetraitInCaen = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']);
-            $session->set('shippingMethodId', $shippingMethodRetraitInCaen->getId());
-        }else{
-            $shippingMethodEnvoi = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_POSTE_NAME']);
-            $session->set('shippingMethodId', $shippingMethodEnvoi->getId());
-        }
+        // if(count($allCartValues['panier_occasions']) > 0){
+        //     $shippingMethodRetraitInCaen = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']);
+        //     $shippingMethodId = $shippingMethodRetraitInCaen->getId();
+        //     $session->set('shippingMethodId', $shippingMethodId);
+        // }else{
+        //     $shippingMethodEnvoi = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_POSTE_NAME']);
+        //     $shippingMethodId = $shippingMethodEnvoi->getId();
+        //     $session->set('shippingMethodId', $shippingMethodId);
+        // }
 
+        
         $shippingForm = $this->createForm(ShippingType::class, null, ['occasionInPanier' => $allCartValues['panier_occasions']]);
         $shippingForm->handleRequest($request);
-
+        
         //form pour les codes de reduction
-        $voucherDiscountId = null; // on initialise à null
         $voucherType = $this->createForm(VoucherType::class);
         $voucherType->handleRequest($request);
-        $session->set('voucherDiscountId', $voucherDiscountId);
 
+        
         if($voucherType->isSubmitted() && $voucherType->isValid())
         {
             
             $voucherDiscountCode = $voucherType['voucherDiscount']->getData();
             // $shippingMethodId = $shippingAndVoucherForm['shipping']->getData()->getId();
-
+            
             if(is_null($voucherDiscountCode)){
-
+                
                 $voucherDiscountId = null;
-
+                
             }else{
                 
                 //on enlève les espaces au cas ou
                 $voucherDiscountCode = str_replace(' ','', $voucherDiscountCode);
                 $voucherDiscount = $this->voucherDiscountRepository->findOneVoucherIsActive($voucherDiscountCode);
-
+                
                 if(is_null($voucherDiscount)){
-
+                    
                     $this->addFlash('warning', 'Bon d\'achat inconnu !');
-
+                    $voucherDiscountId = null;
+                    
                 }else{
-
+                    
                     $voucherDiscountId = $voucherDiscount->getId();
                     $this->addFlash('success', 'Bon d\'achat reconnu !');
-
+                    
                 }
-
+                
             }
-
-            $session->set('voucherDiscountId', $voucherDiscountId);
-
+            
+            $panierInSession['voucherDiscountId'] = $voucherDiscountId;
+            $session->set('paniers', $panierInSession);
+            
             //et on recalcul le tout
-            $allCartValues = $this->panierService->calculateAllCartRealtime($paniers);
-
+            $allCartValues = $this->panierService->returnArrayWithAllCounts();
+            
         }
+        
         return $this->render('site/pages/panier/panier.html.twig', [
             'voucherDiscountForm' => $voucherType,
             'shippingForm' => $shippingForm,
-            'allCartValues' => $allCartValues,
-            'shippingMethodRetraitInCaenId' => $session->get('shippingMethodId'),
+            'allCartValues' => $allCartValues
         ]);
     }
 
     #[Route('/panier/choix-des-adresses', name: 'panier_addresses')]
     public function cartAddresses(Request $request): Response
     {
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
         //?on demarre la session
         $session = $request->getSession();
+        $panierInSession = $session->get('paniers', []);
 
-        //?on compte le nombre de products dans le panier en session
-        $paniers = $this->panierService->returnAllPaniersFromUser();
-    
-        //?retour en arriere si panier vide
-        if(count($paniers) < 1){
+        //on cherche le cookie obligatoire
+        $shippingethodIdInCookie = $request->cookies->get('shippingMethodId');
 
-            $this->addFlash('warning', 'Votre panier est vide !');
-            
-            return $this->redirectToRoute('app_home');
+        if(!$shippingethodIdInCookie){
 
-        }
-
-        $voucherDiscoundId = null;
-        
-        $shippingMethodId = $request->cookies->get('shippingMethodId');
-
-        if(is_null($shippingMethodId)){
-
-            $this->addFlash('warning', 'ShippingMethodId-cookie absent');
+            $this->addFlash('warning', 'ShippingethodIdInCookie absent');
             
             return $this->redirectToRoute('panier_start');
 
         }else{
 
             //on met en session l'id de la methode d'envoi choisi
-            $session->set('shippingMethodId', $shippingMethodId);
+            $session->set('shippingMethodId', $shippingethodIdInCookie);
         }
-
+        
+        
+        
+        $panierInSession = $session->get('paniers', []);
+        
+        //?on compte le nombre de products dans le panier en session
+        $paniers = $this->panierService->returnAllPaniersFromUser();
+        //?retour en arriere si panier vide
+        if(count($paniers) < 1){
+            
+            $this->addFlash('warning', 'Votre panier est vide !');
+            
+            return $this->redirectToRoute('app_home');
+            
+        }
+        
         //on recupere les infos du panier
-        $allCartValues = $this->panierService->calculateAllCartRealtime($paniers);
+        $allCartValues = $this->panierService->returnArrayWithAllCounts();
+        
+        $shippingMethod = $this->shippingMethodRepository->findOneById($allCartValues['shippingMethodId']);
 
-        // $shippingMethod = $this->shippingMethodRepository->findOneById($shippingMethodId);
-        $shippingMethod = $allCartValues['shippingMethod'];
-
+        
         $billingAndDeliveryForm = $this->createForm(BillingAndDeliveryAddressType::class, null, [
             'user' => $this->security->getUser(),
-            'shippingMethod' => $shippingMethod,
+            'shippingMethodId' => $shippingMethod,
         ]);
-
+        
         $billingAndDeliveryForm->handleRequest($request);
-
+        
         if($billingAndDeliveryForm->isSubmitted() && $billingAndDeliveryForm->isValid()){
             
             $formOk = true;
             $billingAddress = $billingAndDeliveryForm['billingAddress']->getData();
             $deliveryAddress = $billingAndDeliveryForm['deliveryAddress']->getData();
-
+            
             if(!$billingAddress){
                 $this->addFlash('warning', 'Aucune adresse de facturation choisie !');
                 $formOk = false;
@@ -202,27 +222,30 @@ class PanierController extends AbstractController
                 $this->addFlash('warning', 'Aucune adresse de livraison / retrait choisie !');
                 $formOk = false;
             }
-
+            
             if($formOk == false){
-
+                
                 //on redirige var la page précèdante
                 return $this->redirect($request->headers->get('referer'));
-
+                
             }else{
-
+                
                 //on met en session les address choisies
-                $session->set('billingAddressId', $billingAddress->getId());
-                $session->set('deliveryAddressId', $deliveryAddress->getId());
-    
+                $panierInSession['billingAddressId'] = $billingAddress->getId();
+                $panierInSession['deliveryAddressId'] = $deliveryAddress->getId();
+                $panierInSession['shippingMethodId'] = $session->get('shippingMethodId');
+                
+                $session->set('paniers', $panierInSession);
                 //on redirige vers la page suivante
                 return $this->redirectToRoute('panier_before_paiement');
             }
-
+            
         }
+        $request->cookies->remove('shippingMethodId');
 
         return $this->render('site/pages/panier/panier_addresses.html.twig', [
             'billingAndDeliveryForm' => $billingAndDeliveryForm,
-            'voucherDiscountId' => $voucherDiscoundId,
+            'voucherDiscountId' => $panierInSession['voucherDiscountId'],
             'allCartValues' => $allCartValues,
             'shippingMethod' => $shippingMethod,
         ]);
@@ -232,8 +255,13 @@ class PanierController extends AbstractController
     public function cartEnd(Request $request): Response
     {
 
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
+
         //?on demarre la session
         $session = $request->getSession();
+        $panierInSession = $session->get('paniers', []);
+        $request->cookies->remove('shippingMethodId');
 
         //?on compte le nombre de products dans le panier en session
         $paniers = $this->panierService->returnAllPaniersFromUser();
@@ -247,8 +275,8 @@ class PanierController extends AbstractController
 
         }
 
-        $billingAddressId = $session->get('billingAddressId');
-        $deliveryAddressId = $session->get('deliveryAddressId');
+        $billingAddressId = $panierInSession['billingAddressId'];
+        $deliveryAddressId = $panierInSession['deliveryAddressId'];
         $shippingMethodId = $session->get('shippingMethodId');
 
         $shippingMethod = $this->shippingMethodRepository->findOneById($shippingMethodId);
@@ -268,29 +296,24 @@ class PanierController extends AbstractController
         $acceptCartForm->handleRequest($request);
 
         //? toutes les infos du panier sont là
-        $allCartValues = $this->panierService->calculateAllCartRealtime($paniers);
+        $allCartValues = $this->panierService->returnArrayWithAllCounts();
 
         if($acceptCartForm->isSubmitted() && $acceptCartForm->isValid())
         {
             
             //?on vérifie si on a bien toutes les variables pour enregistrer le document
-            $this->panierService->checkSessionForSaveInDatabase($session);
-
+            $this->panierService->checkSessionForSaveInDatabase($panierInSession);
+            //?on supprime les variables de session qui deviennent inutilisable
+            $session->remove('back_url_after_login');
+            $session->remove('shippingMethodId');
             //? sauvegarde document dans BDD avec articles, boites, etc... en fonction du Type DEVIS ou COMMANDE
             $document = $this->documentService->saveDocumentLogicInDataBase($allCartValues,$session,$request);
 
             //?on supprime le panier en session
             $session->remove('paniers');
 
-            if($allCartValues['redirectAfterSubmitPanierForPaiement'] == true){
-                //paiement direct donc on redirige vers la page de paiement avec le numero de document
-                return $this->redirectToRoute('paiement', ['tokenDocument' => $document->getToken()]);
-
-            }else{
-    
-                return $this->redirectToRoute('panier_success', ['tokenDocument' => $document->getToken()]);
-
-            }
+            //paiement direct donc on redirige vers la page de paiement avec le numero de document
+            return $this->redirectToRoute('paiement', ['tokenDocument' => $document->getToken()]);
 
         }
 
@@ -356,6 +379,7 @@ class PanierController extends AbstractController
     {
 
         $reponse = $this->panierService->deleteCartLineRealtime($cart_id);
+        $request->cookies->remove('shippingMethodId');
     
         $this->addFlash($reponse[0], $reponse[1]);
 
@@ -401,12 +425,21 @@ class PanierController extends AbstractController
 
         $shippingMethod = $this->shippingMethodRepository->findOneById($datas['shippingMethodId']);
 
-        $result = $this->panierService->returnDeliveryCost($shippingMethod, $datas['weight']);
+        $result = $this->panierService->returnDeliveryCost($shippingMethod->getId(), $datas['weight']);
 
         return new JsonResponse(
             ['deliveryCost' => $result],
             $status = 200,
             $headers = []
         );
+    }
+
+    #[Route('/panier/delete-voucher-from-cart/', name: 'panier_delete_voucher_from_cart')]
+    public function panierDeleteVoucherFromCart(Request $request):Response
+    {
+
+        $this->panierService->deleteVoucherFromCart();
+        
+        return $this->redirect($request->headers->get('referer'));
     }
 }

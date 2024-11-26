@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Address;
 use App\Entity\CollectionPoint;
+use App\Repository\ShippingMethodRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,10 +14,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class BillingAndDeliveryAddressType extends AbstractType
 {
 
+    public function __construct(
+        private ShippingMethodRepository $shippingMethodRepository
+        )
+    {}
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $user = $options['user'];
-        $shippingMethod = $options['shippingMethod'];
+        $shippingMethod = $this->shippingMethodRepository->findOneById($options['shippingMethodId']);
 
         $builder
             ->add('billingAddress', EntityType::class, [
@@ -93,7 +99,7 @@ class BillingAndDeliveryAddressType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Address::class,
             'user' =>  null,
-            'shippingMethod' => null,
+            'shippingMethodId' => null,
         ]);
     }
 }

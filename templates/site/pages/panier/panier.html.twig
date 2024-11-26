@@ -47,13 +47,14 @@
         const regex = /\d{4}-\d{10}/g;
         const shipping_retrait_name = "{{ app.request.server.get('SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME') }}";
         let shipping_cost = {{ (allCartValues['deliveryCostWithoutTax'] / 100) | number_format(2, '.', ',') }};
-        const shippingMethodRetraitInCaenId = {{ shippingMethodRetraitInCaenId }};
+        const shippingMethodId = sessionStorage.getItem("shippingMethodId");
         const divTextLivraisonOuRetrait = document.getElementById('divTextLivraisonOuRetrait');
-        let totalHT = {{ allCartValues['totalPanierHt'] }};
+        let totalHTBeforeDelivery = {{ allCartValues['totalPanierHtBeforeDelivery'] }};
+        let totalHTAfterDelivery = {{ allCartValues['totalPanierHtAfterDelivery'] }};
         let weightPanier = {{ allCartValues['weigthPanier'] }}
         let tva = {{ allCartValues['tax'].value }};
         let DivTotalTTC = document.getElementById('DivTotalTTC');
-        let totalTTC = {{ (allCartValues['totalPanierHt'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }};
+        let totalTTC = {{ (allCartValues['totalPanierHtAfterDelivery'] * ( 1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }};
         let voucher_voucherDiscount = document.getElementById('voucher_voucherDiscount');
         let button_next = document.getElementById('button_next');
         button_next.classList.add('disabled')
@@ -77,13 +78,13 @@
         if(shippingForm){
 
             divTextLivraisonOuRetrait.innerHTML = 'Livraison ou retrait:';
-            shippingForm.addEventListener('change', radioChoice);
+            // shippingForm.addEventListener('change', radioChoice);
 
         }else{
 
             button_next.classList.remove('disabled');
             divTextLivraisonOuRetrait.innerHTML = 'Retrait :';
-            getDeliveryCost(shippingMethodRetraitInCaenId,weightPanier);
+            getDeliveryCost(shippingMethodId,weightPanier);
 
         }
 
@@ -148,10 +149,13 @@
             .then((response) => response.json())
             .then((data) => {
                 let newTotalTTC = '';
-                sessionStorage.setItem('shippingMethodId', shippingId);
+
+                let shippingMethodId = sessionStorage.getItem('shippingMethodId');
+                sessionStorage.setItem('shippingMethodId',shippingId);
+                console.log(sessionStorage.getItem('shippingMethodId'))
+                creerCookie('shippingMethodId',shippingId,1)
 
                 //on crée le cookie
-                creerCookie('shippingMethodId', shippingId, 1);
                 if(data.deliveryCost < 1){
                     divTextLivraisonOuRetrait.innerHTML = 'Retrait gratuit :';
                 }else{
@@ -159,7 +163,7 @@
                 }
 
                 shippingResult.innerHTML = (data.deliveryCost * ( 1 + (tva / 100)) / 100).toFixed(2)+ ' €';
-                newTotalTTC = (totalHT + data.deliveryCost) * ( 1 + (tva / 100)) / 100;
+                newTotalTTC = (totalHTBeforeDelivery + data.deliveryCost) * ( 1 + (tva / 100)) / 100;
                 DivTotalTTC.innerHTML = newTotalTTC.toFixed(2)+' €';
             })
             .catch(error => console.warn(error));
@@ -174,6 +178,8 @@
                 discount_form.classList.add('d-none');
             }
         }
+
+        window.addEventListener('load', shippingForm.addEventListener('change', radioChoice));
 
     </script>
 {% endblock %}

@@ -41,7 +41,7 @@ class ShippingType extends AbstractType
                     },
                     'mapped' => false,
                     'expanded' => true,
-                    'multiple' => false
+                    'multiple' => false,
                 ]);
         }else{
             $builder
@@ -61,7 +61,7 @@ class ShippingType extends AbstractType
                     },
                     'mapped' => false,
                     'expanded' => true,
-                    'multiple' => false
+                    'multiple' => false,
                 ]);
         }
     }

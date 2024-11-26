@@ -49,6 +49,14 @@ class PanierService
     public function addOccasionInCartRealtime(int $occasion_id, int $qte)
     {
 
+        $tokenSession = $this->request->getSession()->get('tokenSession');
+        $user = $this->security->getUser();
+
+        if(!$user){
+
+            $user = $this->userRepository->findOneByEmail($_ENV['UNDEFINED_USER_EMAIL']);
+        }
+
         //?on supprimer les paniers de plus de x heures
         $this->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
@@ -69,8 +77,8 @@ class PanierService
             $panier->setCreatedAt($endPanier);
             $panier->setPriceWithoutTax($occasion->getPriceWithoutTax() * $qte);
             $panier->setUnitPriceExclusingTax($occasion->getPriceWithoutTax());
-            $panier->setTokenSession($this->request->getSession()->get('tokenSession'));
-            $panier->setUser($this->security->getUser());
+            $panier->setTokenSession($tokenSession);
+            $panier->setUser($user);
             $this->em->persist($panier);
 
             $occasion->setIsOnline(false);
@@ -91,16 +99,21 @@ class PanierService
         $tokenSession = $session->get('tokenSession');
         $user = $this->security->getUser();
 
-        $panierA[] = $this->panierRepository->findOneBy(['tokenSession' => $tokenSession, 'id' => $cart_id]) ?? [];
-        $panierB[] = $this->panierRepository->findOneBy(['user' => $user, 'id' => $cart_id]) ?? [];
-        $panierCombined = array_unique(array_merge($panierA,$panierB), SORT_REGULAR);
+        if(!$user){    
 
-        if(!$panierCombined){
+            $panier = $this->panierRepository->findOneBy(['id' => $cart_id, 'tokenSession' => $tokenSession]);
+            
+        }else{
+            
+            $panier = $this->panierRepository->findOneBy(['id' => $cart_id, 'user' => $user]);
+        }
+
+        if(!$panier){
 
             $reponse = ['warning', 'Ligne de panier inconnue !'];
 
         }else{
-            $panier = $panierCombined[0];
+
             if(!is_null($panier->getItem())){
 
                 $item = $panier->getItem();
@@ -127,6 +140,11 @@ class PanierService
         $tokenSession = $this->request->getSession()->get('tokenSession');
         $item = $this->itemRepository->findOneBy(['id' => $article_id]);
         $user = $this->security->getUser();
+
+        if(!$user){
+
+            $user = $this->userRepository->findOneByEmail($_ENV['UNDEFINED_USER_EMAIL']);
+        }
 
         //?on supprimer les paniers de plus de x heures
         $this->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
@@ -185,6 +203,8 @@ class PanierService
     {
         $session = $this->request->getSession();
         $user = $this->security->getUser();
+        $panierInSession = $session->get('paniers',[]);
+        //methode de livraison
         $shippingMethod = $this->shippingMethodRepository->findOneById($session->get('shippingMethodId'));
         $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
         $now = new DateTimeImmutable('now');
@@ -218,8 +238,8 @@ class PanierService
         $responses['remises']['voucher']['voucherMax'] = 0;
         $responses['remises']['voucher']['actif'] = false;
 
-        if(!is_null($session->get('voucherDiscountId'))){
-            $voucherDiscount = $this->voucherDiscountRepository->find($session->get('voucherDiscountId'));
+        if(!is_null($panierInSession['voucherDiscountId'])){
+            $voucherDiscount = $this->voucherDiscountRepository->find($panierInSession['voucherDiscountId']);
             $responses['remises']['voucher']['voucherMax'] = $voucherDiscount->getRemainingValueToUseExcludingTax();
             $responses['remises']['voucher']['token'] = $voucherDiscount->getToken();
             $responses['remises']['voucher']['actif'] = true;
@@ -249,7 +269,7 @@ class PanierService
             
         }else{
             
-            $responses['deliveryCostWithoutTax'] = $this->returnDeliveryCost($shippingMethod, $weigthPanier);
+            $responses['deliveryCostWithoutTax'] = $this->returnDeliveryCost($shippingMethodId, $weigthPanier);
             
         }
 
@@ -275,13 +295,140 @@ class PanierService
         return $responses;
     }
 
+    public function returnArrayWithAllCounts(): array
+    {
+        
+        //toutes les variables seront dans un mega array
+        $responses = [];
+        //on recupere la session en cours
+        $session = $this->request->getSession();
+        //onn recupere l'utilisateur
+        $user = $this->security->getUser();
+        //on recupere des valeurs en session concernant le panier
+        $panierInSession = $session->get('paniers',[]);
+        //on cherche les paniers de l'utilisateur
+        $paniers = $this->returnAllPaniersFromUser();
+
+        
+        // IL FAUT QUELQUE VARIABLES
+        //methode de livraison sur CAEN par default
+        $shippingMethodId = $session->get('shippingMethodId');
+        if(!$shippingMethodId){
+
+            $shippingMethodId = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME'])->getId();
+            $session->set('shippingMethodId', $shippingMethodId);
+        }
+
+        //les parametres des documents
+        $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
+        //init le cout de la preparation des articles
+        $responses['preparationHt'] = $docParams->getPreparation();
+        //init gestion du memberShip (version precedente)
+        $responses['memberShipOnTime'] = false;
+        //init remise de volume
+        $responses['remises']['volume'] = 0;
+        //la date du jour
+        $now = new DateTimeImmutable('now');
+        //on recupere l'entité taxe
+        $responses['tax'] = $this->taxRepository->findOneBy([]);
+
+        
+
+        //si on est loguer
+        if($user){
+
+            //gestion membership au niveau du panier
+            if($user->getMembership() > $now){
+                $responses['preparationHt'] = 0;
+                $responses['memberShipOnTime'] = true;
+            }
+
+        }else{
+
+            $responses['remises']['volume'] = $this->calculateRemise($paniers);
+
+        }
+
+
+        //?ON CALCULE LE NOMBRE DE PANIERS PAR CATEGORIES
+        $responses['panier_items'] = [];
+        $responses['panier_occasions'] = [];
+        $responses['panier_boites'] = [];
+
+        foreach($paniers as $panier){
+            if(!empty($panier->getItem())){
+                $responses['panier_items'][] = $panier;
+            }
+            if(!empty($panier->getOccasion())){
+                $responses['panier_occasions'][] = $panier;
+            }
+            if(!empty($panier->getBoite())){
+                $responses['panier_boites'][] = $panier;
+            }
+        }
+
+
+        //? FRAIS DE PREPARATION S'IL N'Y A PAS D'ARTICLES
+        if(count($responses['panier_items']) < 1){
+            $responses['preparationHt'] = 0;
+        }
+
+        //? CALCUL DE LA REMISE SI UN CODE EST RENSEIGNER
+        $responses['remises']['voucher']['voucherMax'] = 0;
+        $responses['remises']['voucher']['actif'] = false;
+
+        if(!is_null($panierInSession['voucherDiscountId'])){
+            $voucherDiscount = $this->voucherDiscountRepository->find($panierInSession['voucherDiscountId']);
+            $responses['remises']['voucher']['voucherMax'] = $voucherDiscount->getRemainingValueToUseExcludingTax();
+            $responses['remises']['voucher']['token'] = $voucherDiscount->getToken();
+            $responses['remises']['voucher']['actif'] = true;
+        }
+
+        //? CALCUL DES TOTAUX
+        $responses['totauxItems'] = $this->utilitiesService->totauxByPanierGroup($responses['panier_items']);
+        $responses['totauxOccasions'] = $this->utilitiesService->totauxByPanierGroup($responses['panier_occasions']);
+        $responses['totauxBoites'] = $this->utilitiesService->totauxByPanierGroup($responses['panier_boites']);
+        $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
+        $weigthPanier = $responses['weigthPanier'];
+
+        //? calcul de la remise sur les articles
+        $responses['remises']['volume'] = $this->calculateRemise($this->panierRepository->findBy(['user' => $user]));
+        
+        $responses['shippingMethodId'] = $shippingMethodId;
+        $responses['deliveryCostWithoutTax'] = $this->returnDeliveryCost($shippingMethodId, $weigthPanier);
+
+        // $responses['remises']['volume']['remiseDeQte'] = round($responses['totauxItems']['price'] * $responses['remises']['volume']['value'] / 100);
+        $responses['remises']['volume']['remiseDeQte'] = 0; //?desactiver pour le moment
+        
+        $sousTotalItemHTAfterRemiseVolume = $responses['totauxItems']['price'] - $responses['remises']['volume']['remiseDeQte'];
+        $totalHTItemsAndBoite = round(($responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price']) - $responses['remises']['volume']['remiseDeQte']);
+
+        //? calcule de la remise sur les articles
+        $diff = $totalHTItemsAndBoite - $responses['remises']['voucher']['voucherMax'];
+
+        if($diff >= 0){
+            $responses['remises']['voucher']['used'] = $totalHTItemsAndBoite - $diff;
+            $responses['remises']['voucher']['voucherRemaining'] = 0; // reste à utilisé du bon
+        }else{
+            $responses['remises']['voucher']['used'] = $totalHTItemsAndBoite;
+            $responses['remises']['voucher']['voucherRemaining'] = $diff * -1; // reste à utilisé du bon
+        }
+
+
+
+        $responses['totalPanierHtBeforeDelivery'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price']) - $responses['remises']['volume']['remiseDeQte'] - $responses['remises']['voucher']['used'];
+        $responses['totalPanierHtAfterDelivery'] = $responses['totalPanierHtBeforeDelivery'] + $responses['deliveryCostWithoutTax'];
+        return $responses;
+
+    }
+
     public function calculateRemise($paniers)
     {
 
         $qte = 0;
         foreach($paniers as $panier){
             //?remise que sur les articles
-            if($panier->getItem() != NULL){
+            if(!empty($panier->getItem())){
                 $qte += $panier->getQte();
             }
         }
@@ -318,19 +465,15 @@ class PanierService
         return $remises;
     }
 
-    public function checkSessionForSaveInDatabase($sessionObjet)
+    public function checkSessionForSaveInDatabase($panierInSession)
     {
 
-        $sessionArray = json_decode(json_encode($sessionObjet->all()), true);
-        $validation = false;
         $validationKO = [];
 
         $stringVariablesToCheckIfThereExists = ['voucherDiscountId','billingAddressId','deliveryAddressId','shippingMethodId'];
 
         foreach($stringVariablesToCheckIfThereExists as $stringVariablesToCheckIfThereExist){
-            if(array_key_exists($stringVariablesToCheckIfThereExist, $sessionArray)){
-                $validation = true;
-            }else{
+            if(!array_key_exists($stringVariablesToCheckIfThereExist, $panierInSession)){
                 $validationKO[] = $stringVariablesToCheckIfThereExist;
             }
         }
@@ -340,41 +483,42 @@ class PanierService
         }
     }
 
-    public function returnDeliveryCost(ShippingMethod $shipping, int $weigthPanier)
+    public function returnDeliveryCost($shippingId, int $weigthPanier)
     {
 
-        $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shipping, $weigthPanier);
+        $shippingMethod = $this->shippingMethodRepository->find($shippingId);
+        $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingMethod, $weigthPanier);
         $result = $delivery->getPriceExcludingTax();
 
         return $result;
     }
 
-    public function separateBoitesItemsAndOccasion(array $paniers): array
-    {
+    // public function separateBoitesItemsAndOccasion(array $paniers): array
+    // {
 
-        //responses['panier_boites'], $responses['panier_items'], $responses['panier_occasions']
+    //     //responses['panier_boites'], $responses['panier_items'], $responses['panier_occasions']
 
-        $responses['panier_occasions'] = [];
-        $responses['panier_items'] = [];
-        $responses['panier_boites'] = [];
+    //     $responses['panier_occasions'] = [];
+    //     $responses['panier_items'] = [];
+    //     $responses['panier_boites'] = [];
 
-        foreach($paniers as $panier){
-            if(!is_null($panier->getOccasion())){
-                $responses['panier_occasions'][] = $panier;
-            }
+    //     foreach($paniers as $panier){
+    //         if(!is_null($panier->getOccasion())){
+    //             $responses['panier_occasions'][] = $panier;
+    //         }
 
-            if(!is_null($panier->getItem())){
-                $responses['panier_items'][] = $panier;
-            }
+    //         if(!is_null($panier->getItem())){
+    //             $responses['panier_items'][] = $panier;
+    //         }
 
-            if(!is_null($panier->getBoite())){
-                $responses['panier_boites'][] = $panier;
-            }
+    //         if(!is_null($panier->getBoite())){
+    //             $responses['panier_boites'][] = $panier;
+    //         }
 
-        }
+    //     }
 
-        return $responses;
-    }
+    //     return $responses;
+    // }
 
     public function returnArrayPaniersEntitiesFromPanierSession(array $paniersInSession)
     {
@@ -436,13 +580,18 @@ class PanierService
         $session = $this->request->getSession();
         $tokenSession = $session->get('tokenSession');
         $user = $this->security->getUser();
+        
 
-        $paniersA = $this->panierRepository->findBy(['tokenSession' => $tokenSession]) ?? [];
-        $paniersB = $this->panierRepository->findBy(['user' => $user]) ?? [];
-        ///?merge and delete doublons
-        $paniers = array_unique(array_merge($paniersA,$paniersB), SORT_REGULAR);
+        //si on est pas identifier on cherche les paniers de la session
+        $paniersA = $this->panierRepository->findBy(['tokenSession' => $tokenSession]) ?? []; //les paniers 
 
-        return $paniers;
+        if($user){
+
+            $paniersA = $this->panierRepository->findBy(['user' => $user]) ?? []; //les paniers 
+
+        }
+
+        return $paniersA;
     }
 
     public function deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock()
@@ -455,7 +604,7 @@ class PanierService
 
             if(!is_null($panier->getItem())){
                 $itemInDatabase = $this->itemRepository->find($panier->getItem());
-                $itemInDatabase->setStockForSale($itemInDatabase->getStockForSale() + $panier->getQuantity());
+                $itemInDatabase->setStockForSale($itemInDatabase->getStockForSale() + $panier->getQte());
                 $this->em->persist($itemInDatabase);
                 $this->em->remove($panier);
             }
@@ -471,5 +620,12 @@ class PanierService
         }
         
         $this->em->flush();
+    }
+
+    public function deleteVoucherFromCart()
+    {
+        $panierInSession = $this->request->getSession()->get('paniers', []);
+        $panierInSession['voucherDiscountId'] = NULL;
+        $this->request->getSession()->set('paniers', $panierInSession);
     }
 }
