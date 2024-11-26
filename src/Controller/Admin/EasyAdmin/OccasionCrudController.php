@@ -204,7 +204,7 @@ class OccasionCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Liste des occasions')
             ->setPageTitle('new', 'Nouvel occasion')
             ->setPageTitle('edit', 'Édition d\'un occasion')
-            ->setDefaultSort(['boite.id' => 'DESC'])
+            ->setDefaultSort(['id' => 'DESC'])
             ->setSearchFields(['reference', 'boite.name', 'boite.editor.name','id'])
         ;
     }
