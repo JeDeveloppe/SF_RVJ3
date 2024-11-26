@@ -60,6 +60,7 @@ class OccasionCrudController extends AbstractCrudController
 
             FormField::addTab('Fiche de l\'occasion')->setPermission('ROLE_ADMIN'),
                 FormField::addFieldset('Actions / Pramètres'),
+                TextField::new('reference')->setLabel('Référence')->setDisabled(true)->onlyOnIndex()->setTextAlign('center')->setColumns(4),
                 BooleanField::new('isOnline')->setLabel('En ligne')->setColumns(6)->onlyOnForms()->setDisabled($disabledIfBilled)->setColumns(4),
                 BooleanField::new('isOnline')->setLabel('En ligne')->setColumns(6)->onlyOnIndex()->setDisabled(true),
 
