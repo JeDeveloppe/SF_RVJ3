@@ -24,6 +24,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Component\HttpFoundation\Response;
 
 class OccasionCrudController extends AbstractCrudController
 {   
@@ -37,7 +41,8 @@ class OccasionCrudController extends AbstractCrudController
         private Security $security,
         private OccasionRepository $occasionRepository,
         private UtilitiesService $utilitiesService,
-        private BoiteRepository $boiteRepository
+        private BoiteRepository $boiteRepository,
+        private AdminUrlGenerator $adminUrlGenerator
     )
     { 
     }
@@ -60,6 +65,7 @@ class OccasionCrudController extends AbstractCrudController
 
             FormField::addTab('Fiche de l\'occasion')->setPermission('ROLE_ADMIN'),
                 FormField::addFieldset('Actions / Pramètres'),
+                TextField::new('reference')->setLabel('Référence')->setDisabled(true)->onlyOnIndex()->setTextAlign('center')->setColumns(4),
                 BooleanField::new('isOnline')->setLabel('En ligne')->setColumns(6)->onlyOnForms()->setDisabled($disabledIfBilled)->setColumns(4),
                 BooleanField::new('isOnline')->setLabel('En ligne')->setColumns(6)->onlyOnIndex()->setDisabled(true),
 
@@ -178,19 +184,7 @@ class OccasionCrudController extends AbstractCrudController
                         ->setDisabled(true)
                         ->setColumns(6)
                         ->setFormTypeOptions(['placeholder' => 'Créateur de la boite...'])
-                        ->onlyWhenUpdating(),
-                    // DateTimeField::new('updatedAt')->setLabel('Mise à jour le')
-                    //     ->setFormat('dd-MM-yyyy')
-                    //     ->setDisabled()
-                    //     ->setColumns(6)
-                    //     ->onlyWhenUpdating(),
-                    // AssociationField::new('updatedBy')->setLabel('Mise à jour par')
-                    //     ->setFormTypeOption('choice_label', 'nickname')
-                    //     ->setDisabled(true)
-                    //     ->setColumns(6)
-                    //     ->setFormTypeOptions(['placeholder' => '...'])
-                    //     ->onlyWhenUpdating(),
-            
+                        ->onlyWhenUpdating(),        
             
         ];
 
@@ -213,6 +207,7 @@ class OccasionCrudController extends AbstractCrudController
     {
 
         return $actions
+            ->remove(Crud::PAGE_INDEX, Action::NEW)
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::NEW, 'ROLE_ADMIN');
         
@@ -231,6 +226,7 @@ class OccasionCrudController extends AbstractCrudController
     
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
+
         if($entityInstance instanceof Occasion) {
 
             $user = $this->security->getUser();
@@ -259,7 +255,7 @@ class OccasionCrudController extends AbstractCrudController
                 $occasionPriceWithoutTaxFromDiscounts = $boitePriceWithoutTax - $discountBoiteState - $discountMaterialState - $discountRuleState;
             }
 
-            $entityInstance->setPriceWithoutTax($occasionPriceWithoutTaxFromDiscounts)->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user)->setReference('to_create');
+            $entityInstance->setIsOnline(true)->setPriceWithoutTax($occasionPriceWithoutTaxFromDiscounts)->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user)->setReference('to_create');
             $entityManager->persist($entityInstance);
 
             $entityManager->flush();
@@ -268,7 +264,10 @@ class OccasionCrudController extends AbstractCrudController
             $entityInstance->setReference($entityInstance->getBoite()->getId().'-'.$entityInstance->getId());
             $entityManager->persist($entityInstance);
             $entityManager->flush();
+
         }
+
+            
     }
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void

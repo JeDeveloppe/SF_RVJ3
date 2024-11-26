@@ -412,7 +412,16 @@ class Boite
 
     public function __toString()
     {
-        return '#'.$this->id.' - '.$this->name.' - '.$this->editor.' - '.$this->year;
+        if($this->year == 0){
+
+            $yearInDatabase = 'ANNÉE INCONNUE';
+
+        }else{
+
+            $yearInDatabase = $this->year;
+        }
+
+        return '#'.$this->id.' - '.$this->name.' - '.$this->editor.' - '.$yearInDatabase;
     }
 
     /**

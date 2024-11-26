@@ -263,7 +263,7 @@ class BoiteCrudController extends AbstractCrudController
         if ($entityInstance instanceof Boite) {
 
             $user = $this->security->getUser();
-            $entityInstance->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user)->setRvj2id('RVJ3')->setSlug($this->slugger->slug(strtolower($entityInstance->getName())));
+            $entityInstance->setIsOccasion(true)->setCreatedAt(new DateTimeImmutable ('now'))->setCreatedBy($user)->setRvj2id('RVJ3')->setSlug($this->slugger->slug(strtolower($entityInstance->getName())));
 
             $entityManager->persist($entityInstance);
             $entityManager->flush();
