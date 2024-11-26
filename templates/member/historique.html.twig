@@ -65,21 +65,14 @@
                {% endfor %}
             </div>
 
+                    <div class="col-11 d-flex justify-content-center my-1">
+                        {{ knp_pagination_render(documents, 'components/_pagination.html.twig') }}
+                    </div>
          {% else %}
             <div class="col-12 text-center py-5 px-1">PAS ENCORE DE DOCUMENTS...</div>
          {% endif %}
       </div>
    </div>
-
-   {% if documents | length > limitPerPage %}
-
-      <div class="row py-2">
-         <div class="col-12 d-flex justify-content-center">
-               {{ knp_pagination_render(documents, 'components/_pagination.html.twig') }}
-         </div>
-      </div>
-   
-   {% endif %}
 
    {% include "components/_separateur_wave.html.twig" %}
 
