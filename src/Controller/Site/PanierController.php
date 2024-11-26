@@ -396,7 +396,7 @@ class PanierController extends AbstractController
 
         $boite = $this->boiteRepository->findOneBy(['id' => $request->request->get('boiteId')]);
 
-        return $this->redirectToRoute('app_catalogue_pieces_detachees_articles_d_une_boite', [
+        return $this->redirectToRoute('catalogue_pieces_detachees_articles_d_une_boite', [
             'editorSlug' => $boite->getEditor()->getSlug(),
             'boiteSlug' => $boite->getSlug(),
             'id' => $boite->getId()

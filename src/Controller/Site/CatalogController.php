@@ -105,7 +105,7 @@ class CatalogController extends AbstractController
         ]);
     }
 
-    #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}/', name: 'app_catalogue_pieces_detachees_articles_d_une_boite')]
+    #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}/', name: 'catalogue_pieces_detachees_articles_d_une_boite')]
     public function cataloguePiecesDetacheesArticlesDuneBoite($id, $editorSlug, $boiteSlug): Response
     {
         if($_ENV['APP_ENV'] == 'prod'){
