@@ -11,13 +11,14 @@
 {% block body %}
     {% set occasionId = occasion.id %}
     {% set boiteId = occasion.boite.id %}
-
 		<div class="row g-0 py-2 py-lg-3">
 			<div class="col-12 text-center py-3">
 				{% if app.request.headers.get('referer') is null %}
 					<a class="text-purple text-decoration-none" href="{{ path('app_catalogue_occasions', {'category': null}) }}#{{ occasion.id }}">Tous les jeux</a>
-				{% else %}
+				{% elseif 'catalogue-' in app.request.headers.get('referer') %}
 					<a class="text-purple text-decoration-none" href="{{ app.request.headers.get('referer') }}#{{ occasion.id }}">Retour au catalogue</a>
+				{% else %}
+					<a class="text-purple text-decoration-none" href="{{ path('app_catalogue_switch') }}">Retour aux catalogues</a>
 				{% endif %}
 			</div>
 		</div>
