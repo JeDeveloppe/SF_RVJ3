@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CatalogOccasionSearchRepository;
 use App\Repository\DurationOfGameRepository;
+use App\Service\CatalogControllerService;
 use App\Service\CatalogueService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -53,12 +54,38 @@ class CatalogController extends AbstractController
         private Security $security,
         private CatalogueService $catalogueService,
         private DurationOfGameRepository $durationOfGameRepository,
-        private RequestStack $requestStack
+        private RequestStack $requestStack,
+        private CatalogControllerService $catalogControllerService
     )
     {
     }
     
-     //TODO pièces détachées
+
+    #[Route('/catalogues', name: 'app_catalogue_switch')]
+    public function catalogueSwitch(): Response
+    {
+
+        if($_ENV['APP_ENV'] == 'prod'){
+            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees');
+        }
+
+        $metas['description'] = '';
+
+        $occasions = $this->occasionRepository->findByIsOnline(true);
+        shuffle($occasions); // on mélange
+        $occasion = $occasions[2];
+        $query = $this->occasionRepository->findAleatoireOccasionsByAgeWhitoutThisOccasion($occasion->getBoite()->getAge(), $occasion);
+        shuffle($query); // on mélange
+        $firstElements = array_slice($query, 0, 4); //on prend les 6 premiers apres avoir mélanger
+
+        return $this->render('site/pages/catalog/catalog_switch.html.twig', [
+            'metas' => $metas,
+            'firstElements' => $firstElements,
+            'tax' => $this->taxRepository->findOneBy([]),
+            'catalogControllerServiceContent' => $this->catalogControllerService->pageCatalogue()
+        ]);
+    }
+
     #[Route('/catalogue-pieces-detachees', name: 'app_catalogue_pieces_detachees')]
     public function cataloguePiecesDetachees(Request $request): Response
     {
@@ -269,7 +296,6 @@ class CatalogController extends AbstractController
 
         //gestion occasion entre v3 et v2
         if(!$occasion){
-            $http_error_code = 301;
             $occasion = $this->occasionRepository->findUniqueOccasionByRefrenceV2WhenIsOnLineAndSlugsAreOk($reference_occasion, $editor_slug, $boite_slug);
 
             if(!$occasion){
