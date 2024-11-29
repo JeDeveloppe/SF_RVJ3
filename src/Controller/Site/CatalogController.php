@@ -292,11 +292,11 @@ class CatalogController extends AbstractController
         $delivery = null;
         $http_error_code = 200;
 
-        $occasion = $this->occasionRepository->findUniqueOccasionByRefrenceV3WhenIsOnLineAndSlugsAreOk($reference_occasion, $editor_slug, $boite_slug);
+        $occasion = $this->occasionRepository->findUniqueOccasionWhenReferenceAndSlugAreOk($reference_occasion, $editor_slug, $boite_slug);
 
         //gestion occasion entre v3 et v2
         if(!$occasion){
-            $occasion = $this->occasionRepository->findUniqueOccasionByRefrenceV2WhenIsOnLineAndSlugsAreOk($reference_occasion, $editor_slug, $boite_slug);
+            $occasion = $this->occasionRepository->findUniqueOccasionByRefrenceV2AndSlugsAreOk($reference_occasion, $editor_slug, $boite_slug);
 
             if(!$occasion){
                 $http_error_code = 404;

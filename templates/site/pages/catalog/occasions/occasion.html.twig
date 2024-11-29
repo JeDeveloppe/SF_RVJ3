@@ -57,12 +57,16 @@
 					<h1 class="col-12 occasion_detail_name">{{ occasion.boite.name | raw }}</h1>
 					{% include "components/catalog/_occasion_details.html.twig"  with { 'occasion': occasion } %}
 					{# on inclus le bouton ajout au panier #}
-					<div class="col-12 d-flex my-2">
-                		{% include "site/pages/catalog/components/_cardOccasion_button_add_cart.html.twig" with {'OccasionId': occasionId, 'boiteId': boiteId, 'buttonLength': 'full' } %}
-					</div>
-					<div class="col-12 d-flex mt-2 mb-5">
-						{% include "components/catalog/_shop_and_no_transport_logos.html.twig" %}
-					</div>
+					{% if occasion.isOnline == true %}
+						<div class="col-12 d-flex my-2 align-items-center">
+							{% include "site/pages/catalog/components/_cardOccasion_button_add_cart.html.twig" with {'occasion': occasion, 'buttonLength': 'full' } %}
+						</div>
+						<div class="col-12 d-flex mt-2 mb-5">
+							{% include "components/catalog/_shop_and_no_transport_logos.html.twig" %}
+						</div>
+					{% else %}
+        				<div class="col-12 my-4 text-end h4 text-purple">Victime de son petit prix...</div>
+					{% endif %}
 			</div>
 		</div>
 

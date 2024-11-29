@@ -5,14 +5,9 @@
         <img src="{{ asset('build/images/design/catalogs/cart.svg') }}" alt="Logo accès panier">
     </a>
 {% else %}
-
-    {% if app.session.get('paniers')['occasions'][occasion.id] is defined %}
-    {# si l'occasion vient d'etre mis dans le panier #}
-        <p class="btn btn-dark disabled">Dans le panier</p>
-    {% else %}
+        {# si occasion en ligne #}
         {% set returnInCatalogLink = app.request.headers.get('referer') %}
         <a class="btn btn-dark d-flex justify-content-center align-items-center text-white" href="{{ path('panier_add_occasion', {'occasion_id': occasion.id, 'qte': 1, 'returnInCatalog': returnInCatalogLink }) }}">
             Ajouter au panier
         </a>
-    {% endif %}
 {% endif %}

@@ -51,4 +51,15 @@ class OldurlsController extends AbstractController
         return new RedirectResponse($url, 301);
     }
 
+    #[Route('/projet/qui-sommes-nous/', name: 'wereWeAreOld')]
+    public function wereWeAreOld(): RedirectResponse
+    {
+
+        $url = $this->generateUrl('app_support_us');
+
+        return new RedirectResponse($url, 301);
+    }
+
+    
+
 }
