@@ -139,8 +139,7 @@ class OccasionRepository extends ServiceEntityRepository
             'referenceV3' => $occasionReference,
         ])
         ->getQuery()
-        ->getOneOrNullResult()
-        // ->getSingleResult()
+        ->getResult()
         ;
 
         return $query;
@@ -163,7 +162,7 @@ class OccasionRepository extends ServiceEntityRepository
             'referenceV2' => $references[1].'-'.$references[0],
         ])
         ->getQuery()
-        ->getOneOrNullResult()
+        ->getResult()
         // ->getSingleResult()
         ;
 

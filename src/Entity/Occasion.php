@@ -393,4 +393,10 @@ class Occasion
 
         return $this;
     }
+
+    public function getBoiteHtPrice(): ?int
+    {
+        return $this->boite->getHtPrice();
+    }
+
 }

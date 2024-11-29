@@ -283,7 +283,7 @@ class UserService
             ->setEmail($_ENV['UNDEFINED_USER_EMAIL'])
             ->setRoles(['ROLE_USER'])
             ->setAccountnumber('init')
-            ->setNickname('Undefined_user')
+            ->setNickname('INCONNU(E)')
             ->setPhone(0000000000)
             ->setCountry($this->countryRepository->findOneBy(['isocode' => 'FR']))
             ->setPassword(

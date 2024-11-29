@@ -3,9 +3,11 @@
 namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\Panier;
+use Doctrine\ORM\Mapping\Id;
 use phpDocumentor\Reflection\Types\Integer;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
@@ -24,12 +26,14 @@ class PanierCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            IdField::new('id','Ligne n°'),
             DateField::new('createdAt','Fin de validité')->setFormat('dd.MM.yyyy à HH:mm:ss'),
             MoneyField::new('priceWithoutTax')->setCurrency('EUR')->setStoredAsCents(),
             IntegerField::new('qte'),
             MoneyField::new('unitPriceExclusingTax')->setCurrency('EUR')->setStoredAsCents()->onlyOnDetail(),
             AssociationField::new('occasion'),
             AssociationField::new('item'),
+            AssociationField::new('user'),
         ];
     }
 
