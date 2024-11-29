@@ -318,7 +318,6 @@ class PanierService
             $shippingMethodId = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME'])->getId();
             $session->set('shippingMethodId', $shippingMethodId);
         }
-
         //les parametres des documents
         $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
         //init le cout de la preparation des articles
@@ -393,6 +392,7 @@ class PanierService
 
         //? calcul de la remise sur les articles
         $responses['remises']['volume'] = $this->calculateRemise($this->panierRepository->findBy(['user' => $user]));
+
         
         $responses['shippingMethodId'] = $shippingMethodId;
         $responses['deliveryCostWithoutTax'] = $this->returnDeliveryCost($shippingMethodId, $weigthPanier);
