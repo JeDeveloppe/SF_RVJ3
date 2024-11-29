@@ -91,16 +91,15 @@ class PanierController extends AbstractController
         $allCartValues = $this->panierService->returnArrayWithAllCounts();
 
         //?si y a au moins un occasion pas de possibilite de livraison donc methode == retrait obligatoire
-        // if(count($allCartValues['panier_occasions']) > 0){
-        //     $shippingMethodRetraitInCaen = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']);
-        //     $shippingMethodId = $shippingMethodRetraitInCaen->getId();
-        //     $session->set('shippingMethodId', $shippingMethodId);
-        // }else{
-        //     $shippingMethodEnvoi = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_POSTE_NAME']);
-        //     $shippingMethodId = $shippingMethodEnvoi->getId();
-        //     $session->set('shippingMethodId', $shippingMethodId);
-        // }
-
+        if(count($allCartValues['panier_occasions']) > 0){
+            $shippingMethodRetraitInCaen = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']);
+            $shippingMethodId = $shippingMethodRetraitInCaen->getId();
+        }else{
+            $shippingMethodEnvoi = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_POSTE_NAME']);
+            $shippingMethodId = $shippingMethodEnvoi->getId();
+        }
+        //on met a jour en session
+        $session->set('shippingMethodId', $shippingMethodId);
         
         $shippingForm = $this->createForm(ShippingType::class, null, ['occasionInPanier' => $allCartValues['panier_occasions']]);
         $shippingForm->handleRequest($request);
@@ -108,7 +107,7 @@ class PanierController extends AbstractController
         //form pour les codes de reduction
         $voucherType = $this->createForm(VoucherType::class);
         $voucherType->handleRequest($request);
-
+        
         
         if($voucherType->isSubmitted() && $voucherType->isValid())
         {
@@ -364,22 +363,12 @@ class PanierController extends AbstractController
         return $user;
     }
 
-    // #[Route('/panier/delete-cart-line/{category}/{cart_id}', name: 'delete_cart_line_when_logged')]
-    // public function deleteCartLineWhenLogged($category, $cart_id, Request $request): Response
-    // {
-    //     $reponse = $this->panierService->deleteCartLine($category, $cart_id);
-
-    //     $this->addFlash($reponse[0], $reponse[1]);
-
-    //     return $this->redirect($request->headers->get('referer'));
-    // }
-
     #[Route('/panier/delete-cart-line/{cart_id}', name: 'delete_cart_line_realtime')]
     public function deleteCartLineRealtime($cart_id, Request $request): Response
     {
 
         $reponse = $this->panierService->deleteCartLineRealtime($cart_id);
-        $request->cookies->remove('shippingMethodId');
+        // $request->cookies->remove('shippingMethodId');
     
         $this->addFlash($reponse[0], $reponse[1]);
 
@@ -422,7 +411,6 @@ class PanierController extends AbstractController
     {
         $gets = $request->getContent();
         $datas = json_decode($gets, true);
-
         $shippingMethod = $this->shippingMethodRepository->findOneById($datas['shippingMethodId']);
 
         $result = $this->panierService->returnDeliveryCost($shippingMethod->getId(), $datas['weight']);

@@ -47,7 +47,8 @@
         const regex = /\d{4}-\d{10}/g;
         const shipping_retrait_name = "{{ app.request.server.get('SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME') }}";
         let shipping_cost = {{ (allCartValues['deliveryCostWithoutTax'] / 100) | number_format(2, '.', ',') }};
-        const shippingMethodId = sessionStorage.getItem("shippingMethodId");
+        // const shippingMethodId = sessionStorage.getItem("shippingMethodId");
+        const shippingMethodId = {{ (allCartValues['shippingMethodId']) }}
         const divTextLivraisonOuRetrait = document.getElementById('divTextLivraisonOuRetrait');
         let totalHTBeforeDelivery = {{ allCartValues['totalPanierHtBeforeDelivery'] }};
         let totalHTAfterDelivery = {{ allCartValues['totalPanierHtAfterDelivery'] }};
@@ -179,7 +180,14 @@
             }
         }
 
-        window.addEventListener('load', shippingForm.addEventListener('change', radioChoice));
+        window.addEventListener('load', () => {
+            if(shippingForm){
+                shippingForm.addEventListener('change', radioChoice)
+            }
+        });
+
+
+        // window.addEventListener('load', shippingForm.addEventListener('change', radioChoice));
 
     </script>
 {% endblock %}
