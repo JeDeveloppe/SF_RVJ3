@@ -1,0 +1,20 @@
+{% include "components/forms/_display_form_errors.html.twig" %}
+
+<div class="col-11 col-sm-9 col-md-7 col-lg-5">
+    {{ form_start(form) }}
+
+            <div class="input-group position-relative">
+                {{ form_widget(form.search) }}
+                <span class="input-group-append valid_button">
+                    {% if form.vars.value.search is not defined %}
+                        <button class="btn" type="submit" id="submitButtonSearchByName">
+                            <i class="fa fa-search text-dark"></i>
+                        </button>
+                        {% else %}
+                            {% set currentPath = path(app.request.get('_route')) %}
+                            <a class="btn" href="{{ currentPath }}"><i class="fa-solid fa-eraser text-purple"></i></a>
+                        {% endif %}
+                </span>
+            </div>
+    {{ form_end(form) }}
+</div>

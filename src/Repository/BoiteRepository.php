@@ -32,29 +32,18 @@ class BoiteRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findItemsFromBoitesFromSearch($phrase): array
-    {
-        return $this->createQueryBuilder('b')
-            ->join('b.editor','e')
-            ->where('b.name LIKE :val')
-            ->orWhere('e.name LIKE :val')
-            ->andWhere('b.isOnline = :online')
-            ->setParameter('val', '%'.$phrase.'%')
-            ->setParameter('online', true)
-            ->orderBy('b.name', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    public function findBoitesWhereThereIsItems()
+    public function findBoitesWhereThereIsItems($phrase = null): array
     {
 
         $results =  $this->createQueryBuilder('b')
             ->where('b.isOnline = :true')
-            ->join('b.itemsOrigine', 'i')
-            ->andWhere('i.stockForSale > :minimum')
             ->setParameter('true', true)
+            ->andWhere('b.name LIKE :val')
+            ->setParameter('val', '%'.$phrase.'%')
+            ->join('b.itemsOrigine', 'i')
+            ->join('b.editor', 'e')
+            ->orWhere('e.name LIKE :val')
+            ->andWhere('i.stockForSale > :minimum')
             ->setParameter('minimum', 0)
             ->orderBy('b.id', 'DESC')
             ->getQuery()

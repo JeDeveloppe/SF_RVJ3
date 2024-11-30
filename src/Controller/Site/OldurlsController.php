@@ -59,7 +59,14 @@ class OldurlsController extends AbstractController
 
         return new RedirectResponse($url, 301);
     }
-
     
+    #[Route('/carte-des-partenaires/{country}', name: 'partnersMapOld')]
+    public function partnersMapOld(): RedirectResponse
+    {
+
+        $url = $this->generateUrl('app_partners');
+
+        return new RedirectResponse($url, 301);
+    }
 
 }
