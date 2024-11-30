@@ -2,7 +2,7 @@
 {% include "components/catalog/_card_admin_link_to_entity_occasion.html.twig" with {'occasion': occasion} %}
 {% if buttonLength == 'small' %}
     <a class="_card_button_link_add_in_cart d-flex justify-content-center align-items-center text-white" href="{{ path('panier_add_occasion', {'occasion_id': occasion.id, 'qte': 1 }) }}">
-        <img src="{{ asset('build/images/design/catalogs/cart.svg') }}" alt="Logo accès panier">
+        <img src="{{ asset('build/images/design/catalogs/cart.svg') }}" alt="Logo ajouter au panier">
     </a>
 {% else %}
         {# si occasion en ligne #}
