@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class PanierCrudController extends AbstractCrudController
 {
@@ -28,12 +29,13 @@ class PanierCrudController extends AbstractCrudController
         return [
             IdField::new('id','Ligne n°'),
             DateField::new('createdAt','Fin de validité')->setFormat('dd.MM.yyyy à HH:mm:ss'),
-            MoneyField::new('priceWithoutTax')->setCurrency('EUR')->setStoredAsCents(),
-            IntegerField::new('qte'),
+            // MoneyField::new('priceWithoutTax')->setCurrency('EUR')->setStoredAsCents(),
+            // IntegerField::new('qte'),
             MoneyField::new('unitPriceExclusingTax')->setCurrency('EUR')->setStoredAsCents()->onlyOnDetail(),
             AssociationField::new('occasion'),
             AssociationField::new('item'),
             AssociationField::new('user'),
+            TextField::new('tokenSession')->setDisabled(true),
         ];
     }
 
