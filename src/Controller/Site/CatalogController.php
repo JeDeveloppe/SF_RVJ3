@@ -292,13 +292,14 @@ class CatalogController extends AbstractController
         $delivery = null;
         $http_error_code = 200;
 
-        $occasion = $this->occasionRepository->findUniqueOccasionByRefrenceV3WhenIsOnLineAndSlugsAreOk($reference_occasion, $editor_slug, $boite_slug);
-
+        $occasions = $this->occasionRepository->findUniqueOccasionWhenReferenceAndSlugAreOk($reference_occasion, $editor_slug, $boite_slug);
         //gestion occasion entre v3 et v2
-        if(!$occasion){
-            $occasion = $this->occasionRepository->findUniqueOccasionByRefrenceV2WhenIsOnLineAndSlugsAreOk($reference_occasion, $editor_slug, $boite_slug);
+        if(!$occasions[0]){
 
-            if(!$occasion){
+            $occasions = $this->occasionRepository->findUniqueOccasionByRefrenceV2AndSlugsAreOk($reference_occasion, $editor_slug, $boite_slug);
+            $occasion = $occasions[0];
+
+            if(!$occasion[0]){
                 $http_error_code = 404;
                 throw $this->createNotFoundException('Occasion non trouvée');
             }
@@ -336,13 +337,13 @@ class CatalogController extends AbstractController
         }
 
 
-        $query = $this->occasionRepository->findAleatoireOccasionsByAgeWhitoutThisOccasion($occasion->getBoite()->getAge(), $occasion);
+        $query = $this->occasionRepository->findAleatoireOccasionsByAgeWhitoutThisOccasion($occasions[0]->getBoite()->getAge(), $occasions[0]);
         shuffle($query); // on mélange
         $firstElements = array_slice($query, 0, 4); //on prend les 6 premiers apres avoir mélanger
-        $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.ucfirst(strtolower($occasion->getBoite()->getName())).' - '.ucfirst(strtolower($occasion->getBoite()->getEditor()->getName()));
+        $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.ucfirst(strtolower($occasions[0]->getBoite()->getName())).' - '.ucfirst(strtolower($occasions[0]->getBoite()->getEditor()->getName()));
 
         return $this->render('site/pages/catalog/occasions/occasion.html.twig', [
-            'occasion' => $occasion,
+            'occasion' => $occasions[0],
             'tax' => $this->taxRepository->findOneBy([]),
             'metas' => $metas,
             'delivery' => $delivery,

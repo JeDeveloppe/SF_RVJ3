@@ -5,17 +5,22 @@ namespace App\Controller\Admin\EasyAdmin;
 use DateTime;
 use DateTimeImmutable;
 use App\Entity\Occasion;
-use App\Repository\BoiteRepository;
+use PharIo\Manifest\Url;
 use Doctrine\ORM\QueryBuilder;
 use App\Service\UtilitiesService;
+use App\Repository\BoiteRepository;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use Symfony\Component\HttpFoundation\RequestStack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -23,11 +28,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class OccasionCrudController extends AbstractCrudController
 {   
@@ -58,17 +62,17 @@ class OccasionCrudController extends AbstractCrudController
         if($boiteShell && $this->requestStack->getCurrentRequest()->get('crudAction') == 'new'){
 
             $this->getContext()->getEntity()->getInstance()->setBoite($this->boiteRepository->find($boiteShell));
+
         }
-        
+
         return [
- 
+
 
             FormField::addTab('Fiche de l\'occasion')->setPermission('ROLE_ADMIN'),
                 FormField::addFieldset('Actions / Pramètres'),
                 TextField::new('reference')->setLabel('Référence')->setDisabled(true)->onlyOnIndex()->setTextAlign('center')->setColumns(4),
                 BooleanField::new('isOnline')->setLabel('En ligne')->setColumns(6)->onlyOnForms()->setDisabled($disabledIfBilled)->setColumns(4),
                 BooleanField::new('isOnline')->setLabel('En ligne')->setColumns(6)->onlyOnIndex()->setDisabled(true),
-
                 AssociationField::new('stock','Visible dans le stock:')->setColumns(4)->setDisabled($disabledIfBilled)->renderAsEmbeddedForm()->onlyOnDetail(),
                 AssociationField::new('stock','Visible dans le stock:')->setColumns(4)->setDisabled($disabledIfBilled)->onlyOnForms(),
                 
@@ -94,7 +98,7 @@ class OccasionCrudController extends AbstractCrudController
                         ->orderBy('entity.id', 'ASC')
                     )
                     ->setDisabled(true)
-                    ->setColumns(6),
+                    ->setColumns(10),
                 BooleanField::new('isNew')
                     ->setLabel('Neuf')
                     ->onlyOnIndex()
@@ -143,6 +147,7 @@ class OccasionCrudController extends AbstractCrudController
                     ->setStoredAsCents()
                     ->setCurrency('EUR')
                     ->onlyWhenUpdating()->setColumns(4)->setTextAlign('center'),
+                MoneyField::new('boiteHtPrice','Prix HT de réference (boite)')->onlyWhenCreating()->setCurrency('EUR')->setDisabled(true)->setColumns(4)->setTextAlign('center')->setStoredAsCents(),
                 MoneyField::new('virtualPriceWithoutTax','Prix de référence différent de la boite')->onlyWhenCreating()->setCurrency('EUR')->setColumns(4)->setTextAlign('center')->setStoredAsCents(),
                 MoneyField::new('priceWithoutTax')
                     ->setLabel('Prix de vente HT:')
@@ -206,10 +211,23 @@ class OccasionCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
 
-        return $actions
+        $id = $this->requestStack->getCurrentRequest()->get('entityId');
+        if($id){
+            $occasion = $this->occasionRepository->findOneBy(['id' => $id]);
+            $viewOnWebsite = Action::new('viewOnWebsite', 'Voir sur le site', 'fa-solid fa-globe')->linkToRoute('occasion', ['reference_occasion' => $occasion->getReference(), 'boite_slug' => $occasion->getBoite()->getSlug(), 'editor_slug' => $occasion->getBoite()->getEditor()->getSlug()])->setHtmlAttributes(['target' => '_blank'])->setCssClass('btn btn-success');
+            return $actions
+            ->add(Crud::PAGE_EDIT, $viewOnWebsite)
             ->remove(Crud::PAGE_INDEX, Action::NEW)
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::NEW, 'ROLE_ADMIN');
+
+        }else{
+
+            return $actions
+            ->remove(Crud::PAGE_INDEX, Action::NEW)
+            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
+            ->setPermission(Action::NEW, 'ROLE_ADMIN');
+        }
         
     }
 
