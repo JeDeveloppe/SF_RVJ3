@@ -10,7 +10,7 @@
             <div class="col-12 d-flex flex-wrap justify-content-center align-items-center mb-3">
                 <div class="col-12 col-lg-6 ps-md-3 text-center text-md-start"><span class="fw-bold">{{ occasions_totales | length }}</span> {{ jeu_dispo }}.</div>
                 <div class="col-12 mt-3 mt-lg-0 col-lg-6">
-                    {% include "site/pages/catalog/components/_search_occasion_name_or_editor.html.twig" %}
+                    {% include "site/pages/catalog/forms/_search_occasion_name_or_editor.html.twig" %}
                 </div>
             </div>
 
@@ -30,6 +30,6 @@
 
             {% else %}
                 <!-- left column / result == 0 -->
-                {% include "site/pages/catalog/components/_emptyResultsDisplayPartners.html.twig" with {'partners': partners } %}
+                {% include "site/pages/catalog/components/_emptyResultsDisplayPartners.html.twig" %}
             
             {% endif %}

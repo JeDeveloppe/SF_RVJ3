@@ -104,11 +104,10 @@ class CatalogController extends AbstractController
             $search = $form->get('search')->getData();
             $phrase = str_replace(" ","%",$search);
 
-            $donneesFromDatabases = $this->boiteRepository->findItemsFromBoitesFromSearch($phrase);
+            $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems($phrase);
 
         }else{
 
-            //$donneesFromDatabases = $this->boiteRepository->findBy(['isOnline' => true],['id' => 'DESC']);
             $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems();
 
         }

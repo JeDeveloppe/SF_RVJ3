@@ -448,4 +448,16 @@ class SiteController extends AbstractController
         }
     }
 
+    #[Route('/nos-partenaires', name: 'app_partners')]
+    public function partners(Request $request): Response
+    {
+
+        $metas['description'] = "Découvrez nos partenaires du réemploi des jeux !";
+        
+        return $this->render('site/pages/partners/partners.html.twig', [
+            'metas' => $metas,            
+            'partners' => $this->partnerRepository->findBy(['isOnline' => true], ['name' => 'ASC'])
+        ]);
+
+    }
 }

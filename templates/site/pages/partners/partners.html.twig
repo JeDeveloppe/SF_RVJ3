@@ -4,11 +4,13 @@
 
 {% block body %}
 
-    <div class="js-locations" data-locations="{{ donnees }}"></div>
 
     <h1 class="col-12 mt-5 text-center">Nos <span class="text-purple">partenaires</span></h1>
+    <div class="row g-0">
+        <div class="col-12 text-center h5 small">En construction...</div>
+    </div>
 
-    <div class="row my-4">
+    <div class="row g-0 my-4">
         <div class="col-11 col-md-9 col-lg-6 mx-auto">
             <script type="text/javascript" src="{{ asset('map/mapdata_france.js') }}"></script> 
             <script type="text/javascript" src="{{ asset('map/countrymap_france.js') }}"></script> 
@@ -16,14 +18,20 @@
         </div>
     </div>
 
-    <div class="row my-5 justify-content-center">
+    <div class="row g-0 my-5 justify-content-center">
 
         {% for partner in partners %}
 
             {% include "site/pages/partners/_card_partner.html.twig" %}
 
+        {% else %}
+            
+            {% include "site/pages/catalog/components/_emptyResultsDisplayPartners.html.twig" %}
+
         {% endfor %}
 
     </div>
+
+    {% include "components/_separateur_wave.html.twig" %}
 
 {% endblock %}

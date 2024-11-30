@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use DateInterval;
+use DateTimeZone;
 use App\Entity\User;
 use App\Entity\Panier;
 use DateTimeImmutable;
@@ -68,7 +69,7 @@ class PanierService
 
         }else{
 
-            $now = new DateTimeImmutable('now');
+            $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
             $endPanier = $now->add(new DateInterval('PT'.$_ENV['DELAY_TO_DELETE_CART_IN_HOURS'].'H'));
 
             $panier = new Panier();
