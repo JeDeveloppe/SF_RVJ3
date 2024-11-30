@@ -11,7 +11,7 @@
         <p class="btn btn-dark disabled">Dans le panier</p>
     {% else %}
         {% set returnInCatalogLink = app.request.headers.get('referer') %}
-        <a class="btn btn-dark d-flex justify-content-center align-items-center text-white" href="{{ path('panier_add_occasion', {'occasion_id': occasion.id, 'qte': 1, 'returnInCatalog': returnInCatalogLink }) }}">
+        <a class="btn btn-dark d-flex justify-content-center align-items-center text-white" rel="nofollow" href="{{ path('panier_add_occasion', {'occasion_id': occasion.id, 'qte': 1, 'returnInCatalog': returnInCatalogLink }) }}">
             Ajouter au panier
         </a>
     {% endif %}
