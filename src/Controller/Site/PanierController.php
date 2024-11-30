@@ -363,21 +363,14 @@ class PanierController extends AbstractController
         return $user;
     }
 
-    // #[Route('/panier/delete-cart-line/{category}/{cart_id}', name: 'delete_cart_line_when_logged')]
-    // public function deleteCartLineWhenLogged($category, $cart_id, Request $request): Response
-    // {
-    //     $reponse = $this->panierService->deleteCartLine($category, $cart_id);
-    //     $this->addFlash($reponse[0], $reponse[1]);
-    //     return $this->redirect($request->headers->get('referer'));
-    // }
     #[Route('/panier/delete-cart-line/{cart_id}', name: 'delete_cart_line_realtime')]
     public function deleteCartLineRealtime($cart_id, Request $request): Response
     {
 
         $reponse = $this->panierService->deleteCartLineRealtime($cart_id);
-        $request->cookies->remove('shippingMethodId');
+      
         // $request->cookies->remove('shippingMethodId');
-
+    
         $this->addFlash($reponse[0], $reponse[1]);
 
         return $this->redirect($request->headers->get('referer'));
