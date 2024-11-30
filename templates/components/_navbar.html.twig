@@ -39,7 +39,7 @@
 			{% else %}
 				<a id="cart_link" class="nav-link p-1" href="#">
 			{% endif %}
-				<img id="cart_link_logo" class="position-relative" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo accès panier">
+				<img id="cart_link_logo" class="position-relative" src="{{ asset('build/images/design/nav/cart.svg') }}" alt="Logo ajouter au panier">
 				<span id="cart_link_value">{{ twigEvent_paniers  }}</span>
 			</a>
 		</li>
@@ -98,10 +98,10 @@
 					<a href="{{ path('app_press') }}" class="nav-link text-dark">Presse</a>
 				</li>
 				<li class="nav-item d-flex ps-3 ps-lg-0">
-					<a href="https://www.facebook.com/refaitesvosjeux" target="_blank">
+					<a href="https://www.facebook.com/refaitesvosjeux" target="_blank" rel="noopener">
 						<img src="{{ asset('build/images/design/footer/facebook_link.svg') }}" alt="Suivez-nous sur Facebook !">
 					</a>
-					<a class="ms-1" href="https://www.instagram.com/refaitesvosjeux/" target="_blank">
+					<a class="ms-1" href="https://www.instagram.com/refaitesvosjeux/" target="_blank" rel="noopener">
 						<img src="{{ asset('build/images/design/footer/instagram_link.svg') }}" alt="Suivez-nous sur Instagram !">
 					</a>
 				</li>

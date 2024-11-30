@@ -63,7 +63,7 @@ class SiteController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        $metas['description'] = "Association dédiée au réemploi des jeux et au lien social. Découvrez nos prestations, nos jeux d'occasions et des pièces détachées pour vos jeux de société incomplet à petits prix.";
+        $metas['description'] = "Association dédiée au réemploi des jeux et au lien social. Découvrez nos prestations, nos jeux d'occasions et nos pièces détachées pour vos jeux incomplet.";
 
 
         return $this->render('site/pages/home.html.twig', [
