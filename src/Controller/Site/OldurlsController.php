@@ -9,6 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class OldurlsController extends AbstractController
 {
 
+    private $PERMANENT_REDIRECTION = 301;
+    private $TEMPORAIRE_REDIRECTION = 302;
+
     #[Route('/catalogue', name: 'catalogue_old')]
     public function catalogueOld(): RedirectResponse
     {
@@ -19,7 +22,7 @@ class OldurlsController extends AbstractController
 
         $url = $this->generateUrl('app_catalogue_switch');
 
-        return new RedirectResponse($url, 301);
+        return new RedirectResponse($url, $this->TEMPORAIRE_REDIRECTION);
 
     }
 
@@ -28,7 +31,7 @@ class OldurlsController extends AbstractController
     {
         $url = $this->generateUrl('app_give_your_games');
 
-        return new RedirectResponse($url, 301);
+        return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);
     }
 
 
@@ -38,7 +41,7 @@ class OldurlsController extends AbstractController
 
         $url = $this->generateUrl('app_support_us');
 
-        return new RedirectResponse($url, 301);
+        return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);
     }
 
 
@@ -48,7 +51,7 @@ class OldurlsController extends AbstractController
 
         $url = $this->generateUrl('app_home');
 
-        return new RedirectResponse($url, 301);
+        return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);
     }
 
     #[Route('/projet/qui-sommes-nous/', name: 'wereWeAreOld')]
@@ -66,7 +69,16 @@ class OldurlsController extends AbstractController
 
         $url = $this->generateUrl('app_partners');
 
-        return new RedirectResponse($url, 301);
+        return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);
+    }
+
+    #[Route('/conditions-generale-de-vente', name: 'cgvOld')]
+    public function cgvOld(): RedirectResponse
+    {
+
+        $url = $this->generateUrl('app_conditions_generale_de_vente');
+
+        return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);
     }
 
 }

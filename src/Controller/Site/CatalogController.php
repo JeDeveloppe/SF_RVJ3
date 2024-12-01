@@ -91,7 +91,7 @@ class CatalogController extends AbstractController
     {
 
         if($_ENV['APP_ENV'] == 'prod'){
-            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees');
+            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees', 302);
         }
 
         $siteSetting = $this->siteSettingRepository->findOneBy([]);
@@ -135,7 +135,7 @@ class CatalogController extends AbstractController
     public function cataloguePiecesDetacheesArticlesDuneBoite($id, $editorSlug, $boiteSlug): Response
     {
         if($_ENV['APP_ENV'] == 'prod'){
-            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees');
+            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees', 302);
         }
 
         $boite = $this->boiteRepository->findOneBy(['id' => $id, 'slug' => $boiteSlug, 'editor' => $this->editorRepository->findOneBy(['slug' => $editorSlug]), 'isOnline' => true]);
@@ -145,7 +145,7 @@ class CatalogController extends AbstractController
             return $this->redirectToRoute('app_catalogue_pieces_detachees');
         }
 
-        $metas['description'] = 'Les pièces détachées que le service a en stock pour le jeu: '.ucfirst(strtolower($boite->getName())).' - '.ucfirst(strtolower($boite->getEditor()->getName()));
+        $metas['description'] = 'Les pièces détachées pour le jeu: '.ucfirst(strtolower($boite->getName())).' - '.ucfirst(strtolower($boite->getEditor()->getName()));
 
         $items = $boite->getItemsOrigine();
         $groups = [];

@@ -85,7 +85,7 @@ class SiteController extends AbstractController
         ]);
     }
 
-    #[Route('/conditions-generale-de-vente', name: 'app_conditions_generale_de_vente')]
+    #[Route('/conditions-generales-de-vente', name: 'app_conditions_generale_de_vente')]
     public function cgv(): Response
     {
         $legales = $this->legalInformationRepository->findOneBy(['isOnline' => true], ['id' => 'ASC']);
