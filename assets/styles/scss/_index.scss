@@ -44,6 +44,8 @@
 
 .card-img-top-index{
     padding: 6%;
+    max-width: 400px;
+    height: auto;
 }
 .index_card_full_button{
     background: transparent;
@@ -54,4 +56,10 @@
     right: 0;
     height: 100%;
     z-index: 1;
+}
+
+.card-img_link_catalogs{
+    margin: auto;
+    max-width: 98%;
+    height: auto;
 }
