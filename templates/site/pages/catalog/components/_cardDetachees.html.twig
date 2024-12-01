@@ -1,7 +1,7 @@
     {# ON PASSE UNE BOITE #}
-    <div id="{{ boite.id }}" class="card_ d-flex flex-wrap h-100 col-11 mx-auto pb-2">
+    <article id="{{ boite.id }}" class="card_ d-flex flex-wrap h-100 col-11 mx-auto pb-2">
         <div class="card_div_img">
-            <img class="card_catalog_img" src="{{ vich_uploader_asset(boite, 'imageFile') }}" alt="Image de la boite de jeu {{ boite.name }} - {{ boite.editor }}"/><br/>
+            <img class="card_catalog_img" src="{{ vich_uploader_asset(boite, 'imageFile') | imagine_filter('boite') }}" alt="Image de la boite de jeu {{ boite.name }} - {{ boite.editor }}"/><br/>
         </div>
         <p class="info_photo col-12 text-center">Photo non contractuelle</p>
         <div class="card_boite_name text-center text-green">{{ boite.name | raw }}</div>
@@ -19,5 +19,5 @@
                 {% include "components/catalog/_card_admin_link_to_entity_boite.html.twig" with {'boite': boite} %}
             </div>
         {% endif %}
-    </div>
+    </article>
 
