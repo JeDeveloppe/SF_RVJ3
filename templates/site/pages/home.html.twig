@@ -21,7 +21,7 @@
         </div>
     </div>
     <div class="col-12 mt-4 mt-md-0 col-md-5 d-flex justify-content-center align-items-center">
-        <img class="card-img-top-index p-1" src="{{ asset('build/images/design/index/lot_de_presentation.png') }}" alt="Image d'un lot de jeux de socièté">
+        <img class="card-img-top-index p-1" src="{{ asset('build/images/design/index/lot_de_presentation.png')|imagine_filter('big_thumbs') }}" alt="Image d'un lot de jeux de socièté">
     </div>
 </div>
 
@@ -58,7 +58,7 @@
     <div class="col-12 p-3 col-sm-5 mb-4 mb-lg-0 col-lg-3 d-flex justify-content-around">
         <div class="col-12 card card_index_info_catalogue bg-secondary">
             <a class="_card_full_button" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-enfants'}) }}"></a>
-            <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_enfant.png') }}" alt="Lot de jeux pour enfants">
+            <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_enfant.png')|imagine_filter('thumbs') }}" alt="Lot de jeux pour enfants">
             <div class="card-body">
                 <div class="card-title d-flex justify-content-center align-items-center">
                     <div class="h4 text-purple">Enfants</div>
@@ -71,7 +71,7 @@
     <div class="col-12 p-3 col-sm-5 mb-4 mb-lg-0 col-lg-3 d-flex justify-content-around">
         <div class="col-12 card card_index_info_catalogue bg-secondary">
             <a class="_card_full_button" href="{{ path('app_catalogue_occasions', {'category': 'jeux-tout-public'}) }}"></a>
-            <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_tout_public.png') }}" alt="Lot de jeux tout public">
+            <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_tout_public.png')|imagine_filter('thumbs') }}" alt="Lot de jeux tout public">
             <div class="card-body">
                 <div class="card-title d-flex justify-content-center align-items-center">
                     <div class="h4 text-purple">Tout public</div>
@@ -84,7 +84,7 @@
     <div class="col-12 p-3 col-sm-5 mb-4 mb-lg-0 col-lg-3 d-flex justify-content-around">
         <div class="col-12 card card_index_info_catalogue bg-secondary">
             <a class="_card_full_button" href="{{ path('app_catalogue_occasions', {'category': 'jeux-pour-initie-es'}) }}"></a>
-            <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_inities.png') }}" alt="Lot de jeux pour initiés">
+            <img class="card-img-top-index" src="{{ asset('build/images/design/index/exemple_jeux_inities.png')|imagine_filter('thumbs') }}" alt="Lot de jeux pour initiés">
             <div class="card-body">
                 <div class="card-title d-flex justify-content-center align-items-center">
                     <div class="h4 text-purple">Initié·es</div>
@@ -103,7 +103,7 @@
         Trouver la pièce <span class="text-purple">manquante !</span>
     </h2>
     <div class="col-12 mt-4 text-center">
-        <img class="index_chess" src="{{ asset('build/images/design/index/trace_and_chess.png') }}" alt="Catalogue des pièces détachées">
+        <img class="index_chess" src="{{ asset('build/images/design/index/trace_and_chess.png')|imagine_filter('thumbs') }}" alt="Catalogue des pièces détachées">
     </div>
     <div class="col-12 text-center my-3">
         Bientôt disponible ! <br/>
