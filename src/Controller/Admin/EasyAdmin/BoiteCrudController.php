@@ -88,7 +88,6 @@ class BoiteCrudController extends AbstractCrudController
             TextField::new('name')
                 ->setLabel('Nom')
                 ->setPermission('ROLE_BENEVOLE')
-                ->setDisabled($disabledWhenBenevole)
                 ->setColumns(6),
             SlugField::new('slug')
                 ->setTargetFieldName('name')
