@@ -224,7 +224,7 @@ class DashboardController extends AbstractDashboardController
 
     public function configureDashboard(): Dashboard
     {
-        return Dashboard::new()->setTitle('RVJ3');
+        return Dashboard::new()->setTitle('RVJ3')->setFaviconPath('/build/images/favicon/favicon.ico');
     }
 
     public function configureMenuItems(): iterable

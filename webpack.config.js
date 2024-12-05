@@ -26,6 +26,7 @@ Encore
      */
     .addEntry('site', './assets/js/site.js')
     .addEntry('maintenance', './assets/js/maintenance.js')
+    .addEntry('easyAdmin', './assets/js/easyAdmin.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
