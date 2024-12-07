@@ -1,0 +1,15 @@
+{# templates/admin/my-custom-page.html.twig #}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+
+{% block content_title %}SAISIE MANUELLE A PARTIR D'UNE RESERVE [DETAILS]{% endblock %}
+
+{% block main %}
+
+    {% include "components/_flash_message.html.twig" %}
+
+    <div class="row g-0 my-4">
+        {% include "admin/forms/_detailsForManualInvoice.html.twig" %}
+    </div>
+    
+{% endblock %}

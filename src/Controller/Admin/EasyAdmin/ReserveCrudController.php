@@ -91,11 +91,11 @@ class ReserveCrudController extends AbstractCrudController
         $approveAction = Action::new('approve')
             ->addCssClass('btn btn-success')
             ->setIcon('fa fa-check-circle')
-            ->linkToCrudAction('admin_manual_invoice_start', ['reserveId' => $this->requestStack->getCurrentRequest()->get('entityId')]);
+            ->linkToRoute('admin_manual_invoice_details', ['reserveId' => $this->requestStack->getCurrentRequest()->get('entityId')])->displayIf(fn ($entity) => $entity->getUser() != null);
 
             return $actions
-                ->add(Crud::PAGE_INDEX, Action::DETAIL);
-            // ->add(Crud::PAGE_EDIT, $approveAction);
+                ->add(Crud::PAGE_INDEX, Action::DETAIL)
+                ->add(Crud::PAGE_DETAIL, $approveAction);
         
     }
 

@@ -210,6 +210,7 @@ class BoiteCrudController extends AbstractCrudController
                 ->onlyWhenUpdating(),
         ];
     }
+
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -220,6 +221,7 @@ class BoiteCrudController extends AbstractCrudController
             ->setDefaultSort(['id' => 'DESC'])
             ->setSearchFields(['name', 'editor.name', 'id', 'rvj2id']);
     }
+
     public function configureActions(Actions $actions): Actions
     {
         $urlForCreateOccasion = $this->adminUrlGenerator
@@ -228,7 +230,8 @@ class BoiteCrudController extends AbstractCrudController
             ->set('boiteShell', $this->requestStack->getCurrentRequest()->get('entityId'))
             ->generateUrl();
         $createOccasion = Action::new('createOccasion', '+ Occasion')
-            ->linkToUrl($urlForCreateOccasion)->setCssClass('btn btn-success')->displayIf(fn ($entity) => $entity->isIsOccasion() == true);
+            ->linkToUrl($urlForCreateOccasion)->setCssClass('btn btn-success')
+            ->displayIf(fn ($entity) => $entity->isIsOccasion() == true);
 
         $urlForCreateArticle = $this->adminUrlGenerator
             ->setController(ItemCrudController::class)
@@ -236,7 +239,8 @@ class BoiteCrudController extends AbstractCrudController
             ->set('boiteShell', $this->requestStack->getCurrentRequest()->get('entityId'))
             ->generateUrl();
         $createArticle = Action::new('createArticle', '+ Article')
-            ->linkToUrl($urlForCreateArticle)->setCssClass('btn btn-success')->displayIf(fn ($entity) => $entity->getIsOnline() == true);
+            ->linkToUrl($urlForCreateArticle)->setCssClass('btn btn-success')
+            ->displayIf(fn ($entity) => $entity->getIsOnline() == true);
 
 
         return $actions
@@ -249,6 +253,7 @@ class BoiteCrudController extends AbstractCrudController
             // ->add(Crud::PAGE_INDEX, $createOccasion)
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
     }
+
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
@@ -274,6 +279,7 @@ class BoiteCrudController extends AbstractCrudController
             $entityManager->flush();
         }
     }
+
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if ($entityInstance instanceof Boite) {

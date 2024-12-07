@@ -6,9 +6,14 @@ use DateInterval;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Twig\Environment;
+use App\Entity\Panier;
 use DateTimeImmutable;
 use League\Csv\Reader;
+use App\Entity\Address;
+use App\Entity\CollectionPoint;
 use App\Entity\Payment;
+use App\Entity\Reserve;
+use App\Entity\Delivery;
 use App\Entity\Document;
 use App\Entity\DocumentLine;
 use App\Entity\DocumentStatus;
@@ -17,7 +22,9 @@ use App\Service\UtilitiesService;
 use App\Entity\DocumentLineTotals;
 use App\Repository\ItemRepository;
 use App\Repository\UserRepository;
+use App\Entity\OffSiteOccasionSale;
 use App\Entity\Returndetailstostock;
+use App\Entity\ShippingMethod;
 use App\Repository\AddressRepository;
 use App\Repository\PaymentRepository;
 use App\Repository\DocumentRepository;
@@ -30,6 +37,7 @@ use App\Repository\ShippingMethodRepository;
 use App\Repository\CollectionPointRepository;
 use App\Repository\DocumentsendingRepository;
 use App\Repository\VoucherDiscountRepository;
+use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
@@ -38,7 +46,6 @@ use App\Repository\OffSiteOccasionSaleRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 class DocumentService
 {
@@ -370,7 +377,7 @@ class DocumentService
         $document = new Document();
         $now = new DateTimeImmutable('now');
         $endDevis = $now->add(new DateInterval('P'.$docParams->getDelayBeforeDeleteDevis().'D'));
- 
+
         $document
                 ->setToken($this->utilitiesService->generateRandomString())
                 ->setQuoteNumber($docParams->getQuoteTag().$quoteNumber)
@@ -412,8 +419,8 @@ class DocumentService
             ->setQuantity(1)
             ->setDocument($document)
             ->setPriceExcludingTax($panierParams['totauxOccasions']['price']);
-        
         $this->em->persist($documentLine);
+
         $this->em->flush();
 
 
@@ -724,5 +731,142 @@ class DocumentService
         }
 
         $this->em->flush();
+    }
+
+    public function generateDocumentInDatabaseFromReserve(Reserve $reserve, array $allPricesHtFromRequest, Address $billingAddressFromForm, $deliveryAddressFromForm, ShippingMethod $shippingMethodFromForm)
+    {
+
+        $paniers = [];
+
+        //on genere des paniers pour chaque occasions
+        foreach($reserve->getOccasions() as $key =>$occasion){
+            $panier = new Panier();
+            $panier->setOccasion($occasion);
+            $panier->setQte(1);
+            $panier->setPriceWithoutTax($allPricesHtFromRequest[$key] * 100);
+            $panier->setUnitPriceExclusingTax($allPricesHtFromRequest[$key] * 100);
+            $panier->setUser($reserve->getUser());
+            $panier->setCreatedAt(new DateTimeImmutable('now'));
+            $this->em->persist($panier);
+            $paniers[] = $panier;
+        }
+
+
+ 
+        //montant total du panier
+        $totalHtPanier = 0;
+        foreach($allPricesHtFromRequest as $price){
+            $totalHtPanier += $price;
+        }
+
+        
+        $now = new DateTimeImmutable('now');
+        $entityInstance = new OffSiteOccasionSale();
+        $entityInstance->setPlaceOfTransaction('Vente emportée')->setMovementTime($now);
+
+        $billingAddress = $billingAddressFromForm;
+        $deliveryAddress = $deliveryAddressFromForm;
+        $details = [];
+        $details['panier_boites'] = ['init' => 'init']; // for action in admin
+        $details['totalPanier'] = $totalHtPanier * 100;
+        $details['tax'] = $this->taxRepository->findOneBy([]);
+        // $details['deliveryCostWithoutTax'] = $del;
+        // $details['preparationHt'] = 0;
+        $details['shipping'] = $shippingMethodFromForm;
+        $reponses['totauxOccasions'] = [];
+        $reponses['totauxOccasions'] = $this->utilitiesService->totauxByPanierGroup($paniers);
+        $details['totauxOccasions']['weigth'] = $reponses['totauxOccasions']['weigth'];
+        $details['totauxOccasions']['price'] = $reponses['totauxOccasions']['price'];
+        $details['panier_occasions'] = [];
+        $details['panier_boites'] = [];
+        $details['panier_items'] = [];
+
+
+
+        //ON genere un nouveau numero de devis
+        $quoteNumber = $this->generateNewNumberOf("quoteNumber", "getQuoteNumber");
+
+        //on cherche les parametres des documents
+        $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
+
+        //puis on met dans la base
+        $document = new Document();
+        $now = new DateTimeImmutable('now');
+        $endDevis = $now->add(new DateInterval('P'.$docParams->getDelayBeforeDeleteDevis().'D'));
+
+        $document
+                ->setToken($this->utilitiesService->generateRandomString())
+                ->setQuoteNumber($docParams->getQuoteTag().$quoteNumber)
+                ->setTotalExcludingTax($details['totalPanier'])
+                ->setDeliveryAddress($deliveryAddress)
+                ->setUser($reserve->getUser())
+                ->setBillingAddress($billingAddress)
+                ->setTotalWithTax($this->utilitiesService->htToTTC($details['totalPanier'],$details['tax']->getValue()))
+                ->setDeliveryPriceExcludingTax($details['deliveryCostWithoutTax']->getPriceExcludingTax())
+                ->setIsQuoteReminder(false)
+                ->setIsLastQuote(true)
+                ->setEndOfQuoteValidation($endDevis)
+                ->setCreatedAt($now)
+                ->setTaxRate($details['tax'])
+                ->setTaxRateValue($details['tax']->getValue())
+                ->setCost($details['preparationHt'])
+                ->setIsDeleteByUser(false)
+                ->setTimeOfSendingQuote(new DateTimeImmutable('now'))
+                ->setDocumentStatus($this->documentStatusRepository->findOneBy(['action' => 'SEND_END']))
+                ->setShippingMethod($details['shipping']);
+
+        $this->em->persist($document);
+        // $this->em->flush();
+dd($document);
+        // $docLineTotals = new DocumentLineTotals();
+        // $docLineTotals
+        //     ->setDocument($document)
+        //     ->setBoitesWeigth(0)->setBoitesPriceWithoutTax(0)
+        //     ->setItemsWeigth(0)->setItemsPriceWithoutTax(0)
+        //     ->setDiscountonpurchase(0)->setDiscountonpurchaseinpurcentage(0)->setVoucherDiscountValueUsed(0)
+        //     ->setOccasionsWeigth($panierParams['totauxOccasions']['weigth'])->setOccasionsPriceWithoutTax($panierParams['totauxOccasions']['price']);
+        // $this->em->persist($docLineTotals);
+        // $this->em->flush();
+
+
+        $documentLine = new DocumentLine();
+        $documentLine
+            ->setOccasion($panierParams['occasion'])
+            ->setQuantity(1)
+            ->setDocument($document)
+            ->setPriceExcludingTax($panierParams['totauxOccasions']['price']);
+        $this->em->persist($documentLine);
+
+        $this->em->flush();
+
+
+        $paiement = $this->paymentRepository->findOneBy(['document' => $document]);
+
+        if(!$paiement){
+            $paiement = new Payment();
+        }
+
+        //on renseigne le paiement
+        $paiement->setDocument($document)
+                ->setMeansOfPayment($entityInstance->getMeansOfPaiement())
+                ->setTokenPayment('AUCUN')
+                ->setCreatedAt(new DateTimeImmutable('now'))
+                ->setTimeOfTransaction($entityInstance->getMovementTime())
+                ->setDetails('AUCUN DETAILS')
+                ->setTimeOfTransaction($entityInstance->getMovementTime());
+        //on sauvegarde le paiement
+        $this->em->persist($paiement);
+        $this->em->flush();
+
+        //il faut creer le numero de facture
+        $billNumber = $this->generateNewNumberOf('billNumber', 'getBillNumber');
+
+        //on met a jour le document en BDD
+        $etat = $this->documentStatusRepository->findOneBy(['action' => 'SEND_END']); //Envoyer
+        $document->setDocumentStatus($etat)->setBillNumber($docParams->getBillingTag().$billNumber);
+        $this->em->persist($document);
+        $this->em->flush();
+
+        return $document;
     }
 }
