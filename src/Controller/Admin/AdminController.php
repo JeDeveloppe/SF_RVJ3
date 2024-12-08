@@ -2,36 +2,32 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\Admin\EasyAdmin\DocumentCrudController;
 use App\Entity\Panier;
 use DateTimeImmutable;
-use PHPUnit\Util\Json;
-use App\Entity\Delivery;
-use App\Form\AddressType;
 use App\Service\MailService;
 use App\Service\PanierService;
-use App\Form\ManualInvoiceType;
 use App\Service\DocumentService;
 use App\Service\PaiementService;
 use App\Repository\TaxRepository;
+use App\Service\UtilitiesService;
 use App\Repository\UserRepository;
-use App\Entity\OffSiteOccasionSale;
 use App\Repository\BoiteRepository;
 use App\Repository\PaymentRepository;
 use App\Repository\ReserveRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Form\DetailsForManualInvoiceType;
 use App\Repository\SiteSettingRepository;
-use App\Form\BillingAndDeliveryAddressType;
 use App\Repository\DocumentStatusRepository;
 use App\Repository\ShippingMethodRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
 use Symfony\Component\HttpFoundation\Response;
+use App\Repository\DocumentParametreRepository;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\BillingAndDeliveryAddressForManualInvoiceType;
-use App\Form\DetailsForManualInvoiceType;
-use App\Service\UtilitiesService;
+use App\Repository\MeansOfPayementRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -54,7 +50,9 @@ class AdminController extends AbstractController
         private PanierService $panierService,
         private TaxRepository $taxRepository,
         private UtilitiesService $utilitiesService,
-        private AdminUrlGenerator $adminUrlGenerator
+        private AdminUrlGenerator $adminUrlGenerator,
+        private DocumentParametreRepository $documentParametreRepository,
+        private MeansOfPayementRepository $meansOfPayementRepository
     )
     {
     }
@@ -143,7 +141,8 @@ class AdminController extends AbstractController
                 $details = [
                     'paiementId' => $detailsForManualInvoiceForm['paiement']->getData()->getId(),
                     'shippingMethodId' => $detailsForManualInvoiceForm['shippingMethod']->getData()->getId(),
-                    'reserveId' => $reserve->getId()
+                    'reserveId' => $reserve->getId(),
+                    'transactionDate' => $detailsForManualInvoiceForm['transactionDate']->getData()->format('Y-m-d'),
                 ];
 
                 //?on met en session pour passer sur la page suivante
@@ -177,6 +176,10 @@ class AdminController extends AbstractController
         }else{
 
             $shippingMethod = $this->shippingMethodRepository->findOneById($detailsForManualInvoice['shippingMethodId']);
+            $meanOfPaiement = $this->meansOfPayementRepository->findOneById($detailsForManualInvoice['paiementId']);
+            $transactionDate = new DateTimeImmutable($detailsForManualInvoice['transactionDate'], new \DateTimeZone('Europe/Paris'));
+
+
             $billingAndDeliveryForm = $this->createForm(BillingAndDeliveryAddressForManualInvoiceType::class, null,[
                 'user' => $reserve->getUser(),
                 'shippingMethodId' => $shippingMethod->getId(),
@@ -198,6 +201,14 @@ class AdminController extends AbstractController
             }
             //on calcule le poidt total du panier
             $reponses['totauxOccasions'] = $this->utilitiesService->totauxByPanierGroup($paniers);
+            //frais de gestion
+            $cost = 0;
+            if($reponses['totauxOccasions']['price'] == 0){
+                $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
+                $cost = $docParams->getPreparation();
+            }
+
+
 
             if($billingAndDeliveryForm->isSubmitted() && $billingAndDeliveryForm->isValid()){
 
@@ -207,9 +218,13 @@ class AdminController extends AbstractController
                 $deliveryAddressFromForm = $billingAndDeliveryForm['deliveryAddress']->getData();
                 $shippingMethod = $this->shippingMethodRepository->find($detailsForManualInvoice['shippingMethodId']);
 
-                $this->documentService->generateDocumentInDatabaseFromReserve($reserve, $allPricesHtFromRequest, $billingAddressFromForm, $deliveryAddressFromForm, $shippingMethod);
+                //on creer le document, on supprime reserve et on redirige vers la page suivante
+                $document = $this->documentService->generateDocumentInDatabaseFromReserve($reserve, $allPricesHtFromRequest, $billingAddressFromForm, $deliveryAddressFromForm, $shippingMethod);
 
-                dd('stop document créer');
+                //puis on redirige vers les reservations zvec un message d'action
+                $this->addFlash('success', 'Facture manuelle crée avec successe ! '.$document->getBillNumber());
+                $url = $this->adminUrlGenerator->setController(DocumentCrudController::class)->setAction('index')->generateUrl();
+                return $this->redirect($url);
 
             }
 
@@ -217,8 +232,11 @@ class AdminController extends AbstractController
                 'reserve' => $reserve,
                 'billingAndDeliveryForm' => $billingAndDeliveryForm,
                 'shippingMethod' => $shippingMethod,
+                'meanOfPaiement' => $meanOfPaiement,
+                'transactionDate' => $transactionDate,
                 'shippingMethodIdForJavascript' => $shippingMethod->getId(),
-                'cartWeightForJavascript' => $reponses['totauxOccasions']['weigth']
+                'cartWeightForJavascript' => $reponses['totauxOccasions']['weigth'],
+                'costForJavascript' => $cost
             ]);
         }
     }

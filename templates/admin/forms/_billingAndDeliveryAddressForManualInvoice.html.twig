@@ -1,20 +1,18 @@
 
 {{ form_start(billingAndDeliveryForm, { 'attr': {'class': 'col-12 d-flex flex-wrap justify-content-around align-items-center'} }) }}
-    <table class="table align-middle mb-5">
+    <table class="table align-middle mb-5 shadow">
         <tr>
-            <th>#</th>
-            <th>Image</th>
-            <th>Boite</th>
-            <th>Référence</th>
+            <th class="text-center">#</th>
+            <th class="text-center">Image</th>
+            <th class="text-center">Boite</th>
+            <th class="text-center">Référence</th>
             <th class="text-center">Prix catalogue HT</th>
             <th class="text-center">Prix de vente HT</th>
         </tr>
         {% for occasion in reserve.occasions %}
             <tr>
-                <td>
-                    #
-                </td>
-                <td>
+                <td class="text-center">#</td>
+                <td class="text-center">
                     <img class="card_catalog_img" style="max-width:120px" src="{{ vich_uploader_asset(occasion.boite, 'imageFile') }}"/>
                 </td>
                 <td>
@@ -25,14 +23,20 @@
                         <li>Règle du jeu : {{ occasion.gameRule }}</li>
                     </ul>
                 </td>
-                <td>{{ occasion.reference }}</td>
+                <td class="text-center">{{ occasion.reference }}</td>
                 <td class="text-center">{{ (occasion.priceWithoutTax) / 100 |number_format(2, '.', ',') }} €</td>
-                <td class="text-center"><input type="number" step="0.01" name="billingPricesHt[]" required value="{{ (occasion.priceWithoutTax) / 100 |number_format(2, '.', ',') }}" onchange="sumOfSousTotalHt()" /></td>
+                <td class="text-center"><input class="text-end" type="number" step="0.01" name="billingPricesHt[]" required value="{{ (occasion.priceWithoutTax) / 100 |number_format(2, '.', ',') }}" onchange="sumOfSousTotalHt()" /></td>
             </tr>
         {% endfor %}
+    </table>
+    <table class="table my-5 shadow">
         <tr>
             <td class="text-end fw-bolder" colspan="5">SOUS TOTAL HT:</td>
             <td class="text-end fw-bolder"><div id="divSousTotalHt"></div></td>
+        </tr>
+        <tr>
+            <td class="text-end fw-bolder" colspan="5">Frais de gestion:</td>
+            <td class="text-end fw-bolder"><div id="divCost"></div></td>
         </tr>
         <tr>
             <td class="text-end fw-bolder" colspan="5">Prix de la livraison:</td>
@@ -79,11 +83,13 @@
     </div>
 
     <div class="col-12 text-center my-4">
+        <label class="form-label">{{ form_label(billingAndDeliveryForm.confirm) }}</label>
+
         {{ form_widget(billingAndDeliveryForm.confirm) }}
     </div>
 
     <div class="col-12 d-flex justify-content-center">
-        <button type="submit" class="btn btn-success">Générer la facture</button>
+        <button type="submit" class="btn btn-outline-success">Générer la facture<br/><span class="small fw-bolder">(Pas de retour en arrière possible...)</span></button>
     </div>
 
 {{ form_end(billingAndDeliveryForm) }}

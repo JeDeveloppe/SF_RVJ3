@@ -521,60 +521,6 @@ class PanierService
     //     return $responses;
     // }
 
-    public function returnArrayPaniersEntitiesFromPanierSession(array $paniersInSession)
-    {
-
-        foreach($paniersInSession as $categorie =>  $products){
-
-            if($categorie == 'occasions'){
-
-                foreach($products as $occasion_id => $qte){
-                    $occasion = $this->occasionRepository->findOneBy(['id' => $occasion_id]);
-
-                    //?en fonction du prix s'il est remisé ou pas
-                    if($occasion->getDiscountedPriceWithoutTax() > 0){
-
-                        $price = $occasion->getDiscountedPriceWithoutTax();
-
-                    }else{
-
-                        $price = $occasion->getPriceWithoutTax();
-                    }
-
-                    //?on crée la ligne du panier
-                    $panier = new Panier();
-                    $panier->setOccasion($occasion)
-                        ->setCreatedAt( new DateTimeImmutable('now'))
-                        ->setPriceWithoutTax($price)
-                        ->setQte($qte);
-                    // $this->em->persist($panier);
-
-                    $paniers[] = $panier;
-                }
-            }
-            if($categorie == 'items'){
-
-                foreach($products as $item_id => $qte){
-                    $item = $this->itemRepository->findOneBy(['id' => $item_id]);
-
-                    $price = $item->getPriceExcludingTax();
-
-                    //?on crée la ligne du panier
-                    $panier = new Panier();
-                    $panier->setItem($item)
-                        ->setCreatedAt( new DateTimeImmutable('now'))
-                        ->setPriceWithoutTax($price)
-                        ->setQte($qte);
-                    // $this->em->persist($panier);
-
-                    $paniers[] = $panier;
-                }
-            }
-        }
-
-        return $paniers;
-    }
-
     public function returnAllPaniersFromUser()
     {
 
@@ -597,7 +543,7 @@ class PanierService
 
     public function deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock()
     {
-        $now = new DateTimeImmutable('now');
+        $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
         $paniersToDelete = $this->panierRepository->findPaniersToDeleteWhenEndOfValidationIsToOld($now);
 
         foreach($paniersToDelete as $panier)

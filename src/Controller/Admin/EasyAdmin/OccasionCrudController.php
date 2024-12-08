@@ -32,6 +32,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 
 class OccasionCrudController extends AbstractCrudController
 {   
@@ -56,7 +57,7 @@ class OccasionCrudController extends AbstractCrudController
     {
 
         $disabledIfBilled = true;
-        $disabledIfBilled = $this->utilitiesService->easyAdminLogicWhenBilling($this->requestStack, $this->occasionRepository);
+        $disabledIfBilled = $this->utilitiesService->easyAdminLogicWhenBilling($this->requestStack);
         $boiteShell = $this->requestStack->getCurrentRequest()->get('boiteShell');
 
         if($boiteShell && $this->requestStack->getCurrentRequest()->get('crudAction') == 'new'){
@@ -165,17 +166,18 @@ class OccasionCrudController extends AbstractCrudController
 
                 FormField::addTab('Informations stocks')->onlyWhenUpdating(),
                 AssociationField::new('paniers')
-                    ->setLabel('Vente en cours')
+                    ->setLabel('Panier en cours:')
                     ->setDisabled(true)
                     ->setTextAlign('center')->setColumns(4)->onlyWhenUpdating(),
                 AssociationField::new('reserve')
-                    ->setLabel('Réservé')
+                    ->setLabel('Réservé:')
                     ->setDisabled(true)
                     ->setTextAlign('center')->setColumns(4)->onlyWhenUpdating(),
                 AssociationField::new('offSiteOccasionSale')
-                    ->setLabel('Vendu / donner')
-                    ->setDisabled(true)->setTextAlign('center')
-                    ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])->setColumns(12)->onlyWhenUpdating(),
+                    ->setLabel('Vendu / donner (Hors site):')
+                    ->renderAsHtml()
+                    ->setDisabled(true)->setTextAlign('center')->setColumns(6)->onlyWhenUpdating(),
+                AssociationField::new('documentLines','Ligne de document:')->setDisabled(true)->setTextAlign('center')->setColumns(12)->onlyWhenUpdating(),
 
 
                 FormField::addTab('Création / Mise à jour')->onlyWhenUpdating(),

@@ -8,14 +8,17 @@ use App\Entity\ShippingMethod;
 use App\Entity\CollectionPoint;
 use App\Entity\MeansOfPayement;
 use Doctrine\ORM\EntityRepository;
+use DoctrineExtensions\Query\Mysql\Date;
 use Symfony\Component\Form\AbstractType;
 use App\Repository\ShippingMethodRepository;
 use App\Repository\CollectionPointRepository;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class DetailsForManualInvoiceType extends AbstractType
 {
@@ -34,7 +37,7 @@ class DetailsForManualInvoiceType extends AbstractType
                 'class' => MeansOfPayement::class,
                 'label' => false,
                 'attr' => [
-                    'class' => 'col-12',
+                    'class' => 'col-12 form-control',
                 ],
                 'placeholder' => '-- Methode de paiement --',
                 'multiple' => false,
@@ -53,16 +56,27 @@ class DetailsForManualInvoiceType extends AbstractType
                 'class' => ShippingMethod::class,
                 'label' => false,
                 'attr' => [
-                    'class' => 'col-12',
+                    'class' => 'col-12 form-control',
                 ],
                 'placeholder' => '-- Methode de livraison --',
                 'multiple' => false,
                 'expanded' => false,
                 'mapped' => false,
                 ])
-            ->add('submit', SubmitType::class, [
+            ->add('transactionDate', DateType::class, [
+                'label' => 'Date de la transaction:',
                 'attr' => [
-                    'class' => 'btn btn-primary',
+                    'class' => 'col-12 form-control',
+                ],
+                'mapped' => false,
+                'widget' => 'single_text',
+                'html5' => true,
+                'format' => 'yyyy-MM-dd',
+                ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Valider et continuer',
+                'attr' => [
+                    'class' => 'btn btn-success'
                 ]
             ]);
     }

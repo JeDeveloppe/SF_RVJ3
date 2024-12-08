@@ -96,7 +96,7 @@ class BillingAndDeliveryAddressForManualInvoiceType extends AbstractType
             }
 
             $builder->add('confirm', CheckboxType::class, [
-                'label' => 'Je confirme les prix et les addresses ci-dessus',
+                'label' => 'Je confirme les choix ci-dessus:',
                 'required' => true,
                 'mapped' => false,
             ]);
