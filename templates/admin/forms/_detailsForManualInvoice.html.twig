@@ -1,0 +1,14 @@
+{{ form_start(detailsForManualInvoice, { 'attr': {'class': 'col-11 mx-auto col-md-6 d-flex flex-wrap justify-content-around align-items-center'} }) }}
+    
+    <div class="col-12 mb-3">
+        {{ form_widget(detailsForManualInvoice.paiement) }}
+    </div>
+    <div class="col-12 mb-3">
+        {{ form_widget(detailsForManualInvoice.shippingMethod) }}
+    </div>
+    <div class="col-12 mb-5">
+        <label class="form-label">{{ form_label(detailsForManualInvoice.transactionDate) }}</label>
+        {{ form_widget(detailsForManualInvoice.transactionDate) }}
+    </div>
+
+{{ form_end(detailsForManualInvoice) }}

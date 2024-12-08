@@ -1,0 +1,108 @@
+{# templates/admin/my-custom-page.html.twig #}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}SAISIE MANUELLE A PARTIR D'UNE RESERVE [PRIX ET ADRESSES]{% endblock %}
+
+{% block main %}
+
+    {% include "components/_flash_message.html.twig" %}
+
+    {% set referer = app.request.headers.get('referer') %}
+    <div class="rox g-0">
+        <a href="{{ referer }}" class="btn btn-dark"><i class="fa-solid fa-backward-step me-1"></i> Précédent</a>
+    </div>
+
+    <div class="row g-0 my-5">
+        <table class="table table-bordered text-center shadow">
+            <tr>
+                <th scope="col">Moyen de paiement choisi:</th>
+                <th scope="col">Méthode d'envoi choisi: </th>
+                <th scope="col">Date de transaction choisi:</th>
+            </tr>
+            <tbody>
+                <tr>
+                    <td>{{ meanOfPaiement.name }}</td>
+                    <td>{{ shippingMethod.name }}</td>
+                    <td>{{ transactionDate |date("d/m/Y") }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row g-0 my-5">
+        {% include "admin/forms/_billingAndDeliveryAddressForManualInvoice.html.twig" %}
+    </div>
+    
+
+    <script>
+        window.addEventListener('load', () => {
+            const divSousTotalHt = document.getElementById('divSousTotalHt');
+            let divTotalHt = document.getElementById('totalHt');
+            let divLivraisonCost = document.getElementById('livraisonCost');
+            let shippingMethodIdForJavascript = {{ shippingMethodIdForJavascript }};
+            let cartWeightForJavascript = {{ cartWeightForJavascript }};
+            let costPreparationForJavascript = {{ costForJavascript }};
+
+            let occasionsPriceSommeHt = sumOfSousTotalHt();
+            getDeliveryCost(shippingMethodIdForJavascript, cartWeightForJavascript, occasionsPriceSommeHt, costPreparationForJavascript)
+        });
+
+        function sumOfSousTotalHt(){
+            let billingPricesHt = document.getElementsByName('billingPricesHt[]');
+            let costPreparationForJavascript = {{ costForJavascript }};
+
+            let occasionsPrices = [];
+            billingPricesHt.forEach(element => {
+                occasionsPrices.push(Number(element.value));
+            });
+            const occasionsPriceSommeHt = occasionsPrices.reduce((partialSum, a) => partialSum + a, 0);
+
+            divSousTotalHt.innerHTML = occasionsPriceSommeHt.toFixed(2)+ ' €';
+            
+            let shippingMethodIdForJavascript = {{ shippingMethodIdForJavascript }};
+            let cartWeightForJavascript = {{ cartWeightForJavascript }};
+            getDeliveryCost(shippingMethodIdForJavascript, cartWeightForJavascript, occasionsPriceSommeHt, costPreparationForJavascript)
+
+            return occasionsPriceSommeHt;
+        }
+
+        function sumOfTotalHt(deliveryCost, occasionsPriceSommeHt, costPreparationForJavascript){
+            let divCost = document.getElementById('divCost');
+
+            divCost.innerHTML = Number(costPreparationForJavascript).toFixed(2)+ ' €';
+            divTotalHt.innerHTML = (Number(occasionsPriceSommeHt) + Number(costPreparationForJavascript) + Number(deliveryCost)).toFixed(2) + ' €';
+        }
+
+     function getDeliveryCost(shippingId, weigthPanier, occasionsPriceSommeHt, costPreparationForJavascript){
+
+            let url = "{{ path('panier_calcul_delivery_cost') }}";
+            fetch(url, { 
+                
+                // Adding method type 
+                method: "POST", 
+                
+                // Adding body or contents to send 
+                body: JSON.stringify({ 
+                    shippingMethodId: shippingId, 
+                    weight : weigthPanier
+                }), 
+                
+                // Adding headers to the request 
+                headers: { 
+                    "Content-type": "application/json; charset=UTF-8"
+                } 
+            }) 
+            // Converting to JSON 
+            .then((response) => response.json())
+            .then((data) => {
+                let newTotalHt = 0;
+
+                divLivraisonCost.innerHTML = (data.deliveryCost / 100).toFixed(2)+ ' €';
+                sumOfTotalHt( data.deliveryCost / 100, Number(occasionsPriceSommeHt), Number(costPreparationForJavascript) )
+            })
+            .catch(error => console.warn(error));
+        }
+    </script>
+
+{% endblock %}
+
+

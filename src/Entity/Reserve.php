@@ -111,6 +111,18 @@ class Reserve
         return $this;
     }
 
+    public function removeOccasionAfterBillingReserve(Occasion $occasion): static
+    {
+        if ($this->occasions->removeElement($occasion)) {
+            // set the owning side to null (unless already changed)
+            if ($occasion->getReserve() === $this) {
+                $occasion->setReserve(null)->setIsOnline(false);
+            }
+        }
+
+        return $this;
+    }
+
     public function getUser(): ?User
     {
         return $this->user;

@@ -19,7 +19,8 @@
                         </ul>
                     {% elseif value.occasion is not null %}
                         Occasion:<br/>
-                        {{ value.occasion.boite.name }} - {{ value.occasion.boite.editor }} - {{ value.occasion.boite.year }}
+                        {{ value.occasion.boite.name }} - {{ value.occasion.boite.editor }} - {{ value.occasion.boite.year }}<br/>
+                        Référence: {{ value.occasion.reference }}
                         <ul>
                             <li>État de la boite : {{ value.occasion.boxCondition }}</li>
                             <li>État du matériel : {{ value.occasion.equipmentCondition }}</li>

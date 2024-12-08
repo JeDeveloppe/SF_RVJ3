@@ -53,7 +53,7 @@
                                                 <li>{{ value.answer }}</li>
                                             </ul>
                                         {% elseif value.occasion is not null %}
-                                            Occasion:<br/>
+                                            Occasion: {{ value.occasion.reference }}<br/>
                                             {{ value.occasion.boite.name }} - {{ value.occasion.boite.editor }} - {{ value.occasion.boite.year }}
                                             <ul>
                                                 <li>État de la boite : {{ value.occasion.boxCondition }}</li>

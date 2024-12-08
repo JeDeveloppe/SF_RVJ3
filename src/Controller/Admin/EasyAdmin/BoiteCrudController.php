@@ -3,6 +3,7 @@
 namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\Boite;
+use App\Entity\Item;
 use DateTimeImmutable;
 use App\Service\UserService;
 use Doctrine\ORM\QueryBuilder;
@@ -13,6 +14,8 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Asset;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
@@ -27,7 +30,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -88,7 +93,6 @@ class BoiteCrudController extends AbstractCrudController
             TextField::new('name')
                 ->setLabel('Nom')
                 ->setPermission('ROLE_BENEVOLE')
-                ->setDisabled($disabledWhenBenevole)
                 ->setColumns(6),
             SlugField::new('slug')
                 ->setTargetFieldName('name')
@@ -100,7 +104,7 @@ class BoiteCrudController extends AbstractCrudController
                 ->setLabel('Année')
                 ->setPermission('ROLE_ADMIN')
                 ->setRequired(true)
-                ->setColumns(6)->setHtmlAttribute('placeholder', 'Mettre O pour une année inconnue '),
+                ->setColumns(6)->setHtmlAttribute('placeholder', 'Mettre 1 pour une année inconnue '),
             AssociationField::new('editor')
                 ->setLabel('Éditeur')
                 ->setQueryBuilder(
@@ -206,6 +210,7 @@ class BoiteCrudController extends AbstractCrudController
                 ->onlyWhenUpdating(),
         ];
     }
+
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -216,16 +221,30 @@ class BoiteCrudController extends AbstractCrudController
             ->setDefaultSort(['id' => 'DESC'])
             ->setSearchFields(['name', 'editor.name', 'id', 'rvj2id']);
     }
+
     public function configureActions(Actions $actions): Actions
     {
-        $url = $this->adminUrlGenerator
+        $urlForCreateOccasion = $this->adminUrlGenerator
             ->setController(OccasionCrudController::class)
             ->setAction(Action::NEW)
             ->set('boiteShell', $this->requestStack->getCurrentRequest()->get('entityId'))
             ->generateUrl();
         $createOccasion = Action::new('createOccasion', '+ Occasion')
-            ->linkToUrl($url)->setCssClass('btn btn-success');
+            ->linkToUrl($urlForCreateOccasion)->setCssClass('btn btn-success')
+            ->displayIf(fn ($entity) => $entity->isIsOccasion() == true);
+
+        $urlForCreateArticle = $this->adminUrlGenerator
+            ->setController(ItemCrudController::class)
+            ->setAction(Action::NEW)
+            ->set('boiteShell', $this->requestStack->getCurrentRequest()->get('entityId'))
+            ->generateUrl();
+        $createArticle = Action::new('createArticle', '+ Article')
+            ->linkToUrl($urlForCreateArticle)->setCssClass('btn btn-success')
+            ->displayIf(fn ($entity) => $entity->getIsOnline() == true);
+
+
         return $actions
+            ->add(Crud::PAGE_EDIT, $createArticle)
             ->add(Crud::PAGE_EDIT, $createOccasion)
             ->addBatchAction(Action::new('approve', 'Approve Users')
                 ->linkToCrudAction('approveUsers')
@@ -234,6 +253,7 @@ class BoiteCrudController extends AbstractCrudController
             // ->add(Crud::PAGE_INDEX, $createOccasion)
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
     }
+
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
@@ -243,6 +263,13 @@ class BoiteCrudController extends AbstractCrudController
             ->add('durationGame')
         ;
     }
+
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets
+            ->addWebpackEncoreEntry('easyAdmin');
+    }
+
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if ($entityInstance instanceof Boite) {
@@ -252,6 +279,7 @@ class BoiteCrudController extends AbstractCrudController
             $entityManager->flush();
         }
     }
+
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if ($entityInstance instanceof Boite) {

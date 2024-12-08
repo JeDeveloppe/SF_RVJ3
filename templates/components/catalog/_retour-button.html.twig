@@ -1,11 +1,11 @@
 <div class="row my-3">
     <div class="col-12 col-md-6">
         {% if app.request.headers.get('referer') is null %}
-            <a class="btn btn-secondary" href="{{ path('app_catalogue_pieces_detachees') }}#{{ boite.id }}">Voir le catalogue des pièces détachées</a>
+            <a class="btn btn-yellow" href="{{ path('app_catalogue_pieces_detachees') }}#{{ boite.id }}">Voir le catalogue des pièces détachées</a>
         {% elseif app.request.headers.get('referer')| slice(0,-1) == app.request.getSchemeAndHttpHost() %}
-            <a class="btn btn-secondary" href="{{ path('accueil') }}#{{ boite.id }}">Retour a l'accueil</a>
+            <a class="btn btn-yellow" href="{{ path('accueil') }}#{{ boite.id }}">Retour a l'accueil</a>
         {% else %}
-            <a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}#{{ boite.id }}">Retour au catalogue</a>
+            <a class="btn btn-yellow" href="{{ app.request.headers.get('referer') }}#{{ boite.id }}">Retour au catalogue</a>
         {% endif %}
     </div>
 </div>

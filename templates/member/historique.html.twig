@@ -52,8 +52,6 @@
                                     {{ document.shippingMethod.name }} le : {{ document.sendingAt | date('d-m-Y') }}<br/>
                                     {% if document.sendingNumber is not null %}
                                        Numéro de suivi: {{ document.sendingNumber }}
-                                    {% else %}
-                                       Pas de numéro de suivi.
                                     {% endif %}
                                  {% else %}
                                        <span class="fst-italic traitement_en_cours">En cours de traitement</span>

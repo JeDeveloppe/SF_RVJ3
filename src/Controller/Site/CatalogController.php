@@ -116,7 +116,7 @@ class CatalogController extends AbstractController
         $boites = $this->paginator->paginate(
             $donneesFromDatabases, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            24 /*limit per page*/
+            12 /*limit per page*/
         );
 
         $metas['description'] = 'Catalogue complet de toutes les boites dont le service dispose de pièces détachées.';

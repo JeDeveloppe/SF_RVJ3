@@ -3,6 +3,7 @@
 namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\Item;
+use App\Repository\BoiteRepository;
 use DateTimeImmutable;
 use App\Service\ItemService;
 use Doctrine\ORM\QueryBuilder;
@@ -23,6 +24,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ItemCrudController extends AbstractCrudController
 {
@@ -33,13 +35,24 @@ class ItemCrudController extends AbstractCrudController
 
     public function __construct(
         private Security $security,
-        private ItemService $itemService
+        private ItemService $itemService,
+        private RequestStack $requestStack,
+        private BoiteRepository $boiteRepository
     )
     {
     }
 
     public function configureFields(string $pageName): iterable
     {
+        $boiteShell = $this->requestStack->getCurrentRequest()->get('boiteShell');
+        
+
+        if($boiteShell && $this->requestStack->getCurrentRequest()->get('crudAction') == 'new'){
+
+            $this->getContext()->getEntity()->getInstance()->addBoiteOrigine($this->boiteRepository->find($boiteShell));
+
+        }
+
         return [
             FormField::addTab('Général'),
                 FormField::addFieldset('Informations')->onlyWhenUpdating(),
@@ -55,16 +68,29 @@ class ItemCrudController extends AbstractCrudController
                         ->setTextAlign('center')
                         ->setColumns(6),
                     AssociationField::new('BoiteOrigine')
-                        ->setLabel('Boites Originale:')
+                        ->setLabel('Boites Originale: (doit être en ligne)')
                         ->onlyOnForms()
                         ->setColumns(6)
+                        ->onlyOnForms()
                         ->setRequired(true)
                         ->setQueryBuilder(
                             fn(QueryBuilder $queryBuilder) => 
                             $queryBuilder
                                 ->where('entity.isOnline = :true')
                                 ->setParameter('true', true)
-                                ->orderBy('entity.name', 'ASC')),
+                                ->orderBy('entity.id', 'ASC')),
+                    AssociationField::new('BoiteOrigine')
+                        ->setLabel('Boites Originale:')
+                        ->onlyOnForms()
+                        ->setColumns(6)
+                        ->onlyOnIndex()
+                        ->setRequired(true)
+                        ->setQueryBuilder(
+                            fn(QueryBuilder $queryBuilder) => 
+                            $queryBuilder
+                                ->where('entity.isOnline = :true')
+                                ->setParameter('true', true)
+                                ->orderBy('entity.id', 'ASC')),
                     AssociationField::new('BoiteSecondaire')
                         ->setLabel('Boites Secondaire:')->setDisabled(true)->onlyOnForms()->setColumns(6),
 

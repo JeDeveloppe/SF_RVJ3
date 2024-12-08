@@ -86,7 +86,6 @@ class Occasion
         $this->paniers = new ArrayCollection();
     }
 
-
     public function getId(): ?int
     {
         return $this->id;

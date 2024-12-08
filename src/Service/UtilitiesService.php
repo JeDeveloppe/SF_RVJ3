@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Repository\DocumentLineRepository;
+use App\Repository\OccasionRepository;
 use App\Repository\PanierRepository;
 use DateTimeImmutable;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -14,7 +15,8 @@ class UtilitiesService
         private DocumentLineRepository $documentLineRepository,
         private PanierRepository $panierRepository,
         private RequestStack $requestStack,
-        private Security $security
+        private Security $security,
+        private OccasionRepository $occasionRepository
     )
     {
     }
@@ -78,10 +80,9 @@ class UtilitiesService
         return $value;
     }
 
-    public function htToTTC($ht,$tax)
+    public function htToTTC($htInCents,$taxValue)
     {
-        return
-        $ht * (1 + ($tax / 100));
+        return $htInCents * (1 + ($taxValue / 100));
     }
 
     public function totauxByPanierGroup($categories)
@@ -180,16 +181,18 @@ class UtilitiesService
         return $totaux;
     }
 
-    public function easyAdminLogicWhenBilling(RequestStack $requestStack, $repository)
+    public function easyAdminLogicWhenBilling(RequestStack $requestStack)
     {
-        //?edition logic
+        ///?on recupere l'id de l'occasion
         $id = $requestStack->getCurrentRequest()->get('entityId');
+        //de base on set que l'on peut modifier
         $disabledAfterBilling = false;
 
         if($id){
-            $occasion = $repository->find($id);
+            $occasion = $this->occasionRepository->find($id);
+            $documentLine = $this->documentLineRepository->findOneBy(['occasion' => $occasion]);
 
-            if($occasion AND $occasion->getOffSiteOccasionSale() != null){
+            if($occasion AND $occasion->getOffSiteOccasionSale() != null OR $documentLine){
                 $disabledAfterBilling = true;
             }
 
