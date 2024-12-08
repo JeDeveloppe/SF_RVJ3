@@ -11,4 +11,10 @@
         {{ form_widget(detailsForManualInvoice.transactionDate) }}
     </div>
 
+    {% if countAdressFromUser >= 1 %}
+        <button type="submit" class="btn btn-success">Valider et poursuivre...</button>
+    {% else %}
+        <div class="btn btn-danger">L'utilisateur n'a pas saisie d'adresses....</div>
+    {% endif %}
+
 {{ form_end(detailsForManualInvoice) }}

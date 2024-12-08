@@ -125,6 +125,8 @@ class AdminController extends AbstractController
     public function manualInvoiceDetails(Request $request, $reserveId): Response
     {
         $reserve = $this->reserveRepository->findOneById($reserveId);
+        $countAdressFromUser = 0;
+        $countAdressFromUser = count($reserve->getUser()->getAddresses());
 
         if(!$reserve){
 
@@ -157,6 +159,7 @@ class AdminController extends AbstractController
             return $this->render('admin/manual_invoice/setDetails.html.twig', [
                 'reserve' => $reserve,
                 'detailsForManualInvoice' => $detailsForManualInvoiceForm,
+                'countAdressFromUser' => $countAdressFromUser
             ]);
         }
     }
@@ -236,7 +239,7 @@ class AdminController extends AbstractController
                 'transactionDate' => $transactionDate,
                 'shippingMethodIdForJavascript' => $shippingMethod->getId(),
                 'cartWeightForJavascript' => $reponses['totauxOccasions']['weigth'],
-                'costForJavascript' => $cost
+                'costForJavascript' => $cost,
             ]);
         }
     }
