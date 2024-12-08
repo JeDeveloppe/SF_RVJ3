@@ -8,6 +8,11 @@
 
     {% include "components/_flash_message.html.twig" %}
 
+    {% set referer = app.request.headers.get('referer') %}
+    <div class="rox g-0">
+        <a href="{{ referer }}" class="btn btn-dark"><i class="fa-solid fa-backward-step me-1"></i> Précédent</a>
+    </div>
+    
     <div class="row g-0 my-4">
         {% include "admin/forms/_detailsForManualInvoice.html.twig" %}
     </div>

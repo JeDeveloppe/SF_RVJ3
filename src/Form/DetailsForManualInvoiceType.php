@@ -72,13 +72,7 @@ class DetailsForManualInvoiceType extends AbstractType
                 'widget' => 'single_text',
                 'html5' => true,
                 'format' => 'yyyy-MM-dd',
-                ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Valider et continuer',
-                'attr' => [
-                    'class' => 'btn btn-success'
-                ]
-            ]);
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
