@@ -96,7 +96,7 @@
                     content.innerHTML = data.content;
 
                     //on met a jour l'url
-                    history.pushState([], null, Url.pathname + "?" + Params.toString())
+                    history.pushState([], null, Url.pathname + "?" + Params.toString()  + "&ajax=1")
                 }).catch(e => alert(e))
             })
         });

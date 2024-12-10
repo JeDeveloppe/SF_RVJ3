@@ -250,7 +250,7 @@ class OccasionService
                     'end' => 11
                 ];
                 $twig = [
-                    'titleH1' => 'Jeux tout puplic',
+                    'titleH1' => 'Jeux tout public',
                     'breadcrumb' => '<span class="text-purple">Tous les jeux</span> > Tout public'
                 ];
                 break;

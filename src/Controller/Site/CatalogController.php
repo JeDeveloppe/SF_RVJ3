@@ -224,10 +224,10 @@ class CatalogController extends AbstractController
                 
                 }else{
 
-                    $donneesFromDatabases = $this->occasionRepository->searchOccasionsInCatalogue($ages, $players, $durations, $choices);
+                    $donneesFromDatabasesAll = $this->occasionRepository->searchOccasionsInCatalogue($ages, $players, $durations, $choices);
                     $donneesFromDatabasesPlayerMinAndPlayerMaxAsSame = $this->occasionRepository->findOccasionsInCatalogueWherePlayerMinAndPlayerMaxAreSame($players, $durations, $ages, $choices);
 
-                    $donneesFromDatabases = array_unique(array_merge($donneesFromDatabases,$donneesFromDatabasesPlayerMinAndPlayerMaxAsSame), SORT_REGULAR); //?on retire les doublons
+                    $donneesFromDatabases = array_unique(array_merge($donneesFromDatabasesAll,$donneesFromDatabasesPlayerMinAndPlayerMaxAsSame), SORT_REGULAR); //?on retire les doublons
 
                 }
 
@@ -256,7 +256,7 @@ class CatalogController extends AbstractController
             return new JsonResponse([
                 'content' => $this->renderView('site/pages/catalog/components/_display_occasions_results.html.twig', [
                     'occasions' => $occasions,
-                    'occasions_totales' => $occasions,
+                    'occasions_totales' => $donneesFromDatabases,
                     'metas' => $metas,
                     'titreDeLaPage' => $choices['twig']['titleH1'],
                     'breadcrumb' => $choices['twig']['breadcrumb'],
@@ -292,15 +292,30 @@ class CatalogController extends AbstractController
         $http_error_code = 200;
 
         $occasions = $this->occasionRepository->findUniqueOccasionWhenReferenceAndSlugAreOk($reference_occasion, $editor_slug, $boite_slug);
-        //gestion occasion entre v3 et v2
-        if(!$occasions[0]){
+
+        //si on ne trouve pas d'occasion on regarde avec inversion dans la reference v3 et v2
+        if(!$occasions){
 
             $occasions = $this->occasionRepository->findUniqueOccasionByRefrenceV2AndSlugsAreOk($reference_occasion, $editor_slug, $boite_slug);
             $occasion = $occasions[0];
+            //se sera une redirection permanente
+            $http_error_code = 301;
 
-            if(!$occasion[0]){
+            if(!$occasion){
+                //si on a pas trouver en inversant la referance
                 $http_error_code = 404;
                 throw $this->createNotFoundException('Occasion non trouvée');
+
+            }else{
+
+                //on inverse les references - v2 et v3
+                $references = explode('-', $reference_occasion);
+                //et on redirige vers la meme page
+                return $this->redirectToRoute('occasion', [
+                    'reference_occasion' => $references[1].'-'.$references[0],
+                    'editor_slug' => $occasion->getBoite()->getEditor()->getSlug(),
+                    'boite_slug' => $occasion->getBoite()->getSlug(),
+                ], $http_error_code);
             }
         }
 
@@ -339,7 +354,7 @@ class CatalogController extends AbstractController
         $query = $this->occasionRepository->findAleatoireOccasionsByAgeWhitoutThisOccasion($occasions[0]->getBoite()->getAge(), $occasions[0]);
         shuffle($query); // on mélange
         $firstElements = array_slice($query, 0, 4); //on prend les 6 premiers apres avoir mélanger
-        $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.ucfirst(strtolower($occasions[0]->getBoite()->getName())).' - '.ucfirst(strtolower($occasions[0]->getBoite()->getEditor()->getName()));
+        $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.ucfirst(strtolower($occasions[0]->getBoite()->getName())).' - '.ucfirst(strtolower($occasions[0]->getBoite()->getEditor()->getName()).' - Référence:'.$occasions[0]->getReference());
 
         return $this->render('site/pages/catalog/occasions/occasion.html.twig', [
             'occasion' => $occasions[0],
