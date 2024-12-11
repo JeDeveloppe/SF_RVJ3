@@ -56,7 +56,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            $userService->transformPaniersCreatedWhitoutUserToNewUserLogged($user);
+            // $userService->transformPaniersCreatedWhitoutUserToNewUserLogged($user);
 
 
             $user->setAccountnumber($utilitiesService->generateAccountNumber($user->getId()));

@@ -311,19 +311,18 @@ class UserService
 
     }
 
-    // public function transformPaniersCreatedWhitoutUserToNewUserLogged(User $newUser, array $paniersInSession)
-    // {
+    public function transformPaniersCreatedWhitoutUserToNewUserLogged(User $newUser)
+    {
 
-    //     $session = $this->requestStack->getSession();
+        $session = $this->requestStack->getSession();
+        $paniers = $session->get('paniers');
 
-    //     dd($paniersInSession);
+        foreach($paniers as $panier_ligne){
+            $panier_ligne->setUser($newUser)->setTokenSession($session->get('tokenSession'));
+            $this->em->persist($panier_ligne);
+        }
 
-    //     foreach($paniers as $panier_ligne){
-    //         $panier_ligne->setUser($newUser)->setTokenSession($session->get('tokenSession'));
-    //         $this->em->persist($panier_ligne);
-    //     }
+        $this->em->flush();
 
-    //     $this->em->flush();
-
-    // }
+    }
 }

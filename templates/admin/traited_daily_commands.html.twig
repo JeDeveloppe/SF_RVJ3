@@ -48,6 +48,9 @@
                             {% include "admin/components/admin_group_buttons_traited_daily.html.twig" with {'command': data.action, 'document': document} %}
                         </div>
                     </div>
+                    <div class="card-footer">
+                        {% include "admin/components/_linkToUser.html.twig" with {'user': document.user } %} {{ document.user.email }} / {{ document.user.phone ? document.user.phone : 'AUCUN TELEPHONE'  }}
+                    </div>
                 </div>
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal-{{ document.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
