@@ -64,6 +64,9 @@
 						<div class="col-12 d-flex mt-2 mb-5">
 							{% include "components/catalog/_shop_and_no_transport_logos.html.twig" %}
 						</div>
+					{% elseif occasion.isReserved == true %}
+        				<div class="col-12 mt-4 text-end h4 text-purple">Réservé pour une foire...</div><br/>
+        				<div class="col-12 small text-end text-purple">N'hésitez pas à revenir...</div><br/>
 					{% else %}
         				<div class="col-12 my-4 text-end h4 text-purple">Victime de son petit prix...</div>
 					{% endif %}

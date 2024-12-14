@@ -21,6 +21,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use Symfony\Component\HttpFoundation\RequestStack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -101,11 +102,11 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
                 AssociationField::new('movement')
                     ->setLabel('Mouvement:')->setColumns(6)
                     ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-                    ->setDisabled($disabled)->renderAsEmbeddedForm()->onlyOnDetail(),
+                    ->setDisabled($disabled)->renderAsEmbeddedForm()->onlyOnIndex(),
                 AssociationField::new('meansOfPaiement')
                     ->setLabel('Moyen de paiement')->setColumns(6)
                     ->setFormTypeOptions(['placeholder' => 'Sélectionner...'])
-                    ->setDisabled($disabled)->renderAsEmbeddedForm()->onlyOnDetail(),
+                    ->setDisabled($disabled)->renderAsEmbeddedForm()->onlyOnIndex(),
                 AssociationField::new('user')
                     ->setLabel('Acheteur')
                     ->setQueryBuilder(
@@ -132,7 +133,7 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
     {
         return $crud
             ->showEntityActionsInlined()
-            ->setPageTitle('index', 'Liste des mouvements d\'occasions')
+            ->setPageTitle('index', 'Liste des ventes/dons rapide d\'occasions:')
             ->setPageTitle('new', 'Vente rapide d\'un occasion')
             ->setPageTitle('edit', 'Édition d\'un mouvement occasion')
             ->setPageTitle('detail', 'Détails d\'un mouvement occasion')
@@ -152,6 +153,13 @@ class OffSiteOccasionSaleCrudController extends AbstractCrudController
         
     }
 
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('movement')
+        ;
+    }
+    
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if($entityInstance instanceof OffSiteOccasionSale) {

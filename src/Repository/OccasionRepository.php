@@ -109,6 +109,7 @@ class OccasionRepository extends ServiceEntityRepository
             ->join('o.boite','b')
             ->join('o.stock','s')
             ->where('o.isOnline = :online')
+            ->andWhere('o.isReserved = :false')
             ->andWhere('s.name = :stock_name')
             ->andWhere('b.age = :age')
             ->andWhere('o.id != :occasionId')
@@ -116,7 +117,8 @@ class OccasionRepository extends ServiceEntityRepository
                 'occasionId' => $occasion->getId(),
                 'age' => $age,
                 'online' =>  true,
-                'stock_name' => 'SUR LE SITE'
+                'false' => false,
+                'stock_name' => 'SUR LE SITE' //DEFAULT
             ])
             ->orderBy('o.id', 'ASC')
             ->getQuery()
@@ -183,7 +185,7 @@ class OccasionRepository extends ServiceEntityRepository
             ->setParameters([
                 'searchName' => '%'.$searchName.'%',
                 'online' =>  true,
-                'stock_name' => 'SUR LE SITE'
+                'stock_name' => 'SUR LE SITE' //DEFAULT
             ])
             ->orderBy('b.id', 'DESC')
             ->getQuery()
