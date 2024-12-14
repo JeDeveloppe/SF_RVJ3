@@ -55,6 +55,7 @@ class DocumentCrudController extends AbstractCrudController
             FormField::addTab('Général'),
             TextField::new('token')->setLabel('Token')->onlyOnForms()->setDisabled(true)->setColumns(6)->setTextAlign('center'),
             TextField::new('quoteNumber')->setLabel('Num. devis')->setDisabled(true)->setColumns(6)->setTextAlign('center'),
+            TextField::new('billNumber')->setLabel('Num. facture')->setDisabled(true)->setColumns(6)->setTextAlign('center'),
             DateTimeField::new('endOfQuoteValidation')
                 ->setLabel('Valable jusqu\'au:')
                 ->setDisabled(true)

@@ -26,14 +26,21 @@ class OldurlsController extends AbstractController
 
     }
 
-    #[Route('/don-de-jeux/partenaires/{country}/', name: 'give_game_old')]
-    public function giveGameOld(): RedirectResponse
+    #[Route('/don-de-jeux/partenaires/{country}/', name: 'give_game_by_country_old')]
+    public function giveGameByCountryOld(): RedirectResponse
     {
         $url = $this->generateUrl('app_give_your_games');
 
         return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);
     }
 
+    #[Route('/don-de-jeux/', name: 'give_game_old')]
+    public function giveGameOld(): RedirectResponse
+    {
+        $url = $this->generateUrl('app_give_your_games');
+
+        return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);
+    }
 
     #[Route('/nous-soutenir', name: 'support_us_old')]
     public function supportUsOld(): RedirectResponse
@@ -81,4 +88,16 @@ class OldurlsController extends AbstractController
         return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);
     }
 
+    
+    #[Route('/jeu/{editor}/{id}/{slug}/', name: 'piecesDetacheesOld')]
+    public function piecesDetacheesOld($id, $editor, $slug): RedirectResponse
+    {
+        $url = $this->generateUrl('catalogue_pieces_detachees_articles_d_une_boite', [
+            'id' => $id,
+            'editorSlug' => $editor,
+            'boiteSlug' => $slug
+        ]);
+
+        return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);
+    }
 }

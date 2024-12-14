@@ -272,14 +272,14 @@ class DocumentService
                 ->setQuantity($panier->getQte() ?? 1)
                 ->setBoite($panier->getBoite() ?? NULL)
                 ->setItem($panier->getItem() ?? NULL)
-                ->setOccasion($panier->getOccasion() ?? NULL)
+                ->setOccasion($panier->getOccasion() ?? NULL) //?make offline en billed
                 ->setDocument($document)
                 ->setPriceExcludingTax($panier->getPriceWithoutTax());
                 $this->em->persist($documentLine);
 
             if(!is_null($panier->getOccasion())){
                 $occasion = $panier->getOccasion();
-                $occasion->setIsOnline(false);
+                $occasion->setIsOnline(false); //?plus besoin
                 $this->em->persist($occasion);
             }
         }
@@ -326,7 +326,7 @@ class DocumentService
 
                     if(!is_null($docLine->getOccasion())){
                         $occasionInDatabase = $this->occasionRepository->find($docLine->getOccasion());
-                        $occasionInDatabase->setIsOnline(true);
+                        $occasionInDatabase->setIsOnline(true)->setIsBilled(false);
                         $this->em->persist($occasionInDatabase);
                         $this->em->remove($docLine);
                     }
@@ -423,7 +423,7 @@ class DocumentService
 
         $documentLine = new DocumentLine();
         $documentLine
-            ->setOccasion($panierParams['occasion'])
+            ->setOccasion($panierParams['occasion']) //?cela met l'occasion hors ligne et comme vendu
             ->setQuantity(1)
             ->setDocument($document)
             ->setPriceExcludingTax($panierParams['totauxOccasions']['price']);

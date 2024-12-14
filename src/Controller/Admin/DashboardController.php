@@ -13,7 +13,6 @@ use App\Entity\Stock;
 use App\Entity\Editor;
 use DateTimeImmutable;
 use App\Entity\Address;
-use App\Entity\Benefit;
 use App\Entity\Country;
 use App\Entity\Partner;
 use App\Entity\Payment;
@@ -62,8 +61,8 @@ use App\Repository\DocumentStatusRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\OffSiteOccasionSaleRepository;
+use App\Service\AdminService;
 use App\Service\PanierService;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -86,7 +85,8 @@ class DashboardController extends AbstractDashboardController
         private PaiementService $paiementService,
         private ReserveRepository $reserveRepository,
         private PanierRepository $panierRepository,
-        private PanierService $panierService
+        private PanierService $panierService,
+        private AdminService $adminService
     )
     {
         
@@ -259,13 +259,11 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Occasions', 'fas fa-list', Occasion::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Vente / don rapide', 'fas fa-list', OffSiteOccasionSale::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('RESERVER DES OCCASIONS','fa-solid fa-hand', Reserve::class)->setPermission('ROLE_ADMIN')
-        ->setBadge(count($this->reserveRepository->findAll()),'warning');
+        ->setBadge(count($this->reserveRepository->findAll()),'info');
         yield MenuItem::linkToCrud('Types de mouvement', 'fa-solid fa-gear', MovementOccasion::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Liste des états (pièces, boite, règle)', 'fa-solid fa-gear', ConditionOccasion::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Gestion stocks', 'fa-solid fa-gear', Stock::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Liste des recherches', 'fa-solid fa-magnifying-glass', CatalogOccasionSearch::class)->setPermission('ROLE_ADMIN');
-        
-        
         
         yield MenuItem::section('Gestion des documents:')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Les documents', 'fas fa-list', Document::class)->setPermission('ROLE_ADMIN');
@@ -315,11 +313,23 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Grandes région', 'fas fa-list', Granderegion::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Pays', 'fas fa-list', Country::class)->setPermission('ROLE_ADMIN');
 
-
         yield MenuItem::section('Paramètres du site:')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Infos légales', 'fa-solid fa-gear', LegalInformation::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Taxes', 'fa-solid fa-gear', Tax::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Vacances, foires, etc...', 'fas fa-gear', SiteSetting::class)->setPermission('ROLE_ADMIN');
 
+        yield MenuItem::section('Mises à jour:')->setPermission('ROLE_SUPER_ADMIN');
+        yield MenuItem::linkToRoute('Occasions','fa-solid fa-arrows-rotate','admin_update_occasions_billed')->setPermission('ROLE_SUPER_ADMIN');
+
+    }
+
+    #[Route('/admin/update-database/occasions/', name: 'admin_update_occasions_billed', methods: ['GET'])]
+    public function updateOccasionsInDatabase(){
+
+        $this->adminService->updateOccasionsLogic();
+
+        $this->addFlash('success', 'Tous les occasions ont été mis à jour !');
+
+        return $this->redirectToRoute('admin');
     }
 }

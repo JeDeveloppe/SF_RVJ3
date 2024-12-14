@@ -93,7 +93,7 @@ class Reserve
     {
         if (!$this->occasions->contains($occasion)) {
             $this->occasions->add($occasion);
-            $occasion->setReserve($this)->setIsOnline(false);
+            $occasion->setReserve($this)->setIsOnline(false)->setIsReserved(true)->setIsBilled(false);
         }
 
         return $this;
@@ -104,7 +104,19 @@ class Reserve
         if ($this->occasions->removeElement($occasion)) {
             // set the owning side to null (unless already changed)
             if ($occasion->getReserve() === $this) {
-                $occasion->setReserve(null)->setIsOnline(true);
+                $occasion->setReserve(null)->setIsOnline(true)->setIsReserved(false);
+            }
+        }
+
+        return $this;
+    }
+
+    public function removeOccasionDuringFair(Occasion $occasion): static
+    {
+        if ($this->occasions->removeElement($occasion)) {
+            // set the owning side to null (unless already changed)
+            if ($occasion->getReserve() === $this) {
+                $occasion->setReserve(null)->setIsReserved(false);
             }
         }
 

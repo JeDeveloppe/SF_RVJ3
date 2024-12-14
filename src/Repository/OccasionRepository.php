@@ -31,7 +31,7 @@ class OccasionRepository extends ServiceEntityRepository
         //?si je ne rechereche pas de joueurs, je cherche tous les joueurs de la categorie
         $players = $this->returnPlayers($players, $choices);
 
-        //?si je n'eai pas de durées, je cherche toutes les durées de la categorie
+        //?si je n'ai pas de durées, je cherche toutes les durées de la categorie
         $durations = $this->returnDurations($search_durations, $choices);
 
         //si je n'ai pas d'ages, je cherche tous les ages de la categorie
@@ -274,6 +274,18 @@ class OccasionRepository extends ServiceEntityRepository
         return $players;
     }
 
+    public function returnAllOccasionsOfflineAndBilledIsNullAndReservedIsNull(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.isOnline = :false')
+            ->andWhere('o.isBilled IS NULL')   
+            ->andWhere('o.isReserved IS NULL')
+            ->setParameter('false', false)
+            ->orderBy('o.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 //    /**
 //     * @return Occasion[] Returns an array of Occasion objects
