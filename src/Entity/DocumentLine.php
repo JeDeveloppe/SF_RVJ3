@@ -83,6 +83,9 @@ class DocumentLine
     {
         $this->occasion = $occasion;
 
+        //on met a jour l'occasion en hors ligne et comme quoi il est vendu
+        $occasion->setIsBilled(true)->setIsOnline(false);
+
         return $this;
     }
 

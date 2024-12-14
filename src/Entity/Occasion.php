@@ -80,6 +80,12 @@ class Occasion
 
     private ?int $virtualPriceWithoutTax = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isReserved = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isBilled = null;
+
     public function __construct()
     {
         $this->documentLines = new ArrayCollection();
@@ -396,6 +402,30 @@ class Occasion
     public function getBoiteHtPrice(): ?int
     {
         return $this->boite->getHtPrice();
+    }
+
+    public function isIsReserved(): ?bool
+    {
+        return $this->isReserved;
+    }
+
+    public function setIsReserved(?bool $isReserved): static
+    {
+        $this->isReserved = $isReserved;
+
+        return $this;
+    }
+
+    public function isIsBilled(): ?bool
+    {
+        return $this->isBilled;
+    }
+
+    public function setIsBilled(?bool $isBilled): static
+    {
+        $this->isBilled = $isBilled;
+
+        return $this;
     }
 
 }

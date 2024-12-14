@@ -74,6 +74,8 @@ class OccasionCrudController extends AbstractCrudController
                 TextField::new('reference')->setLabel('Référence')->setDisabled(true)->onlyOnIndex()->setTextAlign('center')->setColumns(4),
                 BooleanField::new('isOnline')->setLabel('En ligne')->setColumns(6)->onlyOnForms()->setDisabled($disabledIfBilled)->setColumns(4),
                 BooleanField::new('isOnline')->setLabel('En ligne')->setColumns(6)->onlyOnIndex()->setDisabled(true),
+                BooleanField::new('isReserved')->setLabel('Réservé')->setColumns(6)->onlyOnIndex()->setDisabled(true),
+                BooleanField::new('isBilled')->setLabel('Vendu / donner')->setColumns(6)->onlyOnIndex()->setDisabled(true),
                 AssociationField::new('stock','Visible dans le stock:')->setColumns(4)->setDisabled($disabledIfBilled)->renderAsEmbeddedForm()->onlyOnDetail(),
                 AssociationField::new('stock','Visible dans le stock:')->setColumns(4)->setDisabled($disabledIfBilled)->onlyOnForms(),
                 
@@ -132,11 +134,6 @@ class OccasionCrudController extends AbstractCrudController
                     ->onlyOnForms()->setColumns(12),
 
                 FormField::addFieldset('Prix'),
-                BooleanField::new('isNew')
-                    ->setLabel('Jeu neuf')
-                    ->onlyOnIndex()
-                    ->setDisabled($disabledIfBilled)
-                    ->setColumns(12),
                 BooleanField::new('isNew')
                     ->setLabel('Jeu neuf')
                     ->onlyOnForms()
@@ -237,9 +234,11 @@ class OccasionCrudController extends AbstractCrudController
     {
         return $filters
             ->add('boite')
-            ->add('isOnline')
+            ->add('isOnline','En ligne')
             ->add('priceWithoutTax')
-            ->add('paniers')
+            ->add('paniers','Panier en cours')
+            ->add('isReserved','Réservé')
+            ->add('isBilled','Vendu')
             ->add('id')
         ;
     }

@@ -47,26 +47,30 @@ class ReserveCrudController extends AbstractCrudController
                     fn(QueryBuilder $queryBuilder) => 
                     $queryBuilder)->setFormTypeOptions(['placeholder' => 'Client / compte...'])->setRequired(false),
             AssociationField::new('occasions')
-                ->setLabel('Occasions à mettre de côter:')
+                ->setLabel('Occasions à mettre de côter: (création)')
                 ->setQueryBuilder(
                     fn(QueryBuilder $queryBuilder) => 
                     $queryBuilder
                     ->where('entity.isOnline = :true')
-                    ->orderBy('entity.isOnline', 'ASC')
                     ->orderBy('entity.reference', 'ASC')
                     ->setParameter('true', true)
                 )->setFormTypeOption('by_reference', false)->onlyWhenCreating()->setRequired(true),
             AssociationField::new('occasions')
-                ->setLabel('Occasions à mettre de côter:')
+                ->setLabel('Occasions à mettre de côter: (mise à jour)')
                 ->setQueryBuilder(
                     fn(QueryBuilder $queryBuilder) => 
                     $queryBuilder
-                    ->orderBy('entity.isOnline', 'ASC')
+                    ->where('entity.reserve = :entity') 
+                    ->orWhere('entity.isOnline = :true')
+                    ->setParameter('true', true)
+                    ->setParameter('entity', $this->requestStack->getCurrentRequest()->get('entityId'))
+                    // ->setParameter('false', false)
                     ->orderBy('entity.reference', 'ASC')
                 )->setFormTypeOption('by_reference', false)->onlyWhenUpdating(),
             TextField::new('content')
                 ->setLabel('Commentaire:')
                 ->setFormTypeOptions(['attr' => ['placeholder' => 'Nom du client / référence']]),
+            AssociationField::new('occasions','Qté')->onlyOnIndex(),
             FormField::addTab('Visualisation')->onlyOnDetail(),
             CollectionField::new('occasions')
                 ->setLabel('Détails:')->onlyOnDetail()->setTemplatePath('admin/fields/reserve_details.html.twig')->setDisabled(true),
@@ -101,14 +105,6 @@ class ReserveCrudController extends AbstractCrudController
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if ($entityInstance instanceof Reserve) {
-            
-            //? pour chaque occasions on met hors ligne
-            $occasions = $entityInstance->getOccasions();
-
-            // foreach($occasions as $occasion){
-            //     $occasion->setIsOnline(false);
-            //     $entityManager->persist($occasion);
-            // }
 
             $user = $this->security->getUser();
             $now = new DateTimeImmutable ('now');
@@ -131,6 +127,19 @@ class ReserveCrudController extends AbstractCrudController
             }
 
             $entityManager->remove($entityInstance);
+            $entityManager->flush();
+        }
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if ($entityInstance instanceof Reserve) {
+            $occasions = $entityInstance->getOccasions();
+
+            foreach($occasions as $occasion){
+                $occasion->setIsOnline(false)->setIsReserved(true)->setIsBilled(false);
+            }
+            $entityManager->persist($entityInstance);
             $entityManager->flush();
         }
     }

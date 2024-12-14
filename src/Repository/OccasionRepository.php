@@ -274,6 +274,18 @@ class OccasionRepository extends ServiceEntityRepository
         return $players;
     }
 
+    public function returnAllOccasionsOfflineAndBilledIsNullAndReservedIsNull(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.isOnline = :false')
+            ->andWhere('o.isBilled IS NULL')   
+            ->andWhere('o.isReserved IS NULL')
+            ->setParameter('false', false)
+            ->orderBy('o.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 //    /**
 //     * @return Occasion[] Returns an array of Occasion objects
