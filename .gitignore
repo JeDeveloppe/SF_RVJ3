@@ -24,6 +24,7 @@
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache
+.php-version
 ###< phpunit/phpunit ###
 
 ###> symfony/phpunit-bridge ###
