@@ -3,12 +3,14 @@
 namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\Panier;
+use App\Service\PanierService;
 use Doctrine\ORM\Mapping\Id;
 use phpDocumentor\Reflection\Types\Integer;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -23,9 +25,17 @@ class PanierCrudController extends AbstractCrudController
         return Panier::class;
     }
 
+    public function __construct(
+        private PanierService $panierService
+    )
+    {}
 
     public function configureFields(string $pageName): iterable
     {
+        
+        //suppression des paniers > x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
+
         return [
             IdField::new('id','Ligne n°'),
             DateField::new('createdAt','Fin de validité')->setFormat('dd.MM.yyyy à HH:mm:ss'),
@@ -53,10 +63,19 @@ class PanierCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->remove(Crud::PAGE_INDEX, Action::EDIT)
             ->remove(Crud::PAGE_INDEX, Action::NEW)
-            ->remove(Crud::PAGE_DETAIL, Action::DELETE)
+            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
             ->remove(Crud::PAGE_DETAIL, Action::EDIT);        
+    }
+
+    public function delete(AdminContext $context)
+    {
+        $panier = $context->getEntity()->getInstance();
+
+        $this->panierService->deleteCartLineRealtime($panier->getId());
+
+        return parent::delete($context);
+
     }
 }

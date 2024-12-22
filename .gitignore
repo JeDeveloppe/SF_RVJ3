@@ -19,6 +19,11 @@
 !/import/regionsFR.csv
 /var/
 /vendor/
+.DS_Store
+/*/.DS_Store
+/*/*/.DS_Store
+/*/*/*/.DS_Store
+
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###
