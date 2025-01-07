@@ -1,7 +1,7 @@
-user-agent: *
-allow: /
-disallow: /admin
-disallow: /member
-disallow: /panier
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /member
+Disallow: /panier
 
 Sitemap: https://www.refaitesvosjeux.fr/sitemap.xml

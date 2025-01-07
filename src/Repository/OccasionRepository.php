@@ -250,6 +250,13 @@ class OccasionRepository extends ServiceEntityRepository
             }
         }
 
+        //?for search in repository 12 and after...
+        if(in_array(12, $ages)){
+            for($i = 13; $i <= 99; $i++){
+                $ages[] = $i;
+            }
+        }
+
         return $ages;
     }
 
