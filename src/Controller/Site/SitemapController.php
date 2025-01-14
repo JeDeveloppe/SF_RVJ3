@@ -26,8 +26,8 @@ class SitemapController extends AbstractController
     {
     }
 
-    #[Route('/sitemap.xml', name: 'site_sitemap')]
-    public function index(Request $request): Response
+    #[Route('/sitemap.xml', name: 'site_sitemap_xml')]
+    public function sitemapXml(Request $request): Response
     {
 
         //tableau vide
@@ -97,5 +97,12 @@ class SitemapController extends AbstractController
         $response->headers->set('Content-type', 'text/xml');
         
         return $response;
+    }
+
+    #[Route('/sitemap', name: 'site_sitemap')]
+    public function index(Request $request): Response
+    {
+
+        return $this->redirectToRoute('site_sitemap_xml');
     }
 }
