@@ -98,6 +98,7 @@
             element.addEventListener(
             "mouseenter",
             function (event) {
+                console.log(window.innerWidth);
                 // on met l'accent sur la cible de mouseenter
                 let markers = document.getElementsByClassName("sm_location");
                 markers[element.id].classList.add("bounce-top");
