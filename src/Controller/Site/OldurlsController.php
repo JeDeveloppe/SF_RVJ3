@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
+use function PHPUnit\Framework\throwException;
+
 class OldurlsController extends AbstractController
 {
 
@@ -100,4 +102,6 @@ class OldurlsController extends AbstractController
 
         return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);
     }
+
+    // https://www.refaitesvosjeux.fr/comment-ca-marche/tarifs/
 }

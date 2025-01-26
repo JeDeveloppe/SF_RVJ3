@@ -18,17 +18,17 @@
     </div>
 </div>
 
-<div class="row g-0 justify-content-around justify-content-md-center align-items-center bg-white py-4">
+<div class="row g-0 justify-content-around justify-content-md-center bg-white py-4">
     {% for mission in missions %}
         <div class="col-9 my-4 my-lg-0 col-sm-6 col-lg-4">
-            <div class="card col-11 mx-auto card_missions border-0 bg-white h-100">
-                <img class="px-4 px-lg-5 mt-2" src="{{ asset('build/images/design/association/' ~ mission.img ~ '') }}" alt="{{ mission.img_alt }}">
-                <h4 class="text-center mt-4 h4">{{ mission.title }}</h5>
-                <div class="card-body">
-                    <div class="card-text text-center">
+            <div class="card col-11 mx-auto border-0 card_missions bg-white h-100">
+                <img class="px-4 px-lg-5 mt-2 mb-3" src="{{ asset('build/images/design/association/' ~ mission.img ~ '') }}" alt="{{ mission.img_alt }}">
+                <h4 class="text-center h4 mb-3">{{ mission.title }}</h5>
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div class="card-text text-center mb-3">
                         {{ mission.text }}
                     </div>
-                    <div class="card-text text-center mt-3">
+                    <div class="card-text text-center">
                         <a class="btn btn-dark" href="{{ mission.btn_link }}">{{ mission.btn_text }}</a>
                     </div>
                 </div>

@@ -16,7 +16,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 
 class AmbassadorCrudController extends AbstractCrudController
 {
@@ -49,6 +48,8 @@ class AmbassadorCrudController extends AbstractCrudController
             EmailField::new('email')->setLabel('Adresse email:')->onlyOnForms()->setColumns(6),
             TextField::new('street')->setLabel('Adresse complète:')->onlyOnForms()->setColumns(6),
             AssociationField::new('city')->setLabel('Ville:')->autocomplete()->onlyOnForms()->setColumns(6)->setRequired(false),
+            TextField::new('latitude')->setLabel('Latitude du lieu:')->onlyOnForms()->setColumns(6),
+            TextField::new('longitude')->setLabel('Longitude du lieu:')->onlyOnForms()->setColumns(6),
             TextareaField::new('description')->setLabel('Description:')->onlyOnForms()->setColumns(6),
             UrlField::new('fullurl')->setLabel('Adresse url complète:')->onlyOnForms(),
             UrlField::new('facebookLink')->setLabel('Url Facebook:')->onlyOnForms(),

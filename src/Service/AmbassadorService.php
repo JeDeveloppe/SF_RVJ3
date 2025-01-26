@@ -103,10 +103,19 @@ class AmbassadorService
             $description .= $instagram;
             $description .= '</p>';
 
+            $lat = $ambassador->getLatitude();
+            $long = $ambassador->getLongitude();
+            if($lat == NULL){
+                $lat = $ambassador->getCity()->getLatitude();
+            }
+            if($long == NULL){
+                $long = $ambassador->getCity()->getLongitude();
+            }
+
             $stores[] = 
             [
-                "lat" => $ambassador->getCity()->getLatitude(),
-                "lng" => $ambassador->getCity()->getLongitude(),
+                "lat" => $lat,
+                "lng" => $long,
                 "color" => "#1DBA9D",
                 "name" => $name.$ambassador->getCity()->getName().' ('.$ambassador->getCity()->getDepartment()->getName().')',
                 "description" => $description,
@@ -114,7 +123,6 @@ class AmbassadorService
                 "size" => 40,
             ];
         }
-    
 
         $jsonStores = json_encode($stores, JSON_FORCE_OBJECT); 
 
