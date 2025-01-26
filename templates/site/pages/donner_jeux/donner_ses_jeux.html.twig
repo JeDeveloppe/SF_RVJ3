@@ -98,14 +98,16 @@
             element.addEventListener(
             "mouseenter",
             function (event) {
-                console.log(window.innerWidth);
                 // on met l'accent sur la cible de mouseenter
                 let markers = document.getElementsByClassName("sm_location");
-                markers[element.id].classList.add("bounce-top");
+                // markers[element.id].classList.add("bounce-top");
+                markers[element.id].style.fill = "#5F49CE";
 
                 // on réinitialise la couleur après quelques instants
                 setTimeout(function () {
-                    markers[element.id].classList.remove("bounce-top");
+                    // markers[element.id].classList.remove("bounce-top");
+                    markers[element.id].style.fill = "#00BB9D";
+
                 }, 1000);
             },
             false,
