@@ -176,7 +176,7 @@ class BoiteCrudController extends AbstractCrudController
                 ->setLabel('Prix HT d\'une boite complête en bon état')
                 ->setStoredAsCents()
                 ->setCurrency('EUR')
-                ->onlyOnForms()->setColumns(6),
+                ->onlyOnForms()->setColumns(6)->setRequired(true),
             // AssociationField::new('itemsSecondaire')->setLabel('Articles:')->setPermission('ROLE_ADMIN')->setDisabled(true)->onlyOnForms(),
             FormField::addTab('Ventes rattachées')->onlyWhenUpdating()->setPermission('ROLE_ADMIN'),
             AssociationField::new('documentLines', 'Nbr de ventes')->onlyOnIndex()->setPermission('ROLE_ADMIN'),
