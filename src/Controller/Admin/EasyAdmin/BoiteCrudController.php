@@ -171,7 +171,7 @@ class BoiteCrudController extends AbstractCrudController
                 ->setColumns(6),
 
             FormField::addFieldset('Partie occasion')->setPermission('ROLE_BENEVOLE'),
-            IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms()->setColumns(6),
+            IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms()->setColumns(6)->setRequired(true),
             MoneyField::new('htPrice')
                 ->setLabel('Prix HT d\'une boite complête en bon état')
                 ->setStoredAsCents()
