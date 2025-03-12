@@ -97,7 +97,8 @@ class OldurlsController extends AbstractController
         $url = $this->generateUrl('catalogue_pieces_detachees_articles_d_une_boite', [
             'id' => $id,
             'editorSlug' => $editor,
-            'boiteSlug' => $slug
+            'boiteSlug' => $slug,
+            'year' => NULL
         ]);
 
         return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);

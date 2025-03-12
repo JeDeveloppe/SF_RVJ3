@@ -68,7 +68,7 @@ class SitemapController extends AbstractController
 
         foreach($boites as $boite){
             $urls[] = [                
-                'loc'        => $this->generateUrl('catalogue_pieces_detachees_articles_d_une_boite', ['id' => $boite->getId(), 'boiteSlug' => strtolower($boite->getSlug()), 'editorSlug' => strtolower($boite->getEditor()->getSlug())]),
+                'loc'        => $this->generateUrl('catalogue_pieces_detachees_articles_d_une_boite', ['id' => $boite->getId(), 'boiteSlug' => strtolower($boite->getSlug()), 'editorSlug' => strtolower($boite->getEditor()->getSlug()), 'year' => $boite->getYear() ?? NULL]),
                 'lastmod'    => $occasion->getBoite()->getCreatedAt()->format('Y-m-d'),
                 'changefreq' => "monthly",
                 'priority'   => 0.8

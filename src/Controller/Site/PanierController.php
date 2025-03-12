@@ -389,6 +389,7 @@ class PanierController extends AbstractController
         return $this->redirectToRoute('catalogue_pieces_detachees_articles_d_une_boite', [
             'editorSlug' => $boite->getEditor()->getSlug(),
             'boiteSlug' => $boite->getSlug(),
+            'year' => $boite->getYear(),
             'id' => $boite->getId()
         ]);
     }

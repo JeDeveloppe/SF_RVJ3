@@ -134,8 +134,8 @@ class CatalogController extends AbstractController
         ]);
     }
 
-    #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}/', name: 'catalogue_pieces_detachees_articles_d_une_boite')]
-    public function cataloguePiecesDetacheesArticlesDuneBoite($id, $editorSlug, $boiteSlug): Response
+    #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}-{year}/', name: 'catalogue_pieces_detachees_articles_d_une_boite')]
+    public function cataloguePiecesDetacheesArticlesDuneBoite($id, $editorSlug, $boiteSlug, $year = NULL): Response
     {
         if($_ENV['APP_ENV'] == 'prod'){
             return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees', 302);

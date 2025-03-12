@@ -16,7 +16,7 @@
             {% if boite.itemsOrigine | length > 1 %}
                 {% set conjugaisonArticlesDisponibles = 'pièces disponibles' %}
             {% endif %}
-            <a class="col-12 text-decoration-none text-dark"href="{{ path('catalogue_pieces_detachees_articles_d_une_boite', {'id': boite.id, 'boiteSlug':boite.slug | lower , 'editorSlug': boite.editor.slug  }) }}"><span class="text-yellow fw-bolder">{{ boite.itemsOrigine | length }}</span> {{ conjugaisonArticlesDisponibles }}</a>
+            <a class="col-12 text-decoration-none text-dark"href="{{ path('catalogue_pieces_detachees_articles_d_une_boite', {'id': boite.id, 'boiteSlug':boite.slug | lower , 'editorSlug': boite.editor.slug, 'year': boite.year  }) }}"><span class="text-yellow fw-bolder">{{ boite.itemsOrigine | length }}</span> {{ conjugaisonArticlesDisponibles }}</a>
             {% if is_granted('ROLE_ADMIN') %}
                 <div class="col-12 d-flex flex-wrap justify-content-center align-items-center my-2">
                     {% include "components/catalog/_card_admin_link_to_entity_boite.html.twig" with {'boite': boite} %}
