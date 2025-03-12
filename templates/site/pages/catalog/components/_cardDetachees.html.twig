@@ -1,23 +1,27 @@
     {# ON PASSE UNE BOITE #}
-    <article id="{{ boite.id }}" class="card_ d-flex flex-wrap h-100 col-11 mx-auto pb-2">
+    <article id="{{ boite.id }}" class="card_ d-flex flex-wrap h-100 col-11 mx-auto">
         <div class="card_div_img">
             <img class="card_catalog_img" src="{{ vich_uploader_asset(boite, 'imageFile') | imagine_filter('boite') }}" alt="Image de la boite de jeu {{ boite.name }} - {{ boite.editor }}"/><br/>
         </div>
         <p class="info_photo col-12 text-center">Photo non contractuelle</p>
-        <div class="card_boite_name text-center text-green">{{ boite.name | raw }}</div>
-        <div class="col-12 occasion_detail_editor text-center">
+        <div class="card_boite_name">{{ boite.name | raw }}</div>
+        <div class="col-12 occasion_detail_editor small">
             {{ boite.editor }}
                 {% if boite.year > 0 %}
-                    - <span class="small">{{ boite.year }}</span>
+                    | <span class="small">{{ boite.year }}</span>
                 {% endif %}
         </div>
-        <div class="col-12 d-flex flex-wrap justify-content-around align-items-center mt-3">
-            {% include "site/pages/catalog/components/_cardDetachees_button_add_cart.html.twig" with {'boite': boite }%}
+        <div class="col-12 mt-3 mb-1">
+            {% set conjugaisonArticlesDisponibles = 'pièce disponible' %}
+            {% if boite.itemsOrigine | length > 1 %}
+                {% set conjugaisonArticlesDisponibles = 'pièces disponibles' %}
+            {% endif %}
+            <a class="col-12 text-decoration-none text-dark"href="{{ path('catalogue_pieces_detachees_articles_d_une_boite', {'id': boite.id, 'boiteSlug':boite.slug | lower , 'editorSlug': boite.editor.slug  }) }}"><span class="text-yellow fw-bolder">{{ boite.itemsOrigine | length }}</span> {{ conjugaisonArticlesDisponibles }}</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="col-12 d-flex flex-wrap justify-content-center align-items-center my-2">
+                    {% include "components/catalog/_card_admin_link_to_entity_boite.html.twig" with {'boite': boite} %}
+                </div>
+            {% endif %}
         </div>
-        {% if is_granted('ROLE_ADMIN') %}
-            <div class="col-12 d-flex flex-wrap justify-content-around align-items-center mt-3">
-                {% include "components/catalog/_card_admin_link_to_entity_boite.html.twig" with {'boite': boite} %}
-            </div>
-        {% endif %}
     </article>
 

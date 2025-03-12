@@ -106,18 +106,21 @@ class CatalogController extends AbstractController
 
             $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems($phrase);
 
+            $boites = $this->paginator->paginate(
+                $donneesFromDatabases, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                12 /*limit per page*/
+            );
+
         }else{
 
-            $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems();
+            // $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems();
+            $boites = NULL;
 
         }
 
 
-        $boites = $this->paginator->paginate(
-            $donneesFromDatabases, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            12 /*limit per page*/
-        );
+
 
         $metas['description'] = 'Catalogue complet de toutes les boites dont le service dispose de pièces détachées.';
 

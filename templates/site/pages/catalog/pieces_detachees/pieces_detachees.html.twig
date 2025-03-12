@@ -4,48 +4,54 @@
 
 {% block body %}
 
-    {% set conjugaison_boite = "boite" %}
-
-    <h1 class="col-12 text-center mt-3">Catalogue des <span class="text-purple">pièces détachées</span></h1>
-    <div class="col-12 text-center small mb-3 fst-italic">(Catalogue des boites dont le service possède des pièces)</div>
-
+        <div class="row justify-content-around align-items-center py-4">
+            <h1 class="col-12 text-center">Pièces détachées</h1>
+            <div class="col-12 text-center small mb-3 fst-italic">(Catalogue des boites dont le service possède des pièces)</div>
+        </div>
 
         <div class="row g-0 justify-content-around py-5 bg-white">
             <!-- left column / searchs -->
             <div class="col-12 d-flex flex-wrap justify-content-center">
+                    <p class="col-12 text-center">Il vous manque une pièce, un jeton, un dé ?<br/>Cherchez votre jeu, une année, une édition...</p>
                     {% include "site/pages/catalog/forms/_search_boite.html.twig" %}
-                    <div class="col-11 text-center my-3">
-                        {% if boites | length > 1 %}
-                            {% set conjugaison_boite = "boites" %}
-                        {% endif %}
-                        <b>{{ boites | length }} {{ conjugaison_boite }} en ligne.</b>
-                    </div>
             </div>
         </div>
 
-        <div class="row g-0 bg-white">
-            <!-- results > 0 -->
-            {% if boites | length > 0 %}
+        {% if boites is null %}
+            <div class="row g-0 bg-white">
+                <div class="col-12 my-4 text-center">
+                    <img class="index_chess" src="{{ asset('build/images/design/index/trace_and_chess.png')|imagine_filter('thumbs') }}" alt="Catalogue des pièces détachées">
+                </div>
+            </div>
 
-                {% for boite in boites %}  
+        {% else %}
+            
+            <div class="row g-0 bg-white justify-content-center">
+                <!-- results > 0 -->
+                {% if boites | length > 0 %}
 
-                    <div class="col-9 col-sm-6 col-md-4 col-xl-3 mx-md-0 p-1">
-                        {% include "site/pages/catalog/components/_cardDetachees.html.twig" with { 'boite': boite } %}
+                    {% for boite in boites %}  
+
+                        <div class="col-6 col-sm-6 col-md-4 col-xxl-3 mx-md-0 p-1">
+                            {% include "site/pages/catalog/components/_cardDetachees.html.twig" with { 'boite': boite } %}
+                        </div>
+
+                    {% endfor %}
+
+                    <div class="col-11 d-flex justify-content-center my-5">
+                        {{ knp_pagination_render(boites, 'components/_pagination.html.twig') }}
                     </div>
 
-                {% endfor %}
+                {% else %}
+                    
+                    <!-- result == 0 -->
+                    {% include "site/pages/catalog/components/_emptyResultsDisplayPartners.html.twig" %}
 
-                <div class="col-11 d-flex justify-content-center my-5">
-                    {{ knp_pagination_render(boites, 'components/_pagination.html.twig') }}
-                </div>
+                {% endif %}
+            </div>
 
-            {% else %}
-                
-                <!-- result == 0 -->
-                {% include "site/pages/catalog/components/_emptyResultsDisplayPartners.html.twig" %}
+        {% endif %}
 
-            {% endif %}
-        </div>
 
         {% include "components/_separateur_wave.html.twig" %}
 

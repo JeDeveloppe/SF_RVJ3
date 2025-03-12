@@ -5,7 +5,7 @@
             {% set contenus = boite.content|split('\r\n') %}
             {% if boite.content | length > 0 %}
                 {% for contenu in contenus %}
-                    <li>{{ contenu }}</li>
+                    {{ contenu }}<br/>
                 {% endfor %}
             {% else %}
                 Aucune information pour le moment...

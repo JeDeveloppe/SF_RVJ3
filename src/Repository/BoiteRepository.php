@@ -43,6 +43,7 @@ class BoiteRepository extends ServiceEntityRepository
             ->join('b.itemsOrigine', 'i')
             ->join('b.editor', 'e')
             ->orWhere('e.name LIKE :val')
+            ->orWhere('b.year LIKE :val')
             ->andWhere('i.stockForSale > :minimum')
             ->setParameter('minimum', 0)
             ->orderBy('b.id', 'DESC')
