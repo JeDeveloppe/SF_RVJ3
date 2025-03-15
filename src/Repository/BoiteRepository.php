@@ -32,8 +32,21 @@ class BoiteRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findBoitesWhereThereIsItems($phrase = null): array
+    public function findBoitesWhereThereIsItems($search = null): array
     {
+        $searchs = explode(" ", $search);
+        $words = [];
+        $year = "";
+
+        foreach($searchs as $search){
+            if(is_numeric($search)){
+                $year = $search;
+            }else{
+                $words[] = $search;
+            }
+        }
+        $str = implode(' ', $words);
+        $phrase = str_replace(" ","%",$str);
 
         $results =  $this->createQueryBuilder('b')
             ->where('b.isOnline = :true')
@@ -43,9 +56,10 @@ class BoiteRepository extends ServiceEntityRepository
             ->join('b.itemsOrigine', 'i')
             ->join('b.editor', 'e')
             ->orWhere('e.name LIKE :val')
-            ->orWhere('b.year LIKE :val')
+            ->andWhere('b.year LIKE :year')
             ->andWhere('i.stockForSale > :minimum')
             ->setParameter('minimum', 0)
+            ->setParameter('year', '%'.$year.'%')
             ->orderBy('b.id', 'DESC')
             ->getQuery()
             ->getResult()

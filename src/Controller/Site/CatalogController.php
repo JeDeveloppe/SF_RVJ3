@@ -61,7 +61,7 @@ class CatalogController extends AbstractController
         private RequestStack $requestStack,
         private CatalogControllerService $catalogControllerService,
         private ItemRepository $itemRepository,
-        private ItemGroupRepository $itemGroupRepository
+        private ItemGroupRepository $itemGroupRepository,
     )
     {
     }
@@ -70,6 +70,9 @@ class CatalogController extends AbstractController
     #[Route('/catalogues', name: 'app_catalogue_switch')]
     public function catalogueSwitch(): Response
     {
+
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
         $metas['description'] = ''; //TODO
 
@@ -92,6 +95,9 @@ class CatalogController extends AbstractController
     public function cataloguePiecesDetachees(Request $request): Response
     {
 
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
+
         $siteSetting = $this->siteSettingRepository->findOneBy([]);
 
         $form = $this->createForm(SearchBoiteInCatalogueType::class);
@@ -100,9 +106,8 @@ class CatalogController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
             $search = $form->get('search')->getData();
-            $phrase = str_replace(" ","%",$search);
 
-            $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems($phrase);
+            $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems($search);
 
             $boites = $this->paginator->paginate(
                 $donneesFromDatabases, /* query NOT result */
@@ -136,6 +141,9 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}/{year}/', name: 'catalogue_pieces_detachees_articles_d_une_boite', requirements: ['boiteSlug' => '[a-z0-9\-]+'] )]
     public function cataloguePiecesDetacheesArticlesDuneBoite($id, $editorSlug, $boiteSlug, $year = NULL, $search = NULL): Response
     {
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
+
         $boite = $this->boiteRepository->findOneBy(['id' => $id, 'slug' => $boiteSlug, 'editor' => $this->editorRepository->findOneBy(['slug' => $editorSlug]), 'isOnline' => true]);
 
         if(!$boite){
@@ -194,6 +202,9 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-jeux-occasion/{category}', name: 'app_catalogue_occasions')]
     public function catalogueOccasions(Request $request, $category = NULL): Response
     {
+
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
         $metas['description'] = "Plein de jeux de société d'occasion à petit prix ! Idéal pour les soirées entre amis ou en famille. Visitez nos catalogues et trouvez votre bonheur !";
 
@@ -307,6 +318,9 @@ class CatalogController extends AbstractController
     #[Route('/jeu-occasion/{reference_occasion}/{editor_slug}/{boite_slug}', name: 'occasion')]
     public function occasion($reference_occasion, Security $security, $editor_slug, $boite_slug): Response
     {
+
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
         $delivery = null;
         $http_error_code = 200;
