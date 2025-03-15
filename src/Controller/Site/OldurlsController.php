@@ -18,10 +18,6 @@ class OldurlsController extends AbstractController
     public function catalogueOld(): RedirectResponse
     {
 
-        if($_ENV['APP_ENV'] == 'prod'){
-            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees');
-        }
-
         $url = $this->generateUrl('app_catalogue_switch');
 
         return new RedirectResponse($url, $this->TEMPORAIRE_REDIRECTION);

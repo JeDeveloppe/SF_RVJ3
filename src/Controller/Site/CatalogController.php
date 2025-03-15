@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CatalogOccasionSearchRepository;
 use App\Repository\DurationOfGameRepository;
+use App\Repository\ItemRepository;
 use App\Service\CatalogControllerService;
 use App\Service\CatalogueService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -55,7 +56,8 @@ class CatalogController extends AbstractController
         private CatalogueService $catalogueService,
         private DurationOfGameRepository $durationOfGameRepository,
         private RequestStack $requestStack,
-        private CatalogControllerService $catalogControllerService
+        private CatalogControllerService $catalogControllerService,
+        private ItemRepository $itemRepository
     )
     {
     }
@@ -65,11 +67,7 @@ class CatalogController extends AbstractController
     public function catalogueSwitch(): Response
     {
 
-        if($_ENV['APP_ENV'] == 'prod'){
-            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees');
-        }
-
-        $metas['description'] = '';
+        $metas['description'] = ''; //TODO
 
         $occasions = $this->occasionRepository->findByIsOnline(true);
         shuffle($occasions); // on mélange
@@ -89,10 +87,6 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-pieces-detachees', name: 'app_catalogue_pieces_detachees')]
     public function cataloguePiecesDetachees(Request $request): Response
     {
-
-        if($_ENV['APP_ENV'] == 'prod'){
-            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees', 302);
-        }
 
         $siteSetting = $this->siteSettingRepository->findOneBy([]);
 
@@ -129,6 +123,7 @@ class CatalogController extends AbstractController
             'form' => $form,
             'search' => $search ?? null,
             'metas' => $metas,
+            'totalPiecesDisponiblentSurLeSite' => $this->itemRepository->findAllItemsWithStockForSaleAndReturnCount(),
             'tax' => $this->taxRepository->findOneBy([]),
             'siteSetting' => $siteSetting
         ]);
@@ -137,9 +132,6 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}-{year}/', name: 'catalogue_pieces_detachees_articles_d_une_boite')]
     public function cataloguePiecesDetacheesArticlesDuneBoite($id, $editorSlug, $boiteSlug, $year = NULL): Response
     {
-        if($_ENV['APP_ENV'] == 'prod'){
-            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees', 302);
-        }
 
         $boite = $this->boiteRepository->findOneBy(['id' => $id, 'slug' => $boiteSlug, 'editor' => $this->editorRepository->findOneBy(['slug' => $editorSlug]), 'isOnline' => true]);
 
@@ -151,18 +143,38 @@ class CatalogController extends AbstractController
         $metas['description'] = 'Les pièces détachées pour le jeu: '.ucfirst(strtolower($boite->getName())).' - '.ucfirst(strtolower($boite->getEditor()->getName()));
 
         $items = $boite->getItemsOrigine();
+        $totalItems = 0;
+        $nbrItems = 0;
+        foreach($items as $item){
+            $totalItems += $item->getStockForSale();
+            if($item->getStockForSale() > 0){
+                $nbrItems++;
+            }
+        }
+
+        $affichages['totalItems'] = $nbrItems;
+
+        if($totalItems == 0){
+            $this->addFlash('warning', 'Plus d\'articles en vente');
+            return $this->redirectToRoute('app_catalogue_pieces_detachees');
+        }
+
         $groups = [];
         foreach($items as $item){
             if(!array_key_exists($item->getItemGroup()->getId(),$groups)){
-
+                if($item->getStockForSale() > 0){
+                    $count = 1;
+                }else{
+                    $count = 0;
+                }
                 $groups[$item->getItemGroup()->getId()] = [
                     'group' => $item->getItemGroup(),
-                    'items' => [
-                        $item
-                    ]
+                    'items' => [$item],
+                    'count' => $count,
                 ];
             } else {
                 $groups[$item->getItemGroup()->getId()]['items'][] = $item;
+                $groups[$item->getItemGroup()->getId()]['count'] = $groups[$item->getItemGroup()->getId()]['count'] + 1;
             }
         }
 
@@ -170,6 +182,7 @@ class CatalogController extends AbstractController
             'boite' => $boite,
             'metas' => $metas,
             'groups' => $groups,
+            'affichages' => $affichages,
             'tax' => $this->taxRepository->findOneBy([]),
         ]);
     }

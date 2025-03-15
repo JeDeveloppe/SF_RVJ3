@@ -18,10 +18,13 @@
         </div>
 
         {% if boites is null %}
+
             <div class="row g-0 bg-white">
                 <div class="col-12 my-4 text-center">
                     <img class="index_chess" src="{{ asset('build/images/design/index/trace_and_chess.png')|imagine_filter('thumbs') }}" alt="Catalogue des pièces détachées">
                 </div>
+                <div class="col-12 my-4 text-center">
+                    Actuellement {{ totalPiecesDisponiblentSurLeSite }} pièces disponiblent !
             </div>
 
         {% else %}
@@ -32,15 +35,11 @@
 
                     {% for boite in boites %}  
 
-                        <div class="col-6 col-sm-6 col-md-4 col-xxl-3 mx-md-0 p-1">
-                            {% include "site/pages/catalog/components/_cardDetachees.html.twig" with { 'boite': boite } %}
-                        </div>
-
+                        {% include "site/pages/catalog/components/_cardDetachees.html.twig" with { 'boite': boite } %}
+                        
                     {% endfor %}
 
-                    <div class="col-11 d-flex justify-content-center my-5">
                         {{ knp_pagination_render(boites, 'components/_pagination.html.twig') }}
-                    </div>
 
                 {% else %}
                     

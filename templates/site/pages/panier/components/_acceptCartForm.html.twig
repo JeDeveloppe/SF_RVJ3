@@ -8,11 +8,11 @@
             <button class="btn">
                 <img src="{{ asset('build/images/design/'~ app.request.server.get('PAIEMENT_MODULE') ~'/logo-paiement.svg') }}" alt="Paiement avec PAYPLUG"/>
             </button>
-            {% elseif app.request.server.get('PAIEMENT_MODULE') == 'PAYPLUG' %}
-                <button class="btn">
-                    <img class="img-thumbnail col-7" src="{{ asset('build/images/design/'~ app.request.server.get('PAIEMENT_MODULE') ~'/logo-paiement.png') }}" alt="Paiement avec PAYPLUG"/>
-                </button>
-            {% else %}
+        {% elseif app.request.server.get('PAIEMENT_MODULE') == 'PAYPLUG' %}
+            <button class="btn">
+                <img class="img-thumbnail col-7" src="{{ asset('build/images/design/'~ app.request.server.get('PAIEMENT_MODULE') ~'/logo-paiement.png') }}" alt="Paiement avec PAYPLUG"/>
+            </button>
+        {% else %}
                 <a href="#">PAS DE PAIEMENT POSSIBLE</a>
         {% endif %}
     </div>

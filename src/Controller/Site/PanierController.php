@@ -380,18 +380,12 @@ class PanierController extends AbstractController
     public function addArticleRealtime(Request $request): Response
     {
 
-        $reponse = $this->panierService->addArticleInCartRealtime($request->request->get('select-item'),$request->request->get('qte'));
+        $reponse = $this->panierService->addArticleInCartRealtime($request->request->get('itemId'),$request->request->get('qte'));
 
         $this->addFlash($reponse[0], $reponse[1]);
 
-        $boite = $this->boiteRepository->findOneBy(['id' => $request->request->get('boiteId')]);
+        return $this->redirect($request->headers->get('referer'));
 
-        return $this->redirectToRoute('catalogue_pieces_detachees_articles_d_une_boite', [
-            'editorSlug' => $boite->getEditor()->getSlug(),
-            'boiteSlug' => $boite->getSlug(),
-            'year' => $boite->getYear(),
-            'id' => $boite->getId()
-        ]);
     }
 
     #[Route('/panier/success/{tokenDocument}', name: 'panier_success')]

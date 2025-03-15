@@ -4,7 +4,7 @@
             <!-- liste des pièces détachées -->
             {% for panier in allCartValues['panier_items'] %}
                 <div class="col-12 d-flex flex-wrap justify-content-between align-items-center mb-2">
-                    <div class="col-6 name_occasion_and_item_in_cart_rigth">{{ panier.item.name }} <small>({{ panier.item.reference }})</small></div>
+                    <div class="col-6"><span class="name_occasion_and_item_in_cart_rigth">{{ panier.item.name }}</span><small>({{ panier.item.reference }})</small> Qté:{{panier.qte }}</div>
                     <div class="col-6 text-end">{% include "components/item/_display_item_price.html.twig" with {'product': panier,'tax': allCartValues['tax']} %}</div>
                 </div>
             {% endfor %}

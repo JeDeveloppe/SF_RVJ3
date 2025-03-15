@@ -59,12 +59,12 @@ class BoiteCrudController extends AbstractCrudController
             BooleanField::new('isOnline')
                 ->setLabel('Actif pièces détachée')
                 ->setPermission('ROLE_ADMIN')
-                ->setColumns(6)
-                ->onlyOnForms(),
+                ->onlyOnForms()
+                ->setColumns(6),
             BooleanField::new('isOccasion')
                 ->setLabel('Dispo en occasion')
-                ->onlyOnForms()
                 ->setColumns(6)
+                ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN'),
             BooleanField::new('isDeliverable')->setLabel('Livrable')->onlyOnForms()->setColumns(6)->setPermission('ROLE_ADMIN'),
             BooleanField::new('isDeee')->setLabel('Deee')->onlyOnForms()->setColumns(6)->setPermission('ROLE_ADMIN'),
@@ -177,6 +177,16 @@ class BoiteCrudController extends AbstractCrudController
                 ->setStoredAsCents()
                 ->setCurrency('EUR')
                 ->onlyOnForms()->setColumns(6)->setRequired(true),
+            BooleanField::new('isOnline')
+                ->setLabel('Actif pièces det.')
+                ->setPermission('ROLE_ADMIN')
+                ->onlyOnIndex()
+                ->setColumns(6),
+            BooleanField::new('isOccasion')
+                ->setLabel('Dispo en occas.')
+                ->setColumns(6)
+                ->onlyOnIndex()
+                ->setPermission('ROLE_ADMIN'),
             // AssociationField::new('itemsSecondaire')->setLabel('Articles:')->setPermission('ROLE_ADMIN')->setDisabled(true)->onlyOnForms(),
             FormField::addTab('Ventes rattachées')->onlyWhenUpdating()->setPermission('ROLE_ADMIN'),
             AssociationField::new('documentLines', 'Nbr de ventes')->onlyOnIndex()->setPermission('ROLE_ADMIN'),

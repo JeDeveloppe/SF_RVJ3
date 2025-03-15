@@ -31,7 +31,7 @@
 							<div class="zoom__bottom zoom__centre"></div>
 							<div class="zoom__bottom zoom__right"></div>
 							{# <img class="zoom__image" src="data:image/png;base64,{{ images[key] }}"/> #}
-							<img class="zoom__image" src="{{ vich_uploader_asset(boite, 'imageFile') }}"/>
+            				<img class="zoom__image" src="{{ vich_uploader_asset(boite, 'imageFile') | imagine_filter('boite') }}" alt="Image de la boite de jeu {{ boite.name }} - {{ boite.editor }}"/>
 						</div>
 					</div>
 					<span class="col-12 col-md-6 text-muted small text-center">
@@ -48,7 +48,7 @@
 						</div>
 
 					{# CONTENU DE LA BOITE COMPLETE #}
-					{% include "components/catalog/_boite_content.html.twig" %}
+					{% include "components/catalog/_boite_content.html.twig" %} //TODO  
 				</div>
 			</div>
 		</div>
@@ -61,43 +61,48 @@
 
 		{# BLOC DES DIFFERENTS ARTICLE CLASSES PAR FAMILLE #}
 		<div class="row g-0 justify-content-center bg-white">
-
 			<div class="col-12 d-flex flex-wrap justify-content-center align-items-center">
-				<a class="btn btn-light btn-block me-2 groups" id="all_items">Tout <span class="text-yellow fw-bolder">{{ groups| length }}</span></a>
+				<a class="btn btn-light btn-block m-1 groups" id="all_items">Tout <span class="text-yellow fw-bolder">{{ affichages.totalItems }}</span></a>
 				{% for group in groups %}
-					<a class="btn btn-light btn-block mx-2 groups" id="{{ group.group.name | lower }}">{{ group.group.name }} <span class="text-yellow fw-bolder">{{ group.items | length }}</span></a>
+					{% if group.count > 0 %}
+						<a class="btn btn-light btn-block m-1 groups" id="{{ group.group.name | lower }}">{{ group.group.name }} <span class="text-yellow fw-bolder">{{ group.count }}</span></a>
+					{% endif %}
 				{% endfor %}
 			</div>
-			<div class="col-11 d-flex flex-wrap justify-content-arround align-items-center my-5">
-				{% for group in groups %}
-					{% for item in group.items %}
-						<div class="col-6 col-md-4 col-lg-3 {{ group.group.name | lower }} all_items">
-							<div class="card col-11 mx-auto text-center">
-								<div class="divImgPresentation col-12">
-									<div class="zoom">
-										<div class="zoom__top zoom__left"></div>
-										<div class="zoom__top zoom__centre"></div>
-										<div class="zoom__top zoom__right"></div>
-										<div class="zoom__middle zoom__left"></div>
-										<div class="zoom__middle zoom__centre"></div>
-										<div class="zoom__middle zoom__right"></div>
-										<div class="zoom__bottom zoom__left"></div>
-										<div class="zoom__bottom zoom__centre"></div>
-										<div class="zoom__bottom zoom__right"></div>
-										{# <img class="zoom__image" src="data:image/png;base64,{{ images[key] }}"/> #}
-										<img class="zoom__image" src="{{ vich_uploader_asset(item, 'imageFile') }}"/>
-									</div>
-								</div>
-								<div class="card-body">
+		</div>
+		<div class="row g-0 justify-content-center align-items-center bg-white py-5">
+			{% for group in groups %}
+				{% for item in group.items %}
+					{% if item.stockForSale > 0 %}
+						<div class="col-9 col-sm-7 col-md-4 col-lg-3 mb-3">
+							<div class="card_ col-11 mx-auto d-flex flex-wrap justify-content-center align-items-center py-4 {{ group.group.name | lower }} all_items">
+								<img class="zoom__image" src="{{ vich_uploader_asset(item, 'imageFile') | imagine_filter('boite') }}" alt="Article {{ item.name }} - {{ boite.name }}"/>
+								<div class="col-12 mb-2">
 									{{ item.name }}
-									{{ item.priceExcludingTax }}
+								</div>
+								<div class="col-12 d-flex flex-wrap justify-content-between">
+									<div class="col-12 mb-3"><span class="text-orange" style="font-size: 20px">{{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, ',', ',') }} €</span></div>
+									<div class="col-12">
+										<form class="offset-6 col-6 offset-sm-4 col-sm-8 form-group" action="{{ path('panier_add_article_realtime') }}" method="POST">
+											<div class="input-group mb-3">
+												<input type="number" name="qte" class="form-control text-center" value="1" min="1" max="99" />
+												<input type="hidden" name="itemId" value="{{ item.id }}">
+												<div class="input-group-append ms-2">
+													<button class="btn btn-outline-success" type="submit"><i class="fa-solid fa-cart-arrow-down"></i></button>
+												</div>
+											</div>
+										</form>
+									</div>
+									<div class="col-12">
+										<div class="text-end small fw-italic">En stock: {{ item.stockForSale }}</div>
+									</div>
 								</div>
 							</div>
 						</div>
-					{% endfor %}
-
+					{% endif %}
 				{% endfor %}
-			</div>
+
+			{% endfor %}
 		</div>
 
 		{% include "components/_separateur_wave.html.twig" %}
