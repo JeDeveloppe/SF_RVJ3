@@ -46,6 +46,9 @@ class ItemRepository extends ServiceEntityRepository
         foreach($items as $item){
             $count += $item->getStockForSale();
         }
+
+        $count = count($items);
+
         return $count;
     }
 

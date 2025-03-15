@@ -2,6 +2,7 @@
 
 namespace App\Controller\Site;
 
+use App\Entity\ItemGroup;
 use App\Service\PanierService;
 use App\Service\AdresseService;
 use App\Service\OccasionService;
@@ -25,9 +26,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CatalogOccasionSearchRepository;
 use App\Repository\DurationOfGameRepository;
+use App\Repository\ItemGroupRepository;
 use App\Repository\ItemRepository;
 use App\Service\CatalogControllerService;
 use App\Service\CatalogueService;
+use PHPUnit\TextUI\XmlConfiguration\Group;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -57,7 +60,8 @@ class CatalogController extends AbstractController
         private DurationOfGameRepository $durationOfGameRepository,
         private RequestStack $requestStack,
         private CatalogControllerService $catalogControllerService,
-        private ItemRepository $itemRepository
+        private ItemRepository $itemRepository,
+        private ItemGroupRepository $itemGroupRepository
     )
     {
     }
@@ -129,10 +133,9 @@ class CatalogController extends AbstractController
         ]);
     }
 
-    #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}-{year}/', name: 'catalogue_pieces_detachees_articles_d_une_boite')]
-    public function cataloguePiecesDetacheesArticlesDuneBoite($id, $editorSlug, $boiteSlug, $year = NULL): Response
+    #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}/{year}/', name: 'catalogue_pieces_detachees_articles_d_une_boite', requirements: ['boiteSlug' => '[a-z0-9\-]+'] )]
+    public function cataloguePiecesDetacheesArticlesDuneBoite($id, $editorSlug, $boiteSlug, $year = NULL, $search = NULL): Response
     {
-
         $boite = $this->boiteRepository->findOneBy(['id' => $id, 'slug' => $boiteSlug, 'editor' => $this->editorRepository->findOneBy(['slug' => $editorSlug]), 'isOnline' => true]);
 
         if(!$boite){
@@ -183,6 +186,7 @@ class CatalogController extends AbstractController
             'metas' => $metas,
             'groups' => $groups,
             'affichages' => $affichages,
+            'search' => $search ?? null,
             'tax' => $this->taxRepository->findOneBy([]),
         ]);
     }

@@ -160,7 +160,15 @@
     // height: auto;
     overflow: hidden;
     object-fit: cover;
-  }
+}
+
+.boite_content{
+    text-align: left;
+    font: normal normal 300 14px/24px Nunito;
+    letter-spacing: 0px;
+    color: #1C1C3E;
+    opacity: 1;
+}
 
 .scale-out-center {
 -webkit-animation: scale-out-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;

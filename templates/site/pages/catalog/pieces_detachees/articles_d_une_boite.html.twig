@@ -12,7 +12,11 @@
 		{% set currentPath = app.request.getSchemeAndHttpHost() %}
 
 		{# BLOC BUTTON RETOUR #}
-		{% include "components/catalog/_retour-button.html.twig" %}
+		<div class="row my-3">
+			<div class="col-12 col-md-6">
+				<a class="btn btn-yellow" href="{{ path('app_catalogue_pieces_detachees') }}">Retour au catalogue</a>
+			</div>
+		</div>
 
 		{# BLOC PRESENTATION DU JEU #}
 		<!-- BLOC PRESENTATION DU JEU  -->
@@ -39,16 +43,20 @@
 					</span>
 				</div>
 				<div class="col-11 col-md-5 d-flex flex-wrap">
-					<div class="col-12 occasion_detail_editor pt-5 text-center text-md-start">
+					<div class="col-12 text-center text-md-start mb-4">
 						<h1 class="col-12 occasion_detail_name text-center text-md-start">{{ boite.name | raw }}</h1>
+						<span class="occasion_detail_editor">
 							{% if boite.year > 0 %}
 								Edition <span class="small">{{ boite.year }}</span> |
 							{% endif %}
+						</span>
+						<span class="occasion_detail_editor">
 							{{ boite.editor }}
-						</div>
+						</span>
+					</div>
 
 					{# CONTENU DE LA BOITE COMPLETE #}
-					{% include "components/catalog/_boite_content.html.twig" %} //TODO  
+					{% include "components/catalog/_boite_content.html.twig" %}
 				</div>
 			</div>
 		</div>
@@ -74,18 +82,18 @@
 			{% for group in groups %}
 				{% for item in group.items %}
 					{% if item.stockForSale > 0 %}
-						<div class="col-9 col-sm-7 col-md-4 col-lg-3 mb-3">
-							<div class="card_ col-11 mx-auto d-flex flex-wrap justify-content-center align-items-center py-4 {{ group.group.name | lower }} all_items">
+						<div class="col-8 col-sm-6 col-md-4 col-lg-3 mb-3 {{ group.group.name | lower }} all_items">
+							<div class="card_ col-11 mx-auto d-flex flex-wrap justify-content-center align-items-center pb-2">
 								<img class="zoom__image" src="{{ vich_uploader_asset(item, 'imageFile') | imagine_filter('boite') }}" alt="Article {{ item.name }} - {{ boite.name }}"/>
 								<div class="col-12 mb-2">
 									{{ item.name }}
 								</div>
 								<div class="col-12 d-flex flex-wrap justify-content-between">
 									<div class="col-12 mb-3"><span class="text-orange" style="font-size: 20px">{{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, ',', ',') }} €</span></div>
-									<div class="col-12">
-										<form class="offset-6 col-6 offset-sm-4 col-sm-8 form-group" action="{{ path('panier_add_article_realtime') }}" method="POST">
+									<div class="col-12 d-flex justify-content-end">
+										<form class="form-group" action="{{ path('panier_add_article_realtime') }}" method="POST">
 											<div class="input-group mb-3">
-												<input type="number" name="qte" class="form-control text-center" value="1" min="1" max="99" />
+												<input type="number" name="qte" class="form-control-sm text-center" value="1" min="1" max="99" />
 												<input type="hidden" name="itemId" value="{{ item.id }}">
 												<div class="input-group-append ms-2">
 													<button class="btn btn-outline-success" type="submit"><i class="fa-solid fa-cart-arrow-down"></i></button>
@@ -101,30 +109,29 @@
 						</div>
 					{% endif %}
 				{% endfor %}
-
 			{% endfor %}
 		</div>
 
 		{% include "components/_separateur_wave.html.twig" %}
 
-		<script>
-			let groups = document.getElementsByClassName('groups');
+{% endblock %}
+{% block javascript %}
+	<script>
+		window.onload = function() {
+			let groups = document.querySelectorAll('.groups');
 
-			Array.from(groups).forEach( function (element,index){
-				element.addEventListener('click', () => {
-					let groupName = element.id;
-					let allItems = document.getElementsByClassName('all_items');
-					const ArrayAllItems = Array.from(allItems);
-					ArrayAllItems.forEach( function (element,index){
-						if(element.classList.contains(groupName)){
-							element.classList.remove("d-none");
+			Array.from(groups).forEach(group => {
+				group.addEventListener('click', function(e) {
+					let items = document.querySelectorAll('.all_items');
+					Array.from(items).forEach(item => {
+						if(item.classList.contains(group.id)){
+							item.classList.remove('d-none');
 						}else{
-							element.classList.add("d-none");
+							item.classList.add('d-none');
 						}
-					});
+					})
 				})
-			});
-
-		</script>
-
+			})
+		}
+	</script>
 {% endblock %}
