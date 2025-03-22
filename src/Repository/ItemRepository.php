@@ -32,26 +32,32 @@ class ItemRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findAllItemsWithStockForSaleAndReturnCount(): int
+    public function findAllItemsWithStockForSaleNotNull(): array
     {
+
         $items =  $this->createQueryBuilder('i')
             ->andWhere('i.stockForSale > :val')
             ->setParameter('val', 0)
-            ->orderBy('i.id', 'ASC')
             ->getQuery()
             ->getResult()
         ;
 
-        $count = 0;
-        foreach($items as $item){
-            $count += $item->getStockForSale();
-        }
-
-        $count = count($items);
-
-        return $count;
+        return $items;
     }
 
+    public function findAllItemsWithStockForSaleNotNullOrderByUpdatedAtDesc(): array
+    {
+
+        $items =  $this->createQueryBuilder('i')
+            ->andWhere('i.stockForSale > :val')
+            ->setParameter('val', 0)
+            ->orderBy('i.updatedAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return $items;
+    }
 
 //    /**
 //     * @return Item[] Returns an array of Item objects

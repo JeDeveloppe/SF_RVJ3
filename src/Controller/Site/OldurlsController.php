@@ -87,9 +87,24 @@ class OldurlsController extends AbstractController
     }
 
     
-    #[Route('/jeu/{editor}/{id}/{slug}/', name: 'piecesDetacheesOld')]
-    public function piecesDetacheesOld($id, $editor, $slug): RedirectResponse
+    #[Route('/jeu/{editor}/{id}/{slug}/', name: 'piecesDetacheesOld1')]
+    public function piecesDetacheesOld1($id, $editor, $slug): RedirectResponse
     {
+
+        $url = $this->generateUrl('catalogue_pieces_detachees_articles_d_une_boite', [
+            'id' => $id,
+            'editorSlug' => $editor,
+            'boiteSlug' => $slug,
+            'year' => NULL
+        ]);
+
+        return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);
+    }
+
+    #[Route('/catalogue-pieces-detachees/{editor}/{id}/{slug}/', name: 'piecesDetacheesOld2')]
+    public function piecesDetacheesOld2($id, $editor, $slug): RedirectResponse
+    {
+
         $url = $this->generateUrl('catalogue_pieces_detachees_articles_d_une_boite', [
             'id' => $id,
             'editorSlug' => $editor,

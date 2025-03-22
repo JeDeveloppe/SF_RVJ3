@@ -19,7 +19,7 @@ class SearchBoiteInCatalogueType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'placeholder' => 'Rechercher un jeu, un éditeur...',
-                    'class' => 'form-control'
+                    'class' => 'form-control text-dark'
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -27,7 +27,7 @@ class SearchBoiteInCatalogueType extends AbstractType
                     ]),
                     new Length([
                         'min' => 3,
-                        'minMessage' => 'Au moins {{ limit }} charactères',
+                        'minMessage' => 'Minimum {{ limit }} charactères',
                         // max length allowed by Symfony for security reasons
                         'max' => 50,
                     ])

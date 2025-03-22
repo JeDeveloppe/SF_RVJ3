@@ -120,6 +120,8 @@ class Boite
     #[ORM\ManyToOne(inversedBy: 'boites')]
     private ?DurationOfGame $durationGame = null;
 
+    private int $numberOfItemWithStockNotNull;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
@@ -615,6 +617,19 @@ class Boite
     public function getMinAndMaxPlayers(): ?string
     {
         return 'De '.$this->getPlayersMin().' à '.$this->getPlayersMax();
+    }
+
+    public function getNumberOfItemWithStockNotNull(): ?int {
+
+        return $this->numberOfItemWithStockNotNull;
+
+    }
+
+    public function setNumberOfItemWithStockNotNull(?int $numberOfItemWithStockNotNull): static
+    {
+        $this->numberOfItemWithStockNotNull = $numberOfItemWithStockNotNull;
+
+        return $this;
     }
 
 }

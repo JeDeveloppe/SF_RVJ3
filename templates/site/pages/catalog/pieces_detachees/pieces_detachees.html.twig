@@ -1,5 +1,5 @@
 {% extends "components/_base.html.twig" %}
-   
+
 {% block title %}Catalogue des pièces détachées{% endblock %}
 
 {% block body %}
@@ -12,30 +12,36 @@
         <div class="row g-0 justify-content-around py-5 bg-white">
             <!-- left column / searchs -->
             <div class="col-12 d-flex flex-wrap justify-content-center">
-                    <p class="col-12 text-center">Il vous manque une pièce, un jeton, un dé ?<br/>Cherchez votre jeu, une année, une édition...</p>
+                    <p class="col-12 text-center">Il vous manque une pièce, un jeton, un dé ?</p>
                     {% include "site/pages/catalog/forms/_search_boite.html.twig" %}
             </div>
         </div>
 
-        {% if boites is null %}
-
-            <div class="row g-0 bg-white">
+        {% if totalPiecesDisponiblentSurLeSite < 1 %}
+            <div class="row g-0 bg-white justify-content-center">
                 <div class="col-12 my-4 text-center">
                     <img class="index_chess" src="{{ asset('build/images/design/index/trace_and_chess.png')| imagine_filter('thumbs') }}" alt="Catalogue des pièces détachées">
                 </div>
-                <div class="col-12 my-4 text-center">
-                    {% if totalPiecesDisponiblentSurLeSite < 1 %}
+                <div class="col-11 my-4 text-center">
                         <span class="text-green fw-bold">L’inventaire de nos pièces détachées est en cours... <i class="fa-solid fa-clock"></i></span>
-                    {% else %}
-                        {% set conjugaisonPiece = "pièce disponible" %}
-                        {% if totalPiecesDisponiblentSurLeSite > 1 %}{% set conjugaisonPiece = "pièces disponibles" %}{% endif %}
-                        <span class="text-green fw-bold">Actuellement {{ totalPiecesDisponiblentSurLeSite }} {{ conjugaisonPiece }} !</span>
-                    {% endif %}
                 </div>
             </div>
 
         {% else %}
             
+
+            {% if activeTriWhereThereIsNoSearch == true and boites | length > 12 %}
+                <div class="row g-0 justify-content-end bg-white pb-3">
+                    <div class="col-8 col-md-4 col-lg-3 me-2">
+                        <select id="tri" class="form-select" aria-label="Default select example">
+                            <option selected>Trier par</option>
+                            <option value="name">Nom de la boite A-Z</option>
+                            <option value="updatedAt">Les derniers articles ajoutés (défaut)</option>
+                        </select>
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="row g-0 bg-white justify-content-center">
                 <!-- results > 0 -->
                 {% if boites | length > 0 %}
@@ -49,9 +55,8 @@
                         {{ knp_pagination_render(boites, 'components/_pagination.html.twig') }}
 
                 {% else %}
-                    //TODO -> lien FB ?
-                    <div class="col-12 text-center text-orange fst-italic">
-                        Notre catalogue s'enrichie chaque semaine, n'hesitez pas à revenir !
+                    <div class="col-11 text-center text-orange fst-italic">
+                        Notre catalogue s'enrichit régulièrement, n'hesitez pas à réessayer plus tard !
                     </div>
                     <!-- result == 0 -->
                     {% include "site/pages/catalog/components/_emptyResultsDisplayPartners.html.twig" %}
@@ -66,4 +71,13 @@
         {% include "components/_separateur_wave.html.twig" %}
 
 
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        url = location.protocol + '//' + location.host + location.pathname;
+        document.getElementById('tri').onchange = function() {
+            window.location = url + "?orderColumn=" + this.value;
+        };
+    </script>
 {% endblock %}

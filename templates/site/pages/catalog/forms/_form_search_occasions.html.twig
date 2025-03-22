@@ -1,4 +1,3 @@
-{% include "components/forms/_display_form_errors.html.twig" %}
 {{ form_start(form, {'attr': {'id': 'search_occasions_in_catalogue' }}) }}
         <div class="col-12">
             <label class="label_in_occasion_search_form">{{ form_label(form.players) }}</label>
@@ -39,3 +38,4 @@
                 <a id="resetFormButton" type="button" class="text-purple text-decoration-none">Effacer les filtres</a>
         </div>
 {{ form_end(form) }}
+{% include "components/forms/_display_form_errors.html.twig" %}

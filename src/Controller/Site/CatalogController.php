@@ -74,7 +74,7 @@ class CatalogController extends AbstractController
         //?on supprimer les paniers de plus de x heures
         $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
-        $metas['description'] = ''; //TODO
+        $metas['description'] = 'Explorez notre catalogue de pièces détachées ou celui de nos jeux d\occasion';
 
         $occasions = $this->occasionRepository->findByIsOnline(true);
         shuffle($occasions); // on mélange
@@ -97,32 +97,55 @@ class CatalogController extends AbstractController
 
         //?on supprimer les paniers de plus de x heures
         $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
-
         $siteSetting = $this->siteSettingRepository->findOneBy([]);
+        $orderColumn = $request->query->get('orderColumn') ?? NULL;
+        $activeTriWhereThereIsNoSearch = true;
 
         $form = $this->createForm(SearchBoiteInCatalogueType::class);
         $form->handleRequest($request);
 
-
         if($form->isSubmitted() && $form->isValid()) {
+            $activeTriWhereThereIsNoSearch = false;
             $search = $form->get('search')->getData();
-
             $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems($search);
 
-            $boites = $this->paginator->paginate(
-                $donneesFromDatabases, /* query NOT result */
-                $request->query->getInt('page', 1), /*page number*/
-                12 /*limit per page*/
-            );
 
         }else{
+  
+            //si on cherche par ordre des noms de boite
+            if($orderColumn == 'name'){
 
-            // $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems();
-            $boites = NULL;
+                $items = $this->itemRepository->findAllItemsWithStockForSaleNotNull();
 
+            }else{
+                
+                //si on cherche par ordre des derniers articles ajoutés
+                $items = $this->itemRepository->findAllItemsWithStockForSaleNotNullOrderByUpdatedAtDesc();
+            }
+
+            $donneesFromDatabases = [];
+            foreach($items as $item){
+                $boite = $item->getBoiteOrigine()->first();
+                if(!in_array($boite, $donneesFromDatabases)){
+                    $donneesFromDatabases[] = $boite;
+                }
+            }
+
+            //si on cherche par ordre des noms de boite
+            if($orderColumn == 'name'){
+                usort($donneesFromDatabases, function($a, $b) {
+                    return strcmp($a->getName(), $b->getName());
+                });
+            }
         }
 
+        $donnees = $this->catalogueService->addNumberOfItemWithStockNotNull($donneesFromDatabases);
 
+        $boites = $this->paginator->paginate(
+            $donnees, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            12 /*limit per page*/
+        );
 
 
         $metas['description'] = 'Catalogue complet de toutes les boites dont le service dispose de pièces détachées.';
@@ -131,14 +154,15 @@ class CatalogController extends AbstractController
             'boites' => $boites,
             'form' => $form,
             'search' => $search ?? null,
+            'activeTriWhereThereIsNoSearch' => $activeTriWhereThereIsNoSearch,
             'metas' => $metas,
-            'totalPiecesDisponiblentSurLeSite' => $this->itemRepository->findAllItemsWithStockForSaleAndReturnCount(),
+            'totalPiecesDisponiblentSurLeSite' => count($this->itemRepository->findAllItemsWithStockForSaleNotNull()),
             'tax' => $this->taxRepository->findOneBy([]),
             'siteSetting' => $siteSetting
         ]);
     }
 
-    #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}/{year}/', name: 'catalogue_pieces_detachees_articles_d_une_boite', requirements: ['boiteSlug' => '[a-z0-9\-]+'] )]
+    #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}/', name: 'catalogue_pieces_detachees_articles_d_une_boite', requirements: ['boiteSlug' => '[a-z0-9\-]+'] )]
     public function cataloguePiecesDetacheesArticlesDuneBoite($id, $editorSlug, $boiteSlug, $year = NULL, $search = NULL): Response
     {
         //?on supprimer les paniers de plus de x heures
