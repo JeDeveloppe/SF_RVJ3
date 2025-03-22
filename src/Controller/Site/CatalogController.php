@@ -2,6 +2,7 @@
 
 namespace App\Controller\Site;
 
+use App\Entity\ItemGroup;
 use App\Service\PanierService;
 use App\Service\AdresseService;
 use App\Service\OccasionService;
@@ -25,8 +26,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CatalogOccasionSearchRepository;
 use App\Repository\DurationOfGameRepository;
+use App\Repository\ItemGroupRepository;
+use App\Repository\ItemRepository;
 use App\Service\CatalogControllerService;
 use App\Service\CatalogueService;
+use PHPUnit\TextUI\XmlConfiguration\Group;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -55,7 +59,9 @@ class CatalogController extends AbstractController
         private CatalogueService $catalogueService,
         private DurationOfGameRepository $durationOfGameRepository,
         private RequestStack $requestStack,
-        private CatalogControllerService $catalogControllerService
+        private CatalogControllerService $catalogControllerService,
+        private ItemRepository $itemRepository,
+        private ItemGroupRepository $itemGroupRepository,
     )
     {
     }
@@ -65,11 +71,10 @@ class CatalogController extends AbstractController
     public function catalogueSwitch(): Response
     {
 
-        if($_ENV['APP_ENV'] == 'prod'){
-            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees');
-        }
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
-        $metas['description'] = '';
+        $metas['description'] = 'Explorez notre catalogue de pièces détachées ou celui de nos jeux d\occasion';
 
         $occasions = $this->occasionRepository->findByIsOnline(true);
         shuffle($occasions); // on mélange
@@ -90,34 +95,58 @@ class CatalogController extends AbstractController
     public function cataloguePiecesDetachees(Request $request): Response
     {
 
-        if($_ENV['APP_ENV'] == 'prod'){
-            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees', 302);
-        }
-
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
         $siteSetting = $this->siteSettingRepository->findOneBy([]);
+        $orderColumn = $request->query->get('orderColumn') ?? NULL;
+        $activeTriWhereThereIsNoSearch = true;
 
         $form = $this->createForm(SearchBoiteInCatalogueType::class);
         $form->handleRequest($request);
 
-
         if($form->isSubmitted() && $form->isValid()) {
+            $activeTriWhereThereIsNoSearch = false;
             $search = $form->get('search')->getData();
-            $phrase = str_replace(" ","%",$search);
+            $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems($search);
 
-            $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems($phrase);
 
         }else{
+  
+            //si on cherche par ordre des noms de boite
+            if($orderColumn == 'name'){
 
-            $donneesFromDatabases = $this->boiteRepository->findBoitesWhereThereIsItems();
+                $items = $this->itemRepository->findAllItemsWithStockForSaleNotNull();
 
+            }else{
+                
+                //si on cherche par ordre des derniers articles ajoutés
+                $items = $this->itemRepository->findAllItemsWithStockForSaleNotNullOrderByUpdatedAtDesc();
+            }
+
+            $donneesFromDatabases = [];
+            foreach($items as $item){
+                $boite = $item->getBoiteOrigine()->first();
+                if(!in_array($boite, $donneesFromDatabases)){
+                    $donneesFromDatabases[] = $boite;
+                }
+            }
+
+            //si on cherche par ordre des noms de boite
+            if($orderColumn == 'name'){
+                usort($donneesFromDatabases, function($a, $b) {
+                    return strcmp($a->getName(), $b->getName());
+                });
+            }
         }
 
+        $donnees = $this->catalogueService->addNumberOfItemWithStockNotNull($donneesFromDatabases);
 
         $boites = $this->paginator->paginate(
-            $donneesFromDatabases, /* query NOT result */
+            $donnees, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
             12 /*limit per page*/
         );
+
 
         $metas['description'] = 'Catalogue complet de toutes les boites dont le service dispose de pièces détachées.';
 
@@ -125,18 +154,19 @@ class CatalogController extends AbstractController
             'boites' => $boites,
             'form' => $form,
             'search' => $search ?? null,
+            'activeTriWhereThereIsNoSearch' => $activeTriWhereThereIsNoSearch,
             'metas' => $metas,
+            'totalPiecesDisponiblentSurLeSite' => count($this->itemRepository->findAllItemsWithStockForSaleNotNull()),
             'tax' => $this->taxRepository->findOneBy([]),
             'siteSetting' => $siteSetting
         ]);
     }
 
-    #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}/', name: 'catalogue_pieces_detachees_articles_d_une_boite')]
-    public function cataloguePiecesDetacheesArticlesDuneBoite($id, $editorSlug, $boiteSlug): Response
+    #[Route('/catalogue-pieces-detachees/{id}/{editorSlug}/{boiteSlug}/', name: 'catalogue_pieces_detachees_articles_d_une_boite', requirements: ['boiteSlug' => '[a-z0-9\-]+'] )]
+    public function cataloguePiecesDetacheesArticlesDuneBoite($id, $editorSlug, $boiteSlug, $year = NULL, $search = NULL): Response
     {
-        if($_ENV['APP_ENV'] == 'prod'){
-            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees', 302);
-        }
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
         $boite = $this->boiteRepository->findOneBy(['id' => $id, 'slug' => $boiteSlug, 'editor' => $this->editorRepository->findOneBy(['slug' => $editorSlug]), 'isOnline' => true]);
 
@@ -148,18 +178,38 @@ class CatalogController extends AbstractController
         $metas['description'] = 'Les pièces détachées pour le jeu: '.ucfirst(strtolower($boite->getName())).' - '.ucfirst(strtolower($boite->getEditor()->getName()));
 
         $items = $boite->getItemsOrigine();
+        $totalItems = 0;
+        $nbrItems = 0;
+        foreach($items as $item){
+            $totalItems += $item->getStockForSale();
+            if($item->getStockForSale() > 0){
+                $nbrItems++;
+            }
+        }
+
+        $affichages['totalItems'] = $nbrItems;
+
+        if($totalItems == 0){
+            $this->addFlash('warning', 'Plus d\'articles en vente');
+            return $this->redirectToRoute('app_catalogue_pieces_detachees');
+        }
+
         $groups = [];
         foreach($items as $item){
             if(!array_key_exists($item->getItemGroup()->getId(),$groups)){
-
+                if($item->getStockForSale() > 0){
+                    $count = 1;
+                }else{
+                    $count = 0;
+                }
                 $groups[$item->getItemGroup()->getId()] = [
                     'group' => $item->getItemGroup(),
-                    'items' => [
-                        $item
-                    ]
+                    'items' => [$item],
+                    'count' => $count,
                 ];
             } else {
                 $groups[$item->getItemGroup()->getId()]['items'][] = $item;
+                $groups[$item->getItemGroup()->getId()]['count'] = $groups[$item->getItemGroup()->getId()]['count'] + 1;
             }
         }
 
@@ -167,6 +217,8 @@ class CatalogController extends AbstractController
             'boite' => $boite,
             'metas' => $metas,
             'groups' => $groups,
+            'affichages' => $affichages,
+            'search' => $search ?? null,
             'tax' => $this->taxRepository->findOneBy([]),
         ]);
     }
@@ -174,6 +226,9 @@ class CatalogController extends AbstractController
     #[Route('/catalogue-jeux-occasion/{category}', name: 'app_catalogue_occasions')]
     public function catalogueOccasions(Request $request, $category = NULL): Response
     {
+
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
         $metas['description'] = "Plein de jeux de société d'occasion à petit prix ! Idéal pour les soirées entre amis ou en famille. Visitez nos catalogues et trouvez votre bonheur !";
 
@@ -287,6 +342,9 @@ class CatalogController extends AbstractController
     #[Route('/jeu-occasion/{reference_occasion}/{editor_slug}/{boite_slug}', name: 'occasion')]
     public function occasion($reference_occasion, Security $security, $editor_slug, $boite_slug): Response
     {
+
+        //?on supprimer les paniers de plus de x heures
+        $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
         $delivery = null;
         $http_error_code = 200;

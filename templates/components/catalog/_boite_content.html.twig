@@ -1,15 +1,13 @@
-<div class="card col-12 mt-3">
-    <div class="card-header bg-vos">Contenu d'un jeu complet :</div>
-    <div class="card-body mt-2">
-        <ul>
+<div class="col-12">
+    <b>Contenu du jeu:</b>
+        <ul class="ps-0 boite_content">
             {% set contenus = boite.content|split('\r\n') %}
             {% if boite.content | length > 0 %}
                 {% for contenu in contenus %}
-                    <li>{{ contenu }}</li>
+                    {{ contenu }}<br/>
                 {% endfor %}
             {% else %}
                 Aucune information pour le moment...
             {% endif %}
         </ul>
-    </div>
 </div>

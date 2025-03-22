@@ -28,7 +28,7 @@ class DeliveryRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('d')
             ->where('d.shippingMethod = :method')
             ->andWhere('d.start <= :weigth')
-            ->andWhere('d.end >= :weigth')
+            ->andWhere('d.end > :weigth')
             ->setParameter('method', $shippingMethod)
             ->setParameter('weigth', $weigthPanier)
             ->setMaxResults(1)

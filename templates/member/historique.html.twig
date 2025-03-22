@@ -63,9 +63,9 @@
                {% endfor %}
             </div>
 
-                    <div class="col-11 d-flex justify-content-center my-1">
-                        {{ knp_pagination_render(documents, 'components/_pagination.html.twig') }}
-                    </div>
+
+            {{ knp_pagination_render(documents, 'components/_pagination.html.twig') }}
+
          {% else %}
             <div class="col-12 text-center py-5 px-1">PAS ENCORE DE DOCUMENTS...</div>
          {% endif %}

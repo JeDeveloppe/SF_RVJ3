@@ -31,6 +31,34 @@ class ItemRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findAllItemsWithStockForSaleNotNull(): array
+    {
+
+        $items =  $this->createQueryBuilder('i')
+            ->andWhere('i.stockForSale > :val')
+            ->setParameter('val', 0)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return $items;
+    }
+
+    public function findAllItemsWithStockForSaleNotNullOrderByUpdatedAtDesc(): array
+    {
+
+        $items =  $this->createQueryBuilder('i')
+            ->andWhere('i.stockForSale > :val')
+            ->setParameter('val', 0)
+            ->orderBy('i.updatedAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return $items;
+    }
+
 //    /**
 //     * @return Item[] Returns an array of Item objects
 //     */

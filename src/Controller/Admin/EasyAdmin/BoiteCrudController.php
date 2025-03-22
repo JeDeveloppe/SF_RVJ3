@@ -59,12 +59,12 @@ class BoiteCrudController extends AbstractCrudController
             BooleanField::new('isOnline')
                 ->setLabel('Actif pièces détachée')
                 ->setPermission('ROLE_ADMIN')
-                ->setColumns(6)
-                ->onlyOnForms(),
+                ->onlyOnForms()
+                ->setColumns(6),
             BooleanField::new('isOccasion')
                 ->setLabel('Dispo en occasion')
-                ->onlyOnForms()
                 ->setColumns(6)
+                ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN'),
             BooleanField::new('isDeliverable')->setLabel('Livrable')->onlyOnForms()->setColumns(6)->setPermission('ROLE_ADMIN'),
             BooleanField::new('isDeee')->setLabel('Deee')->onlyOnForms()->setColumns(6)->setPermission('ROLE_ADMIN'),
@@ -171,12 +171,22 @@ class BoiteCrudController extends AbstractCrudController
                 ->setColumns(6),
 
             FormField::addFieldset('Partie occasion')->setPermission('ROLE_BENEVOLE'),
-            IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms()->setColumns(6),
+            IntegerField::new('weigth')->setLabel('Poid (en g)')->onlyOnForms()->setColumns(6)->setRequired(true),
             MoneyField::new('htPrice')
                 ->setLabel('Prix HT d\'une boite complête en bon état')
                 ->setStoredAsCents()
                 ->setCurrency('EUR')
-                ->onlyOnForms()->setColumns(6),
+                ->onlyOnForms()->setColumns(6)->setRequired(true),
+            BooleanField::new('isOnline')
+                ->setLabel('Actif pièces det.')
+                ->setPermission('ROLE_ADMIN')
+                ->onlyOnIndex()
+                ->setColumns(6),
+            BooleanField::new('isOccasion')
+                ->setLabel('Dispo en occas.')
+                ->setColumns(6)
+                ->onlyOnIndex()
+                ->setPermission('ROLE_ADMIN'),
             // AssociationField::new('itemsSecondaire')->setLabel('Articles:')->setPermission('ROLE_ADMIN')->setDisabled(true)->onlyOnForms(),
             FormField::addTab('Ventes rattachées')->onlyWhenUpdating()->setPermission('ROLE_ADMIN'),
             AssociationField::new('documentLines', 'Nbr de ventes')->onlyOnIndex()->setPermission('ROLE_ADMIN'),
@@ -274,7 +284,7 @@ class BoiteCrudController extends AbstractCrudController
     {
         if ($entityInstance instanceof Boite) {
             $user = $this->security->getUser();
-            $entityInstance->setIsOccasion(true)->setCreatedAt(new DateTimeImmutable('now'))->setCreatedBy($user)->setRvj2id('RVJ3')->setSlug($this->slugger->slug(strtolower($entityInstance->getName())));
+            $entityInstance->setIsOccasion(true)->setCreatedAt(new DateTimeImmutable('now'))->setCreatedBy($user)->setRvj2id('RVJ3');
             $entityManager->persist($entityInstance);
             $entityManager->flush();
         }
@@ -284,7 +294,7 @@ class BoiteCrudController extends AbstractCrudController
     {
         if ($entityInstance instanceof Boite) {
             $user = $this->security->getUser();
-            $entityInstance->setUpdatedBy($user)->setUpdatedAt(new DateTimeImmutable('now'))->setSlug($this->slugger->slug(strtolower($entityInstance->getName())));
+            $entityInstance->setUpdatedBy($user)->setUpdatedAt(new DateTimeImmutable('now'));
             $entityManager->persist($entityInstance);
             $entityManager->flush();
         }

@@ -12,7 +12,11 @@
 		{% set currentPath = app.request.getSchemeAndHttpHost() %}
 
 		{# BLOC BUTTON RETOUR #}
-		{% include "components/catalog/_retour-button.html.twig" %}
+		<div class="row my-3">
+			<div class="col-12 col-md-6">
+				<a class="btn btn-yellow" href="{{ path('app_catalogue_pieces_detachees') }}">Retour au catalogue</a>
+			</div>
+		</div>
 
 		{# BLOC PRESENTATION DU JEU #}
 		<!-- BLOC PRESENTATION DU JEU  -->
@@ -31,7 +35,7 @@
 							<div class="zoom__bottom zoom__centre"></div>
 							<div class="zoom__bottom zoom__right"></div>
 							{# <img class="zoom__image" src="data:image/png;base64,{{ images[key] }}"/> #}
-							<img class="zoom__image" src="{{ vich_uploader_asset(boite, 'imageFile') }}"/>
+            				<img class="zoom__image" src="{{ vich_uploader_asset(boite, 'imageFile') | imagine_filter('boite') }}" alt="Image de la boite de jeu {{ boite.name }} - {{ boite.editor }}"/>
 						</div>
 					</div>
 					<span class="col-12 col-md-6 text-muted small text-center">
@@ -39,13 +43,17 @@
 					</span>
 				</div>
 				<div class="col-11 col-md-5 d-flex flex-wrap">
-					<div class="col-12 occasion_detail_editor pt-5 text-center text-md-start">
-						{{ boite.editor }}
+					<div class="col-12 text-center text-md-start mb-4">
+						<h1 class="col-12 occasion_detail_name text-center text-md-start">{{ boite.name | raw }}</h1>
+						<span class="occasion_detail_editor">
 							{% if boite.year > 0 %}
-								- <span class="small">{{ boite.year }}</span>
+								Edition <span class="small">{{ boite.year }}</span> |
 							{% endif %}
-						</div>
-					<h1 class="col-12 occasion_detail_name text-center text-md-start">{{ boite.name | raw }}</h1>
+						</span>
+						<span class="occasion_detail_editor">
+							{{ boite.editor }}
+						</span>
+					</div>
 
 					{# CONTENU DE LA BOITE COMPLETE #}
 					{% include "components/catalog/_boite_content.html.twig" %}
@@ -53,116 +61,77 @@
 			</div>
 		</div>
 
+	{% include "components/_separateur_wave.html.twig" %}
+
+	<div class="row g-0 justify-content-around align-items-center py-4 bg-white">
+		<h2 class="col-12 text-center"><span class="text-purple">Pièces détachées</span> disponibles</h2>
+	</div>
+
 		{# BLOC DES DIFFERENTS ARTICLE CLASSES PAR FAMILLE #}
-		<div class="row g-0 justify-content-center bg-white py-5">
-			<h4 class="col-11 text-center my-5">Nos articles disponibles:</h4>
-			<div class="col-11 d-flex flex-wrap justify-content-around">
-
+		<div class="row g-0 justify-content-center bg-white">
+			<div class="col-12 d-flex flex-wrap justify-content-center align-items-center">
+				<a class="btn btn-light btn-block m-1 groups" id="all_items">Tout <span class="text-yellow fw-bolder">{{ affichages.totalItems }}</span></a>
 				{% for group in groups %}
-
-					<div class="col-11 col-md-9 px-2">
-						<div class="card mb-3 p-0">
-							<div class="card-header">{{ group.group.name }}</div>
-							<div class="card-body d-flex flex-wrap justify-content-center align-items-center">
-								<div class="col-11 col-md-6 divImgPresentation text-center">
-									<div class="zoom card_div_img_articles">
-										<img class="zoom__image zoom_image_placeholder" src="{{ asset('build/images/design/default.png') }}"/>
-										<div class="zoom__top zoom__left"></div>
-										<div class="zoom__top zoom__centre"></div>
-										<div class="zoom__top zoom__right"></div>
-										<div class="zoom__middle zoom__left"></div>
-										<div class="zoom__middle zoom__centre"></div>
-										<div class="zoom__middle zoom__right"></div>
-										<div class="zoom__bottom zoom__left"></div>
-										<div class="zoom__bottom zoom__centre"></div>
-										<div class="zoom__bottom zoom__right"></div>
-										<img class="zoom__image zoom_image_item d-none" src=""/>
-									</div>
+					{% if group.count > 0 %}
+						<a class="btn btn-light btn-block m-1 groups" id="{{ group.group.name | lower }}">{{ group.group.name }} <span class="text-yellow fw-bolder">{{ group.count }}</span></a>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+		<div class="row g-0 justify-content-center align-items-center bg-white py-5">
+			{% for group in groups %}
+				{% for item in group.items %}
+					{% if item.stockForSale > 0 %}
+						<div class="col-8 col-sm-6 col-md-4 col-lg-3 mb-3 {{ group.group.name | lower }} all_items">
+							<div class="card_ col-11 mx-auto d-flex flex-wrap justify-content-center align-items-center pb-2">
+								<img class="zoom__image" src="{{ vich_uploader_asset(item, 'imageFile') | imagine_filter('boite') }}" alt="Article {{ item.name }} - {{ boite.name }}"/>
+								<div class="col-12 mb-2">
+									{{ item.name }}
 								</div>
-								<div class="col-11 col-md-6 d-flex flex-wrap justify-content-around align-items-center p-0 mt-3">
-									<form action="{{ path('panier_add_article_realtime') }}" method="POST">
-										<div class="form-group mb-3">
-											<select name="select-item" class="form-control text-center select-item" required>
-												<option value="">-- Choisir un article --</option>
-													<optgroup label="Pièces originales">
-														{% for item in group.items|sort %}
-															
-																{% if  item.stockForSale > 0 %}
-																	<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }} : {{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC - (Stock: {{ item.stockForSale }})</option>
-																{% else %}
-																	<option data-image="{{ item.image }}" disabled>{{ item.name }} : Réapprovisionnement en cours...</option>
-																{% endif %}												
-															
-														{% else %}
-															<option value="" data-image="{{ asset('build/images/design/default.png') }}" disabled>Victime de son succès...</option>
-														{% endfor %}
-													</optgroup>
-													{# <optgroup label="Pièces similaires">
-														{% if boite.itemsSecondaire | length > 0 %}
-															{% for item in boite.itemsSecondaire|sort %}
-																	{% if item in group.items %}
-																		{% if  item.stockForSale > 0 %}
-																			<option value="{{ item.id }}" data-image="{{ item.image }}">{{ item.name }} : {{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, '.', ',') }} € TTC - (Stock: {{ item.stockForSale }})</option>
-																		{% endif %}
-																	{% endif %}
-															{% endfor %}
-														{% else %}
-															<option value="">Victime de son succès...</option>
-														{% endif %}
-													</optgroup> #}
-											</select>
-										</div>
-										<div class="form-group d-flex justify-content-center align-items-center">
-											<div class="col-3">
-												<input type="number" name="qte" min="1" step="1" value="1" placeholder="Qté" class="form-control col-5" required>
+								<div class="col-12 d-flex flex-wrap justify-content-between">
+									<div class="col-12 mb-3"><span class="text-orange" style="font-size: 20px">{{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, ',', ',') }} €</span></div>
+									<div class="col-12 d-flex justify-content-end">
+										<form class="form-group" action="{{ path('panier_add_article_realtime') }}" method="POST">
+											<div class="input-group mb-3">
+												<input type="number" name="qte" class="form-control-sm text-center" value="1" min="1" max="99" />
+												<input type="hidden" name="itemId" value="{{ item.id }}">
+												<div class="input-group-append ms-2">
+													<button class="btn btn-outline-success" type="submit"><i class="fa-solid fa-cart-arrow-down"></i></button>
+												</div>
 											</div>
-											<div class="ms-2 col-3">
-												<input type="hidden" name="boiteId" value="{{ boite.id }}">
-												<button type="submit" class="btn btn-outline-dark"><i class="fa-solid fa-cart-arrow-down"></i></button>
-											</div>
-										</div>
-									</form>
+										</form>
+									</div>
+									<div class="col-12">
+										<div class="text-end small fw-italic">En stock: {{ item.stockForSale }}</div>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					
+					{% endif %}
 				{% endfor %}
-
-			</div>
+			{% endfor %}
 		</div>
 
 		{% include "components/_separateur_wave.html.twig" %}
 
-		<script>
-			let currentPath = '{{ currentPath }}';
-			let upload_item_image_path = '{{ upload_item_image_path }}';
-			let selects = document.getElementsByClassName('select-item');
-			const ArraySelects = Array.from(selects);
+{% endblock %}
+{% block javascript %}
+	<script>
+		window.onload = function() {
+			let groups = document.querySelectorAll('.groups');
 
-			ArraySelects.forEach( function (element,index){
-				element.addEventListener('change', () => {
-					let imageName = '';
-					let imageDivPlaceholder = document.getElementsByClassName('zoom_image_placeholder');
-					let imageDiv = document.getElementsByClassName('zoom_image_item');
-					
-					if(element.options[element.selectedIndex].getAttribute('data-image'))
-					{
-
-						imageDiv[index].src=currentPath+upload_item_image_path+'/'+element.options[element.selectedIndex].getAttribute('data-image');
-
-					}else{
-
-						// imageDiv[index].src=currentPath+'/build/images/design/default.png';
-						imageDiv[index].src=currentPath+upload_item_image_path+'/'+element.options[element.selectedIndex].getAttribute('data-image');
-
-
-					}
-				
-					imageDivPlaceholder[index].classList.add("d-none");
-					imageDiv[index].classList.remove("d-none");
+			Array.from(groups).forEach(group => {
+				group.addEventListener('click', function(e) {
+					let items = document.querySelectorAll('.all_items');
+					Array.from(items).forEach(item => {
+						if(item.classList.contains(group.id)){
+							item.classList.remove('d-none');
+						}else{
+							item.classList.add('d-none');
+						}
+					})
 				})
-			});
-		</script>
-
+			})
+		}
+	</script>
 {% endblock %}

@@ -105,7 +105,7 @@ class UtilitiesService
                 $weigth += $category->getItem()->getWeigth() * $category->getQte();  
             }
 
-            $price += $category->getPriceWithoutTax();
+            $price += $category->getPriceWithoutTax() * $category->getQte();
         }
         
 

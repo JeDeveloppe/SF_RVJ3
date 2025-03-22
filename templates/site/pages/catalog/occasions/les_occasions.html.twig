@@ -34,103 +34,103 @@
 {% endblock %}
 
 {% block javascript %}
-<script>
-    window.onload = () => {
-        //occasions_filters_menu effect
-        let occasions_filters_button = document.querySelector('.occasions_filters_button');
-        let occasions_filters_menu = document.querySelector('.occasions_filters_menu');
-        occasions_filters_button.addEventListener('click', showFiltersMenu);
+    <script>
+        window.onload = () => {
+            //occasions_filters_menu effect
+            let occasions_filters_button = document.querySelector('.occasions_filters_button');
+            let occasions_filters_menu = document.querySelector('.occasions_filters_menu');
+            occasions_filters_button.addEventListener('click', showFiltersMenu);
 
-        function showFiltersMenu(){
-        if(occasions_filters_menu.classList.contains('d-none')){
-            occasions_filters_menu.classList.remove('d-none');
-        }else{
-            occasions_filters_menu.classList.add('d-none');
-        }
-        }
-        //occasions_filters_menu effect
-        let FormOccasion = document.getElementById('search_occasions_in_catalogue');
+            function showFiltersMenu(){
+            if(occasions_filters_menu.classList.contains('d-none')){
+                occasions_filters_menu.classList.remove('d-none');
+            }else{
+                occasions_filters_menu.classList.add('d-none');
+            }
+            }
+            //occasions_filters_menu effect
+            let FormOccasion = document.getElementById('search_occasions_in_catalogue');
 
-        let resetFormButton = document.getElementById('resetFormButton');
-        function resetFormFunction(){
-            //on recupere url active
-            let Url = new URL(window.location.href);
-            
-            let elements = document.querySelectorAll("input[type=checkbox]:checked")
-            for (var i = 0; i < elements.length; i++){
-                if(elements[i].type === 'checkbox'){
-                    if(elements[i] < elements.length -1){
-                        elements[i].checked = false;
-                    }else{
-                        elements[i].click();
+            let resetFormButton = document.getElementById('resetFormButton');
+            function resetFormFunction(){
+                //on recupere url active
+                let Url = new URL(window.location.href);
+                
+                let elements = document.querySelectorAll("input[type=checkbox]:checked")
+                for (var i = 0; i < elements.length; i++){
+                    if(elements[i].type === 'checkbox'){
+                        if(elements[i] < elements.length -1){
+                            elements[i].checked = false;
+                        }else{
+                            elements[i].click();
+                        }
                     }
                 }
             }
-        }
-        resetFormButton.addEventListener('click', resetFormFunction);
+            resetFormButton.addEventListener('click', resetFormFunction);
 
-        //left search
-        document.querySelectorAll('#search_occasions_in_catalogue input').forEach(input => {
-            input.addEventListener('change', () => {
-                let FormOpions = new FormData(FormOccasion);
+            //left search
+            document.querySelectorAll('#search_occasions_in_catalogue input').forEach(input => {
+                input.addEventListener('change', () => {
+                    let FormOpions = new FormData(FormOccasion);
 
-                //on recupere les donnees
-                let Params = new URLSearchParams();
+                    //on recupere les donnees
+                    let Params = new URLSearchParams();
 
-                FormOpions.forEach((value, key) => {
-                    Params.append(key, value);
+                    FormOpions.forEach((value, key) => {
+                        Params.append(key, value);
+                    })
+
+                    //on recupere url active
+                    let Url = new URL(window.location.href);
+
+                    //on lance fetch()
+                    fetch(Url.pathname + "?" + Params.toString() + "&ajax=1", {
+                        headers: {
+                            "x-Request-with": "XMLHttpRequest"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        let content = document.querySelector("#results");
+                        content.innerHTML = data.content;
+
+                        //on met a jour l'url
+                        history.pushState([], null, Url.pathname + "?" + Params.toString()  + "&ajax=1")
+                    }).catch(e => alert(e))
                 })
+            });
 
-                //on recupere url active
-                let Url = new URL(window.location.href);
+            //animation des cartes quand ils vont dans le panier
+            let cards = document.querySelectorAll('.card_columns');
+            const cardsArray = [...cards];
 
-                //on lance fetch()
-                fetch(Url.pathname + "?" + Params.toString() + "&ajax=1", {
-                    headers: {
-                        "x-Request-with": "XMLHttpRequest"
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    let content = document.querySelector("#results");
-                    content.innerHTML = data.content;
+            function inCartAnimations(card){
 
-                    //on met a jour l'url
-                    history.pushState([], null, Url.pathname + "?" + Params.toString()  + "&ajax=1")
-                }).catch(e => alert(e))
-            })
-        });
-
-        //animation des cartes quand ils vont dans le panier
-        let cards = document.querySelectorAll('.card_columns');
-        const cardsArray = [...cards];
-
-        function inCartAnimations(card){
-
-            card.classList.add('scale-out-center');
-            setTimeout(() => {}, "500");
-        }
-
-        cardsArray.forEach(card => {
-
-            let link_add_cart = card.children[0].children[5].children[1].lastElementChild;
-
-
-            link_add_cart.addEventListener('click', (e) => inCartAnimations(card));
-
-        });
-
-        //animation du champs de recherche s'il est inférieur à 3
-        document.getElementById('search_occasion_name_or_editor_in_catalogue_search').addEventListener('input', function (evt) {
-            if(this.value.length > 0 && this.value.length < 3){
-                this.style.borderColor = 'red';
-            }else{
-                this.style.borderColor = 'transparent';
+                card.classList.add('scale-out-center');
+                setTimeout(() => {}, "500");
             }
 
-        });
+            cardsArray.forEach(card => {
+
+                let link_add_cart = card.children[0].children[5].children[1].lastElementChild;
 
 
-    }
-</script>
+                link_add_cart.addEventListener('click', (e) => inCartAnimations(card));
+
+            });
+
+            //animation du champs de recherche s'il est inférieur à 3
+            document.getElementById('search_occasion_name_or_editor_in_catalogue_search').addEventListener('input', function (evt) {
+                if(this.value.length > 0 && this.value.length < 3){
+                    this.style.borderColor = 'red';
+                }else{
+                    this.style.borderColor = 'transparent';
+                }
+
+            });
+
+
+        }
+    </script>
 {% endblock %}

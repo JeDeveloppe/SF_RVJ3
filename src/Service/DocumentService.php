@@ -263,35 +263,75 @@ class DocumentService
     public function generateAllLinesFromPanierIntoDocumentLines(array $panierParams, Document $document)
     {
 
-        $paniers = array_merge($panierParams['panier_occasions'],$panierParams['panier_boites'],$panierParams['panier_items']);
-        //on met en BDD par ligne de document
-        foreach($paniers as $panier){
+        // $paniers = array_merge($panierParams['panier_occasions'],$panierParams['panier_boites'],$panierParams['panier_items']);
+        $panier_occasions = $panierParams['panier_occasions'];
+        $panier_items = $panierParams['panier_items'];
+
+        //ON TRAITE LES OCCASIONS
+        foreach($panier_occasions as $panier){
             $documentLine = new DocumentLine();
             $documentLine
-                ->setQuestion($panier->getQuestion() ?? NULL)
                 ->setQuantity($panier->getQte() ?? 1)
-                ->setBoite($panier->getBoite() ?? NULL)
-                ->setItem($panier->getItem() ?? NULL)
-                ->setOccasion($panier->getOccasion() ?? NULL) //?make offline en billed
+                ->setOccasion($panier->getOccasion())
                 ->setDocument($document)
                 ->setPriceExcludingTax($panier->getPriceWithoutTax());
-                $this->em->persist($documentLine);
+            $this->em->persist($documentLine);
 
-            if(!is_null($panier->getOccasion())){
-                $occasion = $panier->getOccasion();
-                $occasion->setIsOnline(false); //?plus besoin
-                $this->em->persist($occasion);
-            }
-        }
-        //on met en BDD les differentes lignes et les occasions en hors ligne
-        $this->em->flush();
+            $occasion = $panier->getOccasion();
+            $occasion->setIsOnline(false);
+            $this->em->persist($occasion);
 
-        //on supprimer chaque panier de la BDD
-        foreach($paniers as $panier){
+            //ON SUPPRIME CHAQUE PANIER OCCASION
             $this->em->remove($panier);
         }
-        //on supprim en BDD les differentes lignes
+
         $this->em->flush();
+
+        //ON TRAITE LES ITEMS
+        foreach($panier_items as $panier){
+            $documentLine = new DocumentLine();
+            $documentLine
+                ->setQuantity($panier->getQte() ?? 1)
+                ->setItem($panier->getItem())
+                ->setDocument($document)
+                ->setPriceExcludingTax($panier->getPriceWithoutTax());
+            $this->em->persist($documentLine);
+
+            //ON SUPPRIME CHAQUE PANIER ITEM
+            $this->em->remove($panier);
+        }    
+
+        $this->em->flush();
+
+
+        // //on met en BDD par ligne de document
+        // foreach($paniers as $panier){
+        //     $documentLine = new DocumentLine();
+        //     $documentLine
+        //         ->setQuestion($panier->getQuestion() ?? NULL)
+        //         ->setQuantity($panier->getQte() ?? 1)
+        //         ->setBoite($panier->getBoite() ?? NULL)
+        //         ->setItem($panier->getItem() ?? NULL)
+        //         ->setOccasion($panier->getOccasion() ?? NULL) //?make offline en billed
+        //         ->setDocument($document)
+        //         ->setPriceExcludingTax($panier->getPriceWithoutTax());
+        //         $this->em->persist($documentLine);
+
+        //     if(!is_null($panier->getOccasion())){
+        //         $occasion = $panier->getOccasion();
+        //         $occasion->setIsOnline(false); //?plus besoin
+        //         $this->em->persist($occasion);
+        //     }
+        // }
+        //on met en BDD les differentes lignes et les occasions en hors ligne
+        // $this->em->flush();
+
+        // //on supprimer chaque panier de la BDD
+        // foreach($paniers as $panier){
+        //     $this->em->remove($panier);
+        // }
+        //on supprim en BDD les differentes lignes
+        // $this->em->flush();
     }
 
     public function deleteDocumentFromDataBaseAndPuttingItemsBoiteOccasionBackInStock(array $documentsToDelete = null)

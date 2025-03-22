@@ -18,10 +18,6 @@ class OldurlsController extends AbstractController
     public function catalogueOld(): RedirectResponse
     {
 
-        if($_ENV['APP_ENV'] == 'prod'){
-            return $this->redirect($this->generateUrl('app_home') . '#piecesDetachees');
-        }
-
         $url = $this->generateUrl('app_catalogue_switch');
 
         return new RedirectResponse($url, $this->TEMPORAIRE_REDIRECTION);
@@ -91,13 +87,29 @@ class OldurlsController extends AbstractController
     }
 
     
-    #[Route('/jeu/{editor}/{id}/{slug}/', name: 'piecesDetacheesOld')]
-    public function piecesDetacheesOld($id, $editor, $slug): RedirectResponse
+    #[Route('/jeu/{editor}/{id}/{slug}/', name: 'piecesDetacheesOld1')]
+    public function piecesDetacheesOld1($id, $editor, $slug): RedirectResponse
     {
+
         $url = $this->generateUrl('catalogue_pieces_detachees_articles_d_une_boite', [
             'id' => $id,
             'editorSlug' => $editor,
-            'boiteSlug' => $slug
+            'boiteSlug' => $slug,
+            'year' => NULL
+        ]);
+
+        return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);
+    }
+
+    #[Route('/catalogue-pieces-detachees/{editor}/{id}/{slug}/', name: 'piecesDetacheesOld2')]
+    public function piecesDetacheesOld2($id, $editor, $slug): RedirectResponse
+    {
+
+        $url = $this->generateUrl('catalogue_pieces_detachees_articles_d_une_boite', [
+            'id' => $id,
+            'editorSlug' => $editor,
+            'boiteSlug' => $slug,
+            'year' => NULL
         ]);
 
         return new RedirectResponse($url, $this->PERMANENT_REDIRECTION);

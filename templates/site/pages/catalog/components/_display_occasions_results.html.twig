@@ -24,9 +24,7 @@
 
                 {% endfor %}
 
-                <div class="col-12 my-5">
-                    {{ knp_pagination_render(occasions, 'components/_pagination.html.twig') }}
-                </div>
+                {{ knp_pagination_render(occasions, 'components/_pagination.html.twig') }}
 
             {% else %}
                 <!-- left column / result == 0 -->

@@ -62,10 +62,6 @@
                             </div>
                             <div class="modal-body">
                                     <table class="table align-middle">
-                                        <tr>
-                                            <th>Désignation</th>
-                                            {# <th class="text-center">Prix HT</th> #}
-                                        </tr>
                                         {% for value in document.documentLines %}
                                             <tr>
                                                 <td class="d-flex">
@@ -90,7 +86,7 @@
                                                             </ul>
                                                         </div>
                                                     {% else %}
-                                                        Article:<br/>
+                                                        <b>Article:</b><br/>
                                                         {{ value.item.name }} - Référence : {{ value.item.reference }} - Qté: {{ value.quantity }}
                                                     {% endif %}
                                                 </td>
