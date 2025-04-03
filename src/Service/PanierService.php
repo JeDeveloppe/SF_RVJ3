@@ -200,102 +200,6 @@ class PanierService
         return $reponse;
     }
 
-    public function calculateAllCartRealtime()
-    {
-        $session = $this->request->getSession();
-        $user = $this->security->getUser();
-        $panierInSession = $session->get('paniers',[]);
-        //methode de livraison
-        $shippingMethod = $this->shippingMethodRepository->findOneById($session->get('shippingMethodId'));
-        $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
-        $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
-        $paniers = $this->returnAllPaniersFromUser();
-        
-        $responses = $this->separateBoitesItemsAndOccasion($paniers);
-        $responses['preparationHt'] = $docParams->getPreparation();
-        $responses['memberShipOnTime'] = false;
-
-        if($user){
-
-            //gestion membership au niveau du panier
-            if($user->getMembership() > $now){
-                $responses['preparationHt'] = 0;
-                $responses['memberShipOnTime'] = true;
-            }
-
-        }else{
-
-            $responses['remises']['volume'] = $this->calculateRemise($paniers);
-
-        }
-
-
-        //? et frais de préparation si pas d'articles
-        if(count($responses['panier_items']) < 1){
-            $responses['preparationHt'] = 0;
-        }
-
-        $responses['tax'] = $this->taxRepository->findOneBy([]);
-        $responses['remises']['voucher']['voucherMax'] = 0;
-        $responses['remises']['voucher']['actif'] = false;
-
-        if(!is_null($panierInSession['voucherDiscountId'])){
-            $voucherDiscount = $this->voucherDiscountRepository->find($panierInSession['voucherDiscountId']);
-            $responses['remises']['voucher']['voucherMax'] = $voucherDiscount->getRemainingValueToUseExcludingTax();
-            $responses['remises']['voucher']['token'] = $voucherDiscount->getToken();
-            $responses['remises']['voucher']['actif'] = true;
-        }
-
-        //?action sur le bouton payer / demande de devis du panier
-        if($responses['panier_boites'] > 0){
-            //? after doc is save in bdd, redirect to paiement
-            $responses['redirectAfterSubmitPanierForPaiement'] = true; 
-        }else{
-            $responses['redirectAfterSubmitPanierForPaiement'] = false;
-        }
-
-        $responses['totauxItems'] = $this->utilitiesService->totauxByPanierGroup($responses['panier_items']);
-        $responses['totauxOccasions'] = $this->utilitiesService->totauxByPanierGroup($responses['panier_occasions']);
-        $responses['totauxBoites'] = $this->utilitiesService->totauxByPanierGroup($responses['panier_boites']);
-        $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
-        $weigthPanier = $responses['weigthPanier'];
-
-        //? calcul de la remise sur les articles
-        $responses['remises']['volume'] = $this->calculateRemise($this->panierRepository->findBy(['user' => $user]));
-        
-        $responses['shippingMethod'] = $shippingMethod;
-        if(is_null($shippingMethod)){
-            
-            $responses['deliveryCostWithoutTax'] = 0;
-            
-        }else{
-            
-            $responses['deliveryCostWithoutTax'] = $this->returnDeliveryCost($shippingMethodId, $weigthPanier);
-            
-        }
-
-        $responses['remises']['volume']['remiseDeQte'] = round($responses['totauxItems']['price'] * $responses['remises']['volume']['value'] / 100);
-        
-        $sousTotalItemHTAfterRemiseVolume = $responses['totauxItems']['price'] - $responses['remises']['volume']['remiseDeQte'];
-        $totalHTItemsAndBoite = round(($responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price']) - $responses['remises']['volume']['remiseDeQte']);
-
-        //? calcule de la remise sur les articles
-        $diff = $totalHTItemsAndBoite - $responses['remises']['voucher']['voucherMax'];
-
-        if($diff >= 0){
-            $responses['remises']['voucher']['used'] = $totalHTItemsAndBoite - $diff;
-            $responses['remises']['voucher']['voucherRemaining'] = 0; // reste à utilisé du bon
-        }else{
-            $responses['remises']['voucher']['used'] = $totalHTItemsAndBoite;
-            $responses['remises']['voucher']['voucherRemaining'] = $diff * -1; // reste à utilisé du bon
-        }
-
-
-
-        $responses['totalPanierHt'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price'] + $responses['deliveryCostWithoutTax']) - $responses['remises']['volume']['remiseDeQte'] - $responses['remises']['voucher']['used'];
-        return $responses;
-    }
-
     public function returnArrayWithAllCounts(): array
     {
         
@@ -419,6 +323,17 @@ class PanierService
 
         $responses['totalPanierHtBeforeDelivery'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price']) - $responses['remises']['volume']['remiseDeQte'] - $responses['remises']['voucher']['used'];
         $responses['totalPanierHtAfterDelivery'] = $responses['totalPanierHtBeforeDelivery'] + $responses['deliveryCostWithoutTax'];
+        
+        //?si y a au moins un occasion pas de possibilite de livraison donc methode == retrait obligatoire
+        if(count($responses['panier_occasions']) > 0){
+            $shippingMethodRetraitInCaen = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']);
+            $shippingMethodId = $shippingMethodRetraitInCaen->getId();
+        }else{
+            $shippingMethodEnvoi = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_POSTE_NAME']);
+            $shippingMethodId = $shippingMethodEnvoi->getId();
+        }
+        $responses['shippingMethodId'] = $shippingMethodId;
+        
         return $responses;
 
     }

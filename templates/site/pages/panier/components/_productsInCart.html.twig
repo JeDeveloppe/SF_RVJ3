@@ -19,9 +19,7 @@
                             <td class="align-middle text-center">{{ panier.qte }}</td>
                             <td class="align-middle text-center">{{ (panier.priceWithoutTax  * (1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }}</td>
                             <td class="align-middle text-center xmarks">
-                                {% if '/panier/verification-avant-paiement' in currentPath %}
-
-                                {% else %}
+                                {% if '/panier/verification-avant-paiement' not in currentPath %}
                                     <a href="{{ path('delete_cart_line_realtime', {'cart_id': panier.id }) }}"><i class="fa-solid fa-xmark text-yellow fa-2x" alt="supprimer du panier"></i></a>
                                 {% endif %}
                             </td>
@@ -49,7 +47,9 @@
                 </div>
                 <!-- item_panier_details -->
                 <div class="col-12 col-sm-8 ps-2">
-                    <div class="col-12 text-end d-none d-md-block"><a href="{{ path('delete_cart_line_realtime', {'cart_id': panier.id }) }}"><i class="fa-solid fa-xmark text-yellow fa-2x" alt="supprimer du panier"></i></a></div>
+                    {% if '/panier/verification-avant-paiement' not in currentPath %}
+                        <div class="col-12 text-end d-none d-md-block"><a href="{{ path('delete_cart_line_realtime', {'cart_id': panier.id }) }}"><i class="fa-solid fa-xmark text-yellow fa-2x" alt="supprimer du panier"></i></a></div>
+                    {% endif %}
                     <div class="col-12 occasion_detail_editor">{{ panier.occasion.boite.editor }}</div>
                     <div class="col-12">{{ panier.occasion.boite.name | raw }}</div>
                     <div class="col-12 d-flex flex-wrap flex-column justify-content-around">

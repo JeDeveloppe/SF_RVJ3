@@ -89,16 +89,10 @@ class PanierController extends AbstractController
 
         //?on calcule les valeurs du panier
         $allCartValues = $this->panierService->returnArrayWithAllCounts();
-        //?si y a au moins un occasion pas de possibilite de livraison donc methode == retrait obligatoire
-        if(count($allCartValues['panier_occasions']) > 0){
-            $shippingMethodRetraitInCaen = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']);
-            $shippingMethodId = $shippingMethodRetraitInCaen->getId();
-        }else{
-            $shippingMethodEnvoi = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_POSTE_NAME']);
-            $shippingMethodId = $shippingMethodEnvoi->getId();
-        }
+        dump($allCartValues);
+
         //on met a jour en session
-        $session->set('shippingMethodId', $shippingMethodId);
+        $session->set('shippingMethodId', $allCartValues['shippingMethodId']);
 
         $shippingForm = $this->createForm(ShippingType::class, null, ['occasionInPanier' => $allCartValues['panier_occasions']]);
         $shippingForm->handleRequest($request);
