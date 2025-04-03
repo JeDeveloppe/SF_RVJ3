@@ -111,7 +111,7 @@ class CatalogController extends AbstractController
 
 
         }else{
-  
+
             //si on cherche par ordre des noms de boite
             if($orderColumn == 'name'){
 
@@ -125,9 +125,11 @@ class CatalogController extends AbstractController
 
             $donneesFromDatabases = [];
             foreach($items as $item){
-                $boite = $item->getBoiteOrigine()->first();
-                if(!in_array($boite, $donneesFromDatabases)){
-                    $donneesFromDatabases[] = $boite;
+                $boites = $item->getBoiteOrigine();
+                foreach($boites as $boite){
+                    if(!in_array($boite, $donneesFromDatabases)){
+                        $donneesFromDatabases[] = $boite;
+                    }
                 }
             }
 

@@ -49,6 +49,7 @@
         let shipping_cost = {{ (allCartValues['deliveryCostWithoutTax'] / 100) | number_format(2, '.', ',') }};
         // const shippingMethodId = sessionStorage.getItem("shippingMethodId");
         const shippingMethodId = {{ (allCartValues['shippingMethodId']) }}
+        console.log(shippingMethodId)
         const divTextLivraisonOuRetrait = document.getElementById('divTextLivraisonOuRetrait');
         let totalHTBeforeDelivery = {{ allCartValues['totalPanierHtBeforeDelivery'] }};
         let totalHTAfterDelivery = {{ allCartValues['totalPanierHtAfterDelivery'] }};
