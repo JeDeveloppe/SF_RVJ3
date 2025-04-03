@@ -1,0 +1,22 @@
+{% if donnees | length > 0 %}
+    <div class="card col-12 p-0 mb-3">
+        <table class="table table-striped text-center align-bottom">
+            <tr>
+                <th>Article</th>
+                <th>Qté</th>
+                <th>Prix U. TTC</th>
+                <th class="text-center">Prix TTC<br/><small>(Total)</small></th>
+                <th></th>
+            </tr>
+            {% for panier in donnees %}
+                <tr>
+                    <td>{{ panier.item.name }}<br/><span class="small">{{ panier.item.reference }}</span></td>
+                    <td class="align-middle text-center">{{ panier.qte }}</td>
+                    <td class="align-middle text-center">{{ (panier.unitPriceExclusingTax  * (1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }}</td>
+                    <td class="align-middle text-center">{{ (panier.priceWithoutTax  * (1 + (allCartValues['tax'].value / 100)) / 100) | number_format(2, '.', ',') }}</td>
+                    <td class="align-middle text-center xmarks"><a href="{{ path('panier_delete_item', {'item_id': panier.id }) }}"><i class="fa-solid fa-xmark text-yellow fa-2x" alt="supprimer du panier"></i></a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}

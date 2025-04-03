@@ -89,8 +89,16 @@ class PanierController extends AbstractController
 
         //?on calcule les valeurs du panier
         $allCartValues = $this->panierService->returnArrayWithAllCounts();
-        $panierInSession['shippingMethodId'] = $allCartValues['shippingMethodId'];
-        $session->set('paniers', $panierInSession);
+        //?si y a au moins un occasion pas de possibilite de livraison donc methode == retrait obligatoire
+        if(count($allCartValues['panier_occasions']) > 0){
+            $shippingMethodRetraitInCaen = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']);
+            $shippingMethodId = $shippingMethodRetraitInCaen->getId();
+        }else{
+            $shippingMethodEnvoi = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_POSTE_NAME']);
+            $shippingMethodId = $shippingMethodEnvoi->getId();
+        }
+        //on met a jour en session
+        $session->set('shippingMethodId', $shippingMethodId);
 
         $shippingForm = $this->createForm(ShippingType::class, null, ['occasionInPanier' => $allCartValues['panier_occasions']]);
         $shippingForm->handleRequest($request);
@@ -133,6 +141,8 @@ class PanierController extends AbstractController
             $panierInSession['voucherDiscountId'] = $voucherDiscountId;
             $session->set('paniers', $panierInSession);
 
+            //et on recalcul le tout
+            $allCartValues = $this->panierService->returnArrayWithAllCounts();
 
         }
 
@@ -152,7 +162,6 @@ class PanierController extends AbstractController
         //?on demarre la session
         $session = $request->getSession();
         $panierInSession = $session->get('paniers', []);
-        dump($panierInSession);
 
         //on cherche le cookie obligatoire
         $shippingethodIdInCookie = $request->cookies->get('shippingMethodId');
@@ -167,8 +176,6 @@ class PanierController extends AbstractController
 
             //on met en session l'id de la methode d'envoi choisi
             $session->set('shippingMethodId', $shippingethodIdInCookie);
-            $panierInSession['shippingMethodId'] = $shippingethodIdInCookie;
-            $session->set('paniers', $panierInSession);
         }
 
 
@@ -232,6 +239,7 @@ class PanierController extends AbstractController
             }
 
         }
+        $request->cookies->remove('shippingMethodId');
 
         return $this->render('site/pages/panier/panier_addresses.html.twig', [
             'billingAndDeliveryForm' => $billingAndDeliveryForm,
@@ -251,7 +259,6 @@ class PanierController extends AbstractController
         //?on demarre la session
         $session = $request->getSession();
         $panierInSession = $session->get('paniers', []);
-        dd($panierInSession);
         $request->cookies->remove('shippingMethodId');
 
         //?on compte le nombre de products dans le panier en session
