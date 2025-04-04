@@ -327,8 +327,6 @@ class PanierService
         $responses['totalPanierHtBeforeDelivery'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price']) - $responses['remises']['volume']['remiseDeQte'] - $responses['remises']['voucher']['used'];
         $responses['totalPanierHtAfterDelivery'] = $responses['totalPanierHtBeforeDelivery'] + $responses['deliveryCostWithoutTax'];
         
-
-        dump($shippingMethodId);
         return $responses;
 
     }
