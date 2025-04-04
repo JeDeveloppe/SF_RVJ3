@@ -216,13 +216,7 @@ class PanierService
 
         
         // IL FAUT QUELQUE VARIABLES
-        //methode de livraison sur CAEN par default
-        $shippingMethodId = $session->get('shippingMethodId');
-        if(!$shippingMethodId){
 
-            $shippingMethodId = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME'])->getId();
-            $session->set('shippingMethodId', $shippingMethodId);
-        }
         //les parametres des documents
         $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
         //init le cout de la preparation des articles
@@ -294,13 +288,22 @@ class PanierService
         $responses['totauxBoites'] = $this->utilitiesService->totauxByPanierGroup($responses['panier_boites']);
         $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
         $weigthPanier = $responses['weigthPanier'];
+        //?si y a au moins un occasion pas de possibilite de livraison donc methode == retrait obligatoire
+        $shippingMethodId = $session->get('shippingMethodId');
+        if(!$shippingMethodId  OR count($responses['panier_occasions']) > 0){
+            $shippingMethodRetraitInCaen = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']);
+            $shippingMethodId = $shippingMethodRetraitInCaen->getId();
+        }else{
+            $shippingMethodEnvoi = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_POSTE_NAME']);
+            $shippingMethodId = $shippingMethodEnvoi->getId();
+        }
+        $session->set('shippingMethodId', $shippingMethodId);
+        $responses['shippingMethodId'] = $shippingMethodId;
+        $responses['deliveryCostWithoutTax'] = $this->returnDeliveryCost($shippingMethodId, $weigthPanier);
+
 
         //? calcul de la remise sur les articles
         $responses['remises']['volume'] = $this->calculateRemise($this->panierRepository->findBy(['user' => $user]));
-
-        
-        $responses['shippingMethodId'] = $shippingMethodId;
-        $responses['deliveryCostWithoutTax'] = $this->returnDeliveryCost($shippingMethodId, $weigthPanier);
 
         // $responses['remises']['volume']['remiseDeQte'] = round($responses['totauxItems']['price'] * $responses['remises']['volume']['value'] / 100);
         $responses['remises']['volume']['remiseDeQte'] = 0; //?desactiver pour le moment
@@ -324,16 +327,8 @@ class PanierService
         $responses['totalPanierHtBeforeDelivery'] = ($responses['preparationHt'] + $responses['totauxItems']['price'] + $responses['totauxBoites']['price'] + $responses['totauxOccasions']['price']) - $responses['remises']['volume']['remiseDeQte'] - $responses['remises']['voucher']['used'];
         $responses['totalPanierHtAfterDelivery'] = $responses['totalPanierHtBeforeDelivery'] + $responses['deliveryCostWithoutTax'];
         
-        //?si y a au moins un occasion pas de possibilite de livraison donc methode == retrait obligatoire
-        if(count($responses['panier_occasions']) > 0){
-            $shippingMethodRetraitInCaen = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']);
-            $shippingMethodId = $shippingMethodRetraitInCaen->getId();
-        }else{
-            $shippingMethodEnvoi = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_POSTE_NAME']);
-            $shippingMethodId = $shippingMethodEnvoi->getId();
-        }
-        $responses['shippingMethodId'] = $shippingMethodId;
-        
+
+        dump($shippingMethodId);
         return $responses;
 
     }

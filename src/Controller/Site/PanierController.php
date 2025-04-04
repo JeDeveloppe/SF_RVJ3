@@ -8,6 +8,7 @@ use App\Form\AcceptCartType;
 use App\Service\PanierService;
 use App\Service\DocumentService;
 use App\Repository\TaxRepository;
+use App\Service\UtilitiesService;
 use App\Repository\ItemRepository;
 use App\Repository\BoiteRepository;
 use App\Repository\PanierRepository;
@@ -20,7 +21,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\ShippingMethodRepository;
 use App\Repository\CollectionPointRepository;
 use App\Repository\VoucherDiscountRepository;
-use App\Service\UtilitiesService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -89,10 +89,9 @@ class PanierController extends AbstractController
 
         //?on calcule les valeurs du panier
         $allCartValues = $this->panierService->returnArrayWithAllCounts();
-        dump($allCartValues);
 
-        //on met a jour en session
-        $session->set('shippingMethodId', $allCartValues['shippingMethodId']);
+        //on met a jour le cookie
+        $request->cookies->set('shippingMethodId', $allCartValues['shippingMethodId']);
 
         $shippingForm = $this->createForm(ShippingType::class, null, ['occasionInPanier' => $allCartValues['panier_occasions']]);
         $shippingForm->handleRequest($request);
@@ -166,13 +165,7 @@ class PanierController extends AbstractController
 
             return $this->redirectToRoute('panier_start');
 
-        }else{
-
-            //on met en session l'id de la methode d'envoi choisi
-            $session->set('shippingMethodId', $shippingethodIdInCookie);
         }
-
-
 
         $panierInSession = $session->get('paniers', []);
 
@@ -233,7 +226,6 @@ class PanierController extends AbstractController
             }
 
         }
-        $request->cookies->remove('shippingMethodId');
 
         return $this->render('site/pages/panier/panier_addresses.html.twig', [
             'billingAndDeliveryForm' => $billingAndDeliveryForm,
@@ -253,7 +245,17 @@ class PanierController extends AbstractController
         //?on demarre la session
         $session = $request->getSession();
         $panierInSession = $session->get('paniers', []);
-        $request->cookies->remove('shippingMethodId');
+        
+        //on cherche le cookie obligatoire
+        $shippingethodIdInCookie = $request->cookies->get('shippingMethodId');
+
+        if(!$shippingethodIdInCookie){
+
+            $this->addFlash('warning', 'ShippingethodIdInCookie absent');
+
+            return $this->redirectToRoute('panier_start');
+
+        }
 
         //?on compte le nombre de products dans le panier en session
         $paniers = $this->panierService->returnAllPaniersFromUser();

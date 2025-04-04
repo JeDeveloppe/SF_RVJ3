@@ -1,7 +1,7 @@
-{% if displayProductsInCart == true %}
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 
+{% if displayProductsInCart == true %}
     {% if allCartValues['panier_items'] | length > 0 %}
-        {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
         <div class="card col-12 mb-3">
             <table class="table table-striped text-center align-bottom m-0">
                 <thead>

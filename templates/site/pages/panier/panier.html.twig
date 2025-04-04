@@ -47,8 +47,8 @@
         const regex = /\d{4}-\d{10}/g;
         const shipping_retrait_name = "{{ app.request.server.get('SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME') }}";
         let shipping_cost = {{ (allCartValues['deliveryCostWithoutTax'] / 100) | number_format(2, '.', ',') }};
-        // const shippingMethodId = sessionStorage.getItem("shippingMethodId");
-        const shippingMethodId = {{ (allCartValues['shippingMethodId']) }}
+
+        let shippingMethodId = getCookieByName('shippingMethodId');
         const divTextLivraisonOuRetrait = document.getElementById('divTextLivraisonOuRetrait');
         let totalHTBeforeDelivery = {{ allCartValues['totalPanierHtBeforeDelivery'] }};
         let totalHTAfterDelivery = {{ allCartValues['totalPanierHtAfterDelivery'] }};
@@ -87,6 +87,14 @@
             divTextLivraisonOuRetrait.innerHTML = 'Retrait :';
             getDeliveryCost(shippingMethodId,weightPanier);
 
+        }
+
+        function getCookieByName(name) {
+            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            if (match) {
+                return match[2];
+            }
+            return null;
         }
 
         function inputVoucher()
@@ -153,7 +161,6 @@
 
                 let shippingMethodId = sessionStorage.getItem('shippingMethodId');
                 sessionStorage.setItem('shippingMethodId',shippingId);
-                console.log(sessionStorage.getItem('shippingMethodId'))
                 creerCookie('shippingMethodId',shippingId,1)
 
                 //on crée le cookie
@@ -185,9 +192,5 @@
                 shippingForm.addEventListener('change', radioChoice)
             }
         });
-
-
-        // window.addEventListener('load', shippingForm.addEventListener('change', radioChoice));
-
     </script>
 {% endblock %}
