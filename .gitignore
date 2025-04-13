@@ -1,5 +1,4 @@
 ###> symfony/framework-bundle ###
-/.env
 /.env.dev
 /.env.local
 /.env.prod
@@ -20,6 +19,7 @@
 /var/
 /vendor/
 .DS_Store
+/.DS_Store
 /*/.DS_Store
 /*/*/.DS_Store
 /*/*/*/.DS_Store
@@ -29,7 +29,6 @@
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache
-.php-version
 ###< phpunit/phpunit ###
 
 ###> symfony/phpunit-bridge ###
