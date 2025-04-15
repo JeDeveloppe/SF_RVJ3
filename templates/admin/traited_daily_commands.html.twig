@@ -95,8 +95,13 @@
                                         {% endfor %}
                                     </table>
                             </div>
-                            <div class="modal-footer">
-                                Payée le : {{ document.payment.timeOfTransaction | date('d-m-Y') }} - {{ document.payment.details }}
+                            <div class="modal-footer col-12 d-flex justify-content-between">
+                                <div class="col-12 text-start">
+                                    Port payé: {{ document.deliveryPriceExcludingTax / 100| number_format(2, '.', ',') }} € HT
+                                </div>
+                                <div class="col-12 text-end">
+                                    Payée le : {{ document.payment.timeOfTransaction | date('d-m-Y') }} - {{ document.payment.details }}
+                                </div>
                             </div>
                         </div>
                     </div>
