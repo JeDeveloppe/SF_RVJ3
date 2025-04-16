@@ -27,7 +27,6 @@ class RegistrationController extends AbstractController
         UserAuthenticatorInterface $userAuthenticator,
         UserAuthenticator $authenticator,
         EntityManagerInterface $entityManager,
-        UserService $userService,
         UtilitiesService $utilitiesService): Response
     {
         $user = new User();

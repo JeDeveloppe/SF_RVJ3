@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Delivery;
 use App\Entity\ShippingMethod;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,17 +24,20 @@ class DeliveryRepository extends ServiceEntityRepository
     }
 
     
-    public function findCostByDeliveryShippingMethod(ShippingMethod $shippingMethod, $weigthPanier)
+    public function findCostByDeliveryShippingMethod(ShippingMethod $shippingMethod, $weigthPanier, User $user)
     {
         return $this->createQueryBuilder('d')
             ->where('d.shippingMethod = :method')
             ->andWhere('d.start <= :weigth')
             ->andWhere('d.end > :weigth')
+            ->andWhere('d.country = :country')
             ->setParameter('method', $shippingMethod)
             ->setParameter('weigth', $weigthPanier)
+            ->setParameter('country', $user->getCountry())
             ->setMaxResults(1)
             ->getQuery()
-            ->getSingleResult()
+            ->getOneOrNullResult()
+            // ->getSingleResult()
         ;
     }
 

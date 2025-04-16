@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Delivery;
+use App\Repository\CountryRepository;
 use App\Repository\DeliveryRepository;
 use App\Repository\ShippingMethodRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,7 +13,8 @@ class DeliveryService
     public function __construct(
         private EntityManagerInterface $em,
         private DeliveryRepository $deliveryRepository,
-        private ShippingMethodRepository $shippingMethodRepository
+        private ShippingMethodRepository $shippingMethodRepository,
+        private CountryRepository $countryRepository
         ){
     }
 
@@ -23,7 +25,15 @@ class DeliveryService
             'shippingMethod' => $this->shippingMethodRepository->findOneBy(['name' => $_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']]),
             'start' => 1,
             'end' => 9999,
-            'price' => 0
+            'price' => 0,
+            'country' => $this->countryRepository->findOneBy(['name' => 'FRANCE']),
+        ];
+        $deliveries[] = [
+            'shippingMethod' => $this->shippingMethodRepository->findOneBy(['name' => $_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']]),
+            'start' => 1,
+            'end' => 9999,
+            'price' => 0,
+            'country' => $this->countryRepository->findOneBy(['name' => 'BELGIQUE']),
         ];
 
         foreach($deliveries as $deliverie){
@@ -36,6 +46,7 @@ class DeliveryService
             $delivery->setShippingMethod($deliverie['shippingMethod'])
                 ->setStart($deliverie['start'])
                 ->setEnd($deliverie['end'])
+                ->setCountry($deliverie['country'])
                 ->setPriceExcludingTax($deliverie['price']);
 
             $this->em->persist($delivery);
