@@ -39,6 +39,9 @@ class Country
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: Granderegion::class)]
     private Collection $granderegions;
 
+    #[ORM\OneToMany(mappedBy: 'country', targetEntity: Delivery::class)]
+    private Collection $deliveries;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -46,6 +49,7 @@ class Country
         $this->cities = new ArrayCollection();
         $this->legalInformation = new ArrayCollection();
         $this->granderegions = new ArrayCollection();
+        $this->deliveries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -238,6 +242,36 @@ class Country
             // set the owning side to null (unless already changed)
             if ($granderegion->getCountry() === $this) {
                 $granderegion->setCountry(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Delivery>
+     */
+    public function getDeliveries(): Collection
+    {
+        return $this->deliveries;
+    }
+
+    public function addDelivery(Delivery $delivery): static
+    {
+        if (!$this->deliveries->contains($delivery)) {
+            $this->deliveries->add($delivery);
+            $delivery->setCountry($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDelivery(Delivery $delivery): static
+    {
+        if ($this->deliveries->removeElement($delivery)) {
+            // set the owning side to null (unless already changed)
+            if ($delivery->getCountry() === $this) {
+                $delivery->setCountry(null);
             }
         }
 

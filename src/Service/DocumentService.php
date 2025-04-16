@@ -13,12 +13,10 @@ use League\Csv\Reader;
 use App\Entity\Address;
 use App\Entity\Payment;
 use App\Entity\Reserve;
-use App\Entity\Delivery;
 use App\Entity\Document;
 use App\Entity\DocumentLine;
 use App\Entity\DocumentStatus;
 use App\Entity\ShippingMethod;
-use App\Entity\CollectionPoint;
 use App\Repository\TaxRepository;
 use App\Service\UtilitiesService;
 use App\Entity\DocumentLineTotals;
@@ -26,6 +24,7 @@ use App\Repository\ItemRepository;
 use App\Repository\UserRepository;
 use App\Entity\OffSiteOccasionSale;
 use App\Entity\Returndetailstostock;
+use App\Entity\User;
 use App\Repository\AddressRepository;
 use App\Repository\PaymentRepository;
 use App\Repository\DeliveryRepository;
@@ -37,6 +36,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DocumentStatusRepository;
 use App\Repository\ShippingMethodRepository;
 use App\Repository\CollectionPointRepository;
+use App\Repository\CountryRepository;
 use App\Repository\DocumentsendingRepository;
 use App\Repository\MeansOfPayementRepository;
 use App\Repository\VoucherDiscountRepository;
@@ -81,7 +81,8 @@ class DocumentService
         private OffSiteOccasionSaleRepository $offSiteOccasionSaleRepository,
         private DeliveryRepository $deliveryRepository,
         private RequestStack $requestStack,
-        private MeansOfPayementRepository $meansOfPayementRepository
+        private MeansOfPayementRepository $meansOfPayementRepository,
+        private CountryRepository $countryRepository,
         ){
     }
 
@@ -784,6 +785,7 @@ class DocumentService
     public function generateDocumentInDatabaseFromReserve(Reserve $reserve, array $allPricesHtFromRequest, Address $billingAddressFromForm, $deliveryAddressFromForm, ShippingMethod $shippingMethodFromForm)
     {        
         $details = $this->requestStack->getSession()->get('detailsForManualInvoice');
+        $user = $this->security->getUser();
         $dateOfTransaction = new DateTimeImmutable($details['transactionDate'], new DateTimeZone('Europe/Paris'));
         $meanOfPaiement = $this->meansOfPayementRepository->findOneBy(['id' => $details['paiementId']]);
         $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
@@ -813,7 +815,13 @@ class DocumentService
 
         //recherche du prix de la livraison
         $deliveryCostInCents = 0;
-        $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingMethodFromForm, $totalWeightPanier);
+        $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingMethodFromForm, $totalWeightPanier, $user);
+        if($delivery == null){
+            $france = $this->countryRepository->findOneBy(['name' => 'FRANCE']);
+            $user = new User();
+            $user->setCountry($france);
+            $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingMethodFromForm, $totalWeightPanier, $user);
+        }
         $deliveryCostInCents = $delivery->getPriceExcludingTax();
 
         

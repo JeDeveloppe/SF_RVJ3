@@ -13,6 +13,7 @@ use App\Repository\TaxRepository;
 use App\Repository\ItemRepository;
 use App\Repository\UserRepository;
 use App\Entity\Returndetailstostock;
+use App\Repository\CountryRepository;
 use App\Repository\PanierRepository;
 use App\Repository\DeliveryRepository;
 use App\Repository\DiscountRepository;
@@ -44,6 +45,7 @@ class PanierService
         private RequestStack $request,
         private UserRepository $userRepository,
         private VoucherDiscountRepository $voucherDiscountRepository,
+        private CountryRepository $countryRepository,
         ){
     }
 
@@ -394,9 +396,15 @@ class PanierService
 
     public function returnDeliveryCost($shippingId, int $weigthPanier)
     {
-
+        $user = $this->security->getUser();
         $shippingMethod = $this->shippingMethodRepository->find($shippingId);
-        $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingMethod, $weigthPanier);
+        $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingMethod, $weigthPanier, $user);
+        if($delivery == null){
+            $france = $this->countryRepository->findOneBy(['name' => 'FRANCE']);
+            $user = new User();
+            $user->setCountry($france);
+            $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingMethod, $weigthPanier, $user);
+        }
         $result = $delivery->getPriceExcludingTax();
 
         return $result;

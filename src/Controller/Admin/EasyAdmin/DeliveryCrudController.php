@@ -21,6 +21,7 @@ class DeliveryCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            AssociationField::new('country')->setLabel('Pays')->setFormTypeOptions(['placeholder' => 'Sélectionner...'])->setRequired(true),
             AssociationField::new('shippingMethod')->setLabel('Mode de livraison')->setFormTypeOptions(['placeholder' => 'Sélectionner...']),
             IntegerField::new('start')->setLabel('De (poid en gramme)'),
             IntegerField::new('end')->setLabel('A (poid en gramme (enveloppe comprise))'),

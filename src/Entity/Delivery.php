@@ -26,6 +26,9 @@ class Delivery
     #[ORM\JoinColumn(nullable: false)]
     private ?ShippingMethod $shippingMethod = null;
 
+    #[ORM\ManyToOne(inversedBy: 'deliveries')]
+    private ?Country $country = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class Delivery
     public function setShippingMethod(?ShippingMethod $shippingMethod): static
     {
         $this->shippingMethod = $shippingMethod;
+
+        return $this;
+    }
+
+    public function getCountry(): ?Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Country $country): static
+    {
+        $this->country = $country;
 
         return $this;
     }
