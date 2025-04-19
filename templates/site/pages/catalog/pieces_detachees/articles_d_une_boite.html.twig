@@ -83,15 +83,20 @@
 				{% for item in group.items %}
 					{% if item.stockForSale > 0 %}
 						<div class="col-8 col-sm-6 col-md-4 col-lg-3 mb-3 {{ group.group.name | lower }} all_items">
-							<div class="card_ col-11 mx-auto d-flex flex-wrap justify-content-center align-items-center py-2">
-								<img class="zoom__image p-1 border border-2 border-black rounded-4" src="{{ vich_uploader_asset(item, 'imageFile') | imagine_filter('boite') }}" alt="Article {{ item.name }} - {{ boite.name }}"/>
+							<div class="card_ col-11 mx-auto pt-2 pb-1">
+								<img class="p-1 border border-2 border-black rounded-4 w-100 z-index-1" src="{{ vich_uploader_asset(item, 'imageFile') | imagine_filter('boite') }}" alt="Article {{ item.name }} - {{ boite.name }}"/>
 								<div class="col-12 my-2">
-									{{ item.name }}
+									{{ item.name }}	
 								</div>
 								<div class="col-12 d-flex flex-wrap justify-content-between">
 									<div class="col-12 mb-3"><span class="text-orange" style="font-size: 20px">{{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, ',', ',') }} €</span></div>
-									<div class="col-12 d-flex justify-content-end">
-										<form class="form-group" action="{{ path('panier_add_article_realtime') }}" method="POST">
+									<div class="col-12 d-flex justify-content-between align-items-center">
+										{% set offset = "offset-6" %}
+										{% if item.comment is not null %}
+											{% set offset = "" %}
+											{% include "site/pages/catalog/pieces_detachees/_modal.comment.html.twig" with { item: item } %}
+										{% endif %}
+										<form class="form-group {{ offset }}" action="{{ path('panier_add_article_realtime') }}" method="POST">
 											<div class="input-group mb-3">
 												<input type="number" name="qte" class="form-control-sm text-center" value="1" min="1" max="99" />
 												<input type="hidden" name="itemId" value="{{ item.id }}">

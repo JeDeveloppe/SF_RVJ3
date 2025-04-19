@@ -1,0 +1,21 @@
+<div class="col-12 bg-white text-center h5 text-purple">
+    <span id="odometer" class="odometer">
+        {% if totalPiecesDisponiblentSurLeSite < 100 %}
+            {% set affichageFinal = 31 %}
+        {% endif %}
+        {% if totalPiecesDisponiblentSurLeSite >= 100 and totalPiecesDisponiblentSurLeSite < 1000 %}
+            {% set affichageFinal = 331 %}
+        {% endif %}
+        {% if totalPiecesDisponiblentSurLeSite >= 1000 and totalPiecesDisponiblentSurLeSite < 10000 %}
+            {% set affichageFinal = 0331 %}
+        {% endif %}
+        {{ affichageFinal}}
+    </span>
+    pièces détachées disponibles...
+</div>
+<script>
+    let totalPiecesDisponiblentSurLeSite = {{ totalPiecesDisponiblentSurLeSite }};
+    setTimeout(function(){
+        odometer.innerHTML = totalPiecesDisponiblentSurLeSite;
+    }, 1000);
+</script>

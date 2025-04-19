@@ -108,6 +108,7 @@
     <div class="col-12 text-center my-3">
         <a class="btn btn-yellow mt-3" href="{{ path('app_catalogue_pieces_detachees') }}">Catalogue des pieces détachées</a>
     </div>
+    {% include "components/catalog/_odometer.html.twig" with {'totalPiecesDisponiblentSurLeSite': totalPiecesDisponiblentSurLeSite } %}
 
 </div>
 

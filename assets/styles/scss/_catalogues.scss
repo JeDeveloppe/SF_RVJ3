@@ -207,3 +207,11 @@
     font-style: italic;
     opacity: 1;
 }
+
+#clickableAwesomeFont{
+    cursor: pointer;
+}
+#clickableAwesomeFont:hover{
+    transform: scale(1,3);
+    transition: all 0.3s ease;
+}

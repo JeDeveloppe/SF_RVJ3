@@ -3,16 +3,17 @@
 namespace App\Controller\Admin\EasyAdmin;
 
 use App\Entity\Item;
-use App\Repository\BoiteRepository;
 use DateTimeImmutable;
 use App\Service\ItemService;
 use Doctrine\ORM\QueryBuilder;
+use App\Repository\BoiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use Symfony\Component\HttpFoundation\RequestStack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -21,10 +22,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class ItemCrudController extends AbstractCrudController
 {
@@ -105,7 +106,7 @@ class ItemCrudController extends AbstractCrudController
                             'image_uri' => true,
                             // 'imagine_pattern' => '...',
                             'asset_helper' => true,
-                        ])->setLabel('Image')->onlyWhenCreating()->setColumns(12)->setRequired(true),
+                        ])->setLabel('Image')->onlyWhenCreating()->setColumns(6)->setRequired(true),
                     TextField::new('imageFile')->setFormType(VichImageType::class)->setFormTypeOptions([
                             'required' => false,
                             'allow_delete' => false,
@@ -116,7 +117,12 @@ class ItemCrudController extends AbstractCrudController
                             // 'imagine_pattern' => '...',
                             'asset_helper' => true,
                         ])
-                        ->setLabel('Image')->onlyWhenUpdating()->setColumns(12)->setRequired(false),
+                        ->setLabel('Image')->onlyWhenUpdating()->setColumns(6)->setRequired(false),
+                    TextareaField::new('comment')
+                        ->setLabel('Commentaire:')
+                        ->setFormTypeOptions(['attr' => ['rows' => 5]])
+                        ->onlyOnForms()
+                        ->setColumns(6),
                     TextField::new('name')
                         ->setLabel('Nom:')->setColumns(6),
                     IntegerField::new('stockForSale')

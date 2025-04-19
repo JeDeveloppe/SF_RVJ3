@@ -24,6 +24,7 @@ use App\Repository\AmbassadorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DocumentLineRepository;
 use App\Form\EmailForSendResetPasswordType;
+use App\Repository\ItemRepository;
 use App\Repository\ResetPasswordRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\LegalInformationRepository;
@@ -55,7 +56,8 @@ class SiteController extends AbstractController
         private AmbassadorRepository $ambassadorRepository,
         private UrlGeneratorInterface $urlGeneratorInterface,
         private SiteControllerService $siteControllerService,
-        private MentionsLegalesService $mentionsLegalesService
+        private MentionsLegalesService $mentionsLegalesService,
+        private ItemRepository $itemRepository,
     )
     {
     }
@@ -64,10 +66,13 @@ class SiteController extends AbstractController
     public function index(): Response
     {
         $metas['description'] = "Association dédiée au réemploi des jeux et au lien social. Découvrez nos prestations, nos jeux d'occasions et nos pièces détachées pour vos jeux incomplet.";
+        $totalPiecesDisponiblentSurLeSite = count($this->itemRepository->findAllItemsWithStockForSaleNotNull());
 
 
         return $this->render('site/pages/home.html.twig', [
-            'metas' => $metas
+            'metas' => $metas,
+            'totalPiecesDisponiblentSurLeSite' => $totalPiecesDisponiblentSurLeSite,
+
         ]);
     }
 

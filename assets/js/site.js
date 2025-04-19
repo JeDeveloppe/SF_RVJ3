@@ -14,6 +14,8 @@ import './toast';
 import './bootstrap.js';
 
 require('bootstrap');
+import jQuery from 'jquery';
+import './odometer.js';
 
 
 // SEO skill
