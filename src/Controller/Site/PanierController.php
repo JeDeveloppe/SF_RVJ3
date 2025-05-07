@@ -402,7 +402,12 @@ class PanierController extends AbstractController
     {
         $gets = $request->getContent();
         $datas = json_decode($gets, true);
-        $shippingMethod = $this->shippingMethodRepository->findOneById($datas['shippingMethodId']);
+
+        if(!array_key_exists('shippingMethodId', $datas)){
+            $shippingMethod = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']);
+        }else{
+            $shippingMethod = $this->shippingMethodRepository->findOneBy(['id' => $datas['shippingMethodId']]);
+        }
 
         $result = $this->panierService->returnDeliveryCost($shippingMethod->getId(), $datas['weight']);
 

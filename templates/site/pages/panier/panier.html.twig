@@ -38,8 +38,8 @@
     </div>
 </div>
 
-{% include "components/_separateur_wave.html.twig" %}
 
+{% include "components/_separateur_wave.html.twig" %}
 {% endblock %}
 
 {% block javascript %}
@@ -47,8 +47,8 @@
         const regex = /\d{4}-\d{10}/g;
         const shipping_retrait_name = "{{ app.request.server.get('SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME') }}";
         let shipping_cost = {{ (allCartValues['deliveryCostWithoutTax'] / 100) | number_format(2, '.', ',') }};
-
-        let shippingMethodId = getCookieByName('shippingMethodId');
+        let shippingMethodId = {{ app.request.cookies.get('shippingMethodId') }};
+        // let shippingMethodId = getCookieByName('shippingMethodId');
         const divTextLivraisonOuRetrait = document.getElementById('divTextLivraisonOuRetrait');
         let totalHTBeforeDelivery = {{ allCartValues['totalPanierHtBeforeDelivery'] }};
         let totalHTAfterDelivery = {{ allCartValues['totalPanierHtAfterDelivery'] }};
@@ -160,7 +160,7 @@
                 let newTotalTTC = '';
 
                 let shippingMethodId = sessionStorage.getItem('shippingMethodId');
-                sessionStorage.setItem('shippingMethodId',shippingId);
+                localStorage.setItem('shippingMethodId',shippingId);
                 creerCookie('shippingMethodId',shippingId,1)
 
                 //on crée le cookie

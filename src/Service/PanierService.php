@@ -46,6 +46,7 @@ class PanierService
         private UserRepository $userRepository,
         private VoucherDiscountRepository $voucherDiscountRepository,
         private CountryRepository $countryRepository,
+        private RequestStack $requestStack,
         ){
     }
 
@@ -290,15 +291,22 @@ class PanierService
         $responses['totauxBoites'] = $this->utilitiesService->totauxByPanierGroup($responses['panier_boites']);
         $responses['weigthPanier'] = $responses['totauxBoites']['weigth'] + $responses['totauxOccasions']['weigth'] + $responses['totauxItems']['weigth'];
         $weigthPanier = $responses['weigthPanier'];
-        //?si y a au moins un occasion pas de possibilite de livraison donc methode == retrait obligatoire
-        $shippingMethodId = $session->get('shippingMethodId');
-        if(!$shippingMethodId  OR count($responses['panier_occasions']) > 0){
+
+        // $shippingMethodId = $session->get('shippingMethodId');
+        $shippingMethodId = $this->requestStack->getCurrentRequest()->cookies->get('shippingMethodId');       
+
+        //?si pas de methode de livraison en session ou si y a un occasion dans le panier, retrait à caen obligatoire
+        if(!$shippingMethodId OR count($responses['panier_occasions']) > 0){
             $shippingMethodRetraitInCaen = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_IN_RVJ_DEPOT_NAME']);
             $shippingMethodId = $shippingMethodRetraitInCaen->getId();
-        }else{
-            $shippingMethodEnvoi = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_POSTE_NAME']);
-            $shippingMethodId = $shippingMethodEnvoi->getId();
         }
+        
+        // if{!$shippingMethodId
+        //     $shippingMethodEnvoi = $this->shippingMethodRepository->findOneByName($_ENV['SHIPPING_METHOD_BY_POSTE_NAME']);
+        //     dd($shippingMethodEnvoi);
+        //     $shippingMethodId = $shippingMethodEnvoi->getId();
+        // }
+
         $session->set('shippingMethodId', $shippingMethodId);
         $responses['shippingMethodId'] = $shippingMethodId;
         $responses['deliveryCostWithoutTax'] = $this->returnDeliveryCost($shippingMethodId, $weigthPanier);
@@ -398,13 +406,18 @@ class PanierService
     {
         $user = $this->security->getUser();
         $shippingMethod = $this->shippingMethodRepository->find($shippingId);
-        $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingMethod, $weigthPanier, $user);
-        if($delivery == null){
+
+        if(!$user){
             $france = $this->countryRepository->findOneBy(['name' => 'FRANCE']);
             $user = new User();
             $user->setCountry($france);
             $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingMethod, $weigthPanier, $user);
+
+        }else{
+
+            $delivery = $this->deliveryRepository->findCostByDeliveryShippingMethod($shippingMethod, $weigthPanier, $user);
         }
+
         $result = $delivery->getPriceExcludingTax();
 
         return $result;
