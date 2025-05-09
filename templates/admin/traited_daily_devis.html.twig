@@ -9,71 +9,87 @@
 
     <div class="row">
 
-        {% if devisWithPrice | length > 0 %}
-            {% for document in devisWithPrice %}
-                <div class="card mb-4 p-0 shadow">
-                    <div class="card-header d-flex flex-wrap align-items-center">
-                        <div class="col-3">
-                            {{ document.quoteNumber }}
+        {% if datas | length > 0 %}
+            {% for document in datas|reverse %}
+                <div class="card mb-4 p-0">
+                    <div class="card-header">{{ document.quoteNumber }}</div>
+                    <div class="card-body d-flex flex-wrap align-items-center">
+                        <div class="col-6 col-md-3">
+                            <b>Adresse de facturation:</b>
+                            <p>{{ document.billingAddress | raw }}</p>
                         </div>
-                        <div class="col-3">
-                            Fait le: {{ document.createdAt | date("d/m/Y") }}<br/>
-                            Valable jusqu'au {{ document.endOfQuoteValidation | date('d/m/Y') }}
+                        <div class="col-6 col-md-3">
+                            <b>Adresse de livraison:</b>
+                            <p>{{ document.deliveryAddress | raw }}</p>
                         </div>
-                        <div class="col-3">
-                            {% if document.isQuoteReminder == true %}
-                                {% set color = 'success' %}
-                            {% else %}
-                                {% set color = 'danger' %}
-                            {% endif %}
-                            Relancé par email: <i class="fa-solid fa-paper-plane text-{{ color }}"></i>
-                        </div>
-                        <div class="col-3 text-end">
-                            {{ document.totalWithTax  / 100 | number_format(2, '.', ',') }} € TTC
+                        <div class="col-6 col-md-3 text-center">
+                            {% include "admin/components/admin_group_buttons_traited_daily.html.twig" with {'document': document} %}
                         </div>
                     </div>
-                    <div class="card-body">
-                        <table class="table align-middle">
-                            <tr>
-                                <th>Image</th>
-                                <th>Désignation</th>
-                                <th class="text-center">Prix HT</th>
-                            </tr>
-                            {% for value in document.documentLines %}
-                                <tr>
-                                    <td>
-                                        <img class="card_catalog_img" style="max-width:120px" src="{{ vich_uploader_asset(value.occasion.boite, 'imageFile') }}"/>
-                                    </td>
-                                    <td>
-                                        {% if value.boite is not null %}
-                                            Boite:<br/>
-                                            {{ value.boite.id }} / {{ value.boite.name }} - {{ value.boite.editor }} - {{ value.boite.year }}
-                                            <ul>
-                                                <li>{{ value.question }}</li>
-                                                <li>{{ value.answer }}</li>
-                                            </ul>
-                                        {% elseif value.occasion is not null %}
-                                            Occasion: {{ value.occasion.reference }}<br/>
-                                            {{ value.occasion.boite.name }} - {{ value.occasion.boite.editor }} - {{ value.occasion.boite.year }}
-                                            <ul>
-                                                <li>État de la boite : {{ value.occasion.boxCondition }}</li>
-                                                <li>État du matériel : {{ value.occasion.equipmentCondition }}</li>
-                                                <li>Règle du jeu : {{ value.occasion.gameRule }}</li>
-                                            </ul>
-                                        {% else %}
-                                            Article:<br/>
-                                            {{ value.item.name }} - Référence : {{ value.item.reference }} - Qté: {{ value.quantity }}
-                                        {% endif %}
-                                    </td>
-                                    <td class="text-center">{{ (value.priceExcludingTax) / 100 |number_format(2, '.', ',') }} €</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
+                    <div class="card-footer">
+                        {% include "admin/components/_linkToUser.html.twig" with {'user': document.user } %} {{ document.user.email }} / {{ document.user.phone ? document.user.phone : 'AUCUN TELEPHONE'  }}
                     </div>
                 </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal-{{ document.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">{{ document.quoteNumber }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                    <table class="table align-middle">
+                                        {% for value in document.documentLines %}
+                                            <tr>
+                                                <td class="d-flex">
+                                                    {% if value.boite is not null %}
+                                                        Boite:<br/>
+                                                        {{ value.boite.id }} / {{ value.boite.name }} - {{ value.boite.editor }} - {{ value.boite.year }}
+                                                        <ul>
+                                                            <li>{{ value.question }}</li>
+                                                            <li>{{ value.answer }}</li>
+                                                        </ul>
+                                                    {% elseif value.occasion is not null %}
+                                                        <div class="col-4 text-center">
+                                                            <img class="card_catalog_img" style="max-width:80px" src="{{ vich_uploader_asset(value.occasion.boite, 'imageFile') }}"/>
+                                                        </div>
+                                                        <div class="ps-1">
+                                                            Occasion: (Référence : {{ value.occasion.reference }})<br/>
+                                                            {{ value.occasion.boite.name }} - {{ value.occasion.boite.editor }} - {{ value.occasion.boite.year }}
+                                                            <ul>
+                                                                <li>État de la boite : {{ value.occasion.boxCondition }}</li>
+                                                                <li>État du matériel : {{ value.occasion.equipmentCondition }}</li>
+                                                                <li>Règle du jeu : {{ value.occasion.gameRule }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="col-4 text-center">
+                                                            <img class="card_catalog_img" style="max-width:80px" src="{{ vich_uploader_asset(value.item, 'imageFile') }}"/>
+                                                        </div>
+                                                        <div class="ps-1">
+                                                            <b>Article:</b><br/>
+                                                            {{ value.item.name }} - Référence : {{ value.item.reference }} - Qté: {{ value.quantity }}
+                                                        </div>
+                                                    {% endif %}
+                                                </td>
+                                                {# <td class="text-center">{{ (value.priceExcludingTax) / 100 |number_format(2, '.', ',') }} €</td> #}
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                            </div>
+                            <div class="modal-footer col-12 d-flex justify-content-between">
+                                <div class="col-12 text-start">
+                                    EN ATTENTE DE PAIEMENT...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal -->
             {% endfor %}
         {% else %}
-            "NOTHING FOR THE MOMENT..."
+            <p class="text-center h5 text-danger">"NOTHING FOR THE MOMENT..."</p>
         {% endif %}
 
     </div>

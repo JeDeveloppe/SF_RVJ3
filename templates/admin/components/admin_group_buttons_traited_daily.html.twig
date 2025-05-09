@@ -3,12 +3,14 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ document.id }}">
     Détails de la commande
     </button>
-    {% if document.documentStatus.action != documentsStatus.1.action %}
-        <a href="{{ path('admin_change_status_document', {'document': document.token,'status': documentsStatus.1.action }) }}" class="btn btn-warning">{{ documentsStatus.1.adminActionText }}</a>
-    {% endif %}
-    {% if document.shippingMethod.collectionPoints | length > 0 %}
-        <a href="{{ path('admin_change_status_document', {'document': document.token,'status': document.shippingMethod.collectionPoints[0].documentStatus.action }) }}" class="btn btn-success">{{ document.shippingMethod.collectionPoints[0].documentStatus.adminActionText }}</a>
-    {% else %}
-        <a href="{{ path('admin_change_status_document', {'document': document.token,'status': documentsStatus.2.action }) }}" class="btn btn-success">OK EXPEDIÉ</a>
+    {% if command is defined %}
+        {% if document.documentStatus.action != documentsStatus.1.action %}
+            <a href="{{ path('admin_change_status_document', {'document': document.token,'status': documentsStatus.1.action }) }}" class="btn btn-warning">{{ documentsStatus.1.adminActionText }}</a>
+        {% endif %}
+        {% if document.shippingMethod.collectionPoints | length > 0 %}
+            <a href="{{ path('admin_change_status_document', {'document': document.token,'status': document.shippingMethod.collectionPoints[0].documentStatus.action }) }}" class="btn btn-success">{{ document.shippingMethod.collectionPoints[0].documentStatus.adminActionText }}</a>
+        {% else %}
+            <a href="{{ path('admin_change_status_document', {'document': document.token,'status': documentsStatus.2.action }) }}" class="btn btn-success">OK EXPEDIÉ</a>
+        {% endif %}
     {% endif %}
 </div>
