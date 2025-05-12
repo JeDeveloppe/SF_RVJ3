@@ -91,7 +91,7 @@
 								<div class="col-12 d-flex flex-wrap justify-content-between">
 									<div class="col-12 mb-3"><span class="text-orange" style="font-size: 20px">{{ (item.priceExcludingTax * ( 1 + (tax.value / 100)) / 100) | number_format(2, ',', ',') }} €</span></div>
 									<div class="col-12 d-flex justify-content-between align-items-center">
-										{% set offset = "offset-6" %}
+										{% set offset = "offset-4" %}
 										{% if item.comment is not null %}
 											{% set offset = "" %}
 											{% include "site/pages/catalog/pieces_detachees/_modal.comment.html.twig" with { item: item } %}
