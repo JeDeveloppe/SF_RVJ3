@@ -16,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use phpDocumentor\Reflection\Types\Integer;
 
 class DocumentParametreCrudController extends AbstractCrudController
 {
@@ -33,13 +34,15 @@ class DocumentParametreCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('billingTag')->setLabel('TAG pour les factures:')->setFormTypeOptions(['attr' => ['placeholder' => 'exemple: FAC']])->setTextAlign('center'),
-            TextField::new('quoteTag')->setLabel('TAG pour les devis:')->setFormTypeOptions(['attr' => ['placeholder' => 'exemple: DEV']])->setTextAlign('center'),
-            IntegerField::new('delayBeforeDeleteDevis')->setLabel('Délai avant relance devis (en jours)')->setTextAlign('center'),
-            MoneyField::new('preparation')->setLabel('Coût de préparation:')->setTextAlign('center')->setCurrency('EUR')->setStoredAsCents(),
-            AssociationField::new('updatedBy')->setLabel('Dernière modification par')->onlyOnForms()->setDisabled(true)->setTextAlign('center'),
-            DateTimeField::new('updatedAt')->setLabel('Dernière modification enregistrée le')->onlyOnForms()->setDisabled(true)->setTextAlign('center'),
-            BooleanField::new('isOnline')->setLabel('En utilisation')->setTextAlign('center')
+            TextField::new('billingTag')->setLabel('TAG pour les factures:')->setFormTypeOptions(['attr' => ['placeholder' => 'exemple: FAC']])->setTextAlign('center')->onlyOnForms(),
+            TextField::new('quoteTag')->setLabel('TAG pour les devis:')->setFormTypeOptions(['attr' => ['placeholder' => 'exemple: DEV']])->setTextAlign('center')->onlyOnForms(),
+            IntegerField::new('delayBeforeDeleteDevis')->setLabel('Délai avant relance devis (en jours)')->setTextAlign('center')->onlyOnForms(),
+            IntegerField::new('delay_to_delete_cart_in_hours')->setLabel('Délai avant suppression du panier (en heures)')->setTextAlign('center')->onlyOnForms()->setRequired(true),
+            MoneyField::new('preparation')->setLabel('Coût de préparation:')->setTextAlign('center')->setCurrency('EUR')->setStoredAsCents()->onlyOnForms(),
+            AssociationField::new('updatedBy')->setLabel('Dernière modification par')->onlyOnForms()->setDisabled(true)->setTextAlign('center')->onlyOnForms(),
+            DateTimeField::new('updatedAt')->setLabel('Dernière modification enregistrée le')->onlyOnForms()->setDisabled(true)->setTextAlign('center')->onlyOnForms(),
+            BooleanField::new('isOnline')->setLabel('En utilisation')->setTextAlign('center')->onlyOnForms(),
+            TextField::new('indexDefaultLine')->setLabel('Configuration:')->setTextAlign('center')->onlyOnIndex(),
         ];
     }
 

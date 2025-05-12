@@ -53,6 +53,8 @@ class PanierService
     public function addOccasionInCartRealtime(int $occasion_id, int $qte)
     {
 
+        $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
+
         $tokenSession = $this->request->getSession()->get('tokenSession');
         $user = $this->security->getUser();
 
@@ -73,7 +75,8 @@ class PanierService
         }else{
 
             $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
-            $endPanier = $now->add(new DateInterval('PT'.$_ENV['DELAY_TO_DELETE_CART_IN_HOURS'].'H'));
+            $delay = $docParams->getDelayToDeleteCartInHours() ?? 2;
+            $endPanier = $now->add(new DateInterval('PT'.$delay.'H'));
 
             $panier = new Panier();
             $panier->setOccasion($occasion);
@@ -164,10 +167,14 @@ class PanierService
 
             if($stockDispo >= $qte){
                 
+                $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
+                $delay = $docParams->getDelayToDeleteCartInHours() ?? 2;
+
                 $panier = $this->panierRepository->findOneBy(['tokenSession' => $tokenSession, 'item' => $item]);
     
                 $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
-                $endPanier = $now->add(new DateInterval('PT'.$_ENV['DELAY_TO_DELETE_CART_IN_HOURS'].'H'));//TODO: changer pour 2h
+                $endPanier = $now->add(new DateInterval('PT'.$delay.'H'));//TODO: changer pour 2h
+                
 
                 if($panier){
 

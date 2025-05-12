@@ -20,6 +20,7 @@ use App\Form\BillingAndDeliveryAddressType;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\ShippingMethodRepository;
 use App\Repository\CollectionPointRepository;
+use App\Repository\DocumentParametreRepository;
 use App\Repository\VoucherDiscountRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,6 +48,7 @@ class PanierController extends AbstractController
         private OccasionRepository $occasionRepository,
         private TaxRepository $taxRepository,
         private UtilitiesService $utilitiesService,
+        private DocumentParametreRepository $documentParametreRepository,
     )
     {
     }
@@ -139,10 +141,16 @@ class PanierController extends AbstractController
 
         }
 
+        $docParams = $this->documentParametreRepository->findOneBy(['isOnline' => true]);
+        if($docParams->getDelayToDeleteCartInHours() == NULL){
+            $docParams->setDelayToDeleteCartInHours(2);
+        }
+
         return $this->render('site/pages/panier/panier.html.twig', [
             'voucherDiscountForm' => $voucherType,
             'shippingForm' => $shippingForm,
-            'allCartValues' => $allCartValues
+            'allCartValues' => $allCartValues,
+            'docParams' => $docParams
         ]);
     }
 

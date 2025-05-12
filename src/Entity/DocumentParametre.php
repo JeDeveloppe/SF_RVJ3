@@ -35,6 +35,9 @@ class DocumentParametre
     #[ORM\Column]
     private ?int $preparation = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $delay_to_delete_cart_in_hours = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -124,4 +127,20 @@ class DocumentParametre
         return $this;
     }
 
+    public function getDelayToDeleteCartInHours(): ?int
+    {
+        return $this->delay_to_delete_cart_in_hours;
+    }
+
+    public function setDelayToDeleteCartInHours(?int $delay_to_delete_cart_in_hours): static
+    {
+        $this->delay_to_delete_cart_in_hours = $delay_to_delete_cart_in_hours;
+
+        return $this;
+    }
+
+    public function getIndexDefaultLine(): string
+    {
+        return 'Configuration actuelle';
+    }
 }
