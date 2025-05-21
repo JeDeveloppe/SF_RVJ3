@@ -107,7 +107,6 @@ class DashboardController extends AbstractDashboardController
         //suppression des paniers > x heures
         $this->panierService->deletePanierFromDataBaseAndPuttingItemsBoiteOccasionBackInStock();
 
-
         $itemsWithStockIsNull = $this->itemRepository->findByStockForSaleIsNull();
 
         $payments = $this->paymentRepository->findAll();
@@ -134,8 +133,10 @@ class DashboardController extends AbstractDashboardController
         $detailsDesVentesEnAttenteDePaiement[] = ['name' => 'Occasion(s)', 'valeur' => $occasions];
         $detailsDesVentesEnAttenteDePaiement[] = ['name' => 'Article(s)', 'valeur' => $items];
 
+
         //?on compte le nombre d'inscrits
-        $clients = $this->userRepository->findAll();
+        // $clients = $this->userRepository->findAll();
+        $numberOfclients = $this->userRepository->countUsers();
 
         $totalPayment = 0;
         foreach($payments as $payment){
@@ -165,7 +166,7 @@ class DashboardController extends AbstractDashboardController
 
         $totals[] = [
             'name' => 'Nombre d\'inscrits sur le site:',
-            'total' => count($clients),
+            'total' => $numberOfclients,
             'isMoney' => false
         ];
 
