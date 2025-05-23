@@ -230,6 +230,7 @@ class OccasionService
                     'end' => 6
                 ];
                 $twig = [
+                    'title' => 'pour enfants',
                     'titleH1' => 'Jeux pour enfants',
                     'breadcrumb' => '<span class="text-purple">Tous les jeux</span> > Enfants'
                 ];
@@ -240,6 +241,7 @@ class OccasionService
                     'end' => 12
                 ];
                 $twig = [
+                    'title' => 'pour initié·es',
                     'titleH1' => 'Jeux pour initié·es',
                     'breadcrumb' => '<span class="text-purple">Tous les jeux</span> > Initié·es'
                 ];
@@ -250,6 +252,7 @@ class OccasionService
                     'end' => 11
                 ];
                 $twig = [
+                    'title' => 'tout public',
                     'titleH1' => 'Jeux tout public',
                     'breadcrumb' => '<span class="text-purple">Tous les jeux</span> > Tout public'
                 ];
@@ -260,6 +263,7 @@ class OccasionService
                     'end' => 12
                 ];
                 $twig = [
+                    'title' => '',
                     'titleH1' => 'Tous les jeux',
                     'breadcrumb' => ''
                 ];

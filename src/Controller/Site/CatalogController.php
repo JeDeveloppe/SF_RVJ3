@@ -30,12 +30,9 @@ use App\Repository\ItemGroupRepository;
 use App\Repository\ItemRepository;
 use App\Service\CatalogControllerService;
 use App\Service\CatalogueService;
-use PHPUnit\TextUI\XmlConfiguration\Group;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-
-use function PHPUnit\Framework\throwException;
 
 class CatalogController extends AbstractController
 {
@@ -177,7 +174,11 @@ class CatalogController extends AbstractController
             return $this->redirectToRoute('app_catalogue_pieces_detachees');
         }
 
-        $metas['description'] = 'Les pièces détachées pour le jeu: '.ucfirst(strtolower($boite->getName())).' - '.ucfirst(strtolower($boite->getEditor()->getName()));
+        $yearInDescription = $boite->getYear();
+        if($yearInDescription == 0){
+            $yearInDescription = 'inconnue';
+        }
+        $metas['description'] = 'Les pièces détachées du jeu: '.ucfirst(strtolower($boite->getName())).' - '.ucfirst(strtolower($boite->getEditor()->getName())).' - Année '.$yearInDescription;
 
         $items = $boite->getItemsOrigine();
         $totalItems = 0;
@@ -316,6 +317,7 @@ class CatalogController extends AbstractController
                     'occasions_totales' => $donneesFromDatabases,
                     'metas' => $metas,
                     'titreDeLaPage' => $choices['twig']['titleH1'],
+                    'title' => $choices['twig']['title'],
                     'breadcrumb' => $choices['twig']['breadcrumb'],
                     'form' => $form,
                     'formNameOrEditor' => $formNameOrEditor,
@@ -331,6 +333,7 @@ class CatalogController extends AbstractController
                 'occasions_totales' => $donneesFromDatabases,
                 'metas' => $metas,
                 'titreDeLaPage' => $choices['twig']['titleH1'],
+                'title' => $choices['twig']['title'],
                 'breadcrumb' => $choices['twig']['breadcrumb'],
                 'form' => $form,
                 'formNameOrEditor' => $formNameOrEditor,
@@ -414,7 +417,7 @@ class CatalogController extends AbstractController
         $query = $this->occasionRepository->findAleatoireOccasionsByAgeWhitoutThisOccasion($occasions[0]->getBoite()->getAge(), $occasions[0]);
         shuffle($query); // on mélange
         $firstElements = array_slice($query, 0, 4); //on prend les 6 premiers apres avoir mélanger
-        $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.ucfirst(strtolower($occasions[0]->getBoite()->getName())).' - '.ucfirst(strtolower($occasions[0]->getBoite()->getEditor()->getName()).' - Référence:'.$occasions[0]->getReference());
+        $metas['description'] = 'Jeu d\'occasion vérifié, remis en état, et disponible à petit prix: '.ucfirst(strtolower($occasions[0]->getBoite()->getName())).' - '.ucfirst(strtolower($occasions[0]->getBoite()->getEditor()->getName()).' - Notre référence: '.$occasions[0]->getReference());
 
         return $this->render('site/pages/catalog/occasions/occasion.html.twig', [
             'occasion' => $occasions[0],

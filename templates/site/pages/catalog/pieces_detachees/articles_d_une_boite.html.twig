@@ -1,10 +1,9 @@
 {% extends 'components/_base.html.twig' %}
 
 {% block title %}
-	{{ boite.name | raw }} | {{ boite.editor | raw }}
-	{% if boite.year is not null %}
-		{{ boite.year }}
-	{% endif %}
+{{ boite.name | raw }} | {{ boite.editor | raw }}
+{% if boite.year > 0 %} | {{ boite.year }}{% endif %}
+ | les pièces détachées disponibles
 {% endblock %}
 
 {% block body %}

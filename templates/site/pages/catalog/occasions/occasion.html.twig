@@ -1,11 +1,7 @@
 {% extends 'components/_base.html.twig' %}
 
 {% block title %}
-	{{ occasion.boite.name }}
-	-
-	{{ occasion.boite.editor }}
-	-
-	{{ occasion.boite.year }}
+{{ occasion.boite.name }} | {{ occasion.boite.editor }} {% if occasion.boite.year > 0 %}| {{ occasion.boite.year }}{% endif %} | jeu d'occasion à petit prix.
 {% endblock %}
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 {% block body %}
