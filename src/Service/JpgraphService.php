@@ -30,7 +30,7 @@ class JpgraphService
         $totaux = [];
             for($m=1;$m<=12;$m++){
                 $result = $this->paymentRepository->findPaiementsAndReturnCA($m,$annee);
-                $result_100 = number_format($result / 100,2);
+                $result_100 = intval(number_format($result / 100,2));
                 array_push($totaux,$result_100);
             }
 
@@ -70,7 +70,6 @@ class JpgraphService
         $b1plot->value->Show();
         
         $graph->title->Set("CA des ventes par mois en ".$annee." \n Total HT: ".$totalAnnuel);
-        
         // Display the graph
         $graph->Stroke();
     }
@@ -80,7 +79,7 @@ class JpgraphService
         $totaux1y = [];
         for($m=1;$m<=12;$m++){
             $result = $this->paymentRepository->findPaiementsAndReturnCA($m,$anneeN);
-            $result_100 = number_format($result / 100,2);
+            $result_100 = intval(number_format($result / 100,2));
             array_push($totaux1y,$result_100);
         }
         $data1y=$totaux1y;
@@ -89,7 +88,7 @@ class JpgraphService
         $totaux2y = [];
         for($m=1;$m<=12;$m++){
             $result = $this->paymentRepository->findPaiementsAndReturnCA($m,$anneeN_1);
-            $result_100 = number_format($result / 100,2);
+            $result_100 = intval(number_format($result / 100,2));
             array_push($totaux2y,$result_100);
         }
         $data2y=$totaux2y;
@@ -190,7 +189,6 @@ class JpgraphService
         $b1plot->value->Show();
         
         $graph->title->Set("Quantité de ventes par mois en ".$anneeN." \n Total des ventes: ".array_sum($totalVentes));
-        
         // Display the graph
         $graph->Stroke();
     }
