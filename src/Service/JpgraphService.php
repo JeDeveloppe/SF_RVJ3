@@ -146,13 +146,10 @@ class JpgraphService
             for($m=1;$m<=12;$m++){
                 // $sqlVentes = $bdd->prepare("SELECT SUM(qte) as totalQte FROM documents_lignes_achats dl LEFT JOIN documents d ON dl.idDocument = d.idDocument WHERE MONTH(FROM_UNIXTIME(d.time_transaction)) = ? AND YEAR(FROM_UNIXTIME(d.time_transaction)) = ? AND etat = 2 ");
                 // $result = $this->documentLignesRepository->findBoitesVendues($m,$anneeN);
-                $paiements = $this->paymentRepository->findPaiements($m,$anneeN);
+                $paiementsNumber = $this->paymentRepository->findNumberOfPaiements($m,$anneeN);
 
-                if(count($paiements) < 1){
-                    array_push($totalVentes,0);
-                }else{
-                    array_push($totalVentes,count($paiements));
-                }
+                array_push($totalVentes,$paiementsNumber);
+                
             }
 
         $data1y = $totalVentes;

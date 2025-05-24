@@ -33,14 +33,15 @@ class PaymentRepository extends ServiceEntityRepository
             ->getQuery()->getSingleScalarResult();
     }
 
-    public function findPaiements($month,$year)
+    public function findNumberOfPaiements($month,$year)
     {
         return $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
             ->where('MONTH(p.timeOfTransaction) = :month')
             ->setParameter('month', $month)
             ->andWhere('YEAR(p.timeOfTransaction) = :year')
             ->setParameter('year', $year)
-            ->getQuery()->getResult();
+            ->getQuery()->getSingleScalarResult();
     }
 
 
